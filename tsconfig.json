@@ -1,9 +1,23 @@
 {
-  "include": ["app/**/*", "workers/**/*", "*.ts", "*.tsx", ".react-router/types/**/*"],
+  "include": [
+    "app/**/*",
+    "workers/**/*",
+    "*.ts",
+    "*.tsx",
+    ".react-router/types/**/*"
+  ],
   "compilerOptions": {
     "target": "ES2022",
-    "lib": ["ES2022", "DOM", "DOM.Iterable"],
-    "types": ["@cloudflare/workers-types", "vite/client", "node"],
+    "lib": [
+      "ES2022",
+      "DOM",
+      "DOM.Iterable"
+    ],
+    "types": [
+      "@cloudflare/workers-types",
+      "vite/client",
+      "node"
+    ],
     "module": "ESNext",
     "moduleResolution": "Bundler",
     "jsx": "react-jsx",
@@ -15,6 +29,14 @@
     "allowImportingTsExtensions": true,
     "verbatimModuleSyntax": true,
     "baseUrl": ".",
-    "paths": {"~/*": ["./app/*"]}
+    "paths": {
+      "~/*": [
+        "./app/*"
+      ]
+    },
+    "rootDirs": [
+      ".",
+      "./.react-router/types"
+    ]
   }
 }
