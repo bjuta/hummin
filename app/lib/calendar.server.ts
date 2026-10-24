@@ -45,6 +45,9 @@ export async function reserve(e:HumminEnv,input:{start:string;name:string;email:
  if(!days.some(d=>d.slots.includes(input.start)))throw Error("That time is no longer available");
  const end=new Date(Date.parse(input.start)+30*60000).toISOString();
  const holdId=crypto.randomUUID();
+ // A hold is temporary. Remove expired holds before attempting the UNIQUE start_utc insert.
+ // The insert itself remains the atomic protection against two concurrent reservations.
+ await e.DB.prepare("DELETE FROM booking_slots WHERE status='held' AND created_at <= datetime('now','-10 minutes')").run();
  try{
   await e.DB.prepare("INSERT INTO booking_slots (id,start_utc,end_utc,name,email,phone,status) VALUES(?,?,?,?,?,?,'held')").bind(holdId,input.start,end,input.name,input.email,input.phone).run();
  }catch{throw Error("That time has just been selected by another visitor");}
