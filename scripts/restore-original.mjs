@@ -29,6 +29,7 @@ function assessment(t){
  if(start<0||end<0)throw Error('Original booking handler missing');
  t=t.slice(0,start)+"      v.confirmBooking = () => { this.setState({bookErr:{email:'No booking was made. Please contact sales@hummin.org while live availability is being connected.'},booked:false}); };"+t.slice(end);
  t=need(t,"v.showBooking = showBook;","v.liveBookingNotice = 'Live booking is not configured yet. No reservations can be made from this preview.'; v.showBooking = showBook;");
+ t=need(t,"A copy of your plan is on its way to {{ gateEmail }}.","Your plan is unlocked in this browser. No email has been sent.");
  t=need(t,'<sc-if value="{{ showBooking }}"','<p role="status" style="font-family:Figtree,sans-serif;font-size:14px;color:#B5532C;padding:8px 0 18px">{{ liveBookingNotice }}</p>\n      <sc-if value="{{ showBooking }}"');
  return t;
 }
