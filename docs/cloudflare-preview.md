@@ -1,13 +1,13 @@
 # Cloudflare Preview — current connected account
 
-> Updated 2026-10-25. The preview D1 database is provisioned; the live Worker and Git deployment are NOT yet connected.
+> Updated 2026-10-25. The preview D1 database and an isolated placeholder Worker are provisioned; a Git-driven application deployment is NOT yet configured.
 
 ## Account and domain
 
 - Cloudflare account: `Grimpossible@gmail.com's Account` (ID: `3ee7354d0459679068dad17fd5f712f5`).
 - Zone `hummin.org` is **active** with zone ID `c05e2bede28379b85348b756abc5b015`.
 - Do **not** change `hummin.org` or `www.hummin.org` routing, and do **not** modify the Google Workspace MX records. The website is not ready to replace current hosting.
-- Worker preview target: `hummin-web-preview.grimpossible.workers.dev` (not deployed; do not treat as a live URL).
+- Worker preview target: `hummin-web-preview.grimpossible.workers.dev` (placeholder Worker uploaded; actual site still **not** deployed).
 
 ## Provisioned
 
@@ -20,13 +20,13 @@
 
 ## GitHub ↔ Cloudflare prerequisite (requires user authorization)
 
-Attempting a Cloudflare Builds API repository connection to `bjuta/hummin` returned **HTTP 404 (8000008): disconnected from Git account**. The GitHub connector in ChatGPT does not grant Cloudflare's separate GitHub App authorization.
+The Cloudflare GitHub App was authorised and a repository connection for `bjuta/hummin` was successfully created (ID `c04a439d-b8c6-4dc4-8e97-b538f9999552`). A Worker was created under name `hummin-web-preview` (tag `1909baafb46a4078acde412c5c2a7b6c`), currently containing only a 503/noindex placeholder, not the website build. The Cloudflare account still has **no Workers Builds deployment token**, so it cannot yet run a Git-triggered deploy.
 
 To authorize:
-1. In Cloudflare Dashboard → **Workers & Pages**, choose **Create application** → **Import a repository** (or a Worker's Settings → Builds → Connect).
-2. Choose **GitHub** and approve/install the **Cloudflare GitHub App** for account `bjuta`, granting access to repository `bjuta/hummin`.
-3. Once authorization exists, connect this repo to Worker **hummin-web-preview** (a dedicated preview Worker; NOT your production HUMMIN domain).
-4. For the preview app use **production branch** `feat/fullstack-workers-foundation`, build command `npm run build`, deploy command `npm run deploy:preview`, and root `/`.
+1. In Cloudflare Dashboard → **Workers & Pages** → **hummin-web-preview** → **Settings** → **Builds** → **Connect**. The GitHub App is already authorised; select `bjuta/hummin`.
+2. Select branch `feat/fullstack-workers-foundation` as the deployment branch for this *preview-only* Worker.
+3. Configure build `npm run build`, deploy `npm run deploy:preview`, root `/`; allow the dashboard to generate an API/build token.
+4. Once the account has a build token, inspect generated trigger, run a branch build and verify actual SSR pages on a preview URL.
 5. Do not attach `hummin.org` and do not create a production build trigger for `main` yet.
 
 If Workers Builds tries to infer a Worker name from default `wrangler.jsonc`, explicitly configure the preview deploy command `npm run deploy:preview` so the worker is `hummin-web-preview`, matching the preview Wrangler file.
