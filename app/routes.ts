@@ -1,13 +1,12 @@
 import { type RouteConfig, index, route } from "@react-router/dev/routes";
-
 export default [
-  index("routes/home.tsx"),
-  route("how-we-work", "routes/content.tsx", { id: "page-how-we-work" }),
-  route("applied-expertise", "routes/content.tsx", { id: "page-applied-expertise" }),
-  route("engagements", "routes/content.tsx", { id: "page-engagements" }),
-  route("who-we-work-with", "routes/content.tsx", { id: "page-who-we-work-with" }),
-  route("about", "routes/content.tsx", { id: "page-about" }),
-  route("assessment", "routes/assessment.tsx"),
-  route("contact", "routes/contact.tsx"),
-  route("privacy", "routes/privacy.tsx")
+ index("routes/fidelity.ts"),
+ route("how-we-work","routes/fidelity.ts",{id:"original-how"}),
+ route("applied-expertise","routes/fidelity.ts",{id:"original-expertise"}),
+ route("engagements","routes/fidelity.ts",{id:"original-engagements"}),
+ route("who-we-work-with","routes/fidelity.ts",{id:"original-clients"}),
+ route("assessment","routes/fidelity.ts",{id:"original-assessment"}),
+ route("about","routes/fidelity.ts",{id:"original-about"}),
+ route("contact","routes/fidelity.ts",{id:"original-contact"}),
+ route("privacy","routes/privacy.tsx")
 ] satisfies RouteConfig;
