@@ -23,15 +23,119 @@ function site(t){
  return need(t,original,replacement);
 }
 function assessment(t){
- t=need(t,"const full = x => ((x.getDate() * 7 + x.getMonth() * 3) % 6) === 0;","const full = x => true;");
- t=need(t,"const SL = [[9, 0], [9, 30], [10, 0], [11, 0], [11, 30], [14, 0], [14, 30], [15, 30], [16, 0]];","const SL = [];");
- const start=t.indexOf('      v.confirmBooking = () => {'),end=t.indexOf('\n      v.notBooked = ',start);
- if(start<0||end<0)throw Error('Original booking handler missing');
- t=t.slice(0,start)+"      v.confirmBooking = () => { this.setState({bookErr:{email:'No booking was made. Please contact sales@hummin.org while live availability is being connected.'},booked:false}); };"+t.slice(end);
- t=need(t,"v.showBooking = showBook;","v.liveBookingNotice = 'Live booking is not configured yet. No reservations can be made from this preview.'; v.showBooking = showBook;");
- t=need(t,"A copy of your plan is on its way to {{ gateEmail }}.","Your plan is unlocked in this browser. No email has been sent.");
- t=need(t,'<sc-if value="{{ showBooking }}"','<p role="status" style="font-family:Figtree,sans-serif;font-size:14px;color:#B5532C;padding:8px 0 18px">{{ liveBookingNotice }}</p>\n      <sc-if value="{{ showBooking }}"');
- return t;
+  // Restore the exported assessment rather than redrawing its design.
+  t=need(t,"A copy of your plan is on its way to {{ gateEmail }}.","Your plan is unlocked in this browser. No email has been sent.");
+  const oldState="bookErr: {}, booked: false }";
+  t=need(t,oldState,"bookErr: {}, booked: false, bookingDays: [], bookingLoading: false, bookingEnabled: false, bookingStatus: '', bookingSaving: false }");
+  const loadMethod=String.raw\`
+  loadBookingSlots() {
+    const seq = (this._bookingRequestSeq || 0) + 1; this._bookingRequestSeq = seq;
+    this.setState({ bookingLoading: true, bookingStatus: '' });
+    fetch('/api/booking/slots', { method: 'GET', cache: 'no-store', headers: { Accept: 'application/json' } })
+      .then(async response => {
+        const data = await response.json().catch(() => ({}));
+        if (!response.ok || data.enabled !== true || !Array.isArray(data.days)) throw Error(data.message || 'Live bookings are not available yet.');
+        const days = data.days.filter(d => /^\\\\d{4}-\\\\d{2}-\\\\d{2}$/.test(d.date) && Array.isArray(d.slots)).map(d => ({ date: d.date, slots: d.slots.filter(x => typeof x === 'string') }));
+        if (seq !== this._bookingRequestSeq) return;
+        this.setState(s => ({
+          bookingDays: days, bookingLoading: false, bookingEnabled: true, bookingStatus: '',
+          day: days.some(d => d.date === s.day) ? s.day : null,
+          slot: days.some(d => d.date === s.day && d.slots.includes(s.slot)) ? s.slot : null
+        }));
+      })
+      .catch(error => {
+        if (seq !== this._bookingRequestSeq) return;
+        this.setState({ bookingDays: [], bookingLoading: false, bookingEnabled: false,
+          bookingStatus: 'Live appointment booking is unavailable. Please email sales@hummin.org.', day: null, slot: null });
+      });
+  }
+\`;
+  t=need(t,"  go(step) { if (step >= STEPS.length) { this.setState({ stage: 'results' }); this.top(); return; }",
+    loadMethod+"  go(step) { if (step >= STEPS.length) { this.setState({ stage: 'results' }); this.loadBookingSlots(); this.top(); return; }");
+  t=need(t,"v.openBooking = () => { this.setState({ forceBook: true });","v.openBooking = () => { this.loadBookingSlots(); this.setState({ forceBook: true });");
+  t=need(t,"booked: false }); this.top();","booked: false, bookingDays: [], bookingLoading: false, bookingEnabled: false, bookingStatus: '', bookingSaving: false }); this.top();");
+  const booking=String.raw\`
+      // Availability comes from the Worker/Google Calendar, never a generated formula.
+      const available = s.bookingEnabled ? s.bookingDays : [];
+      const dayDate = value => new Date(value + 'T12:00:00');
+      const days = available.map(item => dayDate(item.date));
+      const lead = days.length ? (days[0].getDay() + 6) % 7 : 0;
+      const cells = []; for (let i = 0; i < lead; i++) cells.push(null); days.forEach(x => cells.push(x));
+      const isoDay = x => [x.getFullYear(), String(x.getMonth()+1).padStart(2,'0'),String(x.getDate()).padStart(2,'0')].join('-');
+      const localTime = t => new Date(t).toLocaleTimeString('en-KE', {timeZone:'Africa/Nairobi',hour:'2-digit',minute:'2-digit',hour12:false});
+      const localDay = (t, opts) => new Date(t).toLocaleDateString('en-KE', {timeZone:'Africa/Nairobi',...opts});
+      v.weekdays = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'];
+      v.monthLabel = days.length ? days[0].toLocaleDateString('en-KE',{month:'long',year:'numeric'}) +
+        (days[days.length-1].getMonth() !== days[0].getMonth() ? ' – ' + days[days.length-1].toLocaleDateString('en-KE',{month:'long'}) : '') : 'Availability';
+      v.days = cells.map(x => {
+        if (!x) return { num:'',sub:'',disabled:true,selStr:'false',aria:'Empty',bg:'transparent',bd:'transparent',fg:'transparent',cursor:'default',pick:()=>{} };
+        const date = isoDay(x), item = available.find(d => d.date === date);
+        const isFull = !item || item.slots.length === 0, sel = s.day === date;
+        return {num:x.getDate(),sub:isFull?'Full':x.toLocaleDateString('en-KE',{month:'short'}),disabled:isFull,selStr:sel?'true':'false',
+          aria:x.toLocaleDateString('en-KE',{weekday:'long',day:'numeric',month:'long'})+(isFull?', no appointments available':''),
+          bg:sel?'#1E272A':isFull?'transparent':'#FFFFFF',fg:sel?'#F4F5F1':isFull?'#BAC4BE':'#1E272A',
+          bd:sel?'#1E272A':isFull?'#E7EBE6':'#D0D8D2',cursor:isFull?'not-allowed':'pointer',
+          pick:()=>{if(!isFull)this.setState({day:date,slot:null,bookingStatus:''});}};
+      });
+      const dayObj = s.day ? dayDate(s.day) : null;
+      v.hasDay = !!dayObj;
+      v.dayLabel = dayObj ? dayObj.toLocaleDateString('en-KE',{weekday:'long',day:'numeric',month:'long'}) : 'Choose a day';
+      v.tzLabel = 'Nairobi time (EAT)';
+      const daySlots = available.find(d => d.date === s.day);
+      v.slots = daySlots ? daySlots.slots.map(key => { const sel = s.slot === key; return {
+        label: localTime(key),selStr:sel?'true':'false',bg:sel?'#B5532C':'#FFFFFF',fg:sel?'#FFFFFF':'#1E272A',
+        bd:sel?'#B5532C':'#D0D8D2',pick:()=>this.setState({slot:key,bookingStatus:''})
+      };}) : [];
+      v.hasSlot = !!s.slot && s.bookingEnabled;
+      const slotDate = s.slot ? new Date(s.slot) : null;
+      v.slotShort = slotDate ? localDay(s.slot,{weekday:'short',day:'numeric',month:'short'}) + ', ' + localTime(s.slot) + ' EAT' : '';
+      v.liveBookingNotice = s.bookingLoading ? 'Checking live appointment availability…' :
+        (s.bookingStatus || (s.bookingEnabled ? 'Select an available time. Bookings are confirmed only after Google Calendar accepts the appointment.' :
+         'Live appointment booking is not yet available. Please email sales@hummin.org.'));
+      v.bookFields = [['name','Name','text','name','Your full name'],['email','Work Email','email','email','name@business.com'],['phone','Phone (optional)','tel','tel','+254 7…']].map(([k,label,type,ac,ph])=>({
+        id:'b-'+k,label,type,ac,ph,value:s.book[k],err:s.bookErr[k]||'',inv:s.bookErr[k]?'true':'false',
+        bd:s.bookErr[k]?'#B5532C':'#BAC4BE',
+        onChange:e=>{const val=e.target.value;this.setState(st=>({book:{...st.book,[k]:val},bookErr:{...st.bookErr,[k]:''}}));}
+      }));
+      v.bookSubmitLabel = s.bookingSaving ? 'Confirming appointment…' : 'Confirm ' + v.slotShort;
+      v.bookSubmitDisabled = s.bookingSaving ? 'true' : 'false';
+      v.confirmBooking = async () => {
+        if (this.state.bookingSaving || !s.bookingEnabled || !s.slot) return;
+        const b=this.state.book, errors={};
+        if(!b.name.trim()) errors.name='Enter your name.';
+        if(!EMAIL_RE.test(b.email.trim())) errors.email='Enter a valid email, such as name@business.com.';
+        if(Object.keys(errors).length){this.setState({bookErr:errors});const el=document.getElementById('b-'+Object.keys(errors)[0]);if(el)el.focus();return;}
+        this.setState({bookingSaving:true,bookingStatus:'Confirming your appointment…',bookErr:{}});
+        try {
+          const response=await fetch('/api/booking/reserve',{method:'POST',credentials:'same-origin',cache:'no-store',
+            headers:{'Content-Type':'application/json','Accept':'application/json'},
+            body:JSON.stringify({start:s.slot,name:b.name.trim(),email:b.email.trim(),phone:b.phone.trim()})});
+          const data=await response.json().catch(()=>({}));
+          if(!response.ok||data.ok!==true||!data.eventId)throw Error(data.message||'Appointment could not be confirmed.');
+          const st=new Date(s.slot),en=new Date(st.getTime()+30*60000),z=x=>x.toISOString().replace(/[-:]/g,'').replace(/\\\\.\\\\d{3}/,'');
+          const ics=['BEGIN:VCALENDAR','VERSION:2.0','PRODID:-//HUMMIN//Assessment//EN','BEGIN:VEVENT',
+            'UID:'+data.eventId+'@hummin.org','DTSTAMP:'+z(new Date()),'DTSTART:'+z(st),'DTEND:'+z(en),
+            'SUMMARY:HUMMIN results review','DESCRIPTION:Your appointment was confirmed by HUMMIN.',
+            'ORGANIZER;CN=HUMMIN:mailto:sales@hummin.org','END:VEVENT','END:VCALENDAR'].join('\\\\r\\\\n');
+          if(this._ics) URL.revokeObjectURL(this._ics);
+          this._ics=URL.createObjectURL(new Blob([ics],{type:'text/calendar'}));
+          this.setState({booked:true,bookingSaving:false,bookingStatus:'',gcal:data.calendarUrl||''});
+        } catch(error) {
+          this.setState({bookingSaving:false,bookingStatus:(error&&error.message)||'We could not confirm this appointment. Please email sales@hummin.org.'});
+          this.loadBookingSlots();
+        }
+      };
+\`;
+  const start=t.indexOf('      // booking\n'), end=t.indexOf('\n      v.notBooked = ',start);
+  if(start<0||end<0)throw Error('Original booking block not found');
+  t=t.slice(0,start)+booking+t.slice(end);
+  t=need(t,"<sc-if value=\"{{ showBooking }}\"",
+    "<sc-if value=\"{{ showBooking }}\""); // Retain the existing original conditional and calendar layout.
+  t=need(t,"Confirm {{ slotShort }}","{{ bookSubmitLabel }}");
+  t=need(t,'sc-camel-on-click="{{ confirmBooking }}"','sc-camel-on-click="{{ confirmBooking }}" aria-busy="{{ bookSubmitDisabled }}"');
+  t=need(t,"<sc-if value=\"{{ showBooking }}\" hint-placeholder-val=\"{{ false }}\">",
+    "<sc-if value=\"{{ showBooking }}\" hint-placeholder-val=\"{{ false }}\"><p role=\"status\" style=\"font-family:Figtree,sans-serif;font-size:14px;color:#B5532C;padding:8px 0 18px\">{{ liveBookingNotice }}</p>");
+  return t;
 }
 for(const [name,fn] of [['site',site],['assessment',assessment]]){
  const src=read(name);if(!src)throw Error('Source missing: '+name);
