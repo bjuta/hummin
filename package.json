@@ -13,7 +13,8 @@
     "db:remote": "wrangler d1 migrations apply hummin-web --remote",
     "deploy:preview": "wrangler deploy",
     "db:preview": "wrangler d1 migrations apply hummin-web-preview --config wrangler.preview.jsonc --remote",
-    "prebuild": "node scripts/restore-original.mjs"
+    "prebuild": "node scripts/restore-original.mjs",
+    "verify:restoration": "node scripts/verify-restored.mjs"
   },
   "dependencies": {
     "isbot": "5.1.32",
