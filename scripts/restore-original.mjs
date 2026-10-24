@@ -27,18 +27,18 @@ function assessment(t){
   t=need(t,"A copy of your plan is on its way to {{ gateEmail }}.","Your plan is unlocked in this browser. No email has been sent.");
   const oldState="bookErr: {}, booked: false }";
   t=need(t,oldState,"bookErr: {}, booked: false, bookingDays: [], bookingLoading: false, bookingEnabled: false, bookingStatus: '', bookingSaving: false }");
-  const loadMethod=String.raw\`
-  loadBookingSlots() {
+  const loadMethod=String.raw`
+  loadBookingSlots(preserveStatus = false) {
     const seq = (this._bookingRequestSeq || 0) + 1; this._bookingRequestSeq = seq;
-    this.setState({ bookingLoading: true, bookingStatus: '' });
+    this.setState({ bookingLoading: true, ...(preserveStatus ? {} : { bookingStatus: '' }) });
     fetch('/api/booking/slots', { method: 'GET', cache: 'no-store', headers: { Accept: 'application/json' } })
       .then(async response => {
         const data = await response.json().catch(() => ({}));
         if (!response.ok || data.enabled !== true || !Array.isArray(data.days)) throw Error(data.message || 'Live bookings are not available yet.');
-        const days = data.days.filter(d => /^\\\\d{4}-\\\\d{2}-\\\\d{2}$/.test(d.date) && Array.isArray(d.slots)).map(d => ({ date: d.date, slots: d.slots.filter(x => typeof x === 'string') }));
+        const days = data.days.filter(d => /^\d{4}-\d{2}-\d{2}$/.test(d.date) && Array.isArray(d.slots)).map(d => ({ date: d.date, slots: d.slots.filter(x => typeof x === 'string') }));
         if (seq !== this._bookingRequestSeq) return;
         this.setState(s => ({
-          bookingDays: days, bookingLoading: false, bookingEnabled: true, bookingStatus: '',
+          bookingDays: days, bookingLoading: false, bookingEnabled: true, bookingStatus: preserveStatus ? s.bookingStatus : '',
           day: days.some(d => d.date === s.day) ? s.day : null,
           slot: days.some(d => d.date === s.day && d.slots.includes(s.slot)) ? s.slot : null
         }));
@@ -49,12 +49,12 @@ function assessment(t){
           bookingStatus: 'Live appointment booking is unavailable. Please email sales@hummin.org.', day: null, slot: null });
       });
   }
-\`;
+`;
   t=need(t,"  go(step) { if (step >= STEPS.length) { this.setState({ stage: 'results' }); this.top(); return; }",
     loadMethod+"  go(step) { if (step >= STEPS.length) { this.setState({ stage: 'results' }); this.loadBookingSlots(); this.top(); return; }");
   t=need(t,"v.openBooking = () => { this.setState({ forceBook: true });","v.openBooking = () => { this.loadBookingSlots(); this.setState({ forceBook: true });");
   t=need(t,"booked: false }); this.top();","booked: false, bookingDays: [], bookingLoading: false, bookingEnabled: false, bookingStatus: '', bookingSaving: false }); this.top();");
-  const booking=String.raw\`
+  const booking=String.raw`
       // Availability comes from the Worker/Google Calendar, never a generated formula.
       const available = s.bookingEnabled ? s.bookingDays : [];
       const dayDate = value => new Date(value + 'T12:00:00');
@@ -112,20 +112,20 @@ function assessment(t){
             body:JSON.stringify({start:s.slot,name:b.name.trim(),email:b.email.trim(),phone:b.phone.trim()})});
           const data=await response.json().catch(()=>({}));
           if(!response.ok||data.ok!==true||!data.eventId)throw Error(data.message||'Appointment could not be confirmed.');
-          const st=new Date(s.slot),en=new Date(st.getTime()+30*60000),z=x=>x.toISOString().replace(/[-:]/g,'').replace(/\\\\.\\\\d{3}/,'');
+          const st=new Date(s.slot),en=new Date(st.getTime()+30*60000),z=x=>x.toISOString().replace(/[-:]/g,'').replace(/\.\d{3}/,'');
           const ics=['BEGIN:VCALENDAR','VERSION:2.0','PRODID:-//HUMMIN//Assessment//EN','BEGIN:VEVENT',
             'UID:'+data.eventId+'@hummin.org','DTSTAMP:'+z(new Date()),'DTSTART:'+z(st),'DTEND:'+z(en),
             'SUMMARY:HUMMIN results review','DESCRIPTION:Your appointment was confirmed by HUMMIN.',
-            'ORGANIZER;CN=HUMMIN:mailto:sales@hummin.org','END:VEVENT','END:VCALENDAR'].join('\\\\r\\\\n');
+            'ORGANIZER;CN=HUMMIN:mailto:sales@hummin.org','END:VEVENT','END:VCALENDAR'].join('\r\n');
           if(this._ics) URL.revokeObjectURL(this._ics);
           this._ics=URL.createObjectURL(new Blob([ics],{type:'text/calendar'}));
           this.setState({booked:true,bookingSaving:false,bookingStatus:'',gcal:data.calendarUrl||''});
         } catch(error) {
           this.setState({bookingSaving:false,bookingStatus:(error&&error.message)||'We could not confirm this appointment. Please email sales@hummin.org.'});
-          this.loadBookingSlots();
+          this.loadBookingSlots(true);
         }
       };
-\`;
+`;
   const start=t.indexOf('      // booking\n'), end=t.indexOf('\n      v.notBooked = ',start);
   if(start<0||end<0)throw Error('Original booking block not found');
   t=t.slice(0,start)+booking+t.slice(end);
