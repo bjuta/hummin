@@ -1,0 +1,32 @@
+{
+  "name": "hummin",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "react-router dev",
+    "build": "react-router build",
+    "typegen": "react-router typegen",
+    "typecheck": "npm run typegen && tsc --noEmit",
+    "preview": "npm run build && vite preview",
+    "deploy": "wrangler deploy",
+    "db:local": "wrangler d1 migrations apply hummin-web --local",
+    "db:remote": "wrangler d1 migrations apply hummin-web --remote"
+  },
+  "dependencies": {
+    "isbot": "5.1.32",
+    "react": "19.2.1",
+    "react-dom": "19.2.1",
+    "react-router": "7.9.6"
+  },
+  "devDependencies": {
+    "@cloudflare/vite-plugin": "1.15.3",
+    "@cloudflare/workers-types": "5.20261023.1",
+    "@react-router/dev": "7.9.6",
+    "@types/node": "24.10.1",
+    "@types/react": "19.2.7",
+    "@types/react-dom": "19.2.3",
+    "typescript": "5.9.3",
+    "vite": "^7.0.0",
+    "wrangler": "4.88.0"
+  }
+}
