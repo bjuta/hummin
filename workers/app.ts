@@ -10,6 +10,11 @@ export interface HumminEnv {
   TURNSTILE_SECRET_KEY?: string;
   SITE_URL?: string;
   CONTACT_ENABLED?: string;
+  BOOKING_ENABLED?: string;
+  GOOGLE_CALENDAR_ID?: string;
+  GOOGLE_CLIENT_ID?: string;
+  GOOGLE_CLIENT_SECRET?: string;
+  GOOGLE_REFRESH_TOKEN?: string;
 }
 
 declare module "react-router" {
