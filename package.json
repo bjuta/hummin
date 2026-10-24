@@ -10,7 +10,9 @@
     "preview": "npm run build && vite preview",
     "deploy": "wrangler deploy",
     "db:local": "wrangler d1 migrations apply hummin-web --local",
-    "db:remote": "wrangler d1 migrations apply hummin-web --remote"
+    "db:remote": "wrangler d1 migrations apply hummin-web --remote",
+    "deploy:preview": "wrangler deploy --config wrangler.preview.jsonc",
+    "db:preview": "wrangler d1 migrations apply hummin-web-preview --config wrangler.preview.jsonc --remote"
   },
   "dependencies": {
     "isbot": "5.1.32",
