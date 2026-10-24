@@ -38,12 +38,12 @@ async function notify(enquiry:Visitor,id:string,apiKey:string,from:string){
 }
 export async function loader({context}:{context:AppLoadContext}){
  const env=context.cloudflare.env;
- return { formReady:!!(env.DB&&env.RESEND_API_KEY&&env.TURNSTILE_SECRET_KEY&&env.TURNSTILE_SITE_KEY&&env.EMAIL_FROM), siteKey:env.TURNSTILE_SITE_KEY||"" };
+ return { formReady:!!(env.CONTACT_ENABLED==='true'&&env.DB&&env.RESEND_API_KEY&&env.TURNSTILE_SECRET_KEY&&env.TURNSTILE_SITE_KEY&&env.EMAIL_FROM), siteKey:env.TURNSTILE_SITE_KEY||"" };
 }
 export async function action({request,context}:{request:Request;context:AppLoadContext}):Promise<Response>{
  const env=context.cloudflare.env;
  const error=(message:string,status:number)=>Response.json({ok:false,message} satisfies Result,{status});
- if(!env.DB||!env.RESEND_API_KEY||!env.TURNSTILE_SECRET_KEY||!env.TURNSTILE_SITE_KEY||!env.EMAIL_FROM)
+ if(env.CONTACT_ENABLED!=='true'||!env.DB||!env.RESEND_API_KEY||!env.TURNSTILE_SECRET_KEY||!env.TURNSTILE_SITE_KEY||!env.EMAIL_FROM)
   return error("Online enquiries are not configured yet. Please email sales@hummin.org.",503);
  if(request.headers.get("content-length")&&Number(request.headers.get("content-length"))>10000)return error("Message is too large.",413);
  const origin=request.headers.get("origin");
