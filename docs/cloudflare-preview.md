@@ -45,3 +45,15 @@ The preview schema was applied once through the D1 API; migration history is not
 ## Release checklist
 
 See `docs/launch-gates.md`. Passing CI does not mean production readiness. Approved photos, branding, real assessment and privacy notices still need completion.
+
+## First real full-stack deployment — succeeded
+
+- Cloudflare Builds trigger `56a037a2-d366-4506-b34c-3e72c0ab78c1` created for branch `feat/fullstack-workers-foundation`.
+- First attempt failed because `wrangler deploy --config wrangler.preview.jsonc` re-bundled the uncompiled Worker entry and could not resolve `virtual:react-router/server-build`.
+- Fixed by setting Vite Cloudflare plugin `configPath` to `./wrangler.preview.jsonc` and using `wrangler deploy` without `--config` so it uses Vite's compiled output manifest.
+- Successful build `ba1e6319-d09a-4d23-99ad-43b3267d819a` outcome **success**.
+- Deployed Worker version `fb61418a-c5a0-4249-82c6-2496955eb8ae`.
+- Preview URL: `https://hummin-web-preview.grimpossible.workers.dev`.
+- Deployment logs confirm attached D1 binding `env.DB (hummin-web-preview)` and `CONTACT_ENABLED=false`.
+- Cloudflare deployment confirmed; independent HTTP/browser check not completed because this execution environment could not resolve the preview hostname.
+- Remaining: user browser QA, final photography, missing original assessment, approved privacy policy, Turnstile + Resend credentials and real contact delivery tests. Main branch and `hummin.org` remain untouched.
