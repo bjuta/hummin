@@ -1,0 +1,20 @@
+{
+  "name": "hummin-web-preview",
+  "main": "./workers/app.ts",
+  "compatibility_date": "2026-10-01",
+  "compatibility_flags": ["nodejs_compat"],
+  "workers_dev": true,
+  "observability": { "enabled": true },
+  "assets": { "directory": "./build/client", "binding": "ASSETS" },
+  "vars": {
+    "SITE_URL": "https://hummin-web-preview.grimpossible.workers.dev",
+    "CONTACT_ENABLED": "false",
+    "TURNSTILE_SITE_KEY": ""
+  },
+  "d1_databases": [{
+    "binding": "DB",
+    "database_name": "hummin-web-preview",
+    "database_id": "a6fb62df-824e-4231-8630-34ce1e6c27f4",
+    "migrations_dir": "migrations"
+  }]
+}
