@@ -1,6 +1,11 @@
 name: Stage production infrastructure
 on:
   workflow_dispatch:
+    inputs:
+      release_sha:
+        description: "Exact 40-character verified release commit on feat/fullstack-workers-foundation"
+        required: true
+        type: string
 permissions:
   contents: read
 concurrency:
@@ -11,14 +16,35 @@ jobs:
     runs-on: ubuntu-latest
     environment: production-staging
     steps:
+      - name: Validate approved release SHA format
+        env:
+          RELEASE_SHA: ${{ inputs.release_sha }}
+        run: |
+          [[ "$RELEASE_SHA" =~ ^[0-9a-f]{40}$ ]] || { echo "A 40-character release SHA is required"; exit 1; }
       - uses: actions/checkout@v4
+        with:
+          ref: feat/fullstack-workers-foundation
+          persist-credentials: false
+      - name: Verify the exact approved branch commit
+        env:
+          RELEASE_SHA: ${{ inputs.release_sha }}
+        run: |
+          test "$(git rev-parse HEAD)" = "$RELEASE_SHA" || { echo "Branch moved since approval; aborting"; exit 1; }
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
       - run: npm install --no-audit --no-fund
       - run: npm run check:production:config
+      - run: npm run verify:production:migrations
+      - run: npm run verify:seo
       - run: npm run typecheck
       - run: npm run build
+      - name: Verify staging deployment credentials
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+        run: |
+          test -n "$CLOUDFLARE_API_TOKEN" && test -n "$CLOUDFLARE_ACCOUNT_ID" || { echo "Missing staging-scoped Cloudflare credentials"; exit 1; }
       - name: Apply tracked production D1 migrations
         run: npm run db:production
         env:
