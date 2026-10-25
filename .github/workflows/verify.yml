@@ -18,4 +18,5 @@ jobs:
       - run: npm run typecheck
       - run: npm run build
       - run: npm run verify:restoration
+      - run: npm run verify:insights
       - run: npm run verify:email
