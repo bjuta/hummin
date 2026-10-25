@@ -33,7 +33,7 @@ test("Preview never exposes public self-registration or mock admin data",()=>{
  assert.match(read("app/lib/admin-auth.server.ts"),/attempts<5/);
  assert.match(read("app/lib/admin-auth.server.ts"),/HMAC/);
  assert.match(read("app/routes/admin.index.tsx"),/sessionUser/);
- assert.match(read("app/routes/admin.index.tsx"),/SELECT COUNT/);
+ assert.match(read("app/lib/admin-data.server.ts"),/COUNT\(\*\)/);
  assert.doesNotMatch(read("app/routes/admin.index.tsx"),/LEADS0|THREADS0|BOOK0|TPLS0/);
 });
 test("Branded account emails use operational links and verified identity fallback",()=>{
