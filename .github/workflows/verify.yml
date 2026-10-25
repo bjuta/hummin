@@ -25,3 +25,4 @@ jobs:
       - run: npm run verify:admin-data
       - run: npm run verify:admin-fidelity
       - run: npm run verify:admin-operations
+      - run: npm run verify:analytics
