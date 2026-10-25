@@ -18,7 +18,7 @@ export async function action({request,context}:{request:Request;context:AppLoadC
  return redirect("/admin",{headers:{...privateHeaders,"Set-Cookie":sessionCookie(value)}});
 }
 export default function Verify(){
- const {email,ready}=useLoaderData<typeof loader>(),data=useActionData<typeof action>();
+ const {email,ready}=useLoaderData<typeof loader>(),data=useActionData() as {ok:boolean;message:string}|undefined;
  return <section style={{minHeight:"82vh",display:"grid",placeItems:"center",background:"#F4F5F1",padding:24,fontFamily:"Figtree,Arial,sans-serif"}}>
  <div style={{maxWidth:460,width:"100%",padding:36,borderRadius:20,background:"#FFFFFF",border:"1px solid #D0D8D2"}}>
  <p style={{color:"#B5532C",fontWeight:700,letterSpacing:3}}>HUMMIN / VERIFY</p>
