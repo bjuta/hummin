@@ -19,5 +19,9 @@ assert.ok(!("RESEND_API_KEY" in conf.vars));
 assert.ok(!("ADMIN_AUTH_PEPPER" in conf.vars));
 const pkg=JSON.parse(fs.readFileSync("package.json","utf8"));
 assert.match(pkg.scripts["db:production"],/--config wrangler.production.jsonc --remote/);
-assert.match(pkg.scripts["deploy:production:staging"],/--config wrangler.production.jsonc/);
+// Build selection must be explicit; Wrangler must deploy the generated SSR
+// output, never rebundle the raw worker.ts entry with an unresolved virtual import.
+assert.match(pkg.scripts["deploy:production:staging"],/HUMMIN_DEPLOY_TARGET=production/);
+assert.match(pkg.scripts["deploy:production:staging"],/--config build\/server\/wrangler\.json/);
+assert.doesNotMatch(pkg.scripts["deploy:production:staging"],/--config wrangler\.preview\.jsonc/);
 console.log("PASS: isolated, non-public, fail-closed production staging configuration");
