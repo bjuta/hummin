@@ -81,7 +81,8 @@ test('Both account codes are six contiguous digits and have expiries',()=>{
 test('Booking and newsletter links are real, and sender rules follow brand book',()=>{
  assert.equal(mails[3].sender,'people');
  assert.equal(mails[5].sender,'system');
- assert.equal(mails[8].sender,'people');
+ assert.equal(mails[8].sender,'newsletter');
+ assert.equal(mails[0].sender,'people');
  assert.match(mails[3].html,/meet\.google\.com/);
  assert.match(mails[8].text,/unsubscribe/);
  assert.match(mails[8].html,/Notes from HUMMIN/);
@@ -90,6 +91,7 @@ test('Booking and newsletter links are real, and sender rules follow brand book'
 test('Newsletter verification is never confused with a monthly edition',()=>{
  const mail=newsletterOptInEmail({recipient:contact.email,confirmUrl:origin+'/newsletter/confirm?token=abc',assetOrigin:origin});
  assert.equal(mail.type,'newsletter-opt-in');
+ assert.equal(mail.sender,'newsletter');
  assert.match(mail.html,/Confirm Subscription/);
  assert.match(mail.text,/confirm/);
 });
