@@ -26,3 +26,11 @@ test("Insights deep links select the requested page on the first paint",()=>{
  assert.match(restore,/view:'author',author:path\[2\]/);
  assert.match(restore,/view:'topic',topic:topic\.name/);
 });
+
+test("Global splash waits for mounted component and active nested route before fade",()=>{
+ assert.match(restore,/window\.__HUMMIN_DESIGN_MOUNTED__===?true|window\.__HUMMIN_DESIGN_MOUNTED__!==true/);
+ assert.match(restore,/window\.dispatchEvent\(new Event\('hummin-design-mounted'\)\)/);
+ assert.match(restore,/hummin-assessment-frame/);
+ assert.match(restore,/hummin-insights-frame/);
+ assert.match(restore,/document\.fonts\.ready/);
+});
