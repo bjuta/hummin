@@ -76,8 +76,10 @@ export function renderBrandEmail(spec:EmailSpec,assetOrigin:string):BrandEmail {
  if(spec.primary && !spec.primary.url)throw Error("A primary action must have a real destination");
  if(spec.secondary && !spec.primary)throw Error("Secondary action requires a primary action");
  const origin=normalizeBase(assetOrigin);
- const light=e(origin+"/email/mark-light.png"), dark=e(origin+"/email/mark-dark.png");
- const motif=e(origin+"/email/motif.svg");
+ // Until hummin.org is routed to this Worker, keep email imagery on the
+ // already-live HTTPS Worker host. Do not use a website URL that lacks assets.
+ const imageBase=origin==="https://hummin.org"?"https://hummin-web-production.grimpossible.workers.dev":origin;
+ const light=e(imageBase+"/email/mark-light.png");
  const paragraphs=spec.paragraphs||[];
  const rows=spec.rows||[];
  const messageParts=[
@@ -113,7 +115,7 @@ export function renderBrandEmail(spec:EmailSpec,assetOrigin:string):BrandEmail {
  '<div style="display:none!important;visibility:hidden;opacity:0;height:0;width:0;overflow:hidden;mso-hide:all;">'+e(spec.preheader)+'</div>'+
  '<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="border-collapse:collapse;background:#F4F5F1;"><tr><td align="center" style="padding:24px 10px 36px;">'+
  '<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="width:100%;max-width:600px;border-collapse:separate;border-spacing:0;border-radius:18px;overflow:hidden;">'+
- '<tr><td class="hm-pad hm-head" style="background:'+SLATE+' url('+motif+') no-repeat right -65px center;background-size:300px auto;padding:24px 40px;height:104px;box-sizing:border-box;border-radius:18px 18px 0 0;overflow:hidden;">'+
+ '<tr><td class="hm-pad hm-head" style="background:'+SLATE+';padding:24px 40px;height:104px;box-sizing:border-box;border-radius:18px 18px 0 0;overflow:hidden;">'+
  '<img src="'+light+'" width="38" alt="HUMMIN" style="display:inline-block;width:38px;height:auto;vertical-align:middle;border:0;"/>'+
  inline('color:#F4F5F1;font-size:13px;font-weight:600;letter-spacing:0.18em;vertical-align:middle;margin-left:10px;', 'HUMMIN')+
  '</td></tr>'+
@@ -123,7 +125,7 @@ export function renderBrandEmail(spec:EmailSpec,assetOrigin:string):BrandEmail {
  '<tr><td style="padding:0 0 24px;"><h1 class="hm-title" style="margin:0;font-family:Newsreader,Georgia,serif;font-weight:400;font-size:34px;line-height:1.1;letter-spacing:-0.01em;color:'+SLATE+';">'+e(spec.title)+'</h1></td></tr>'+
  sections+'</table></td></tr>'+
  '<tr><td class="hm-pad" style="background:'+MIST+';padding:22px 40px;color:#5E6967;font-size:12px;line-height:1.6;">'+
- '<img src="'+dark+'" alt="" aria-hidden="true" width="24" style="width:24px;height:auto;vertical-align:middle;border:0;"/>'+
+
  inline('font-weight:600;letter-spacing:0.14em;color:'+SLATE+';vertical-align:middle;margin-left:8px;','HUMMIN')+
  '<div style="padding-top:9px;">Embedded advisory and execution. Nairobi, Kenya</div>'+
  '<div style="padding-top:5px;"><a href="https://hummin.org" style="color:'+EMBER+';font-weight:600;text-decoration:none;">hummin.org</a> &nbsp;·&nbsp; <a href="mailto:sales@hummin.org" style="color:'+EMBER+';font-weight:600;text-decoration:none;">sales@hummin.org</a></div>'+
