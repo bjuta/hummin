@@ -15,7 +15,7 @@ const render=(d:EmailSpec,origin:string):BrandEmail=>renderBrandEmail(d,origin);
 export function contactInternalEmail(person:ContactDetails,options:ContactEmailOptions){
  return render({
   type:"contact-internal",sender:"system",recipient:"sales@hummin.org",replyTo:person.email,
-  subject:"New enquiry: "+person.name+", "+person.businessName.replace(/[\r\n\t]/g," ").slice(0,110),
+  subject:"New enquiry: "+person.name.replace(/[\r\n\t]/g," ").slice(0,100)+", "+person.businessName.replace(/[\r\n\t]/g," ").slice(0,110),
   preheader:"Sent from the contact form"+(options.sentAt?" at "+clock(options.sentAt):" on hummin.org")+".",
   kicker:"New enquiry",title:person.name+" wants to talk.",
   paragraphs:["Sent from the contact form on hummin.org. Reply to this email to answer them directly."],
