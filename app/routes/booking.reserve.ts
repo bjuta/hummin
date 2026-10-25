@@ -15,7 +15,7 @@ export async function action({request,context}:{request:Request;context:AppLoadC
  try{
  const event=await reserve(env,{start,name,email,phone});
  let emailQueued=false;
- if(env.DB&&event.meetUrl&&env.RESEND_API_KEY&&env.EMAIL_FROM){
+ if(env.DB&&(event.meetUrl||event.calendarUrl)&&env.RESEND_API_KEY&&env.EMAIL_FROM){
   const appointment={recipient:email,name,start:new Date(start),end:new Date(Date.parse(start)+1800000),host:"HUMMIN",meetUrl:event.meetUrl,calendarUrl:event.calendarUrl,assetOrigin:env.SITE_URL||new URL(request.url).origin};
   try{
    await queueEmail(env,"booking-confirmation:"+event.eventId,bookingConfirmationEmail(appointment));
@@ -24,7 +24,7 @@ export async function action({request,context}:{request:Request;context:AppLoadC
    emailQueued=true;
    context.cloudflare.ctx.waitUntil(deliverDue(env,3).catch(()=>({sent:0,failed:0})));
   }catch(e){console.error("Booking confirmed but email enqueue failed",event.eventId);}
- }else{console.error("Booking confirmed without email prerequisites or Meet URL",event.eventId);}
+ }else{console.error("Booking confirmed without email prerequisites or a valid Calendar link",event.eventId);}
  return Response.json({ok:true,...event,emailQueued},{headers:{"Cache-Control":"no-store"}});
 }
  catch(e){console.error("HUMMIN booking attempt could not be confirmed");return err(e instanceof Error && /no longer available|just been selected/.test(e.message)?"That time has been taken. Choose another slot.":"Booking could not be confirmed. Please email sales@hummin.org.",409);}
