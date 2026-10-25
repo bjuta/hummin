@@ -1,0 +1,23 @@
+import assert from "node:assert/strict";
+const base=(process.env.HUMMIN_STAGING_URL||"https://hummin-web-production.grimpossible.workers.dev").replace(/\/$/,"");
+assert.match(base,/^https:\/\/hummin-web-production\.[a-z0-9-]+\.workers\.dev$/,"Run only against the isolated production Worker URL");
+const read=async(path)=>{
+ const r=await fetch(base+path,{redirect:"manual",signal:AbortSignal.timeout(20000)});
+ return {response:r,body:await r.text()};
+};
+const home=await read("/");
+assert.equal(home.response.status,200,"Homepage must load");
+assert.match(home.response.headers.get("x-robots-tag")||"",/noindex/i,"Staging homepage must not be indexed");
+assert.match(home.body,/<meta name="robots" content="noindex,nofollow">/i,"Staging template must retain noindex");
+const robots=await read("/robots.txt");
+assert.equal(robots.response.status,200);
+assert.match(robots.body,/Disallow: \/\n/);
+const sitemap=await read("/sitemap.xml");
+assert.equal(sitemap.response.status,404,"Staging sitemap must not be publicly crawlable");
+const slots=await read("/api/booking/slots");
+assert.equal(slots.response.status,200);
+assert.equal(JSON.parse(slots.body).enabled,false,"Booking must be disabled at staging");
+const login=await read("/admin/login");
+assert.equal(login.response.status,200);
+assert.match(login.body,/not currently available|not active/i,"Staff login must be disabled until explicitly provisioned");
+console.log("PASS staging smoke: public pages, crawler policy, booking and Admin fail-closed");
