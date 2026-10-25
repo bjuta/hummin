@@ -9,14 +9,23 @@ export async function queueEmail(env:HumminEnv,key:string,email:BrandEmail,delay
 }
 export async function deliverDue(env:HumminEnv,limit=12):Promise<{sent:number;failed:number}>{
  if(!env.DB||!env.RESEND_API_KEY||!env.EMAIL_FROM)throw Error("Email provider unavailable");
- const due=await env.DB.prepare("SELECT id,payload,attempts FROM email_outbox WHERE ((status IN ('pending','failed') AND next_attempt_at <= ?) OR (status='sending' AND claimed_at < ?)) AND attempts < 7 ORDER BY next_attempt_at LIMIT ?")
- .bind(new Date().toISOString(),new Date(Date.now()-15*60000).toISOString(),limit).all<{id:string;payload:string;attempts:number}>();
+ const due=await env.DB.prepare("SELECT id,kind,recipient,payload,attempts FROM email_outbox WHERE ((status IN ('pending','failed') AND next_attempt_at <= ?) OR (status='sending' AND claimed_at < ?)) AND attempts < 7 ORDER BY next_attempt_at LIMIT ?")
+ .bind(new Date().toISOString(),new Date(Date.now()-15*60000).toISOString(),limit).all<{id:string;kind:string;recipient:string;payload:string;attempts:number}>();
  let sent=0,failed=0;
  for(const row of due.results||[]){
   const claimed=await env.DB.prepare("UPDATE email_outbox SET status='sending',claimed_at=?,attempts=attempts+1 WHERE id=? AND ((status IN ('pending','failed') AND next_attempt_at<=?) OR (status='sending' AND claimed_at<?))")
     .bind(new Date().toISOString(),row.id,new Date().toISOString(),new Date(Date.now()-15*60000).toISOString()).run();
   if(claimed.meta?.changes!==1)continue;
   try{
+   // Subscription consent is rechecked at dispatch time, even after an issue was queued.
+   if(row.kind==="newsletter-monthly"){
+    const approved=await env.DB.prepare("SELECT status FROM newsletter_issues WHERE id=?").bind(row.id.slice("newsletter:".length).split(":")[0]).first<{status:string}>();
+    const active=await env.DB.prepare("SELECT status FROM newsletter_subscribers WHERE email=?").bind(row.recipient).first<{status:string}>();
+    if(approved?.status!=="approved"||active?.status!=="active"){
+     await env.DB.prepare("DELETE FROM email_outbox WHERE id=? AND status='sending'").bind(row.id).run();
+     continue;
+    }
+   }
    const email=JSON.parse(row.payload) as BrandEmail;
    const res=await fetch("https://api.resend.com/emails",{method:"POST",headers:{"Authorization":"Bearer "+env.RESEND_API_KEY,"Content-Type":"application/json","Idempotency-Key":row.id},
     body:JSON.stringify({from:env.EMAIL_FROM,to:[email.recipient],subject:email.subject,text:email.text,html:email.html,reply_to:email.replyTo||"sales@hummin.org"})});
