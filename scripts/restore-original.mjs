@@ -13,7 +13,7 @@ function patch(html, fn, override){
 function site(t){
  t=need(t,'<dc-import name="HUMMIN Insights" on-contact="{{ go_contact }}" on-assess="{{ go_assess }}" on-nav="{{ goPage }}" open-post="{{ insightPost }}" open-nonce="{{ insightNonce }}" hint-size="100%,1200px"></dc-import>',
  '<iframe title="HUMMIN Insights articles and author profiles" src="/design/insights/index.html" style="width:100%;height:1250px;min-height:400px;border:0;display:block;background:#F4F5F1" loading="eager" id="hummin-insights-frame"></iframe>');
- t=need(t,"open: () => this.go('insights', { insightPost: x.slug, insightNonce: Date.now() })","open: () => { window.location.assign('/insights/'+x.slug); }");
+ t=need(t,"open: () => this.go('insights', { insightPost: x.slug, insightNonce: Date.now() })","open: () => this.go('insights', { insightPost: x.slug, insightNonce: Date.now() })");
 
  t=need(t,'<span>© 2026 HUMMIN</span>','<a href="/newsletter" style="color:#E7EBE6;text-decoration:underline;text-underline-offset:4px">Notes from HUMMIN</a><span>© 2026 HUMMIN</span>');
  t=need(t,'<dc-import name="HUMMIN Assessment v2" on-contact="{{ go_contact }}" hint-size="100%,900px"></dc-import>','<iframe title="HUMMIN Business Assessment" src="/design/assessment/index.html" style="width:100%;min-height:960px;border:0;display:block;background:#1E272A" loading="eager" id="hummin-assessment-frame"></iframe>');
@@ -21,7 +21,8 @@ function site(t){
  t=need(t,"class Component extends DCLogic {","const HUMMIN_ROUTE_PATHS = {home:'/',how:'/how-we-work',core:'/applied-expertise',eng:'/engagements',who:'/who-we-work-with',assess:'/assessment',about:'/about',insights:'/insights',contact:'/contact'};\nconst HUMMIN_PATH_PAGES = Object.fromEntries(Object.entries(HUMMIN_ROUTE_PATHS).map(([page,url])=>[url,page]));\nclass Component extends DCLogic {");
  t=need(t,"    this._lastPage = this.state.page;","    this.onPopState = () => { const next=HUMMIN_PATH_PAGES[window.location.pathname]||(window.location.pathname.startsWith('/insights/')?'insights':'home'); this.setState({page:next,menu:false,peekOpen:false}); window.scrollTo({top:0,behavior:'instant'}); };\n    window.addEventListener('popstate', this.onPopState);\n    this.onTurnstileReady = () => this.mountTurnstile(); window.addEventListener('hummin-turnstile-ready',this.onTurnstileReady); requestAnimationFrame(() => this.mountTurnstile());\n    window.__HUMMIN_DESIGN_MOUNTED__=true;window.dispatchEvent(new Event('hummin-design-mounted'));\n    this._lastPage = this.state.page;");
  t=need(t,"window.removeEventListener('keydown', this.onKey); if (this.io) this.io.disconnect();","window.removeEventListener('keydown', this.onKey); window.removeEventListener('popstate', this.onPopState);window.removeEventListener('hummin-turnstile-ready',this.onTurnstileReady); if (this.io) this.io.disconnect();");
- t=need(t,"  _go(p, extra) {\n    this.setState({ page: p, menu: false, ...(extra || {}) });","  _go(p, extra) {\n    const path=HUMMIN_ROUTE_PATHS[p]; if(path && window.location.pathname!==path)window.history.pushState({humminPage:p},'',path);\n    this.setState({ page: p, menu: false, ...(extra || {}) });");
+ t=need(t,"  _go(p, extra) {\n    this.setState({ page: p, menu: false, ...(extra || {}) });
+    window.dispatchEvent(new Event('hummin-route-change'));","  _go(p, extra) {\n    const path=p==='insights'&&extra?.insightPost?'/insights/'+extra.insightPost:HUMMIN_ROUTE_PATHS[p]; if(path && window.location.pathname!==path)window.history.pushState({humminPage:p},'',path);\n    this.setState({ page: p, menu: false, ...(extra || {}) });");
  t=need(t,"  submit() {","  mountTurnstile() {\n    if (this.state.page !== 'contact' || window.HUMMIN_CONTACT_READY !== true) return;\n    const host = document.getElementById('hummin-turnstile');\n    if (!host || host.dataset.widget || !window.turnstile?.render) return;\n    try {\n      const id = window.turnstile.render(host,{ sitekey: window.HUMMIN_TURNSTILE_SITE_KEY, theme:'light' });\n      if(id!==undefined){ this._turnstileWidgetId=id; host.dataset.widget='ready'; }\n    }catch(e){ console.error('Turnstile could not render'); }\n  }\n"+"  submit() {");
  t=need(t,"  componentDidUpdate() { if (this._lastPage !== this.state.page) { this._lastPage = this.state.page; requestAnimationFrame(() => this.rise()); } }","  componentDidUpdate() { if (this._lastPage !== this.state.page) { this._lastPage = this.state.page; requestAnimationFrame(() => this.rise()); } if(this.state.page==='contact')requestAnimationFrame(() => this.mountTurnstile()); }");
  t=need(t,"<sc-if value=\"{{ not_sent }}\" hint-placeholder-val=\"{{ true }}\">","<sc-if value=\"{{ contactInactive }}\" hint-placeholder-val=\"{{ true }}\"><div role=\"status\" style=\"display:grid;gap:18px;max-width:620px;padding:30px;border:1px solid #D0D8D2;border-radius:20px;background:#E7EBE6;color:#1E272A\"><h2 style=\"margin:0;font-family:Newsreader,serif;font-weight:400;font-size:clamp(28px,3cqw,40px)\">Start a conversation directly.</h2><p style=\"margin:0;font-size:16px;line-height:1.65\">The online enquiry form is not accepting submissions in this preview. Email us directly and we will take it from there.</p><a href=\"mailto:sales@hummin.org\" style=\"justify-self:start;display:inline-flex;align-items:center;min-height:52px;padding:0 24px;background:#B5532C;color:#FFFFFF;border-radius:999px;font-size:15px;font-weight:600;text-decoration:none\">Email sales@hummin.org</a></div></sc-if><sc-if value=\"{{ contactReady }}\" hint-placeholder-val=\"{{ false }}\"><sc-if value=\"{{ not_sent }}\" hint-placeholder-val=\"{{ true }}\">");
@@ -278,6 +279,20 @@ class Component extends DCLogic {`);
  const mounted=`  componentDidMount() {
     window.__HUMMIN_DESIGN_MOUNTED__=true;window.dispatchEvent(new Event('hummin-design-mounted'));
     this._insightsAlive=true;
+    this._onHumminRouteMessage=(event)=>{
+      if(event.origin!==window.location.origin||event.source!==window.parent)return;
+      const path=event.data?.humminNavigate;
+      if(typeof path!=='string'||!/^\/insights(?:\/[^?#]*)?$/.test(path))return;
+      const parts=path.split('/').filter(Boolean);
+      if(parts[1]==='author'&&AUTHORS[parts[2]])this.setState({view:'author',slug:null,author:parts[2],topic:null});
+      else if(parts[1]==='topic'){
+        const topic=TOPICS.find(x=>slugify(x.name)===parts[2]);
+        if(topic)this.setState({view:'topic',slug:null,author:null,topic:topic.name});
+      }else if(parts[1]&&POSTS.some(x=>x.slug===parts[1]))this.setState({view:'post',slug:parts[1],author:null,topic:null});
+      else this.setState({view:'index',slug:null,author:null,topic:null});
+      requestAnimationFrame(()=>this.sendHeight());
+    };
+    window.addEventListener('message',this._onHumminRouteMessage);
     const locationPath = window.parent!==window ? window.parent.location.pathname : window.location.pathname;
     const parts=locationPath.split('/').filter(Boolean);
     if(parts[0]==='insights' && parts[1]==='author' && ['team','muiruri'].includes(parts[2]))this.setState({view:'author',author:parts[2]});
@@ -314,12 +329,17 @@ class Component extends DCLogic {`);
   }
  `;
  t=need(t,oldMount,mounted);
- t=need(t,"  componentWillUnmount() { clearTimeout(this._ct); }","  componentWillUnmount() { this._insightsAlive=false;clearTimeout(this._ct);this._heightObserver?.disconnect();if(this._onInsightsResize)window.removeEventListener('resize',this._onInsightsResize); }");
+ t=need(t,"  componentWillUnmount() { clearTimeout(this._ct); }","  componentWillUnmount() { this._insightsAlive=false;clearTimeout(this._ct);this._heightObserver?.disconnect();if(this._onHumminRouteMessage)window.removeEventListener('message',this._onHumminRouteMessage);if(this._onInsightsResize)window.removeEventListener('resize',this._onInsightsResize); }");
  t=need(t,"  go(view, extra) { this.setState({ view, ...(extra || {}) }); const sc = this.scroller(); if (sc) sc.scrollTop = 0; else window.scrollTo({ top: 0 }); }",
  `  go(view,extra){
     const data=extra||{};
     const path=view==='post' ? '/insights/'+data.slug : view==='author' ? '/insights/author/'+data.author : view==='topic' ? '/insights/topic/'+slugify(data.topic||'') : '/insights';
-    if(window.parent!==window){window.parent.location.assign(path);return;}
+    if(window.parent!==window){
+      this.setState({view,...data});
+      window.parent.postMessage({humminRoute:path},window.location.origin);
+      window.parent.scrollTo({top:0});
+      return;
+    }
     this.setState({view,...data});
     window.history.pushState({},'',path);
     window.scrollTo({top:0});
