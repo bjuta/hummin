@@ -51,13 +51,23 @@ export function EngagementsExact({records,engagements,milestones,selected}:{reco
  <Form method="post" style={{display:"flex",gap:8,flexWrap:"wrap"}}><input type="hidden" name="operation" value="milestone_create"/><input type="hidden" name="id" value={n(chosen.id)}/><input type="text" required minLength={2} maxLength={180} style={{...control,flex:1}} name="title" placeholder="New milestone"/><button style={{...button,background:"#B5532C",color:"white"}}>Add milestone</button></Form></div>:null}
  </div>;
 }
-export function AnalyticsExact(){
- const ranges=["7 days","30 days","90 days"],[range,setRange]=useState("30 days");
- const cards=["Visitors","Page views","Assessments finished","Leads","Visitor to lead","New clients"];
+export function AnalyticsExact({records,conversion}:{records:R[];conversion:R[]}){
+ const ranges=[7,30,90],[range,setRange]=useState(30);
+ const start=new Date();start.setUTCDate(start.getUTCDate()-range+1);
+ const daily=records.filter(r=>n(r.day)>=start.toISOString().slice(0,10));
+ const views=daily.reduce((x,r)=>x+(Number(r.views)||0),0);
+ const paths=new Map<string,number>(),channels=new Map<string,number>();
+ for(const row of daily){paths.set(n(row.path),(paths.get(n(row.path))||0)+(Number(row.views)||0));channels.set(n(row.channel),(channels.get(n(row.channel))||0)+(Number(row.views)||0));}
+ const totals=conversion[0]||{};
  return <div style={{display:"grid",gap:12}}>
- <div style={{display:"flex",flexWrap:"wrap",alignItems:"center",justifyContent:"space-between",gap:12}}><div style={{display:"flex",gap:4,padding:3,borderRadius:99,background:"#E7EBE6"}}>{ranges.map(r=><button key={r} onClick={()=>setRange(r)} aria-pressed={range===r} style={{...button,background:range===r?"#1E272A":"transparent",color:range===r?"white":"#1E272A",border:0}}>{r}</button>)}</div><span style={label}>Traffic from Cloudflare Web Analytics (no cookies). Leads and conversions from HUMMIN events.</span></div>
- <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(min(100%,170px),1fr))",gap:12}}>{cards.map((title,i)=><div key={title} style={{padding:16,borderRadius:16,background:i===0?"#1E272A":i===5?"#B5532C":"white",color:i===0||i===5?"white":"#1E272A",display:"grid",gap:4}}><span style={label}>{title}</span><span style={{font:"400 34px Newsreader,serif"}}>—</span><small>Awaiting verified analytics</small></div>)}</div>
- {["Reach, not impressions","Visitors and leads","Sources · visitors to leads to clients","Countries and cities","Sharing","Assessment funnel","Search queries","Audience and speed"].map(title=><div key={title} style={P}><strong style={head}>{title}</strong><Empty>{title==="Search queries"?"Google Search Console data is not connected.":title==="Visitors and leads"?"No fabricated traffic graphs: Cloudflare Analytics data must be connected.":"This module requires measured data before its original visualisation can be populated."}</Empty></div>)}</div>;
+ <div style={{display:"flex",gap:4,flexWrap:"wrap",alignItems:"center"}}>{ranges.map(days=><button key={days} style={{...button,background:range===days?"#1E272A":"white",color:range===days?"white":"#1E272A"}} onClick={()=>setRange(days)} aria-pressed={range===days}>{days} days</button>)}<span style={{...label,marginLeft:"auto"}}>First-party anonymous page views, not unique visitors</span></div>
+ <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(160px,1fr))",gap:12}}>
+ {([["Page views",views],["Unique visitors","Not measured"],["Assessments submitted",n(totals.assessments)||"0"],["Enquiries received",n(totals.enquiries)||"0"],["Confirmed bookings",n(totals.bookings)||"0"]] as const).map(([title,value],i)=><div key={title} style={{...P,background:i===0?"#1E272A":"white",color:i===0?"white":"#1E272A"}}><span style={label}>{title}</span><strong style={{font:"400 32px Newsreader,serif"}}>{value}</strong></div>)}</div>
+ <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(min(100%,330px),1fr))",gap:12}}>
+ <div style={P}><strong>Top pages</strong>{[...paths].sort((a,b)=>b[1]-a[1]).slice(0,12).map(([path,count])=><div key={path} style={{display:"flex",gap:10,justifyContent:"space-between",borderTop:"1px solid #E7EBE6",paddingTop:9}}><span style={{overflowWrap:"anywhere"}}>{path}</span><strong>{count}</strong></div>)}{!paths.size?<Empty>Page-view measurement is now connected. No events recorded for this period.</Empty>:null}</div>
+ <div style={P}><strong>Traffic channels</strong>{[...channels].sort((a,b)=>b[1]-a[1]).map(([channel,count])=><div key={channel} style={{display:"flex",justifyContent:"space-between",borderTop:"1px solid #E7EBE6",paddingTop:9}}><span>{channel}</span><strong>{count}</strong></div>)}{!channels.size?<Empty>No measured channels for this period.</Empty>:null}<span style={label}>No IP addresses, cookies or raw referrers are retained. A channel is inferred from the referring domain only.</span></div></div>
+ <div style={P}><strong>Conversion reporting</strong><p style={label}>Assessment, enquiry and booking totals reflect the last 30 days, regardless of selected pageview range. Unique visitor conversion rates are not shown because unique visitor attribution is not collected.</p></div>
+ </div>;
 }
 export function InvoicesExact(){
  const filters=["All","Draft","Issued","Paid","Overdue","Cancelled"];
