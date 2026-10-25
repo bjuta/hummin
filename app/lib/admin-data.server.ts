@@ -10,8 +10,8 @@ const readEnquiries=(env:HumminEnv)=>
  COALESCE(w.stage,'new') AS stage,w.assigned_user_id,w.updated_at FROM enquiries e
  LEFT JOIN admin_enquiry_workflow w ON w.enquiry_id=e.id ORDER BY e.submitted_at DESC LIMIT 75`).all<EnquiryRow>();
 export async function loadAdminView(env:HumminEnv,user:AdminUser,view:AdminView){
- if(!env.DB)throw new Error("Database is unavailable");
  if(!canView(user.role,view))return {restricted:true,records:[],counts:{}};
+ if(!env.DB)throw new Error("Database is unavailable");
  const db=env.DB;
  if(view==="dash"){
   if(user.role!=="owner"&&user.role!=="sales")return {restricted:false,records:[],counts:{}};
@@ -57,7 +57,7 @@ export async function loadAdminView(env:HumminEnv,user:AdminUser,view:AdminView)
  return {restricted:false,counts:{},records:[]};
 }
 export async function updateEnquiry(env:HumminEnv,user:AdminUser,operation:string,enquiryId:string,value:string){
- if(!env.DB||!canView(user.role,"pipe"))return {ok:false,message:"Not authorised."};
+ if(!canView(user.role,"pipe")||!env.DB)return {ok:false,message:"Not authorised."};
  if(!/^[\da-f-]{8,64}$/i.test(enquiryId))return {ok:false,message:"Invalid enquiry."};
  const exists=await env.DB.prepare("SELECT id FROM enquiries WHERE id=?").bind(enquiryId).first();
  if(!exists)return {ok:false,message:"Enquiry not found."};
