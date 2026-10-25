@@ -8,7 +8,7 @@
     "typegen": "react-router typegen",
     "typecheck": "npm run typegen && tsc --noEmit",
     "preview": "npm run build && vite preview",
-    "deploy": "wrangler deploy",
+    "deploy": "node -e \"console.error('Choose deploy:preview or deploy:production:staging explicitly; public domain routing requires separate approval.'); process.exit(1)\"",
     "db:local": "wrangler d1 migrations apply hummin-web --local",
     "db:remote": "wrangler d1 migrations apply hummin-web --remote",
     "deploy:preview": "wrangler deploy",
@@ -22,7 +22,10 @@
     "verify:admin-fidelity": "node --test tests/admin-fidelity.test.mjs",
     "verify:insights-publications": "node --experimental-strip-types --test tests/insights-publications.test.mjs",
     "verify:admin-operations": "node --experimental-strip-types --test tests/admin-operations.test.mjs",
-    "verify:analytics": "node --experimental-strip-types --test tests/analytics-events.test.mjs"
+    "verify:analytics": "node --experimental-strip-types --test tests/analytics-events.test.mjs",
+    "db:production": "wrangler d1 migrations apply hummin-web-production --config wrangler.production.jsonc --remote",
+    "deploy:production:staging": "npm run build && wrangler deploy --config wrangler.production.jsonc",
+    "check:production:config": "node scripts/check-production-config.mjs"
   },
   "dependencies": {
     "isbot": "5.1.32",
