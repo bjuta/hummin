@@ -4,7 +4,7 @@ import {queueApprovedNewsletters} from "../lib/newsletter-runner.server.ts";
 import {reconcileBookingEmails} from "../lib/booking-mail-recovery.server.ts";
 export async function runMailWorker(env:HumminEnv){
  if(!env.DB||!env.RESEND_API_KEY||!env.EMAIL_FROM)return {sent:0,failed:0};
- await reconcileBookingEmails(env);
- await queueApprovedNewsletters(env);
+ await reconcileBookingEmails(env).catch(e=>console.error("Booking reconciliation deferred",e instanceof Error?e.message:"unknown"));
+ await queueApprovedNewsletters(env).catch(e=>console.error("Newsletter queue deferred",e instanceof Error?e.message:"unknown"));
  return deliverDue(env,15);
 }
