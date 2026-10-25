@@ -2,7 +2,7 @@ import { DatabaseSync } from "node:sqlite";
 import { readdirSync,readFileSync } from "node:fs";
 import assert from "node:assert/strict";
 const migrations=readdirSync("migrations").filter(f=>/^\d+_.+\.sql$/.test(f)).sort();
-assert.equal(migrations.length,9,"Expected all nine migrations");
+assert.equal(migrations.length,10,"Expected all ten migrations");
 const db=new DatabaseSync(":memory:");
 db.exec("PRAGMA foreign_keys=ON");
 for(const migration of migrations){
@@ -18,4 +18,5 @@ for(const table of ["enquiries","booking_slots","assessment_deliveries","email_o
 assert.deepEqual(db.prepare("PRAGMA foreign_key_check").all(),[],"Foreign-key violations");
 assert.equal(db.prepare("SELECT count(*) AS total FROM admin_users").get().total,0,"Do not seed privileged accounts");
 assert.equal(db.prepare("SELECT count(*) AS total FROM enquiries").get().total,0,"Do not seed visitor enquiries");
-console.log("PASS: nine migrations apply on empty SQLite with all required tables, valid FKs and no fabricated records");
+assert.ok(names.has("booking_rate_limits"),"Missing durable booking quota table");
+console.log("PASS: ten migrations apply on empty SQLite with all required tables, valid FKs and no fabricated records");

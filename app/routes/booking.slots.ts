@@ -1,10 +1,15 @@
 import { isConfigured, liveSlots } from "../lib/calendar.server";
 import type { AppLoadContext } from "react-router";
-export async function loader({context}:{context:AppLoadContext}){
+import {bookingLimit} from "../lib/booking-abuse.server.ts";
+export async function loader({request,context}:{request:Request;context:AppLoadContext}){
  const env=context.cloudflare.env;
  const disabled=()=>Response.json({enabled:false,days:[],message:"Live booking is not configured."},{headers:{"Cache-Control":"no-store"}});
  // Never display bookable times when appointment creation is disabled.
  if(!isConfigured(env))return disabled();
- try{return Response.json({enabled:true,days:await liveSlots(env)},{headers:{"Cache-Control":"no-store"}});}
+ try{
+  const limit=await bookingLimit(env,request,"slots");
+  if(!limit.ok)return Response.json({enabled:false,days:[],message:"Too many availability requests."},{status:429,headers:{"Cache-Control":"no-store","Retry-After":String(limit.retryAfter)}});
+  return Response.json({enabled:true,days:await liveSlots(env),siteKey:env.TURNSTILE_SITE_KEY},{headers:{"Cache-Control":"no-store"}});
+ }
  catch{console.error("HUMMIN booking availability failed");return Response.json({enabled:false,days:[],message:"Availability is temporarily unavailable."},{status:503,headers:{"Cache-Control":"no-store"}});}
 }

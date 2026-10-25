@@ -1,7 +1,8 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
-import {hasCalendarCredentials,isConfigured} from '../app/lib/calendar.server.ts';
+import {hasCalendarCredentials,isConfigured,reconcilePendingBookingHolds} from '../app/lib/calendar.server.ts';
+import {bookingLimit,verifyBookingTurnstile} from '../app/lib/booking-abuse.server.ts';
 import {queueEmail,deliverDue} from '../app/lib/mail-outbox.server.ts';
 import {contactReceivedEmail} from '../app/lib/email-templates.server.ts';
 
@@ -146,7 +147,7 @@ test('Every active email workflow has a real trigger or explicit feature gate',(
 });
 
 test('Booking remains closed unless both feature gates and Google credentials are ready',()=>{
- const calendar={DB:{},GOOGLE_CALENDAR_ID:'test-calendar',GOOGLE_CLIENT_ID:'test-id',GOOGLE_CLIENT_SECRET:'test-secret',GOOGLE_REFRESH_TOKEN:'test-refresh'};
+ const calendar={DB:{},GOOGLE_CALENDAR_ID:'test-calendar',GOOGLE_CLIENT_ID:'test-id',GOOGLE_CLIENT_SECRET:'test-secret',GOOGLE_REFRESH_TOKEN:'test-refresh',TURNSTILE_SITE_KEY:'site',TURNSTILE_SECRET_KEY:'secret',RESEND_API_KEY:'provider',EMAIL_FROM:'HUMMIN <hello@example.org>'};
  assert.equal(hasCalendarCredentials(calendar),true);
  for(const [booking,availability] of [['false','false'],['true','false'],['false','true']]){
   assert.equal(isConfigured({...calendar,BOOKING_ENABLED:booking,BOOKING_AVAILABILITY_ENABLED:availability}),false);
@@ -155,4 +156,48 @@ test('Booking remains closed unless both feature gates and Google credentials ar
  assert.equal(isConfigured({...calendar,BOOKING_ENABLED:'true',BOOKING_AVAILABILITY_ENABLED:'true',GOOGLE_REFRESH_TOKEN:undefined}),false);
  assert.match(fs.readFileSync('app/routes/booking.slots.ts','utf8'),/!isConfigured\(env\)/);
  assert.match(fs.readFileSync('app/routes/booking.reserve.ts','utf8'),/!isConfigured\(env\)/);
+});
+
+
+test('Durable D1 booking quota denies overflow and does not store plaintext IP',async()=>{
+ const counts=new Map(),ip='203.0.113.10',r=new Request('https://hummin-web-preview.grimpossible.workers.dev/api/booking/slots',{headers:{'cf-connecting-ip':ip}});
+ const env={TURNSTILE_SECRET_KEY:'test-protect',DB:{prepare(sql){
+  assert.match(sql,/INSERT INTO booking_rate_limits/);
+  return {bind(key){return {async first(){let v=(counts.get(key)||0)+1;counts.set(key,v);return {requests:v};}}};}
+ }}};
+ for(let i=0;i<36;i++)assert.equal((await bookingLimit(env,r,'slots')).ok,true);
+ const exceeded=await bookingLimit(env,r,'slots');
+ assert.equal(exceeded.ok,false);assert.ok(exceeded.retryAfter>0&&exceeded.retryAfter<=600);
+ assert.equal(counts.size,1);assert.ok(![...counts.keys()][0].includes(ip));
+});
+test('Booking Turnstile verifies hostname and dedicated action; no token fails closed',async()=>{
+ const r=new Request('https://hummin-web-preview.grimpossible.workers.dev/api/booking/reserve');
+ const env={TURNSTILE_SECRET_KEY:'test-protect',TURNSTILE_SITE_KEY:'test-site'};
+ const previous=globalThis.fetch;
+ globalThis.fetch=async()=>({ok:true,async json(){return {success:true,hostname:'hummin-web-preview.grimpossible.workers.dev',action:'hummin-booking'};}});
+ try{
+  assert.equal(await verifyBookingTurnstile(env,r,'token'),true);
+  assert.equal(await verifyBookingTurnstile(env,r,''),false);
+  assert.equal(await verifyBookingTurnstile(env,new Request('https://hummin.org/api/booking/reserve'),'token'),false);
+ }finally{globalThis.fetch=previous;}
+});
+test('Restored assessment submits real single-use Turnstile token to booking endpoint',()=>{
+ const restore=fs.readFileSync('scripts/restore-original.mjs','utf8');
+ assert.match(restore,/hummin-booking-submit/);
+ assert.match(restore,/action:'hummin-booking'/);
+ assert.match(restore,/turnstileToken:challenge/);
+ assert.match(restore,/turnstile\.render/);
+ assert.match(restore,/turnstile\?\.reset/);
+ const reservation=fs.readFileSync('app/routes/booking.reserve.ts','utf8');
+ assert.match(reservation,/bookingLimit\(env,request,"reserve"\)/);
+ assert.match(reservation,/verifyBookingTurnstile\(env,request,token\)/);
+ assert.match(reservation,/bookingLimit\(env,request,"email",email\)/);
+});
+test('Calendar reservation preallocates Google event identity; uncertain outcomes remain reconcilable',()=>{
+ const source=fs.readFileSync('app/lib/calendar.server.ts','utf8');
+ assert.match(source,/eventId=holdId\.replace/);
+ assert.match(source,/google_event_id\) VALUES/);
+ assert.match(source,/body:JSON\.stringify\(\{id:eventId/);
+ assert.match(source,/reconcilePendingBookingHolds/);
+ assert.doesNotMatch(source,/DELETE FROM booking_slots WHERE id=\? AND status='held'"\)\.bind\(holdId\)/);
 });

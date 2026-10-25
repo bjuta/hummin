@@ -26,7 +26,7 @@ function site(t){
  t=need(t,"page: 'home', menu: false","page: ({'/':'home','/contact':'contact','/about':'about','/assessment':'assess','/how-we-work':'how','/applied-expertise':'core','/engagements':'eng','/who-we-work-with':'who','/insights':'insights'}[window.location.pathname] || (window.location.pathname.startsWith('/insights/')?'insights':'home')), menu: false");
  t=need(t,"class Component extends DCLogic {","const HUMMIN_ROUTE_PATHS = {home:'/',how:'/how-we-work',core:'/applied-expertise',eng:'/engagements',who:'/who-we-work-with',assess:'/assessment',about:'/about',insights:'/insights',contact:'/contact'};\nconst HUMMIN_PATH_PAGES = Object.fromEntries(Object.entries(HUMMIN_ROUTE_PATHS).map(([page,url])=>[url,page]));\nclass Component extends DCLogic {");
  t=need(t,"    this._lastPage = this.state.page;","    this.onPopState = () => { const next=HUMMIN_PATH_PAGES[window.location.pathname]||(window.location.pathname.startsWith('/insights/')?'insights':'home'); this.setState({page:next,menu:false,peekOpen:false}); window.scrollTo({top:0,behavior:'instant'}); };\n    window.addEventListener('popstate', this.onPopState);\n    this.onTurnstileReady = () => this.mountTurnstile(); window.addEventListener('hummin-turnstile-ready',this.onTurnstileReady); requestAnimationFrame(() => this.mountTurnstile());\n    window.__HUMMIN_DESIGN_MOUNTED__=true;window.dispatchEvent(new Event('hummin-design-mounted'));\n    this._lastPage = this.state.page;");
- t=need(t,"window.removeEventListener('keydown', this.onKey); if (this.io) this.io.disconnect();","window.removeEventListener('keydown', this.onKey); window.removeEventListener('popstate', this.onPopState);window.removeEventListener('hummin-turnstile-ready',this.onTurnstileReady); if (this.io) this.io.disconnect();");
+ t=need(t,"window.removeEventListener('keydown', this.onKey); if (this.io) this.io.disconnect();","window.removeEventListener('keydown', this.onKey); window.removeEventListener('popstate', this.onPopState);window.removeEventListener('hummin-turnstile-ready',this.onTurnstileReady); if(this._bookingChallengeTimer)clearInterval(this._bookingChallengeTimer);if (this.io) this.io.disconnect();");
  t=need(t,"  _go(p, extra) {\n    this.setState({ page: p, menu: false, ...(extra || {}) });","  _go(p, extra) {\n    const path=p==='insights'&&extra?.insightPost?'/insights/'+extra.insightPost:HUMMIN_ROUTE_PATHS[p]; if(path && window.location.pathname!==path)window.history.pushState({humminPage:p},'',path);\n    this.setState({ page: p, menu: false, ...(extra || {}) });\n    window.dispatchEvent(new Event('hummin-route-change'));");
  t=need(t,"  submit() {","  mountTurnstile() {\n    if (this.state.page !== 'contact' || window.HUMMIN_CONTACT_READY !== true) return;\n    const host = document.getElementById('hummin-turnstile');\n    if (!host || host.dataset.widget || !window.turnstile?.render) return;\n    try {\n      const id = window.turnstile.render(host,{ sitekey: window.HUMMIN_TURNSTILE_SITE_KEY, theme:'light' });\n      if(id!==undefined){ this._turnstileWidgetId=id; host.dataset.widget='ready'; }\n    }catch(e){ console.error('Turnstile could not render'); }\n  }\n"+"  submit() {");
  t=need(t,"  componentDidUpdate() { if (this._lastPage !== this.state.page) { this._lastPage = this.state.page; requestAnimationFrame(() => this.rise()); } }","  componentDidUpdate() { if (this._lastPage !== this.state.page) { this._lastPage = this.state.page; requestAnimationFrame(() => this.rise()); } if(this.state.page==='contact')requestAnimationFrame(() => this.mountTurnstile()); }");
@@ -57,13 +57,36 @@ function assessment(t){
   const oldState="bookErr: {}, booked: false, assessmentSending: false, assessmentStatus: null }";
   t=need(t,oldState,"bookErr: {}, booked: false, assessmentSending: false, assessmentStatus: null, bookingDays: [], bookingLoading: false, bookingEnabled: false, bookingStatus: '', bookingSaving: false }");
   const loadMethod=String.raw`
+  installBookingChallenge() {
+    if (!window.HUMMIN_BOOKING_SITE_KEY || !window.turnstile?.render) return;
+    const button=document.getElementById('hummin-booking-submit');
+    if(!button)return;
+    let host=document.getElementById('hummin-booking-turnstile');
+    if(!host){
+      host=document.createElement('div');host.id='hummin-booking-turnstile';
+      host.style.cssText='min-height:65px;margin:16px 0;';
+      button.parentNode.insertBefore(host,button);
+    }
+    if(host.dataset.widget)return;
+    try{
+      const id=window.turnstile.render(host,{sitekey:window.HUMMIN_BOOKING_SITE_KEY,action:'hummin-booking'});
+      host.dataset.widget=String(id);this._bookingWidget=id;
+    }catch(_ignored){}
+  }
   loadBookingSlots(preserveStatus = false) {
     const seq = (this._bookingRequestSeq || 0) + 1; this._bookingRequestSeq = seq;
     this.setState({ bookingLoading: true, ...(preserveStatus ? {} : { bookingStatus: '' }) });
     fetch('/api/booking/slots', { method: 'GET', cache: 'no-store', headers: { Accept: 'application/json' } })
       .then(async response => {
         const data = await response.json().catch(() => ({}));
-        if (!response.ok || data.enabled !== true || !Array.isArray(data.days)) throw Error(data.message || 'Live bookings are not available yet.');
+        if (!response.ok || data.enabled !== true || !Array.isArray(data.days) || typeof data.siteKey !== 'string') throw Error(data.message || 'Live bookings are not available yet.');
+        window.HUMMIN_BOOKING_SITE_KEY=data.siteKey;
+        if(!document.getElementById('hummin-booking-api')){
+          const script=document.createElement('script');script.id='hummin-booking-api';
+          script.src='https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit';script.async=true;
+          document.head.appendChild(script);
+        }
+        if(!this._bookingChallengeTimer)this._bookingChallengeTimer=setInterval(()=>this.installBookingChallenge(),350);
         const days = data.days.filter(d => /^\d{4}-\d{2}-\d{2}$/.test(d.date) && Array.isArray(d.slots)).map(d => ({ date: d.date, slots: d.slots.filter(x => typeof x === 'string') }));
         if (seq !== this._bookingRequestSeq) return;
         this.setState(s => ({
@@ -134,11 +157,13 @@ function assessment(t){
         if(!b.name.trim()) errors.name='Enter your name.';
         if(!EMAIL_RE.test(b.email.trim())) errors.email='Enter a valid email, such as name@business.com.';
         if(Object.keys(errors).length){this.setState({bookErr:errors});const el=document.getElementById('b-'+Object.keys(errors)[0]);if(el)el.focus();return;}
+        const challenge=window.turnstile?.getResponse?.(this._bookingWidget);
+        if(!challenge){this.setState({bookingStatus:'Complete the booking security check before confirming.'});return;}
         this.setState({bookingSaving:true,bookingStatus:'Confirming your appointment…',bookErr:{}});
         try {
           const response=await fetch('/api/booking/reserve',{method:'POST',credentials:'same-origin',cache:'no-store',
             headers:{'Content-Type':'application/json','Accept':'application/json'},
-            body:JSON.stringify({start:s.slot,name:b.name.trim(),email:b.email.trim(),phone:b.phone.trim()})});
+            body:JSON.stringify({start:s.slot,name:b.name.trim(),email:b.email.trim(),phone:b.phone.trim(),turnstileToken:challenge})});
           const data=await response.json().catch(()=>({}));
           if(!response.ok||data.ok!==true||!data.eventId)throw Error(data.message||'Appointment could not be confirmed.');
           const st=new Date(s.slot),en=new Date(st.getTime()+30*60000),z=x=>x.toISOString().replace(/[-:]/g,'').replace(/\.\d{3}/,'');
@@ -148,8 +173,10 @@ function assessment(t){
             'ORGANIZER;CN=HUMMIN:mailto:sales@hummin.org','END:VEVENT','END:VCALENDAR'].join('\r\n');
           if(this._ics) URL.revokeObjectURL(this._ics);
           this._ics=URL.createObjectURL(new Blob([ics],{type:'text/calendar'}));
+          window.turnstile?.reset?.(this._bookingWidget);
           this.setState({booked:true,bookingSaving:false,bookingStatus:'',gcal:data.calendarUrl||''});
         } catch(error) {
+          window.turnstile?.reset?.(this._bookingWidget);
           this.setState({bookingSaving:false,bookingStatus:(error&&error.message)||'We could not confirm this appointment. Please email sales@hummin.org.'});
           this.loadBookingSlots(true);
         }
@@ -161,7 +188,7 @@ function assessment(t){
   t=need(t,"<sc-if value=\"{{ showBooking }}\"",
     "<sc-if value=\"{{ showBooking }}\""); // Retain the existing original conditional and calendar layout.
   t=need(t,"Confirm {{ slotShort }}","{{ bookSubmitLabel }}");
-  t=need(t,'sc-camel-on-click="{{ confirmBooking }}"','sc-camel-on-click="{{ confirmBooking }}" aria-busy="{{ bookSubmitDisabled }}"');
+  t=need(t,'sc-camel-on-click="{{ confirmBooking }}"','id="hummin-booking-submit" sc-camel-on-click="{{ confirmBooking }}" aria-busy="{{ bookSubmitDisabled }}"');
   t=need(t,"<sc-if value=\"{{ showBooking }}\" hint-placeholder-val=\"{{ false }}\">",
     "<sc-if value=\"{{ showBooking }}\" hint-placeholder-val=\"{{ false }}\"><p role=\"status\" style=\"font-family:Figtree,sans-serif;font-size:14px;color:#B5532C;padding:8px 0 18px\">{{ liveBookingNotice }}</p>");
   return t;
