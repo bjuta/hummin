@@ -16,10 +16,10 @@ function site(t){
  t=need(t,"open: () => this.go('insights', { insightPost: x.slug, insightNonce: Date.now() })","open: () => { window.location.assign('/insights/'+x.slug); }");
 
  t=need(t,'<span>© 2026 HUMMIN</span>','<a href="/newsletter" style="color:#E7EBE6;text-decoration:underline;text-underline-offset:4px">Notes from HUMMIN</a><span>© 2026 HUMMIN</span>');
- t=need(t,'<dc-import name="HUMMIN Assessment v2" on-contact="{{ go_contact }}" hint-size="100%,900px"></dc-import>','<iframe title="HUMMIN Business Assessment" src="/design/assessment/index.html" style="width:100%;min-height:960px;border:0;display:block;background:#1E272A" loading="lazy"></iframe>');
+ t=need(t,'<dc-import name="HUMMIN Assessment v2" on-contact="{{ go_contact }}" hint-size="100%,900px"></dc-import>','<iframe title="HUMMIN Business Assessment" src="/design/assessment/index.html" style="width:100%;min-height:960px;border:0;display:block;background:#1E272A" loading="eager" id="hummin-assessment-frame"></iframe>');
  t=need(t,"page: 'home', menu: false","page: ({'/':'home','/contact':'contact','/about':'about','/assessment':'assess','/how-we-work':'how','/applied-expertise':'core','/engagements':'eng','/who-we-work-with':'who','/insights':'insights'}[window.location.pathname] || (window.location.pathname.startsWith('/insights/')?'insights':'home')), menu: false");
  t=need(t,"class Component extends DCLogic {","const HUMMIN_ROUTE_PATHS = {home:'/',how:'/how-we-work',core:'/applied-expertise',eng:'/engagements',who:'/who-we-work-with',assess:'/assessment',about:'/about',insights:'/insights',contact:'/contact'};\nconst HUMMIN_PATH_PAGES = Object.fromEntries(Object.entries(HUMMIN_ROUTE_PATHS).map(([page,url])=>[url,page]));\nclass Component extends DCLogic {");
- t=need(t,"    this._lastPage = this.state.page;","    this.onPopState = () => { const next=HUMMIN_PATH_PAGES[window.location.pathname]||(window.location.pathname.startsWith('/insights/')?'insights':'home'); this.setState({page:next,menu:false,peekOpen:false}); window.scrollTo({top:0,behavior:'instant'}); };\n    window.addEventListener('popstate', this.onPopState);\n    this.onTurnstileReady = () => this.mountTurnstile(); window.addEventListener('hummin-turnstile-ready',this.onTurnstileReady); requestAnimationFrame(() => this.mountTurnstile());\n    this._lastPage = this.state.page;");
+ t=need(t,"    this._lastPage = this.state.page;","    this.onPopState = () => { const next=HUMMIN_PATH_PAGES[window.location.pathname]||(window.location.pathname.startsWith('/insights/')?'insights':'home'); this.setState({page:next,menu:false,peekOpen:false}); window.scrollTo({top:0,behavior:'instant'}); };\n    window.addEventListener('popstate', this.onPopState);\n    this.onTurnstileReady = () => this.mountTurnstile(); window.addEventListener('hummin-turnstile-ready',this.onTurnstileReady); requestAnimationFrame(() => this.mountTurnstile());\n    window.__HUMMIN_DESIGN_MOUNTED__=true;window.dispatchEvent(new Event('hummin-design-mounted'));\n    this._lastPage = this.state.page;");
  t=need(t,"window.removeEventListener('keydown', this.onKey); if (this.io) this.io.disconnect();","window.removeEventListener('keydown', this.onKey); window.removeEventListener('popstate', this.onPopState);window.removeEventListener('hummin-turnstile-ready',this.onTurnstileReady); if (this.io) this.io.disconnect();");
  t=need(t,"  _go(p, extra) {\n    this.setState({ page: p, menu: false, ...(extra || {}) });","  _go(p, extra) {\n    const path=HUMMIN_ROUTE_PATHS[p]; if(path && window.location.pathname!==path)window.history.pushState({humminPage:p},'',path);\n    this.setState({ page: p, menu: false, ...(extra || {}) });");
  t=need(t,"  submit() {","  mountTurnstile() {\n    if (this.state.page !== 'contact' || window.HUMMIN_CONTACT_READY !== true) return;\n    const host = document.getElementById('hummin-turnstile');\n    if (!host || host.dataset.widget || !window.turnstile?.render) return;\n    try {\n      const id = window.turnstile.render(host,{ sitekey: window.HUMMIN_TURNSTILE_SITE_KEY, theme:'light' });\n      if(id!==undefined){ this._turnstileWidgetId=id; host.dataset.widget='ready'; }\n    }catch(e){ console.error('Turnstile could not render'); }\n  }\n"+"  submit() {");
@@ -41,7 +41,7 @@ function site(t){
 }
 function assessment(t){
   // Restore the exported assessment rather than redrawing its design.
-  t=need(t,"class Component extends DCLogic {","class Component extends DCLogic {\n  componentDidMount() {\n    fetch('/api/email/config',{cache:'no-store'}).then(r=>r.json()).then(cfg=>{this._emailConfig=cfg;this.mountEmailChallenge();}).catch(()=>{this._emailConfig={ready:false};});\n    this._mailObserver=new MutationObserver(()=>this.mountEmailChallenge());\n    this._mailObserver.observe(document.body,{childList:true,subtree:true});\n    this._emailReady=()=>this.mountEmailChallenge();\n    window.addEventListener('hummin-assessment-turnstile',this._emailReady);\n  }\n  mountEmailChallenge(){\n    if(!this._emailConfig?.ready||!window.turnstile?.render)return;\n    const el=document.getElementById('assessment-turnstile');\n    if(!el||el.dataset.rendered)return;\n    el.dataset.rendered='true';\n    this._emailWidget=window.turnstile.render(el,{sitekey:this._emailConfig.siteKey,theme:'light'});\n  }\n");
+  t=need(t,"class Component extends DCLogic {","class Component extends DCLogic {\n  componentDidMount() {\n    window.__HUMMIN_DESIGN_MOUNTED__=true;window.dispatchEvent(new Event('hummin-design-mounted'));\n    fetch('/api/email/config',{cache:'no-store'}).then(r=>r.json()).then(cfg=>{this._emailConfig=cfg;this.mountEmailChallenge();}).catch(()=>{this._emailConfig={ready:false};});\n    this._mailObserver=new MutationObserver(()=>this.mountEmailChallenge());\n    this._mailObserver.observe(document.body,{childList:true,subtree:true});\n    this._emailReady=()=>this.mountEmailChallenge();\n    window.addEventListener('hummin-assessment-turnstile',this._emailReady);\n  }\n  mountEmailChallenge(){\n    if(!this._emailConfig?.ready||!window.turnstile?.render)return;\n    const el=document.getElementById('assessment-turnstile');\n    if(!el||el.dataset.rendered)return;\n    el.dataset.rendered='true';\n    this._emailWidget=window.turnstile.render(el,{sitekey:this._emailConfig.siteKey,theme:'light'});\n  }\n");
   t=need(t,"componentWillUnmount() { if (this._ics) URL.revokeObjectURL(this._ics); }","componentWillUnmount() { if(this._mailObserver)this._mailObserver.disconnect();if(this._emailReady)window.removeEventListener('hummin-assessment-turnstile',this._emailReady);if (this._ics) URL.revokeObjectURL(this._ics); }");
   t=need(t,"v.unlocked = s.unlocked; v.locked = !s.unlocked; v.gateEmail = s.gate.email;","v.unlocked = s.unlocked; v.locked = !s.unlocked; v.gateEmail = s.gate.email; v.assessmentStatus=s.assessmentStatus;");
   t=need(t,"v.unlock = () => { const g = s.gate, e = {}; if (!g.name.trim()) e.name = 'Enter your name.'; if (!EMAIL_RE.test(g.email.trim())) e.email = 'Enter a valid email, such as name@business.com.'; if (!g.biz.trim()) e.biz = 'Enter your business name.'; if (Object.keys(e).length) { this.setState({ gateErr: e }); const el = document.getElementById('g-' + Object.keys(e)[0]); if (el) el.focus(); return; } this.setState(st => ({ unlocked: true, book: { ...st.book, name: st.book.name || g.name, email: st.book.email || g.email } })); };","v.unlock = async () => {\n  if (this.state.assessmentSending) return;\n  const g=this.state.gate,errors={};\n  if(!g.name.trim())errors.name='Enter your name.';\n  if(!EMAIL_RE.test(g.email.trim()))errors.email='Enter a valid email.';\n  if(!g.biz.trim())errors.biz='Enter your business name.';\n  if(Object.keys(errors).length){this.setState({gateErr:errors});return;}\n  const token=window.turnstile?.getResponse(this._emailWidget)||'';\n  if(!token){this.setState({assessmentStatus:'Complete the verification to email your plan.'});return;}\n  this.setState({assessmentSending:true,assessmentStatus:'Queuing a copy of your results...'});\n  try{\n   const r=this.results();\n   const ranked=r.areas.slice().sort((a,b)=>(a.pct-(a.w-1)*20)-(b.pct-(b.w-1)*20)).slice(0,3);\n   const response=await fetch('/api/assessment/email',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({\n    name:g.name.trim(),business:g.biz.trim(),email:g.email.trim(),goal:r.goal.label,score:r.score,\n    monthlyCost:this.state.cur==='KES'?r.monthly:null,priorities:ranked.map(x=>x.name),token\n   })});\n   const body=await response.json().catch(()=>({}));\n   if(!response.ok||body.ok!==true)throw Error(body.message||'Could not queue the assessment email.');\n   this.setState(st=>({unlocked:true,assessmentSending:false,assessmentStatus:body.message,\n    book:{...st.book,name:st.book.name||g.name,email:st.book.email||g.email}}));\n  }catch(error){\n   if(window.turnstile?.reset)window.turnstile.reset(this._emailWidget);\n   this.setState({assessmentSending:false,assessmentStatus:error.message||'Email delivery is unavailable. Please try again.'});\n  }\n};");
@@ -184,7 +184,7 @@ function brandedBoot(html,kind){
    function frame(){return new Promise(function(resolve){requestAnimationFrame(function(){requestAnimationFrame(resolve)})})}
    function fonts(){return document.fonts&&document.fonts.ready?Promise.race([document.fonts.ready,new Promise(function(resolve){setTimeout(resolve,1800)})]):Promise.resolve()}
    function ready(){
-     if(ended||document.readyState==='loading'||Date.now()-started<450)return;
+     if(ended||document.readyState==='loading'||Date.now()-started<450||window.__HUMMIN_DESIGN_MOUNTED__!==true)return;
      var root=document.querySelector('x-dc');
      if(!root||!root.children.length)return;
      // Wait for the runtime to leave a visual page subtree. At minimum two
@@ -193,7 +193,7 @@ function brandedBoot(html,kind){
      if(text.indexOf('HUMMIN')<0)return;
      // For the main site, wait for the Insights iframe when present. It shares
      // the same boot protocol and exposes a loaded state.
-     var iframe=document.getElementById('hummin-insights-frame');
+     var iframe=document.getElementById('hummin-insights-frame')||document.getElementById('hummin-assessment-frame');
      if(iframe&&!iframe.dataset.hmLoaded&&Date.now()-started<5500)return;
      ended=true;obs.disconnect();
      Promise.resolve(fonts()).then(frame).then(function(){
@@ -206,11 +206,13 @@ function brandedBoot(html,kind){
    var obs=new MutationObserver(ready);
    obs.observe(document.documentElement,{childList:true,subtree:true});
    document.addEventListener('DOMContentLoaded',function(){setTimeout(ready,460)});
+   window.addEventListener('hummin-design-mounted',function(){setTimeout(ready,160)},{once:true});
    window.addEventListener('load',ready,{once:true});
    window.addEventListener('message',function(e){
      if(e.origin!==location.origin||!e.data||e.data.humminDesignReady!==true)return;
-     if(e.source===document.getElementById('hummin-insights-frame')?.contentWindow){
-       var f=document.getElementById('hummin-insights-frame');if(f)f.dataset.hmLoaded='true';
+     var child=document.getElementById('hummin-insights-frame')||document.getElementById('hummin-assessment-frame');
+     if(child&&e.source===child.contentWindow){
+       var f=child;if(f)f.dataset.hmLoaded='true';
        ready();
      }
    });
@@ -274,6 +276,7 @@ class Component extends DCLogic {`);
  })();`);
  const oldMount="  componentDidMount() { this._nonce = this.props.openNonce; if (this.props.openPost) this.setState({ view: 'post', slug: this.props.openPost }); }";
  const mounted=`  componentDidMount() {
+    window.__HUMMIN_DESIGN_MOUNTED__=true;window.dispatchEvent(new Event('hummin-design-mounted'));
     this._insightsAlive=true;
     const locationPath = window.parent!==window ? window.parent.location.pathname : window.location.pathname;
     const parts=locationPath.split('/').filter(Boolean);
