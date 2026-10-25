@@ -156,8 +156,8 @@ function assessment(t){
 }
 for(const [name,fn] of [['site',site],['assessment',assessment]]){
  const src=read(name);if(!src)throw Error('Source missing: '+name);
- if(name==='assessment')html=html.replace('</head>','<script>window.humminAssessmentTurnstile=function(){window.dispatchEvent(new Event("hummin-assessment-turnstile"));};</script><script src="https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit&onload=humminAssessmentTurnstile" async defer></script></head>');
  let html=patch(src,fn);html=html.replace('<head>','<head>\n<meta name="robots" content="noindex,nofollow">');
+ if(name==='assessment')html=html.replace('</head>','<script>window.humminAssessmentTurnstile=function(){window.dispatchEvent(new Event("hummin-assessment-turnstile"));};</script><script src="https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit&onload=humminAssessmentTurnstile" async defer></script></head>');
  const dir=path.join('public','design',name);fs.mkdirSync(dir,{recursive:true});fs.writeFileSync(path.join(dir,'index.html'),html);
  console.log('Restored high-fidelity '+name+' ('+html.length+' characters)');
 }
