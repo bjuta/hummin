@@ -42,7 +42,8 @@ export async function deliverDue(env:HumminEnv,limit=12):Promise<{sent:number;fa
    }
    const email=JSON.parse(row.payload) as BrandEmail;
    const res=await fetch("https://api.resend.com/emails",{method:"POST",headers:{"Authorization":"Bearer "+env.RESEND_API_KEY,"Content-Type":"application/json","Idempotency-Key":row.id},
-    body:JSON.stringify({from:env.EMAIL_FROM,to:[email.recipient],subject:email.subject,text:email.text,html:email.html,reply_to:email.replyTo||"sales@hummin.org"})});
+    body:JSON.stringify({from:env.EMAIL_FROM,to:[email.recipient],subject:email.subject,text:email.text,html:email.html,reply_to:email.replyTo||"sales@hummin.org",
+      ...(email.type==="newsletter-monthly"&&email.unsubscribeUrl?{headers:{"List-Unsubscribe":"<"+email.unsubscribeUrl+">","List-Unsubscribe-Post":"List-Unsubscribe=One-Click"}}:{})})});
    if(!res.ok)throw Error("Email provider returned HTTP "+res.status);
    const body=await res.json() as {id?:string};
    if(!body.id)throw Error("Provider did not return an email id");
