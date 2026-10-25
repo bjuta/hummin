@@ -19,6 +19,7 @@ jobs:
       - run: npm run build
       - run: npm run verify:restoration
       - run: npm run verify:insights
+      - run: npm run verify:insights-publications
       - run: npm run verify:email
       - run: npm run verify:admin
       - run: npm run verify:admin-data
