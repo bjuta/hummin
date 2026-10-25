@@ -27,8 +27,7 @@
     "CONTACT_ENABLED": "false",
     "BOOKING_ENABLED": "false",
     "BOOKING_AVAILABILITY_ENABLED": "false",
-    "ADMIN_AUTH_ENABLED": "false",
-    "TURNSTILE_SITE_KEY": ""
+    "ADMIN_AUTH_ENABLED": "false"
   },
   "d1_databases": [
     {
@@ -37,5 +36,6 @@
       "database_id": "acd04e85-a433-463b-865f-a01f8aac3e27",
       "migrations_dir": "migrations"
     }
-  ]
+  ],
+  "keep_vars": true
 }
