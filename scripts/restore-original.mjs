@@ -10,6 +10,7 @@ function patch(html, fn){
  return html.replace(re,(_whole,start,_body,end)=>start+JSON.stringify(tpl).replaceAll('</','<\\/')+end);
 }
 function site(t){
+ t=need(t,'<span>© 2026 HUMMIN</span>','<a href="/newsletter" style="color:#E7EBE6;text-decoration:underline;text-underline-offset:4px">Notes from HUMMIN</a><span>© 2026 HUMMIN</span>');
  t=need(t,'<dc-import name="HUMMIN Assessment v2" on-contact="{{ go_contact }}" hint-size="100%,900px"></dc-import>','<iframe title="HUMMIN Business Assessment" src="/design/assessment/index.html" style="width:100%;min-height:960px;border:0;display:block;background:#1E272A" loading="lazy"></iframe>');
  t=need(t,"page: 'home', menu: false","page: ({'/':'home','/contact':'contact','/about':'about','/assessment':'assess','/how-we-work':'how','/applied-expertise':'core','/engagements':'eng','/who-we-work-with':'who'}[window.location.pathname] || 'home'), menu: false");
  t=need(t,"class Component extends DCLogic {","const HUMMIN_ROUTE_PATHS = {home:'/',how:'/how-we-work',core:'/applied-expertise',eng:'/engagements',who:'/who-we-work-with',assess:'/assessment',about:'/about',contact:'/contact'};\nconst HUMMIN_PATH_PAGES = Object.fromEntries(Object.entries(HUMMIN_ROUTE_PATHS).map(([page,url])=>[url,page]));\nclass Component extends DCLogic {");
