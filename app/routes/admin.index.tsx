@@ -52,6 +52,7 @@ export async function action({request,context}:{request:Request;context:AppLoadC
  const operation=String(f.get("operation")||""),id=String(f.get("id")||""),value=String(f.get("value")||"");
  const {adminPageMutation}=await import("../lib/admin-source.server.ts");
  const result=await adminPageMutation(env,u,operation,id,value,f);
+ if(result.ok&&operation==="inbox_reply"){const {deliverDue}=await import("../lib/mail-outbox.server.ts");context.cloudflare.ctx.waitUntil(deliverDue(env,3).catch(()=>({sent:0,failed:1})));}
  if(!result.ok)return Response.json(result,{status:400,headers:privateHeaders});
  const view=operation.startsWith("post_")?"post":operation==="move_assessment"?"pipe":operation==="assessment_note"?"lead":operation.startsWith("inbox_")?"inbox":"dash";
  return redirect("/admin?view="+view+"&item="+encodeURIComponent(("id" in result&&result.id)?String(result.id):id)+"&saved=1",{headers:privateHeaders});
@@ -165,7 +166,7 @@ export default function AdminHome(){
  <div className="hm-toolbar"><p className="hm-overline">HUMMIN / ADMIN</p><Link to="/">View website</Link></div>
  <h1 className="hm-title">{headline}</h1>
  <p className="hm-description">{SUBTITLES[view]}</p>
- {saved?<p className="hm-alert" role="status">Change saved to HUMMIN's database.</p>:null}
+ {saved?<p className="hm-alert" role="status">Your change was saved or queued. Email delivery status is shown in the conversation and Email log.</p>:null}
  {response?<p className="hm-alert" role="alert">{response.message}</p>:null}
  {section.restricted?<Blank title="Restricted to authorised roles" description="This section is not available to your staff access level."/>:
  user.role==="partner"||user.role==="staff"?<Blank title="No assigned operational modules" description="This account is authenticated. Your permissions will expand when an authorised owner assigns specific work."/>:
