@@ -17,7 +17,11 @@
   },
   "assets": {
     "directory": "./build/client",
-    "binding": "ASSETS"
+    "binding": "ASSETS",
+    "run_worker_first": [
+      "/robots.txt",
+      "/sitemap.xml"
+    ]
   },
   "vars": {
     "SITE_URL": "https://hummin-web-preview.grimpossible.workers.dev",
