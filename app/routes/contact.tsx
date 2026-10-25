@@ -1,7 +1,6 @@
 import { Form, Link, useActionData, useLoaderData, useNavigation } from "react-router";
 import { enquiryNotification, enquiryAcknowledgement } from "../lib/enquiry-email.server";
 import type { AppLoadContext } from "react-router";
-import { enquiryNotification } from "../lib/enquiry-email.server";
 
 type Result = { ok:boolean; message:string };
 type Visitor = { name:string; businessName:string; email:string; message:string };
