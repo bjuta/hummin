@@ -233,7 +233,7 @@ const bundleAsset=JSON.parse(newManifest);
 const officialSymbol=bundleAsset['69600b5c-99d3-4ec0-9520-3db39d09fc81'];
 if(!officialSymbol||officialSymbol.mime!=='image/svg+xml'||!officialSymbol.compressed)throw Error('Canonical HUMMIN symbol missing from design bundle');
 const symbolSvg=zlib.gunzipSync(Buffer.from(officialSymbol.data,'base64')).toString('utf8');
-if(!/<svg[\\s>]/i.test(symbolSvg)||/<script[\\s>]/i.test(symbolSvg))throw Error('Canonical HUMMIN symbol is not safe SVG');
+if(!symbolSvg.trimStart().startsWith('<svg ')||/<script\b/i.test(symbolSvg))throw Error('Canonical HUMMIN symbol is not safe SVG');
 fs.mkdirSync('public/brand',{recursive:true});
 fs.writeFileSync('public/brand/hummin-symbol.svg',symbolSvg);
 console.log('Extracted official HUMMIN logo symbol ('+symbolSvg.length+' characters)');
