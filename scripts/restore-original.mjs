@@ -35,9 +35,10 @@ function site(t){
 }
 function assessment(t){
   // Restore the exported assessment rather than redrawing its design.
+  t=need(t,"bookErr: {}, booked: false }","bookErr: {}, booked: false, assessmentSending: false, assessmentStatus: null }");
   t=need(t,"A copy of your plan is on its way to {{ gateEmail }}.","Your plan is unlocked in this browser. No email has been sent.");
-  const oldState="bookErr: {}, booked: false }";
-  t=need(t,oldState,"bookErr: {}, booked: false, bookingDays: [], bookingLoading: false, bookingEnabled: false, bookingStatus: '', bookingSaving: false }");
+  const oldState="bookErr: {}, booked: false, assessmentSending: false, assessmentStatus: null }";
+  t=need(t,oldState,"bookErr: {}, booked: false, assessmentSending: false, assessmentStatus: null, bookingDays: [], bookingLoading: false, bookingEnabled: false, bookingStatus: '', bookingSaving: false }");
   const loadMethod=String.raw`
   loadBookingSlots(preserveStatus = false) {
     const seq = (this._bookingRequestSeq || 0) + 1; this._bookingRequestSeq = seq;
