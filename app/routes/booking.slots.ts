@@ -3,8 +3,8 @@ import type { AppLoadContext } from "react-router";
 export async function loader({context}:{context:AppLoadContext}){
  const env=context.cloudflare.env;
  const disabled=()=>Response.json({enabled:false,days:[],message:"Live booking is not configured."},{headers:{"Cache-Control":"no-store"}});
- // Read-only availability may be tested in preview without enabling appointment creation.
- if((env.BOOKING_AVAILABILITY_ENABLED!=="true"&&env.BOOKING_ENABLED!=="true")||!hasCalendarCredentials(env))return disabled();
+ // Never display bookable times when appointment creation is disabled.
+ if(env.BOOKING_ENABLED!=="true"||!hasCalendarCredentials(env))return disabled();
  try{return Response.json({enabled:true,days:await liveSlots(env)},{headers:{"Cache-Control":"no-store"}});}
  catch{console.error("HUMMIN booking availability failed");return Response.json({enabled:false,days:[],message:"Availability is temporarily unavailable."},{status:503,headers:{"Cache-Control":"no-store"}});}
 }
