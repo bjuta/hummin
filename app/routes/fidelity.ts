@@ -4,7 +4,18 @@ import type { AppLoadContext } from "react-router";
 export async function loader({ request, context }: { request: Request; context: AppLoadContext }) {
  const env=context.cloudflare.env;
  const pathname=new URL(request.url).pathname;
- const insight=pathname.startsWith('/insights')?insightDetails(pathname):null;
+ let insight=pathname.startsWith('/insights')?insightDetails(pathname):null;
+ // Only explicitly published CMS snapshots can replace the bundled article metadata.
+ if(pathname.startsWith('/insights/') && !pathname.startsWith('/insights/author/') &&
+    !pathname.startsWith('/insights/topic/') && !pathname.startsWith('/insights/download/')){
+  const slug=pathname.split('/').filter(Boolean)[1];
+  if(slug){
+   const {publicInsightBySlug}=await import("../lib/insights-public.server.ts");
+   const published=await publicInsightBySlug(env,slug);
+   if(published)insight={title:published.title+" | HUMMIN Insights",description:published.excerpt,
+      canonical:"https://hummin.org"+pathname,type:"article",post:published};
+  }
+ }
  if(pathname.startsWith('/insights')&&!insight)return new Response('Insight not found',{status:404,headers:{'Content-Type':'text/plain; charset=utf-8'}});
  if(!env.ASSETS) return new Response("Design assets not available",{status:503});
  const assetUrl=new URL("/design/site/index.html",request.url);
