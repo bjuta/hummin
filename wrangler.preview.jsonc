@@ -24,7 +24,7 @@
     "CONTACT_ENABLED": "true",
     "BOOKING_ENABLED": "false",
     "TURNSTILE_SITE_KEY": "0x4AAAAAAFk826tr9GZGfmXb",
-    "ADMIN_AUTH_ENABLED": "false"
+    "ADMIN_AUTH_ENABLED": "true"
   },
   "d1_databases": [
     {
