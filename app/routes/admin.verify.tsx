@@ -1,35 +1,68 @@
-import {Form,redirect,useActionData,useLoaderData} from "react-router";
+import {useEffect,useRef,useState} from "react";
+import {Link,redirect,useActionData,useLoaderData,useNavigation,useSubmit} from "react-router";
 import type {AppLoadContext} from "react-router";
 import {adminReady,completeAdminCode,correctOrigin,privateHeaders,sessionCookie} from "../lib/admin-auth.server.ts";
+import {AdminAuthCard} from "../components/admin-chrome.tsx";
+
 export async function loader({request,context}:{request:Request;context:AppLoadContext}){
  const e=context.cloudflare.env;
- return {ready:adminReady(e),email:(new URL(request.url).searchParams.get("email")||"").slice(0,254)};
+ const query=new URL(request.url).searchParams;
+ const issued=Number(query.get("issued"));
+ // Client countdown is guidance, not the authority for expiry. D1 validates the actual code deadline.
+ const requestedAt=Number.isSafeInteger(issued)&&issued>Date.now()-720000&&issued<Date.now()+30000?issued:null;
+ return {ready:adminReady(e),email:(query.get("email")||"").slice(0,254),requestedAt};
 }
 export async function action({request,context}:{request:Request;context:AppLoadContext}){
  const e=context.cloudflare.env;
- const fail=(message:string)=>Response.json({ok:false,message},{status:400,headers:privateHeaders});
- if(!adminReady(e))return fail("Admin access is unavailable.");
- if(!correctOrigin(request))return fail("Invalid origin.");
- if(Number(request.headers.get("content-length"))>2048)return fail("Request too large.");
- const form=await request.formData();
+ const fail=(message:string,status=400)=>Response.json({ok:false,message},{status,headers:privateHeaders});
+ if(!adminReady(e))return fail("Admin access is unavailable.",503);
+ if(!correctOrigin(request))return fail("Invalid origin.",403);
+ if(Number(request.headers.get("content-length"))>2048)return fail("Request too large.",413);
+ let form:FormData;try{form=await request.formData();}catch{return fail("Invalid code request.");}
  const email=String(form.get("email")||""),code=String(form.get("code")||"");
- const value=await completeAdminCode(e,email,code);
- if(!value)return fail("The code is incorrect or has expired. Request another code.");
- return redirect("/admin",{headers:{...privateHeaders,"Set-Cookie":sessionCookie(value)}});
+ const session=await completeAdminCode(e,email,code);
+ if(!session)return fail("That code is incorrect or has expired. Check the email or request a new code.");
+ return redirect("/admin",{headers:{...privateHeaders,"Set-Cookie":sessionCookie(session)}});
 }
+function displayTime(seconds:number){return Math.floor(seconds/60)+":"+String(seconds%60).padStart(2,"0");}
 export default function Verify(){
- const {email,ready}=useLoaderData<typeof loader>(),data=useActionData() as {ok:boolean;message:string}|undefined;
- return <section style={{minHeight:"82vh",display:"grid",placeItems:"center",background:"#F4F5F1",padding:24,fontFamily:"Figtree,Arial,sans-serif"}}>
- <div style={{maxWidth:460,width:"100%",padding:36,borderRadius:20,background:"#FFFFFF",border:"1px solid #D0D8D2"}}>
- <p style={{color:"#B5532C",fontWeight:700,letterSpacing:3}}>HUMMIN / VERIFY</p>
- <h1 style={{fontFamily:"Newsreader,Georgia,serif",fontSize:42,fontWeight:400}}>Enter your sign-in code.</h1>
- <p>For provisioned accounts, a six-digit code is sent by email. It expires after 10 minutes.</p>
- {ready?<Form method="post" style={{display:"grid",gap:16}}>
- <label>Email<input required name="email" type="email" defaultValue={email} autoComplete="email" style={{display:"block",width:"100%",padding:12}}/></label>
- <label>Six-digit code<input required name="code" inputMode="numeric" pattern="[0-9]{6}" minLength={6} maxLength={6} autoComplete="one-time-code" style={{display:"block",width:"100%",padding:12,letterSpacing:5,fontSize:22}}/></label>
- <button style={{border:0,borderRadius:30,padding:14,background:"#B5532C",color:"white",fontWeight:700}}>Verify and sign in</button>
- </Form>:<p>Admin access is not active.</p>}
- {data&&"message" in data?<p role="alert" style={{color:"#B5532C"}}>{data.message}</p>:null}
- <p><a href="/admin/login">Request another code</a></p>
- </div></section>;
+ const {email,ready,requestedAt}=useLoaderData<typeof loader>();
+ const result=useActionData() as {ok:boolean;message:string}|undefined;
+ const submit=useSubmit(),navigation=useNavigation();
+ const [code,setCode]=useState(""),[now,setNow]=useState(()=>Date.now());
+ const [focused,setFocused]=useState(false);
+ const submitted=useRef(""),field=useRef<HTMLInputElement>(null);
+ const verifying=navigation.state!=="idle";
+ const secondsLeft=requestedAt==null?null:Math.max(0,600-Math.floor((now-requestedAt)/1000));
+ const expired=secondsLeft===0;
+ useEffect(()=>{const timer=window.setInterval(()=>setNow(Date.now()),1000);return ()=>window.clearInterval(timer);},[]);
+ useEffect(()=>{if(result?.message){setCode("");submitted.current="";field.current?.focus();}},[result]);
+ function change(value:string){
+  const next=value.replace(/\D/g,"").slice(0,6);
+  setCode(next);
+  if(next.length===6&&!expired&&ready&&!verifying&&submitted.current!==next){
+   submitted.current=next;
+   const payload=new FormData();
+   payload.set("email",email);payload.set("code",next);
+   submit(payload,{method:"post",action:"/admin/verify"});
+  }
+ }
+ return <AdminAuthCard kicker="HUMMIN / IDENTITY VERIFICATION" title="Check your inbox." description="We requested a six-digit sign-in code for the staff address below. Enter it to continue to your HUMMIN workspace.">
+ <div className="hm-status" role="status" aria-live="polite">
+ <strong>Sign-in code requested</strong>
+ <div style={{marginTop:5,overflowWrap:"anywhere"}}>If this is a registered staff address, a code has been sent to <strong>{email}</strong>.</div>
+ <div style={{fontSize:12,marginTop:8}}>The code expires 10 minutes after issue.</div>
+ </div>
+ <div style={{display:"flex",justifyContent:"space-between",alignItems:"baseline",gap:12,marginBottom:10}}>
+ <span className="hm-label" style={{margin:0}}>Verification code</span>
+ <span style={{fontSize:12,color:expired?"#9A4128":"#5E6967",fontWeight:700}} role="timer" aria-live="off">{secondsLeft==null?"Valid for 10 min":expired?"Code window ended":displayTime(secondsLeft)+" remaining"}</span>
+ </div>
+ {ready&&!expired?<div className="hm-otp-frame" onClick={()=>field.current?.focus()}>
+ <div className="hm-otp-slots" aria-hidden="true">{Array.from({length:6},(_,i)=><span key={i} className={"hm-otp-slot"+(focused&&i===Math.min(code.length,5)?" hm-otp-active":"")}>{code[i]||""}</span>)}</div>
+ <input ref={field} className="hm-otp-input" autoFocus id="admin-one-time-code" type="text" name="code" aria-label="Six-digit sign-in code" aria-describedby="hm-otp-guidance" inputMode="numeric" pattern="[0-9]*" autoComplete="one-time-code" maxLength={6} value={code} onChange={e=>change(e.target.value)} onFocus={()=>setFocused(true)} onBlur={()=>setFocused(false)}/>
+ </div>:<p className="hm-error" role="status">{expired?"Your code window has ended. Request a new code to sign in.":"Verification is not available right now."}</p>}
+ <p id="hm-otp-guidance" style={{fontSize:12,color:"#5E6967",lineHeight:1.6,margin:0}}>{verifying?"Verifying securely…":"Paste or type all six digits. We’ll verify automatically—no extra button needed."}</p>
+ {result?.message?<p className="hm-error" role="alert">{result.message}</p>:null}
+ <div className="hm-auth-foot"><Link to={"/admin/login?email="+encodeURIComponent(email)}>← Change email / request new code</Link><Link to="/">HUMMIN website</Link></div>
+ </AdminAuthCard>;
 }
