@@ -8,6 +8,8 @@ export default [
  route("assessment","routes/fidelity.ts",{id:"original-assessment"}),
  route("about","routes/fidelity.ts",{id:"original-about"}),
  route("contact","routes/fidelity.ts",{id:"original-contact"}),
+ route("api/email/config","routes/email.config.ts"),
+ route("api/assessment/email","routes/assessment.email.ts"),
  route("api/booking/slots","routes/booking.slots.ts"),
  route("api/booking/reserve","routes/booking.reserve.ts"),
  route("email/mark-light.png","routes/email.logo.ts",{id:"email-mark-light"}),
