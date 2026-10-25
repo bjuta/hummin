@@ -9,7 +9,7 @@
   "assets": { "directory": "./build/client", "binding": "ASSETS" },
   "vars": {
     "SITE_URL": "https://hummin-web-preview.grimpossible.workers.dev",
-    "CONTACT_ENABLED": "false",
+    "CONTACT_ENABLED": "true",
     "BOOKING_ENABLED": "false",
     "TURNSTILE_SITE_KEY": "0x4AAAAAAFk826tr9GZGfmXb"
   },
