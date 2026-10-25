@@ -24,6 +24,11 @@ export async function deliverDue(env:HumminEnv,limit=12):Promise<{sent:number;fa
    const body=await res.json() as {id?:string};
    if(!body.id)throw Error("Provider did not return an email id");
    await env.DB.prepare("UPDATE email_outbox SET status='sent',provider_id=?,sent_at=CURRENT_TIMESTAMP,last_error=NULL WHERE id=?").bind(body.id,row.id).run();
+   if(row.id.startsWith("contact-internal:")){
+    const id=row.id.slice("contact-internal:".length);
+    try{await env.DB.prepare("UPDATE enquiries SET status='accepted',provider_message_id=?,provider_accepted_at=CURRENT_TIMESTAMP WHERE id=?").bind(body.id,id).run();}
+    catch{console.error("Provider accepted enquiry but enquiry record could not be updated",id);}
+   }
    sent++;
   }catch(err){
    failed++;
