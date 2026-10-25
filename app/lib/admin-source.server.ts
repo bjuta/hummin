@@ -94,7 +94,6 @@ export async function adminPageMutation(e:HumminEnv,u:AdminUser,operation:string
     if(blocks.some(b=>!BLOCKS.includes(b.t as typeof BLOCKS[number])||b.text.length>8000))throw Error();
     topics=t.filter(x=>TOPICS.includes(x));
   }catch{return {ok:false,message:"Invalid editor blocks"};}
-  if(operation==="post_publish"&&!title)return {ok:false,message:"A title is required to publish"};
   const slug=String(form.get("slug")||"").trim().toLowerCase();
   if(!/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(slug)||slug.length>120)return {ok:false,message:"Enter a valid URL slug"};
   const postId=identifier(id)?id:crypto.randomUUID();
@@ -103,7 +102,7 @@ export async function adminPageMutation(e:HumminEnv,u:AdminUser,operation:string
   if(!old&&origSlug&&!(await D.prepare("SELECT slug FROM admin_insights_posts WHERE source_slug=?").bind(origSlug).first())){
    if(!["enquiries-30-day-fix","five-monday-figures","runs-through-the-owner","introducing-hummin"].includes(origSlug))return {ok:false,message:"Unknown original"};
   }
-  const status=operation==="post_publish"?"published":"draft";
+  const status="draft";
   const rev=(old?.revision||0)+1;
   const payload={title,excerpt,type,topics,blocks,status,slug};
   try{
@@ -113,7 +112,7 @@ export async function adminPageMutation(e:HumminEnv,u:AdminUser,operation:string
     audit(e,u,operation,"insights",postId,slug)
    ]);
   }catch{return {ok:false,message:"Could not save. Check that the slug is unique."};}
-  return {ok:true,message:operation==="post_publish"?"Post saved as published in CMS; public publishing integration pending":"Draft saved",id:postId};
+  return {ok:true,message:"Draft saved",id:postId};
  }
  return {ok:false,message:"This control has not been connected yet"};
 }
