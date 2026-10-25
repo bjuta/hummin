@@ -12,6 +12,7 @@ export function robotsPolicy(host:string){
  "Allow: /",
  "Disallow: /admin",
  "Disallow: /api/",
+ "Disallow: /design/",
  "Disallow: /newsletter/confirm",
  "Disallow: /newsletter/unsubscribe",
  "Sitemap: https://hummin.org/sitemap.xml",
