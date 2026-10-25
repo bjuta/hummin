@@ -22,6 +22,7 @@ const original = [
   ['Contact form follows server-side readiness', site.includes('window.HUMMIN_CONTACT_READY === true') && site.includes('v.contactInactive = !v.contactReady')],
   ['Contact is protected by a real Turnstile widget', site.includes('hummin-turnstile') && site.includes('turnstile.render') && site.includes('cf-turnstile-response')],
   ['Contact backend errors shown in original design', site.includes('contactStatus')],
+  ['HUMMIN confirmation copy has no em dash', (() => { const a=site.indexOf('Enquiry received'); const b=site.indexOf('Send another enquiry',a); return a>=0&&b>a&&!site.slice(a,b).includes('—'); })()],
   ['Contact fallback has a real mailto', site.includes('Email sales@hummin.org')],
   ['No simulated contact confirmation', !site.includes("setTimeout(() => { this.setState({ sending: false, sent: true")],
   ['Assessment questions retained', assessment.includes('const STEPS = [') && assessment.includes('const GOALS = [')],
