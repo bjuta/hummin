@@ -10,5 +10,8 @@ export default [
  route("contact","routes/fidelity.ts",{id:"original-contact"}),
  route("api/booking/slots","routes/booking.slots.ts"),
  route("api/booking/reserve","routes/booking.reserve.ts"),
+ route("email/mark-light.png","routes/email.logo.ts",{id:"email-mark-light"}),
+ route("email/mark-dark.png","routes/email.logo.ts",{id:"email-mark-dark"}),
+ route("email/motif.svg","routes/email.logo.ts",{id:"email-motif"}),
  route("privacy","routes/privacy.tsx")
 ] satisfies RouteConfig;
