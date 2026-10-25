@@ -17,6 +17,7 @@ const original = [
   ['Navigation uses real paths', site.includes('HUMMIN_ROUTE_PATHS') && site.includes("window.history.pushState")],
   ['Navigation follows browser back', site.includes("addEventListener('popstate'")],
   ['Original layout embeds the assessment', site.includes('/design/assessment/index.html')],
+  ['Unresolved popup and navigation overlays default to hidden', site.includes('visibility:hidden;visibility:{{ peekVis }}') && site.includes('visibility:hidden;visibility:{{ drawerVis }}') && site.includes('opacity:0;opacity:{{ scrimOpacity }}')],
   ['Original typography retained', site.includes('Newsreader') && site.includes('Figtree')],
   ['Original slate/rust palette retained', site.includes('#1E272A') && site.includes('#B5532C')],
   ['Contact form follows server-side readiness', site.includes('window.HUMMIN_CONTACT_READY === true') && site.includes('v.contactInactive = !v.contactReady')],
