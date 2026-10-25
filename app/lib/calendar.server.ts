@@ -61,9 +61,18 @@ export async function reserve(e:HumminEnv,input:{start:string;name:string;email:
   if(!result.ok)throw Error("Calendar did not accept the appointment");
   const event=await result.json() as {id?:string;htmlLink?:string};
   if(!event.id)throw Error("Calendar did not confirm the appointment");
-  try{await e.DB.prepare("UPDATE booking_slots SET status='confirmed',google_event_id=? WHERE id=?").bind(event.id,holdId).run();}catch{console.error("Google Calendar event created but D1 update failed",holdId);}
+  // An event in Google Calendar is not a complete booking until D1 also records it.
+  // Leave its hold in place if D1 fails; do not remove it and accidentally free the slot.
+  try{
+   const saved=await e.DB.prepare("UPDATE booking_slots SET status='confirmed',google_event_id=? WHERE id=? AND status='held'").bind(event.id,holdId).run();
+   if(saved.meta?.changes!==1)throw Error("Booking confirmation was not persisted");
+  }catch{
+   console.error("Calendar event was created but booking persistence failed; manual reconciliation required",holdId);
+   throw Error("BOOKING_RECONCILIATION_REQUIRED");
+  }
   return {eventId:event.id,calendarUrl:event.htmlLink||""};
  }catch(error){
+  if(error instanceof Error && error.message==="BOOKING_RECONCILIATION_REQUIRED")throw error;
   try{await e.DB.prepare("DELETE FROM booking_slots WHERE id=? AND status='held'").bind(holdId).run();}catch{console.error("Unable to release booking hold",holdId);}
   throw error;
  }
