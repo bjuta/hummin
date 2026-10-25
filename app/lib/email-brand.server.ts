@@ -7,7 +7,7 @@ export type MailType =
  | "contact-internal" | "contact-received" | "assessment-results"
  | "booking-confirmation" | "booking-reminder"
  | "account-sign-in" | "account-welcome" | "account-password-reset"
- | "newsletter-monthly" | "newsletter-opt-in";
+ | "newsletter-monthly" | "newsletter-opt-in" | "insights-download";
 
 export type BrandEmail = {
  type: MailType;
@@ -46,7 +46,7 @@ export type EmailSpec = {
 export const emailTypes: readonly MailType[] = [
  "contact-internal","contact-received","assessment-results",
  "booking-confirmation","booking-reminder",
- "account-sign-in","account-welcome","account-password-reset","newsletter-monthly","newsletter-opt-in"
+ "account-sign-in","account-welcome","account-password-reset","newsletter-monthly","newsletter-opt-in","insights-download"
 ] as const;
 
 const e = (s:string):string => s.replace(/[&<>"']/g, x =>
