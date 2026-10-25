@@ -25,6 +25,7 @@ jobs:
         run: |
           HUMMIN_DEPLOY_TARGET=production npm run build
           node scripts/verify-production-bundle.mjs
+          npx wrangler deploy --config build/server/wrangler.json --dry-run --outdir .wrangler/production-package-check
       - run: npm run verify:restoration
       - run: npm run verify:insights
       - run: npm run verify:insights-publications
