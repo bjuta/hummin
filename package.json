@@ -13,7 +13,7 @@
     "db:remote": "wrangler d1 migrations apply hummin-web --remote",
     "deploy:preview": "wrangler deploy",
     "db:preview": "wrangler d1 migrations apply hummin-web-preview --config wrangler.preview.jsonc --remote",
-    "prebuild": "node scripts/restore-original.mjs",
+    "prebuild": "node scripts/restore-original.mjs && node scripts/build-insights-downloads.mjs",
     "verify:restoration": "node scripts/verify-restored.mjs",
     "verify:email": "node --experimental-strip-types --test tests/enquiry-email.test.mjs tests/email-workflows.test.mjs"
   },
