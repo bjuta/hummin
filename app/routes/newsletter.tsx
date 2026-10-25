@@ -3,9 +3,10 @@ import type {AppLoadContext} from "react-router";
 import {newsletterOptInEmail} from "../lib/email-templates.server.ts";
 import {deliverDue} from "../lib/mail-outbox.server.ts";
 type Result={ok:boolean;message:string};
-export async function loader({context}:{context:AppLoadContext}){
+export async function loader({context,request}:{context:AppLoadContext;request:Request}){
  const env=context.cloudflare.env;
- return {ready:!!(env.DB&&env.RESEND_API_KEY&&env.EMAIL_FROM&&env.TURNSTILE_SECRET_KEY&&env.TURNSTILE_SITE_KEY),siteKey:env.TURNSTILE_SITE_KEY||""};
+ const candidate=new URL(request.url).searchParams.get("email")||"";
+ return {ready:!!(env.DB&&env.RESEND_API_KEY&&env.EMAIL_FROM&&env.TURNSTILE_SECRET_KEY&&env.TURNSTILE_SITE_KEY),siteKey:env.TURNSTILE_SITE_KEY||"",prefill:candidate.slice(0,254)};
 }
 export async function action({request,context}:{request:Request;context:AppLoadContext}){
  const e=context.cloudflare.env;
@@ -38,7 +39,7 @@ export async function action({request,context}:{request:Request;context:AppLoadC
  }catch{console.error("Newsletter opt-in could not be queued");return fail("We could not send a confirmation email. Please try again.",503);}
 }
 export default function Newsletter(){
- const {ready,siteKey}=useLoaderData<typeof loader>(),data=useActionData() as Result|undefined;
+ const {ready,siteKey,prefill}=useLoaderData<typeof loader>(),data=useActionData() as Result|undefined;
  return <main style={{background:"#F4F5F1",minHeight:"100vh",fontFamily:"Figtree,Arial,sans-serif",color:"#1E272A",padding:"48px 20px"}}>
  <section style={{maxWidth:620,margin:"0 auto"}}><a href="/" style={{fontWeight:700,letterSpacing:"0.18em",textDecoration:"none",color:"#1E272A"}}>HUMMIN</a>
  <p style={{marginTop:70,fontSize:12,letterSpacing:2,textTransform:"uppercase",color:"#B5532C"}}>Notes from HUMMIN</p>
@@ -46,7 +47,7 @@ export default function Newsletter(){
  <p style={{fontSize:17,lineHeight:1.7,color:"#434F4F"}}>Ideas and practical observations about running and growing a business. No automatic subscription when you contact us or take the assessment.</p>
  {data&&<p role="status" style={{color:data.ok?"#2E6B5C":"#B5532C"}}>{data.message}</p>}
  {!ready?<p>Newsletter subscriptions are not accepting requests. Email <a href="mailto:sales@hummin.org">sales@hummin.org</a>.</p>:!data?.ok?<Form method="post" style={{display:"grid",gap:18}}>
- <label style={{display:"grid",gap:8,fontWeight:600}}>Email address<input required type="email" name="email" maxLength={254} autoComplete="email" style={{font:"inherit",padding:15,border:"1px solid #BAC4BE",borderRadius:6,background:"#FFFFFF"}}/></label>
+ <label style={{display:"grid",gap:8,fontWeight:600}}>Email address<input required type="email" name="email" defaultValue={prefill} maxLength={254} autoComplete="email" style={{font:"inherit",padding:15,border:"1px solid #BAC4BE",borderRadius:6,background:"#FFFFFF"}}/></label>
  <div className="cf-turnstile" data-sitekey={siteKey} data-theme="light"/>
  <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer/>
  <button type="submit" style={{background:"#B5532C",color:"#FFFFFF",font:"inherit",padding:"16px 22px",border:0,borderRadius:99,fontWeight:600,cursor:"pointer"}}>Request subscription</button>
