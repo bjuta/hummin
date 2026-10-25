@@ -1,11 +1,11 @@
 import {Form,Link,redirect,useActionData,useLoaderData} from "react-router";
 import type {AppLoadContext} from "react-router";
 import {correctOrigin,privateHeaders,sessionUser} from "../lib/admin-auth.server.ts";
-import {enquiryNotes,loadAdminView,updateEnquiry} from "../lib/admin-data.server.ts";
+
 import {canView,resolveView,type AdminView,type AdminRole} from "../lib/admin-permissions.ts";
 import {AdminChrome} from "../components/admin-chrome.tsx";
 import {PipelineScreen,LeadsScreen,LeadDetailScreen,InboxScreen,InsightsListScreen,InsightsEditorScreen} from "../components/admin-source-screens.tsx";
-import {adminPageData,adminPageMutation} from "../lib/admin-source.server.ts";
+
 import {insightsPosts} from "../lib/insights.server.ts";
 import {DashboardExact,BookingsExact,EngagementsExact,AnalyticsExact,InvoicesExact,ReportsExact,AssessmentSettingsExact,TeamExact,EmailExact,AudienceExact} from "../components/admin-other-screens.tsx";
 
@@ -33,6 +33,8 @@ export async function loader({request,context}:{request:Request;context:AppLoadC
  const env=context.cloudflare.env,u=await sessionUser(env,request);
  if(!u)throw redirect("/admin/login");
  const params=new URL(request.url).searchParams,view=resolveView(params.get("view")),selectedId=params.get("item");
+ const {loadAdminView,enquiryNotes}=await import("../lib/admin-data.server.ts");
+ const {adminPageData}=await import("../lib/admin-source.server.ts");
  const section=await loadAdminView(env,u,view);
  const notes=await enquiryNotes(env,u,null);
  const fidelity=["pipe","leads","lead","inbox","posts","post"].includes(view)&&canView(u.role,view)?await adminPageData(env,u,view,selectedId||""):{records:[]};
@@ -47,6 +49,7 @@ export async function action({request,context}:{request:Request;context:AppLoadC
  if(size>100000)return new Response("Request too large",{status:413,headers:privateHeaders});
  let f:FormData;try{f=await request.formData();}catch{return new Response("Invalid form",{status:400,headers:privateHeaders});}
  const operation=String(f.get("operation")||""),id=String(f.get("id")||""),value=String(f.get("value")||"");
+ const {adminPageMutation}=await import("../lib/admin-source.server.ts");
  const result=await adminPageMutation(env,u,operation,id,value,f);
  if(!result.ok)return Response.json(result,{status:400,headers:privateHeaders});
  const view=operation.startsWith("post_")?"post":operation==="move_assessment"?"pipe":operation==="assessment_note"?"lead":operation.startsWith("inbox_")?"inbox":"dash";
