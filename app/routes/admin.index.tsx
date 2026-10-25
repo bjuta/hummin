@@ -3,6 +3,7 @@ import type {AppLoadContext} from "react-router";
 import {correctOrigin,privateHeaders,sessionUser} from "../lib/admin-auth.server.ts";
 import {enquiryNotes,loadAdminView,updateEnquiry} from "../lib/admin-data.server.ts";
 import {canView,resolveView,type AdminView,type AdminRole} from "../lib/admin-permissions.ts";
+import {AdminChrome} from "../components/admin-chrome.tsx";
 
 const PAGES:{view:AdminView;label:string;short:string}[]=[
  {view:"dash",label:"Dashboard",short:"Overview"},{view:"leads",label:"Leads",short:"Assessments"},
@@ -112,9 +113,9 @@ export default function AdminHome(){
  const records=(section.records||[]).map(item),counts=section.counts||{};
  const accessible=PAGES.filter(p=>canView(user.role,p.view));
  const current=PAGES.find(p=>p.view===view);
- return <div className="hm-admin">
+ return <AdminChrome menuItems={accessible.map(p=>({id:p.view,label:p.label,href:"/admin"+(p.view==="dash"?"":"?view="+p.view)}))} current={view} userName={user.name} signOut><div className="hm-admin">
  <style>{`
- .hm-admin{--slate:#1E272A;--ember:#B5532C;--mist:#F4F5F1;color:var(--slate);font:14px/1.5 Figtree,Arial,sans-serif;background:var(--mist);min-height:100vh;display:grid;grid-template-columns:240px minmax(0,1fr)}
+ .hm-admin{--slate:#1E272A;--ember:#B5532C;--mist:#F4F5F1;color:var(--slate);font:14px/1.5 Figtree,Arial,sans-serif;background:var(--mist);min-height:calc(100vh - 68px);display:block}
  .hm-admin *, .hm-admin *:before,.hm-admin *:after{box-sizing:border-box}
  .hm-side{background:var(--slate);color:#F4F5F1;padding:28px 16px;display:flex;flex-direction:column;gap:24px}
  .hm-logo{font-size:19px;font-weight:800;letter-spacing:.2em;padding:7px 14px;text-decoration:none;color:inherit}
@@ -123,11 +124,11 @@ export default function AdminHome(){
  .hm-nav-num{font:600 10px Figtree;color:#A8B4B0;min-width:17px}
  .hm-account{margin-top:auto;padding:15px;border-top:1px solid #435054;color:#C1CAC6;font-size:12px}
  .hm-account strong{display:block;color:white;font-size:14px;margin:5px 0}
- .hm-main{min-width:0;padding:36px clamp(18px,3.5vw,56px) 80px}.hm-toolbar{display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap}
+ .hm-main{min-width:0;padding:clamp(20px,3vw,36px) clamp(16px,3vw,32px) 64px;display:grid;gap:18px}.hm-toolbar{display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap}
  .hm-overline{font-size:11px!important;font-weight:800!important;color:var(--ember)!important;letter-spacing:.15em!important;text-transform:uppercase!important}
- .hm-toolbar a{color:var(--slate);font-weight:700}.hm-title{font:400 clamp(34px,4vw,58px)/1.06 Newsreader,Georgia,serif;margin:25px 0 8px}
- .hm-description{color:#5E6967;font-size:16px;margin:0 0 35px}.hm-stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px;margin-bottom:24px}
- .hm-stat{background:#FFF;border:1px solid #D0D8D2;border-radius:14px;min-height:135px;padding:21px}.hm-stat span{display:block;color:#65716E;font-size:12px;font-weight:700}.hm-stat strong{display:block;font:400 48px Newsreader,Georgia,serif;margin-top:12px}
+ .hm-toolbar a{color:var(--slate);font-weight:700}.hm-title{font:400 clamp(32px,4vw,48px)/1 Newsreader,Georgia,serif;letter-spacing:-.015em;margin:0 0 8px}
+ .hm-description{color:#5E6967;font-size:14px;margin:0 0 5px}.hm-stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px;margin-bottom:24px}
+ .hm-stat{background:#FFF;border:1px solid #D0D8D2;border-radius:16px;min-height:135px;padding:18px}.hm-stat:first-child{background:#1E272A;color:#F4F5F1;border-color:#1E272A}.hm-stat:nth-child(2){background:#DCEBE5;border-color:#DCEBE5}.hm-stat span{display:block;color:inherit;opacity:.75;font-size:12px;font-weight:600}.hm-stat strong{display:block;font:400 40px/1 Newsreader,Georgia,serif;margin-top:12px}
  .hm-panel{background:white;border:1px solid #D0D8D2;border-radius:16px;padding:clamp(16px,2vw,25px);min-width:0}
  .hm-panel h2,.hm-blank h2{font:400 27px Newsreader,Georgia,serif;margin:0 0 15px}.hm-panel h3{font-size:13px;margin:27px 0 10px}
  .hm-muted{color:#65716E;font-size:13px;line-height:1.6}.hm-record{display:flex;gap:15px 20px;flex-wrap:wrap;align-items:center;justify-content:space-between;padding:15px 2px;border-top:1px solid #E7EBE6;color:var(--slate);text-decoration:none}
@@ -149,15 +150,9 @@ export default function AdminHome(){
  .hm-admin a:focus-visible,.hm-admin button:focus-visible,.hm-admin select:focus-visible{outline:3px solid #B5532C;outline-offset:2px}
  @media(max-width:900px){.hm-admin{display:block}.hm-side{padding:16px;gap:9px}.hm-nav{display:flex;gap:3px;overflow:auto;max-width:100vw;padding:6px 0}.hm-nav a{white-space:nowrap;padding:8px 12px}.hm-nav-num{display:none}.hm-account{display:none}.hm-main{padding:22px 16px 50px}.hm-two{grid-template-columns:1fr}}
  `}</style>
- <aside className="hm-side" aria-label="Admin navigation">
- <Link className="hm-logo" to="/admin">HUMMIN<span style={{color:"#B5532C"}}>.</span></Link>
- <nav className="hm-nav">{accessible.map((p,i)=><Link key={p.view} to={"/admin"+(p.view==="dash"?"":"?view="+p.view)} aria-current={p.view===view?"page":undefined}><span className="hm-nav-num">{String(i+1).padStart(2,"0")}</span>{p.label}</Link>)}</nav>
- <div className="hm-account"><span>Signed in as</span><strong>{user.name}</strong><span>{stageTitle(user.role)} access</span>
- <Form method="post" action="/admin/logout"><button type="submit" style={{background:"none",border:0,color:"#F4F5F1",textDecoration:"underline",padding:"14px 0",cursor:"pointer"}}>Sign out</button></Form></div>
- </aside>
  <main className="hm-main">
- <div className="hm-toolbar"><p className="hm-overline">HUMMIN / OPERATIONS</p><Link to="/">View website</Link></div>
- <h1 className="hm-title">{current?.label||"Dashboard"}.</h1>
+ <div className="hm-toolbar"><p className="hm-overline">HUMMIN / ADMIN</p><Link to="/">View website</Link></div>
+ <h1 className="hm-title">{current?.label||"Dashboard"}</h1>
  <p className="hm-description">{SUBTITLES[view]}</p>
  {saved?<p className="hm-alert" role="status">Change saved to HUMMIN's database.</p>:null}
  {response?<p className="hm-alert" role="alert">{response.message}</p>:null}
@@ -165,5 +160,5 @@ export default function AdminHome(){
  user.role==="partner"||user.role==="staff"?<Blank title="No assigned operational modules" description="This account is authenticated. Your permissions will expand when an authorised owner assigns specific work."/>:
  <Section view={view} records={records} counts={counts} notes={notes} selectedId={selectedId}/>}
  <p className="hm-muted" style={{marginTop:32}}>Only live records are shown. This preview excludes the standalone Admin's fictitious examples.</p>
- </main></div>;
+ </main></div></AdminChrome>;
 }
