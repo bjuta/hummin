@@ -34,8 +34,8 @@ test("Insights has versioned block editor, no fake public publish or mock articl
  const ui=read("app/components/admin-source-screens.tsx"),service=read("app/lib/admin-source.server.ts");
  for(const block of ["Paragraph","Heading","List","Numbered list","Download","Assessment prompt"])assert.ok(ui.includes(block));
  for(const term of ["admin_insights_posts","admin_insights_revisions","source_slug","topics_json","blocks_json"])assert.ok(service.includes(term));
- assert.ok(service.includes('operation==="post_publish")return {ok:false'));
- assert.ok(ui.includes('disabled title="Public publishing is not connected yet"'));
+ assert.ok(service.includes('operation==="post_save"||operation==="post_publish"'));
+ assert.ok(ui.includes('name="operation" value="post_publish"'));
  const sql=read("migrations/0006_admin_source_fidelity.sql");
  assert.ok(sql.includes("admin_insights_revisions"));
  for(const fake of ["LEADS0","THREADS0","POSTS0","BOOK0","TPLS0"])assert.ok(!ui.includes(fake));
