@@ -1,0 +1,5 @@
+CREATE TABLE IF NOT EXISTS admin_users (id TEXT PRIMARY KEY,email TEXT NOT NULL UNIQUE COLLATE NOCASE,name TEXT NOT NULL,role TEXT NOT NULL CHECK(role IN ('owner','sales','editor','partner','staff')),status TEXT NOT NULL DEFAULT 'invited' CHECK(status IN ('invited','active','disabled')),verified_at TEXT,created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP);
+CREATE TABLE IF NOT EXISTS admin_auth_challenges (id TEXT PRIMARY KEY,user_id TEXT NOT NULL REFERENCES admin_users(id),code_hash TEXT NOT NULL,created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,expires_at TEXT NOT NULL,attempts INTEGER NOT NULL DEFAULT 0,used_at TEXT);
+CREATE INDEX IF NOT EXISTS idx_admin_challenge_user ON admin_auth_challenges(user_id,created_at);
+CREATE TABLE IF NOT EXISTS admin_sessions (token_hash TEXT PRIMARY KEY,user_id TEXT NOT NULL REFERENCES admin_users(id),expires_at TEXT NOT NULL,revoked_at TEXT,created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP);
+CREATE INDEX IF NOT EXISTS idx_admin_sessions_user ON admin_sessions(user_id,expires_at);
