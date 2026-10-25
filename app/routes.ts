@@ -17,6 +17,7 @@ export default [
  route("insights/:slug","routes/fidelity.ts",{id:"insights-article"}),
  route("about","routes/fidelity.ts",{id:"original-about"}),
  route("contact","routes/fidelity.ts",{id:"original-contact"}),
+ route("api/insights/publications","routes/insights.publications.ts"),
  route("api/email/config","routes/email.config.ts"),
  route("api/assessment/email","routes/assessment.email.ts"),
  route("newsletter","routes/newsletter.tsx"),
