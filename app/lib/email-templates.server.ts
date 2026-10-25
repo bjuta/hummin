@@ -174,3 +174,17 @@ export function newsletterOptInEmail(input:{recipient:string;confirmUrl:string;a
   footer:"Sent because this email address was entered on the HUMMIN newsletter form."
  },input.assetOrigin);
 }
+
+/** A link requested from a HUMMIN Insights guide, not a marketing subscription. */
+export function insightsDownloadEmail(a:{recipient:string;assetOrigin:string;downloadUrl:string}){
+ return render({
+  type:"insights-download",sender:"people",recipient:a.recipient,replyTo:"sales@hummin.org",
+  subject:"Your Monday figures template from HUMMIN",
+  preheader:"Download the weekly figures template for the next 12 weeks.",
+  kicker:"Insights · Free template",title:"Your Monday figures template.",
+  paragraphs:["Here is the editable workbook you requested in Notes from HUMMIN. It covers the five numbers every owner should see each Monday: sales, new enquiries, cash in the bank, overdue receivables, and one business bottleneck.","Open the workbook in Excel or upload it to Google Sheets. It includes space for 12 weeks and the action agreed at each review."],
+  primary:{label:"Download the workbook",url:a.downloadUrl},
+  note:"This is not a newsletter subscription. We will only send you Notes from HUMMIN if you subscribe separately and confirm your address.",
+  footer:"You received this email because you requested a template in HUMMIN Insights."
+ },a.assetOrigin);
+}
