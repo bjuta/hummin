@@ -21,6 +21,10 @@ jobs:
       - run: npm run verify:seo
       - run: npm run typecheck
       - run: npm run build
+      - name: Validate production Vite Worker bundle
+        run: |
+          HUMMIN_DEPLOY_TARGET=production npm run build
+          node scripts/verify-production-bundle.mjs
       - run: npm run verify:restoration
       - run: npm run verify:insights
       - run: npm run verify:insights-publications
