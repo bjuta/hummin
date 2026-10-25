@@ -1,4 +1,4 @@
-import { contactInternalEmail,contactReceivedEmail,type ContactDetails } from "./email-templates.server";
+import { contactInternalEmail,contactReceivedEmail,type ContactDetails } from "./email-templates.server.ts";
 
 export function enquiryNotification(enquiry:ContactDetails,id:string,assetOrigin:string,sentAt?:Date){
  return contactInternalEmail(enquiry,{reference:id,assetOrigin,sentAt});
