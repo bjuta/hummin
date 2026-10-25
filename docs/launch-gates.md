@@ -19,14 +19,14 @@
 - [ ] Approve privacy notice, data retention periods, and contact/assessment consent handling.
 - [ ] Configure and test Turnstile + Resend sender on an approved subdomain with end-to-end delivery to `sales@hummin.org`; don't change Google Workspace MX records.
 - [ ] Review pending/failed enquiry records, failure notifications and operational access.
-- [ ] Connect a confirmed HUMMIN-owned Google Workspace calendar using Worker-specific OAuth secrets; test FreeBusy, conflict prevention, meeting creation, invites and cancellation behaviour.
+- [x] Google OAuth stored as Cloudflare secrets; FreeBusy works, a real event was created for a confirmed test attendee on 28 October 2026, its D1 record was confirmed, and its slot was excluded from subsequent availability.\n- [ ] Confirm invitation receipt, cancellation/reconciliation behaviour, and an end-to-end appointment through the published assessment UI.
 - [ ] Add booking endpoint rate limiting and form abuse protections before enabling `BOOKING_ENABLED`.
 - [ ] Establish production D1, backups, incident/recovery process and monitoring.
 - [ ] Approve the PR, production deployment, domain cutover, and indexability changes.
 
-## Defer calendar credentials without blocking design QA
+## Booking remains deliberately off until launch protection
 
-Calendar authentication is explicitly deferred. Keep `BOOKING_ENABLED=false`, with a visible mailto fallback and no collection of booking details. A connected ChatGPT calendar belonging to a different organisation must never be silently adopted as the HUMMIN booking calendar.
+Calendar authentication is configured and verified on the preview Worker. Keep `BOOKING_ENABLED=false` until anti-abuse protection, invitation delivery and the complete assessment-to-booking flow are verified. The live slots API must show no bookable choices while booking is disabled.
 
 The same applies to contact: keep `CONTACT_ENABLED=false` until security and genuine notification delivery are verified. Neither preview nor documentation should claim that untested services work in production.
 
