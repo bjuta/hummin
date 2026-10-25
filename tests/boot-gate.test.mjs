@@ -34,3 +34,11 @@ test("Global splash waits for mounted component and active nested route before f
  assert.match(restore,/hummin-insights-frame/);
  assert.match(restore,/document\.fonts\.ready/);
 });
+
+test("A lost iframe ready message cannot leave Insights or Assessment permanently hidden",()=>{
+ assert.match(restore,/function recoverFrame\(\)/);
+ assert.match(restore,/child\.__HUMMIN_DESIGN_MOUNTED__!==true/);
+ assert.match(restore,/doc\.getElementById\('hummin-boot'\)/);
+ assert.match(restore,/f\.style\.visibility='visible'/);
+ assert.match(restore,/setInterval\(function\(\)/);
+});
