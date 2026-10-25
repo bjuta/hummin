@@ -19,7 +19,8 @@
     "verify:insights": "node scripts/verify-insights.mjs",
     "verify:admin": "node --experimental-strip-types --test tests/admin-auth.test.mjs",
     "verify:admin-data": "node --experimental-strip-types --test tests/admin-data.test.mjs",
-    "verify:admin-fidelity": "node --test tests/admin-fidelity.test.mjs"
+    "verify:admin-fidelity": "node --test tests/admin-fidelity.test.mjs",
+    "verify:insights-publications": "node --experimental-strip-types --test tests/insights-publications.test.mjs"
   },
   "dependencies": {
     "isbot": "5.1.32",
