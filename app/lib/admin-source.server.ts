@@ -3,7 +3,7 @@ import type {AdminUser} from "./admin-permissions.ts";
 
 export const PIPE_STAGES=["new","contacted","call_booked","proposal_sent","won","lost"] as const;
 export const TOPICS=["Strategy","Technology","Marketing","Operations","Talent","Data","Specialist Partners"];
-export const BLOCKS=["p","h","ul","dl","as"] as const;
+export const BLOCKS=["p","h","ul","ol","dl","as"] as const;
 export type PostBlock={t:string;text:string};
 const identifier=(s:string)=>/^[a-f0-9-]{8,64}$/i.test(s);
 const canManage=(u:AdminUser)=>u.role==="owner"||u.role==="sales";
