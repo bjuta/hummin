@@ -23,21 +23,6 @@ async function verifyTurnstile(secret:string,token:string,hostname:string):Promi
   return body.success===true && body.hostname===hostname;
  }catch{return false;}
 }
-async function sendEmail(message:{recipient:string;subject:string;html:string;text:string;replyTo?:string},id:string,apiKey:string,from:string) {
- const res=await fetch("https://api.resend.com/emails",{
-  method:"POST",
-  headers:{"Authorization":"Bearer "+apiKey,"Content-Type":"application/json","Idempotency-Key":id},
-  body:JSON.stringify({
-   from,to:[message.recipient],reply_to:message.replyTo||"sales@hummin.org",
-   subject:message.subject,html:message.html,text:message.text
-  })
- });
- if(!res.ok)throw Error("Resend rejected the message ("+res.status+")");
- const body=await res.json() as {id?:string};
- if(!body.id)throw Error("Resend returned no message ID");
- return body.id;
-}
-
 export async function loader({context}:{context:AppLoadContext}){
  const env=context.cloudflare.env;
  return { formReady:!!(env.CONTACT_ENABLED==='true'&&env.DB&&env.RESEND_API_KEY&&env.TURNSTILE_SECRET_KEY&&env.TURNSTILE_SITE_KEY&&env.EMAIL_FROM), siteKey:env.TURNSTILE_SITE_KEY||"" };
