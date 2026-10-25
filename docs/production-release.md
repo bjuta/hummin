@@ -28,3 +28,17 @@ Prepared 25 October 2026. **Production site and Google Workspace DNS are not cha
 - Verify production sender deliverability, abuse prevention, booking/replay protection, OTP session protection and newsletter unsubscribe.
 - Verify analytics with actual recorded events.
 - Approve the public domain cutover explicitly, after the above.
+
+
+## Staging execution checkpoint (25 October 2026)
+- [x] New empty isolated D1 exists; no schema or customer records have been copied.
+- [x] Production configuration is fail-closed and passed CI.
+- [x] Manually gated `.github/workflows/stage-production.yml` created for migration and isolated Worker staging.
+- [ ] **Workflow has not been executed**. It needs an authorised GitHub production-staging environment and Cloudflare API token/account ID GitHub secrets.
+- [ ] Since the workflow is introduced on a development branch, GitHub may require it to exist on the default branch before a `workflow_dispatch` run is available.
+- [ ] Execute the manual staging workflow only after the approval and secrets are in place; review its logs and confirm the production `d1_migrations` history.
+- [ ] Confirm the Worker hostname is correct for the Cloudflare account. Do not introduce public routes in the workflow.
+- [ ] Confirm the Worker renders correctly and service flags are false.
+- [ ] Deploy the public domain only after service-gate acceptance.
+
+The preview D1 was constructed using direct SQL and does **not** currently have a Wrangler `d1_migrations` table. Do not use preview migration history as a production baseline. Use tracked migrations on the empty production database.
