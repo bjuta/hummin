@@ -7,6 +7,7 @@ import {
  accountWelcomeEmail,accountPasswordResetEmail,monthlyNewsletterEmail
 } from '../app/lib/email-templates.server.ts';
 import {emailTypes} from '../app/lib/email-brand.server.ts';
+import {newsletterOptInEmail} from '../app/lib/email-templates.server.ts';
 
 const origin='https://hummin-web-preview.grimpossible.workers.dev';
 const contact={name:'Wanjiru Kamau',businessName:'Kamau Hardware',email:'wanjiru@example.co.ke',message:'We get plenty of calls but I am not sure how many turn into sales.'};
@@ -24,8 +25,9 @@ const mails=[
  monthlyNewsletterEmail({recipient:contact.email,month:'November 2026',title:'Why enquiries go unanswered.',preheader:'Why enquiries go unanswered, and a 30-day fix.',paragraphs:['Most owners we meet get more enquiries than they think.'],articleUrl:'https://hummin.org/notes',unsubscribeUrl:'https://hummin.org/unsubscribe?token=sample',assetOrigin:origin})
 ];
 test('All nine brand-book email types are present, unique, and complete',()=>{
- assert.equal(emailTypes.length,9);
- assert.deepEqual(mails.map(x=>x.type),emailTypes);
+ assert.equal(emailTypes.length,10);
+ assert.deepEqual(mails.map(x=>x.type),emailTypes.slice(0,9));
+ assert.equal(newsletterOptInEmail({recipient:contact.email,confirmUrl:origin+'/newsletter/confirm?token=sample',assetOrigin:origin}).type,'newsletter-opt-in');
  for(const x of mails){
   assert.ok(x.subject && x.preheader && x.text && x.html && x.recipient);
   assert.match(x.html,/max-width:600px/);
@@ -83,4 +85,11 @@ test('Booking and newsletter links are real, and sender rules follow brand book'
  assert.match(mails[3].html,/meet\.google\.com/);
  assert.match(mails[8].text,/unsubscribe/);
  assert.match(mails[8].html,/Notes from HUMMIN/);
+});
+
+test('Newsletter verification is never confused with a monthly edition',()=>{
+ const mail=newsletterOptInEmail({recipient:contact.email,confirmUrl:origin+'/newsletter/confirm?token=abc',assetOrigin:origin});
+ assert.equal(mail.type,'newsletter-opt-in');
+ assert.match(mail.html,/Confirm Subscription/);
+ assert.match(mail.text,/confirm/);
 });
