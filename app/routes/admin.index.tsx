@@ -37,9 +37,11 @@ export async function loader({request,context}:{request:Request;context:AppLoadC
  const {adminPageData}=await import("../lib/admin-source.server.ts");
  const {insightsPosts}=await import("../lib/insights.server.ts");
  const section=await loadAdminView(env,u,view);
+ const {operationsData}=await import("../lib/admin-operations.server.ts");
+ const operations=await operationsData(env,u,view,selectedId||"");
  const notes=await enquiryNotes(env,u,null);
  const fidelity=["pipe","leads","lead","inbox","posts","post"].includes(view)&&canView(u.role,view)?await adminPageData(env,u,view,selectedId||""):{records:[]};
- return Response.json({user:{name:u.name,role:u.role},view,section,notes,fidelity,original:insightsPosts,selectedId:selectedId||"",saved:params.get("saved")==="1"},{headers:privateHeaders});
+ return Response.json({user:{name:u.name,role:u.role},view,section,notes,operations,fidelity,original:insightsPosts,selectedId:selectedId||"",saved:params.get("saved")==="1"},{headers:privateHeaders});
 }
 export async function action({request,context}:{request:Request;context:AppLoadContext}){
  const env=context.cloudflare.env,u=await sessionUser(env,request);
@@ -51,13 +53,14 @@ export async function action({request,context}:{request:Request;context:AppLoadC
  let f:FormData;try{f=await request.formData();}catch{return new Response("Invalid form",{status:400,headers:privateHeaders});}
  const operation=String(f.get("operation")||""),id=String(f.get("id")||""),value=String(f.get("value")||"");
  const {adminPageMutation}=await import("../lib/admin-source.server.ts");
- const result=await adminPageMutation(env,u,operation,id,value,f);
+ const {operationsMutation}=await import("../lib/admin-operations.server.ts");
+ const result=operation.startsWith("client_")||operation.startsWith("engagement_")||operation.startsWith("milestone_")||operation==="email_settings_save"||operation==="assessment_draft_save"?await operationsMutation(env,u,operation,id,f):await adminPageMutation(env,u,operation,id,value,f);
  if(result.ok&&operation==="inbox_reply"){const {deliverDue}=await import("../lib/mail-outbox.server.ts");context.cloudflare.ctx.waitUntil(deliverDue(env,3).catch(()=>({sent:0,failed:1})));}
  if(!result.ok)return Response.json(result,{status:400,headers:privateHeaders});
- const view=operation.startsWith("post_")?"post":operation==="move_assessment"?"pipe":operation==="assessment_note"?"lead":operation.startsWith("inbox_")?"inbox":"dash";
+ const view=operation.startsWith("client_")||operation.startsWith("engagement_")||operation.startsWith("milestone_")?"clients":operation==="email_settings_save"?"email":operation==="assessment_draft_save"?"settings":operation.startsWith("post_")?"post":operation==="move_assessment"?"pipe":operation==="assessment_note"?"lead":operation.startsWith("inbox_")?"inbox":"dash";
  return redirect("/admin?view="+view+"&item="+encodeURIComponent(("id" in result&&result.id)?String(result.id):id)+"&saved=1",{headers:privateHeaders});
 }
-type Load={user:{name:string;role:AdminRole};view:AdminView;section:{restricted:boolean;counts:Record<string,number>;records:Record<string,unknown>[];stats?:Record<string,unknown>[]};notes:Record<string,unknown>[];fidelity:{records:Record<string,unknown>[];notes?:Record<string,unknown>[];replies?:Record<string,unknown>[];members?:Record<string,unknown>[]};original:Record<string,unknown>[];selectedId:string;saved:boolean};
+type Load={user:{name:string;role:AdminRole};view:AdminView;section:{restricted:boolean;counts:Record<string,number>;records:Record<string,unknown>[];stats?:Record<string,unknown>[]};notes:Record<string,unknown>[];fidelity:{records:Record<string,unknown>[];notes?:Record<string,unknown>[];replies?:Record<string,unknown>[];members?:Record<string,unknown>[]};operations:{records:Record<string,unknown>[];engagements?:Record<string,unknown>[];details:Record<string,unknown>[]};original:Record<string,unknown>[];selectedId:string;saved:boolean};
 const stages=["new","contacted","exploring","proposal","won","lost"];
 const stageTitle=(s:unknown)=>text(s).replace(/_/g," ").replace(/^./,c=>c.toUpperCase());
 const Head=({columns}:{columns:string[]})=><div className="hm-th">{columns.map(h=><span key={h}>{h}</span>)}</div>;
@@ -120,7 +123,7 @@ function Section({view,records,counts,notes,selectedId}:{view:AdminView;records:
 export default function AdminHome(){
  const data=useLoaderData() as Load;
  const response=useActionData() as {ok:boolean;message:string}|undefined;
- const {user,view,section,notes,fidelity,original,selectedId,saved}=data;
+ const {user,view,section,notes,fidelity,operations,original,selectedId,saved}=data;
  const records=(section.records||[]).map(item),counts=section.counts||{};
  const accessible=PAGES.filter(p=>canView(user.role,p.view));
  const current=PAGES.find(p=>p.view===view);
@@ -178,13 +181,13 @@ export default function AdminHome(){
  view==="posts"?<InsightsListScreen data={fidelity} original={original}/>:
  view==="post"?<InsightsEditorScreen key={selectedId} data={fidelity} original={original} selected={selectedId}/>:
  view==="book"?<BookingsExact records={records}/>:
- view==="clients"?<EngagementsExact/>:
+ view==="clients"?<EngagementsExact records={operations.records} engagements={operations.engagements||[]} milestones={operations.details} selected={selectedId}/>:
  view==="analytics"?<AnalyticsExact/>:
  view==="invoices"?<InvoicesExact/>:
  view==="reports"?<ReportsExact/>:
- view==="settings"?<AssessmentSettingsExact/>:
+ view==="settings"?<AssessmentSettingsExact drafts={operations.records}/>:
  view==="team"?<TeamExact records={records}/>:
- view==="email"?<EmailExact records={records}/>:
+ view==="email"?<EmailExact records={records} settings={operations.records}/>:
  view==="aud"?<AudienceExact records={records}/>:
  <Section view={view} records={records} counts={counts} notes={notes} selectedId={selectedId}/>}
  <p className="hm-muted" style={{marginTop:32}}>Only live records are shown. This preview excludes the standalone Admin's fictitious examples.</p>
