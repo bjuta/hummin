@@ -10,6 +10,7 @@ export interface HumminEnv {
   EMAIL_FROM?: string;
   EMAIL_FROM_SYSTEM?: string;
   EMAIL_FROM_PEOPLE?: string;
+  EMAIL_FROM_NEWSLETTER?: string;
   ADMIN_AUTH_ENABLED?: string;
   ADMIN_AUTH_PEPPER?: string;
   TURNSTILE_SITE_KEY?: string;
