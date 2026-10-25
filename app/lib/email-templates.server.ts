@@ -99,13 +99,15 @@ export function bookingReminderEmail(a:Appointment){
 }
 
 type AccountCode={recipient:string;name:string;code:string;expiresMinutes:number;assetOrigin:string};
-const formattedCode=(raw:string)=>{
+// Preserve a contiguous six-digit value so copying from email also works with
+// paste, keyboard autofill and the Admin's auto-submitting OTP control.
+const copyableCode=(raw:string)=>{
  if(!/^\d{6}$/.test(raw))throw Error("Account code must contain six digits");
- return raw.slice(0,3)+" "+raw.slice(3);
+ return raw;
 };
 /** Brand Book 17.6: Account sign-in code. No account sender is active yet. */
 export function signInCodeEmail(a:AccountCode){
- const code=formattedCode(a.code);
+ const code=copyableCode(a.code);
  return render({
   type:"account-sign-in",sender:"system",recipient:a.recipient,replyTo:"sales@hummin.org",
   subject:"Your HUMMIN sign-in code is "+a.code,
@@ -125,7 +127,7 @@ export function accountWelcomeEmail(a:AccountCode){
   preheader:"One step to finish setting up your HUMMIN account.",
   kicker:"Welcome",title:"Confirm your email address.",
   paragraphs:["Hello "+first(a.name)+", your HUMMIN account is almost ready. Enter this code to confirm the email address is yours."],
-  code:{value:formattedCode(a.code),expiry:"Expires in "+a.expiresMinutes+" minutes"},
+  code:{value:copyableCode(a.code),expiry:"Expires in "+a.expiresMinutes+" minutes"},
   note:"If you did not create an account, ignore this email and the account will not be activated.",
   footer:"Sent because this address was used to create an account on hummin.org."
  },a.assetOrigin);
