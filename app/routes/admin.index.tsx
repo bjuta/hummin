@@ -7,6 +7,7 @@ import {AdminChrome} from "../components/admin-chrome.tsx";
 import {PipelineScreen,LeadsScreen,LeadDetailScreen,InboxScreen,InsightsListScreen,InsightsEditorScreen} from "../components/admin-source-screens.tsx";
 import {adminPageData,adminPageMutation} from "../lib/admin-source.server.ts";
 import {insightsPosts} from "../lib/insights.server.ts";
+import {DashboardExact,BookingsExact,EngagementsExact,AnalyticsExact,InvoicesExact,ReportsExact,AssessmentSettingsExact,TeamExact,EmailExact,AudienceExact} from "../components/admin-other-screens.tsx";
 
 const PAGES:{view:AdminView;label:string;short:string}[]=[
  {view:"dash",label:"Dashboard",short:"Overview"},{view:"leads",label:"Leads",short:"Assessments"},
@@ -164,12 +165,22 @@ export default function AdminHome(){
  {response?<p className="hm-alert" role="alert">{response.message}</p>:null}
  {section.restricted?<Blank title="Restricted to authorised roles" description="This section is not available to your staff access level."/>:
  user.role==="partner"||user.role==="staff"?<Blank title="No assigned operational modules" description="This account is authenticated. Your permissions will expand when an authorised owner assigns specific work."/>:
+ view==="dash"?<DashboardExact counts={counts} records={records}/>:
  view==="pipe"?<PipelineScreen data={fidelity}/>:
  view==="leads"?<LeadsScreen data={fidelity}/>:
  view==="lead"?<LeadDetailScreen data={fidelity} selected={selectedId}/>:
  view==="inbox"?<InboxScreen data={fidelity} selected={selectedId}/>:
  view==="posts"?<InsightsListScreen data={fidelity} original={insightsPosts as unknown as Record<string,unknown>[]}/>:
  view==="post"?<InsightsEditorScreen key={selectedId} data={fidelity} original={insightsPosts as unknown as Record<string,unknown>[]} selected={selectedId}/>:
+ view==="book"?<BookingsExact records={records}/>:
+ view==="clients"?<EngagementsExact/>:
+ view==="analytics"?<AnalyticsExact/>:
+ view==="invoices"?<InvoicesExact/>:
+ view==="reports"?<ReportsExact/>:
+ view==="settings"?<AssessmentSettingsExact/>:
+ view==="team"?<TeamExact records={records}/>:
+ view==="email"?<EmailExact records={records}/>:
+ view==="aud"?<AudienceExact records={records}/>:
  <Section view={view} records={records} counts={counts} notes={notes} selectedId={selectedId}/>}
  <p className="hm-muted" style={{marginTop:32}}>Only live records are shown. This preview excludes the standalone Admin's fictitious examples.</p>
  </main></div></AdminChrome>;
