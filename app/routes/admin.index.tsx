@@ -175,7 +175,7 @@ export default function AdminHome(){
  view==="lead"?<LeadDetailScreen data={fidelity} selected={selectedId}/>:
  view==="inbox"?<InboxScreen data={fidelity} selected={selectedId}/>:
  view==="posts"?<InsightsListScreen data={fidelity} original={original}/>:
- view==="post"?<InsightsEditorScreen key={selectedId} data={fidelity} original={insightsPosts as unknown as Record<string,unknown>[]} selected={selectedId}/>:
+ view==="post"?<InsightsEditorScreen key={selectedId} data={fidelity} original={original} selected={selectedId}/>:
  view==="book"?<BookingsExact records={records}/>:
  view==="clients"?<EngagementsExact/>:
  view==="analytics"?<AnalyticsExact/>:
