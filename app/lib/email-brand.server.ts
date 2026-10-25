@@ -16,7 +16,7 @@ export type BrandEmail = {
  html: string;
  text: string;
  recipient: string;
- sender: "people" | "system";
+ sender: "people" | "system" | "newsletter";
  replyTo?: string;
  unsubscribeUrl?: string;
 };
@@ -24,7 +24,7 @@ export type BrandEmail = {
 export type EmailSpec = {
  type: MailType;
  recipient: string;
- sender: "people" | "system";
+ sender: "people" | "system" | "newsletter";
  replyTo?: string;
  subject: string;
  preheader: string;
