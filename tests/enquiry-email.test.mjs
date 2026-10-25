@@ -72,9 +72,9 @@ test('Dynamic values are escaped, and actionable links cannot use script URLs',(
  assert.throws(()=>accountPasswordResetEmail({recipient:contact.email,resetUrl:'javascript:alert(1)',expiresMinutes:30,assetOrigin:origin}));
 });
 
-test('Both account codes are six digits, spaced correctly, and have expiries',()=>{
- assert.match(mails[5].html,/482 913/);
- assert.match(mails[6].html,/730 418/);
+test('Both account codes are six contiguous digits and have expiries',()=>{
+ assert.match(mails[5].html,/482913/);
+ assert.match(mails[6].html,/730418/);
  assert.match(mails[5].html,/Expires in 10 minutes/);
  assert.throws(()=>signInCodeEmail({recipient:contact.email,name:contact.name,code:'123',expiresMinutes:10,assetOrigin:origin}));
 });
