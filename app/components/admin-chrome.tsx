@@ -52,9 +52,9 @@ export function AdminChrome({children,menuItems=[],current="",userName,signOut=f
  return <div className="hm-admin-scope"><style>{adminCss}</style>
  <header className="hm-admin-top"><div className="hm-admin-top-inner">
  {menuItems.length?<button type="button" className="hm-menu-button" aria-label={open?"Close Admin menu":"Open Admin menu"} aria-expanded={open} aria-controls="hm-admin-menu" onClick={()=>setOpen(v=>!v)}><span aria-hidden="true" style={{fontSize:19,lineHeight:1}}>{open?"×":"☰"}</span></button>:null}
- <Link to="/admin" className="hm-brand" aria-label="HUMMIN Admin home"><span className="hm-mark">H</span><span>HUMMIN</span><span className="hm-admin-tag">Admin</span></Link>
+ <Link to="/admin" className="hm-brand" aria-label="HUMMIN Admin home"><img src="/email/mark-dark.png" width={38} height={38} alt="" style={{width:38,height:38,objectFit:"contain"}}/><span>HUMMIN</span><span className="hm-admin-tag">Admin</span></Link>
  <span style={{flex:1}}/>
- {userName?<span style={{fontSize:12,fontWeight:600,color:"#5E6967"}}>{userName}</span>:<span style={{fontSize:12,color:"#5E6967"}}>Secure staff access</span>}
+ {userName?<span aria-label={"Signed in as "+userName} title={userName} style={{width:36,height:36,borderRadius:"50%",background:"#1E272A",color:"#F4F5F1",fontWeight:700,fontSize:12,display:"grid",placeItems:"center",flexShrink:0}}>{userName.split(/\\s+/).map(w=>w[0]).join("").slice(0,2).toUpperCase()}</span>:<span style={{fontSize:12,color:"#5E6967"}}>Secure staff access</span>}
  {signOut?<Form method="post" action="/admin/logout"><button className="hm-admin-action" type="submit">Sign out</button></Form>:null}
  </div>
  {open?<><button type="button" className="hm-menu-backdrop" aria-label="Close Admin menu" onClick={()=>setOpen(false)}/><nav className="hm-menu-popover" id="hm-admin-menu" aria-label="Admin">
