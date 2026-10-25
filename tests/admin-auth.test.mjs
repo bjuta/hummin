@@ -41,7 +41,11 @@ test("Preview never exposes public self-registration or mock admin data",()=>{
 test("Branded account emails use operational links and verified identity fallback",()=>{
  const signIn=signInCodeEmail({recipient:"staff@example.org",name:"Staff Member",code:"123456",expiresMinutes:10,assetOrigin:"https://hummin.org"});
  assert.equal(signIn.type,"account-sign-in");
- assert.match(signIn.text,/123 456/);
+ assert.match(signIn.text,/123456/);
+ assert.match(signIn.html,/>123456<\\/div>/);
+ assert.doesNotMatch(signIn.text,/123\\s+456/);
+ assert.doesNotMatch(signIn.html,/123\\s+456/);
+ assert.match(signIn.html,/user-select:all/);
  const welcome=staffAccountActivatedEmail({recipient:"staff@example.org",name:"Staff Member",role:"editor",assetOrigin:"https://hummin.org"});
  assert.equal(welcome.type,"account-welcome");
  assert.match(welcome.html,/https:\/\/hummin.org\/admin/);
@@ -84,4 +88,16 @@ test("All branded email headers have rounded top corners",()=>{
  assert.match(mail.html,/border-radius:18px 18px 0 0/);
  assert.match(mail.html,/max-width:600px/);
  assert.match(mail.html,/border-radius:18px;overflow:hidden/);
+});
+
+test("Sign-in and welcome emails contain one uninterrupted six-digit code",async()=>{
+ const {accountWelcomeEmail}=await import("../app/lib/email-templates.server.ts");
+ const props={recipient:"staff@example.org",name:"Staff Member",code:"987654",expiresMinutes:10,assetOrigin:"https://hummin.org"};
+ for(const mail of [signInCodeEmail(props),accountWelcomeEmail(props)]){
+  assert.match(mail.html,/>987654<\\/div>/);
+  assert.match(mail.text,/987654/);
+  assert.doesNotMatch(mail.html,/987\\s+654/);
+  assert.doesNotMatch(mail.text,/987\\s+654/);
+ }
+ assert.throws(()=>signInCodeEmail({...props,code:"987 654"}),/six digits/);
 });
