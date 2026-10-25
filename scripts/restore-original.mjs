@@ -184,16 +184,18 @@ function brandedBoot(html,kind){
    function frame(){return new Promise(function(resolve){requestAnimationFrame(function(){requestAnimationFrame(resolve)})})}
    function fonts(){return document.fonts&&document.fonts.ready?Promise.race([document.fonts.ready,new Promise(function(resolve){setTimeout(resolve,1800)})]):Promise.resolve()}
    function ready(){
-     if(ended)return;
+     if(ended||document.readyState==='loading'||Date.now()-started<450)return;
      var root=document.querySelector('x-dc');
      if(!root||!root.children.length)return;
+     // Wait for the runtime to leave a visual page subtree. At minimum two
+     // animation frames are allowed after document parsing and style loading.
      var text=root.textContent||'';
-     if(text.indexOf('HUMMIN')<0&&Date.now()-started<2500)return;
+     if(text.indexOf('HUMMIN')<0)return;
      // For the main site, wait for the Insights iframe when present. It shares
      // the same boot protocol and exposes a loaded state.
      var iframe=document.getElementById('hummin-insights-frame');
      if(iframe&&!iframe.dataset.hmLoaded&&Date.now()-started<5500)return;
-     ended=true;
+     ended=true;obs.disconnect();
      Promise.resolve(fonts()).then(frame).then(function(){
        document.documentElement.classList.remove('hm-booting');
        var splash=document.getElementById('hummin-boot');
@@ -203,7 +205,7 @@ function brandedBoot(html,kind){
    }
    var obs=new MutationObserver(ready);
    obs.observe(document.documentElement,{childList:true,subtree:true});
-   document.addEventListener('DOMContentLoaded',ready);
+   document.addEventListener('DOMContentLoaded',function(){setTimeout(ready,460)});
    window.addEventListener('load',ready,{once:true});
    window.addEventListener('message',function(e){
      if(e.origin!==location.origin||!e.data||e.data.humminDesignReady!==true)return;
@@ -212,8 +214,9 @@ function brandedBoot(html,kind){
        ready();
      }
    });
-   // Never trap users behind an endless loading screen on failed assets.
-   setTimeout(function(){if(!ended)ready()},max);
+   // Gracefully reveal even if a remote asset or iframe stalls. A stalled
+   // child must never leave the user permanently blocked.
+   setTimeout(function(){if(ended)return;ended=true;obs.disconnect();document.documentElement.classList.remove('hm-booting');var splash=document.getElementById('hummin-boot');if(splash)splash.remove();},max);
    ready();
  })();</script>`;
  const init=script.replace('__KIND__',JSON.stringify(kind));
@@ -254,6 +257,21 @@ function insightTemplate(t){
   return changed;
 }
 class Component extends DCLogic {`);
+ // Resolve deep links before the first React render, not after componentDidMount.
+ // Rendering the index first caused a brief full-screen article-navigation flash.
+ t=need(t,"state = { view: 'index', slug: null, topic: null, author: null, type: 'all', q: '', dl: {}, dlEmail: {}, subEmail: '', subErr: '', subDone: false, copied: false };",
+ `state = (()=>{
+   const path=(window.parent!==window?window.parent.location.pathname:window.location.pathname).split('/').filter(Boolean);
+   let initial={view:'index',slug:null,topic:null,author:null};
+   if(path[0]==='insights'){
+     if(path[1]==='author'&&AUTHORS[path[2]])initial={...initial,view:'author',author:path[2]};
+     else if(path[1]==='topic'){
+       const topic=TOPICS.find(t=>slugify(t.name)===path[2]);
+       if(topic)initial={...initial,view:'topic',topic:topic.name};
+     }else if(path[1]&&POSTS.some(p=>p.slug===path[1]))initial={...initial,view:'post',slug:path[1]};
+   }
+   return {...initial,type:'all',q:'',dl:{},dlEmail:{},subEmail:'',subErr:'',subDone:false,copied:false};
+ })();`);
  const oldMount="  componentDidMount() { this._nonce = this.props.openNonce; if (this.props.openPost) this.setState({ view: 'post', slug: this.props.openPost }); }";
  const mounted=`  componentDidMount() {
     this._insightsAlive=true;
