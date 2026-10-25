@@ -7,6 +7,10 @@ export interface HumminEnv {
   ASSETS?: Fetcher;
   RESEND_API_KEY?: string;
   EMAIL_FROM?: string;
+  EMAIL_FROM_SYSTEM?: string;
+  EMAIL_FROM_PEOPLE?: string;
+  ADMIN_AUTH_ENABLED?: string;
+  ADMIN_AUTH_PEPPER?: string;
   TURNSTILE_SITE_KEY?: string;
   TURNSTILE_SECRET_KEY?: string;
   SITE_URL?: string;
