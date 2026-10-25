@@ -22,7 +22,9 @@ test("Admin sessions are secure and cross-site POST requests are rejected",()=>{
 });
 test("Preview never exposes public self-registration or mock admin data",()=>{
  const p=JSON.parse(read("wrangler.preview.jsonc"));
- assert.equal(p.vars.ADMIN_AUTH_ENABLED,"false");
+ assert.equal(p.vars.ADMIN_AUTH_ENABLED,"true");
+ assert.equal(adminReady({ADMIN_AUTH_ENABLED:"true"}),false);
+ assert.equal(adminReady({ADMIN_AUTH_ENABLED:"true",DB:{},ADMIN_AUTH_PEPPER:"example-secret",RESEND_API_KEY:"example-api",EMAIL_FROM:"HUMMIN <hello@notify.hummin.org>"}),true);
  const routes=read("app/routes.ts");
  for(const path of ["admin/login","admin/verify","admin/logout","admin"])assert.ok(routes.includes('route("'+path+'"'));
  const migration=read("migrations/0004_admin_accounts.sql");
