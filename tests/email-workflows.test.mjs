@@ -163,7 +163,7 @@ test('Durable D1 booking quota denies overflow and does not store plaintext IP',
  const counts=new Map(),ip='203.0.113.10',r=new Request('https://hummin-web-preview.grimpossible.workers.dev/api/booking/slots',{headers:{'cf-connecting-ip':ip}});
  const env={TURNSTILE_SECRET_KEY:'test-protect',DB:{prepare(sql){
   assert.match(sql,/INSERT INTO booking_rate_limits/);
-  return {bind(key){return {async first(){let v=(counts.get(key)||0)+1;counts.set(key,v);return {requests:v};}}};}
+  return {bind(key){return {async first(){let v=(counts.get(key)||0)+1;counts.set(key,v);return {requests:v};}}}};
  }}};
  for(let i=0;i<36;i++)assert.equal((await bookingLimit(env,r,'slots')).ok,true);
  const exceeded=await bookingLimit(env,r,'slots');
