@@ -27,7 +27,7 @@ export async function adminPageData(e:HumminEnv,u:AdminUser,view:string,selected
  }
  if(view==="posts"||view==="post"){
   if(!canWrite(u))return {records:[],restricted:true};
-  const posts=await D.prepare("SELECT id,source_slug,slug,title,excerpt,type,author,status,topics_json,blocks_json,revision,updated_at FROM admin_insights_posts ORDER BY updated_at DESC LIMIT 150").all();
+  const posts=await D.prepare("SELECT p.id,p.source_slug,p.slug,p.title,p.excerpt,p.type,p.author,p.status,p.topics_json,p.blocks_json,p.revision,p.updated_at,(SELECT r.revision FROM admin_insights_publications r WHERE r.post_id=p.id) AS published_revision FROM admin_insights_posts p ORDER BY p.updated_at DESC LIMIT 150").all();
   return {records:posts.results||[]};
  }
  return {records:[]};
