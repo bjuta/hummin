@@ -41,7 +41,13 @@ export async function loader({ request, context }: { request: Request; context: 
  })():'';
  const resize='<script>window.addEventListener("message",function(e){if(e.origin!==window.location.origin||!e.data||!Number.isFinite(e.data.humminInsightsHeight))return;var f=document.getElementById("hummin-insights-frame");if(f&&e.source===f.contentWindow)f.style.height=Math.min(20000,Math.max(400,Math.ceil(e.data.humminInsightsHeight)))+"px";});</script>';
  const html=(await response.text()).replace("</head>",meta+config+script+resize+"</head>");
- return new Response(html,{status:response.status,headers:{"Content-Type":"text/html; charset=utf-8","X-Robots-Tag":"noindex, nofollow","Cache-Control":"no-store"}});
+ // Stage and preview Workers are always excluded from indexing. Only the
+ // explicitly approved public hostnames may be indexed after domain cutover.
+ const hostname=new URL(request.url).hostname.toLowerCase();
+ const isPublicHost=hostname==="hummin.org"||hostname==="www.hummin.org";
+ const headers:Record<string,string>={"Content-Type":"text/html; charset=utf-8","Cache-Control":"no-store"};
+ if(!isPublicHost)headers["X-Robots-Tag"]="noindex, nofollow";
+ return new Response(html,{status:response.status,headers});
 }
 export async function action(args:{request:Request;context:AppLoadContext}) {
  if(new URL(args.request.url).pathname!=="/contact") return new Response("Method not allowed",{status:405});
