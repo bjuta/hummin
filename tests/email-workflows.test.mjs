@@ -38,7 +38,7 @@ function memoryEnv(){
     return null;
    }
   };
- }}};
+ }};}};
  return {DB:db,RESEND_API_KEY:'test-key',EMAIL_FROM:'HUMMIN <hello@notify.hummin.org>',outbox,subscribers,issues};
 }
 
