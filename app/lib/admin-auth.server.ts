@@ -1,5 +1,6 @@
 import type {HumminEnv} from "../../workers/app";
-import {signInCodeEmail} from "./email-templates.server.ts";
+import {signInCodeEmail,staffAccountActivatedEmail} from "./email-templates.server.ts";
+import {queueEmail} from "./mail-outbox.server.ts";
 import {deliverDue} from "./mail-outbox.server.ts";
 
 export type AdminUser={id:string;email:string;name:string;role:"owner"|"sales"|"editor"|"partner"|"staff";status:string};
@@ -71,5 +72,11 @@ export async function completeAdminCode(e:HumminEnv,emailInput:string,input:stri
   e.DB!.prepare("INSERT INTO admin_sessions(token_hash,user_id,expires_at) VALUES(?,?,?)").bind(hash,user.id,new Date(Date.now()+AGE*1000).toISOString()),
   e.DB!.prepare("UPDATE admin_users SET status='active',verified_at=COALESCE(verified_at,CURRENT_TIMESTAMP) WHERE id=? AND status IN ('invited','active')").bind(user.id)
  ]);
+ if(user.status==="invited"){
+  try{
+   const base=e.SITE_URL||"https://hummin.org";
+   await queueEmail(e,"admin-welcome:"+user.id,staffAccountActivatedEmail({recipient:user.email,name:user.name,role:user.role,assetOrigin:base}));
+  }catch{console.error("Staff activation succeeded but welcome email could not be queued");}
+ }
  return session;
 }
