@@ -96,12 +96,12 @@ export function InboxScreen({data,selected}:{data:Data;selected:string}){
  </div></div>;
 }
 const topicOptions=["Strategy","Technology","Marketing","Operations","Talent","Data","Specialist Partners"];
-type EditorPost={id?:string;source_slug?:string;slug:string;title:string;excerpt:string;type:string;author:string;status:string;topics:string[];blocks:{t:string;text:string}[]};
+type EditorPost={id?:string;source_slug?:string;revision?:number;published_revision?:number|null;slug:string;title:string;excerpt:string;type:string;author:string;status:string;topics:string[];blocks:{t:string;text:string}[]};
 function toPost(p:RecordRow):EditorPost{
  let topics:string[]=[],blocks:{t:string;text:string}[]=[];
  try{topics=JSON.parse(nice(p.topics_json)||"[]");}catch{}
  try{blocks=JSON.parse(nice(p.blocks_json)||"[]");}catch{}
- return {id:nice(p.id),source_slug:nice(p.source_slug),slug:nice(p.slug),title:nice(p.title),excerpt:nice(p.excerpt),type:nice(p.type)||"Guide",author:nice(p.author),status:nice(p.status),topics,blocks};
+ return {id:nice(p.id),source_slug:nice(p.source_slug),revision:Number(p.revision)||0,published_revision:p.published_revision==null?null:Number(p.published_revision),slug:nice(p.slug),title:nice(p.title),excerpt:nice(p.excerpt),type:nice(p.type)||"Guide",author:nice(p.author)==="muiruri"||nice(p.author)==="Muiruri Beautah"?"muiruri":"team",status:nice(p.status),topics,blocks};
 }
 const slugify=(s:string)=>s.toLowerCase().trim().replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,"");
 export function InsightsListScreen({data,original}:{data:Data;original:RecordRow[]}){
@@ -110,13 +110,13 @@ export function InsightsListScreen({data,original}:{data:Data;original:RecordRow
  const rows:RecordRow[]=[...posts.map(p=>({...p,origin:"CMS"})),...original.filter(p=>!existing.has(nice(p.slug))).map(p=>({...p,id:"",source_slug:p.slug,origin:"Bundled",status:"published"}))];
  return <div style={{display:"grid",gap:12}}><div style={{display:"flex",justifyContent:"flex-end"}}><Link to="/admin?view=post&item=new" style={{...btn,lineHeight:"42px",color:"white"}}>New Post</Link></div>
  <div style={{...panel,padding:0,overflow:"hidden"}}>{rows.map((p,i)=><Link key={nice(p.id)||nice(p.slug)} to={"/admin?view=post&item="+encodeURIComponent(nice(p.id)||"original:"+nice(p.slug))} style={{display:"flex",flexWrap:"wrap",alignItems:"center",gap:"8px 14px",padding:"14px 16px",borderBottom:"1px solid #E7EBE6",color:"#1E272A"}}>
- <span style={{borderRadius:99,padding:"4px 10px",fontSize:11,fontWeight:700,color:p.status==="published"?"#2E6B5C":"#434F4F",background:p.status==="published"?"#DCEBE5":"#E7EBE6"}}>{p.status==="published"?"Published":nice(p.status)}</span>
+ <span style={{borderRadius:99,padding:"4px 10px",fontSize:11,fontWeight:700,color:p.status==="published"?"#2E6B5C":"#434F4F",background:p.status==="published"?"#DCEBE5":"#E7EBE6"}}>{p.published_revision?"Live + "+nice(p.status):p.origin==="Bundled"?"Bundled":p.status==="published"?"Bundled · editable":nice(p.status)}</span>
  <span style={{flex:"2 1 220px"}}><strong style={{display:"block",fontSize:15}}>{nice(p.title)||"Untitled"}</strong><small style={muted}>{nice(p.type)} · {nice(p.author)} · {nice(p.origin)}</small></span><span style={muted}>{date(p.updated_at||p.date)}</span></Link>)}
  {!rows.length?<PanelEmpty description="No posts yet. Create the first draft with New Post."/>:null}</div></div>;
 }
 export function InsightsEditorScreen({data,original,selected}:{data:Data;original:RecordRow[];selected:string}){
  const found=data.records.find(r=>r.id===selected),seed=selected.startsWith("original:")?original.find(p=>p.slug===selected.slice(9)):null;
- const starting=found?toPost(found):seed?{slug:nice(seed.slug),source_slug:nice(seed.slug),title:nice(seed.title),excerpt:nice(seed.excerpt),type:nice(seed.type).replace(/^./,x=>x.toUpperCase()),author:nice(seed.author),status:"published",topics:(seed.topics as string[])||[],blocks:[]}: {slug:"",title:"",excerpt:"",type:"Guide",author:"HUMMIN",status:"draft",topics:[],blocks:[{t:"p",text:""}]};
+ const starting=found?toPost(found):seed?{slug:nice(seed.slug),source_slug:nice(seed.slug),title:nice(seed.title),excerpt:nice(seed.excerpt),type:nice(seed.type).replace(/^./,x=>x.toUpperCase()),author:nice(seed.author)==="muiruri"?"muiruri":"team",revision:0,status:"published",topics:(seed.topics as string[])||[],blocks:[]}: {slug:"",title:"",excerpt:"",type:"Guide",author:"team",revision:0,status:"draft",topics:[],blocks:[{t:"p",text:""}]};
  const [post,setPost]=useState<EditorPost>(starting);
  const navigation=useNavigation(),pending=navigation.state!=="idle";
  const change=(x:Partial<EditorPost>)=>setPost(p=>({...p,...x}));
@@ -125,7 +125,7 @@ export function InsightsEditorScreen({data,original,selected}:{data:Data;origina
  const words=post.blocks.reduce((sum,b)=>sum+b.text.trim().split(/\s+/).filter(Boolean).length,0);
  return <div style={{display:"flex",flexWrap:"wrap",gap:16,alignItems:"start"}}>
  <Form method="post" id="insights-editor-form" style={{display:"contents"}}>
- <input type="hidden" name="id" value={post.id||""}/><input type="hidden" name="source_slug" value={post.source_slug||""}/><input type="hidden" name="blocks" value={JSON.stringify(post.blocks)}/><input type="hidden" name="topics" value={JSON.stringify(post.topics)}/><input type="hidden" name="title" value={post.title}/><input type="hidden" name="excerpt" value={post.excerpt}/><input type="hidden" name="type" value={post.type}/><input type="hidden" name="slug" value={post.slug}/>
+ <input type="hidden" name="id" value={post.id||""}/><input type="hidden" name="revision" value={post.revision||0}/><input type="hidden" name="author" value={post.author}/><input type="hidden" name="source_slug" value={post.source_slug||""}/><input type="hidden" name="blocks" value={JSON.stringify(post.blocks)}/><input type="hidden" name="topics" value={JSON.stringify(post.topics)}/><input type="hidden" name="title" value={post.title}/><input type="hidden" name="excerpt" value={post.excerpt}/><input type="hidden" name="type" value={post.type}/><input type="hidden" name="slug" value={post.slug}/>
  <div style={{...panel,flex:"3 1 520px",maxWidth:820,display:"grid",gap:10,padding:"clamp(16px,3vw,36px)"}}>
  <input aria-label="Title" placeholder="Title" value={post.title} onChange={e=>change({title:e.target.value,...(!post.id&&!post.source_slug?{slug:slugify(e.target.value)}:{})})} style={{border:0,outline:0,font:"400 clamp(28px,3.4vw,40px)/1.1 Newsreader,serif",width:"100%"}}/>
  <textarea aria-label="Summary" value={post.excerpt} rows={2} placeholder="One-sentence summary" onChange={e=>change({excerpt:e.target.value})} style={{border:0,outline:0,resize:"vertical",fontSize:16,lineHeight:1.5,padding:"0 0 10px",borderBottom:"1px solid #E7EBE6"}}/>
@@ -140,13 +140,13 @@ export function InsightsEditorScreen({data,original,selected}:{data:Data;origina
  </div>
  <div style={{flex:"1 1 260px",display:"grid",gap:12,position:"sticky",top:84}}>
  <div style={{...panel,display:"grid",gap:12,padding:16}}>
- <div style={{display:"flex",justifyContent:"space-between"}}><strong>Status</strong><span style={{fontSize:11,borderRadius:99,background:"#E7EBE6",padding:"4px 10px"}}>{post.status}</span></div>
+ <div style={{display:"flex",justifyContent:"space-between"}}><strong>Status</strong><span style={{fontSize:11,borderRadius:99,background:"#E7EBE6",padding:"4px 10px"}}>{post.status}{post.published_revision?" · live rev "+post.published_revision:""}</span></div>
  <label style={muted}>Type<select style={field} value={post.type} onChange={e=>change({type:e.target.value})}>{["Guide","Opinion","News","Guest partner"].map(t=><option key={t}>{t}</option>)}</select></label>
  <label style={muted}>URL slug<input style={field} value={post.slug} onChange={e=>change({slug:slugify(e.target.value)})} maxLength={120}/></label>
  <div><span style={muted}>Topics</span><div style={{display:"flex",flexWrap:"wrap",gap:6,marginTop:6}}>{topicOptions.map(t=><button key={t} type="button" aria-pressed={post.topics.includes(t)} onClick={()=>change({topics:post.topics.includes(t)?post.topics.filter(x=>x!==t):[...post.topics,t]})} style={{padding:"6px 10px",borderRadius:99,fontSize:12,fontWeight:600,border:"1px solid #D0D8D2",background:post.topics.includes(t)?"#1E272A":"white",color:post.topics.includes(t)?"white":"#1E272A"}}>{t}</button>)}</div></div>
- <span style={muted}>{post.author||"HUMMIN"} · {words} words · {Math.max(1,Math.ceil(words/220))} min read</span>
+ <label style={muted}>Author<select style={field} value={post.author} onChange={e=>change({author:e.target.value})}><option value="team">HUMMIN Team</option><option value="muiruri">Muiruri Beautah</option></select></label><span style={muted}>{words} words · {Math.max(1,Math.ceil(words/220))} min read</span>
  <button type="submit" name="operation" value="post_save" style={btn} disabled={pending}>Save Draft</button>
- <button type="submit" name="operation" value="post_publish" style={{...btn,background:"#1E272A",opacity:.5}} disabled title="Public publishing is not connected yet">{post.status==="published"?"Update":"Publish"}</button>
- <small style={{...muted,lineHeight:1.6}}>CMS records are stored and versioned. Public article rendering still uses the current bundled source; publishing to the public site will only be enabled after the rendering adapter is validated.</small>
+ <button type="submit" name="operation" value="post_publish" style={{...btn,background:"#1E272A"}} disabled={pending}>{post.published_revision?"Update published post":"Publish to preview"}</button>
+ <small style={{...muted,lineHeight:1.6}}>Save Draft keeps changes private. Publish to preview releases a separate version to the current Insights design. Live production publishing remains disabled.</small>
  </div></div></Form></div>;
 }
