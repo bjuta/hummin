@@ -40,9 +40,8 @@ export async function liveSlots(e:HumminEnv):Promise<SlotDay[]>{
   return {date,slots};
  });
 }
-export async function reserve(e:HumminEnv,input:{start:string;name:string;email:string;phone:string}, opts?:{controlledTest?:boolean}):Promise<{eventId:string;calendarUrl:string}>{
- const controlledTest=opts?.controlledTest===true&&e.BOOKING_ENABLED==="false"&&e.SITE_URL==="https://hummin-web-preview.grimpossible.workers.dev"&&input.email==="grimpossible@gmail.com"&&input.name==="HUMMIN integration test";
- if((!isConfigured(e)&&!controlledTest)||!hasCalendarCredentials(e)||!e.DB)throw Error("Booking is not configured");
+export async function reserve(e:HumminEnv,input:{start:string;name:string;email:string;phone:string}):Promise<{eventId:string;calendarUrl:string}>{
+ if(!isConfigured(e)||!e.DB)throw Error("Booking is not configured");
  const days=await liveSlots(e);
  if(!days.some(d=>d.slots.includes(input.start)))throw Error("That time is no longer available");
  const end=new Date(Date.parse(input.start)+30*60000).toISOString();
@@ -57,7 +56,7 @@ export async function reserve(e:HumminEnv,input:{start:string;name:string;email:
   const token=await accessToken(e);
   const result=await fetch("https://www.googleapis.com/calendar/v3/calendars/"+encodeURIComponent(e.GOOGLE_CALENDAR_ID!)+"/events?sendUpdates=all&conferenceDataVersion=1",{
    method:"POST",headers:{"Authorization":"Bearer "+token,"Content-Type":"application/json"},
-   body:JSON.stringify({summary:controlledTest?"HUMMIN calendar integration test — no meeting required":"HUMMIN business assessment results review",description:controlledTest?"Controlled HUMMIN preview booking test. No meeting required.":"30-minute consultation arranged on hummin.org.",start:{dateTime:input.start},end:{dateTime:end},attendees:[{email:input.email}],conferenceData:{createRequest:{requestId:holdId,conferenceSolutionKey:{type:"hangoutsMeet"}}}})
+   body:JSON.stringify({summary:"HUMMIN business assessment results review",description:"30-minute consultation arranged on hummin.org.",start:{dateTime:input.start},end:{dateTime:end},attendees:[{email:input.email}],conferenceData:{createRequest:{requestId:holdId,conferenceSolutionKey:{type:"hangoutsMeet"}}}})
   });
   if(!result.ok)throw Error("Calendar did not accept the appointment");
   const event=await result.json() as {id?:string;htmlLink?:string};
