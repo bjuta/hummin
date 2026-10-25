@@ -4,20 +4,24 @@ import {correctOrigin,privateHeaders,sessionUser} from "../lib/admin-auth.server
 import {enquiryNotes,loadAdminView,updateEnquiry} from "../lib/admin-data.server.ts";
 import {canView,resolveView,type AdminView,type AdminRole} from "../lib/admin-permissions.ts";
 import {AdminChrome} from "../components/admin-chrome.tsx";
+import {PipelineScreen,LeadsScreen,LeadDetailScreen,InboxScreen,InsightsListScreen,InsightsEditorScreen} from "../components/admin-source-screens.tsx";
+import {adminPageData,adminPageMutation} from "../lib/admin-source.server.ts";
+import {insightsPosts} from "../lib/insights.server.ts";
 
 const PAGES:{view:AdminView;label:string;short:string}[]=[
  {view:"dash",label:"Dashboard",short:"Overview"},{view:"leads",label:"Leads",short:"Assessments"},
  {view:"pipe",label:"Pipeline",short:"Pipeline"},{view:"inbox",label:"Inbox",short:"Enquiries"},
  {view:"book",label:"Bookings",short:"Calendar"},{view:"clients",label:"Clients and engagements",short:"Clients"},
- {view:"posts",label:"Insights",short:"Editorial"},{view:"aud",label:"Downloads and subscribers",short:"Audience"},
- {view:"email",label:"Email",short:"Delivery"},{view:"team",label:"Team and permissions",short:"Team"}
+ {view:"posts",label:"Insights",short:"Editorial"},{view:"analytics",label:"Analytics",short:"Analytics"},{view:"aud",label:"Downloads and subscribers",short:"Audience"},
+ {view:"email",label:"Email",short:"Delivery"},{view:"team",label:"Team and permissions",short:"Team"},
+ {view:"invoices",label:"Invoices",short:"Billing"},{view:"reports",label:"Reports",short:"Reporting"},{view:"settings",label:"Assessment settings",short:"Settings"}
 ];
 const SUBTITLES:Record<AdminView,string>={
  dash:"What is happening across HUMMIN this week.",leads:"Business Assessments completed and delivery status.",
  pipe:"Move active enquiries forward as conversations progress.",inbox:"Messages received through the contact form.",
  book:"Confirmed and held appointments from the booking service.",
  clients:"Engagement records will appear once the client module is connected.",
- posts:"Published articles and editorial inventory.",aud:"Confirmed and unconfirmed newsletter subscribers.",
+ posts:"Write, review, and publish Insights.",post:"Write, review, and publish Insights.",lead:"Assessment details and next steps.",analytics:"Traffic, sources, and what turns visitors into clients.",invoices:"Billing and eTIMS invoices.",reports:"Reports and exports.",settings:"Scoring and assessment assumptions.",aud:"Confirmed and unconfirmed newsletter subscribers.",
  email:"Provider-backed email delivery; no template secrets exposed.",
  team:"Provisioned staff and their access levels."
 };
@@ -29,24 +33,25 @@ export async function loader({request,context}:{request:Request;context:AppLoadC
  if(!u)throw redirect("/admin/login");
  const params=new URL(request.url).searchParams,view=resolveView(params.get("view")),selectedId=params.get("item");
  const section=await loadAdminView(env,u,view);
- const notes=await enquiryNotes(env,u,(view==="pipe"||view==="inbox")?selectedId:null);
- return Response.json({user:{name:u.name,role:u.role},view,section,notes,selectedId:selectedId||"",saved:params.get("saved")==="1"},{headers:privateHeaders});
+ const notes=await enquiryNotes(env,u,null);
+ const fidelity=["pipe","leads","lead","inbox","posts","post"].includes(view)&&canView(u.role,view)?await adminPageData(env,u,view,selectedId||""):{records:[]};
+ return Response.json({user:{name:u.name,role:u.role},view,section,notes,fidelity,selectedId:selectedId||"",saved:params.get("saved")==="1"},{headers:privateHeaders});
 }
 export async function action({request,context}:{request:Request;context:AppLoadContext}){
  const env=context.cloudflare.env,u=await sessionUser(env,request);
  if(!u)return new Response("Unauthorised",{status:401,headers:privateHeaders});
- if(!canView(u.role,"pipe"))return new Response("Forbidden",{status:403,headers:privateHeaders});
+
  if(!correctOrigin(request))return new Response("Invalid origin",{status:403,headers:privateHeaders});
  const size=Number(request.headers.get("content-length")||0);
- if(size>10000)return new Response("Request too large",{status:413,headers:privateHeaders});
+ if(size>100000)return new Response("Request too large",{status:413,headers:privateHeaders});
  let f:FormData;try{f=await request.formData();}catch{return new Response("Invalid form",{status:400,headers:privateHeaders});}
  const operation=String(f.get("operation")||""),id=String(f.get("id")||""),value=String(f.get("value")||"");
- const result=await updateEnquiry(env,u,operation,id,value);
+ const result=await adminPageMutation(env,u,operation,id,value,f);
  if(!result.ok)return Response.json(result,{status:400,headers:privateHeaders});
- const view=operation==="note"?"inbox":"pipe";
- return redirect("/admin?view="+view+"&item="+encodeURIComponent(id)+"&saved=1",{headers:privateHeaders});
+ const view=operation.startsWith("post_")?"post":operation==="move_assessment"?"pipe":operation==="assessment_note"?"lead":operation.startsWith("inbox_")?"inbox":"dash";
+ return redirect("/admin?view="+view+"&item="+encodeURIComponent(("id" in result&&result.id)?String(result.id):id)+"&saved=1",{headers:privateHeaders});
 }
-type Load={user:{name:string;role:AdminRole};view:AdminView;section:{restricted:boolean;counts:Record<string,number>;records:Record<string,unknown>[];stats?:Record<string,unknown>[]};notes:Record<string,unknown>[];selectedId:string;saved:boolean};
+type Load={user:{name:string;role:AdminRole};view:AdminView;section:{restricted:boolean;counts:Record<string,number>;records:Record<string,unknown>[];stats?:Record<string,unknown>[]};notes:Record<string,unknown>[];fidelity:{records:Record<string,unknown>[];notes?:Record<string,unknown>[];replies?:Record<string,unknown>[];members?:Record<string,unknown>[]};selectedId:string;saved:boolean};
 const stages=["new","contacted","exploring","proposal","won","lost"];
 const stageTitle=(s:unknown)=>text(s).replace(/_/g," ").replace(/^./,c=>c.toUpperCase());
 const Head=({columns}:{columns:string[]})=><div className="hm-th">{columns.map(h=><span key={h}>{h}</span>)}</div>;
@@ -109,10 +114,11 @@ function Section({view,records,counts,notes,selectedId}:{view:AdminView;records:
 export default function AdminHome(){
  const data=useLoaderData() as Load;
  const response=useActionData() as {ok:boolean;message:string}|undefined;
- const {user,view,section,notes,selectedId,saved}=data;
+ const {user,view,section,notes,fidelity,selectedId,saved}=data;
  const records=(section.records||[]).map(item),counts=section.counts||{};
  const accessible=PAGES.filter(p=>canView(user.role,p.view));
  const current=PAGES.find(p=>p.view===view);
+ const headline=view==="lead"?"Lead detail":view==="post"?"Insights editor":current?.label||"Dashboard";
  return <AdminChrome menuItems={accessible.map(p=>({id:p.view,label:p.label,href:"/admin"+(p.view==="dash"?"":"?view="+p.view)}))} current={view} userName={user.name} signOut><div className="hm-admin">
  <style>{`
  .hm-admin{--slate:#1E272A;--ember:#B5532C;--mist:#F4F5F1;color:var(--slate);font:14px/1.5 Figtree,Arial,sans-serif;background:var(--mist);min-height:calc(100vh - 68px);display:block}
@@ -152,12 +158,18 @@ export default function AdminHome(){
  `}</style>
  <main className="hm-main">
  <div className="hm-toolbar"><p className="hm-overline">HUMMIN / ADMIN</p><Link to="/">View website</Link></div>
- <h1 className="hm-title">{current?.label||"Dashboard"}</h1>
+ <h1 className="hm-title">{headline}</h1>
  <p className="hm-description">{SUBTITLES[view]}</p>
  {saved?<p className="hm-alert" role="status">Change saved to HUMMIN's database.</p>:null}
  {response?<p className="hm-alert" role="alert">{response.message}</p>:null}
  {section.restricted?<Blank title="Restricted to authorised roles" description="This section is not available to your staff access level."/>:
  user.role==="partner"||user.role==="staff"?<Blank title="No assigned operational modules" description="This account is authenticated. Your permissions will expand when an authorised owner assigns specific work."/>:
+ view==="pipe"?<PipelineScreen data={fidelity}/>:
+ view==="leads"?<LeadsScreen data={fidelity}/>:
+ view==="lead"?<LeadDetailScreen data={fidelity} selected={selectedId}/>:
+ view==="inbox"?<InboxScreen data={fidelity} selected={selectedId}/>:
+ view==="posts"?<InsightsListScreen data={fidelity} original={insightsPosts as unknown as Record<string,unknown>[]}/>:
+ view==="post"?<InsightsEditorScreen key={selectedId} data={fidelity} original={insightsPosts as unknown as Record<string,unknown>[]} selected={selectedId}/>:
  <Section view={view} records={records} counts={counts} notes={notes} selectedId={selectedId}/>}
  <p className="hm-muted" style={{marginTop:32}}>Only live records are shown. This preview excludes the standalone Admin's fictitious examples.</p>
  </main></div></AdminChrome>;
