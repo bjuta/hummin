@@ -279,6 +279,28 @@ function brandedBoot(html,kind){
      if(f&&f.dataset.hmLoaded==='true')clearInterval(frameCheck);
    },180);
    window.addEventListener('load',recoverFrame);
+   function correctInsightsHeight(){
+     var f=document.getElementById('hummin-insights-frame');
+     if(!f||f.dataset.hmLoaded!=='true')return;
+     try{
+       var w=f.contentWindow,d=w.document;
+       var sections=Array.from(d.querySelectorAll('main,section,article,footer')).filter(function(el){return el.getClientRects().length&&w.getComputedStyle(el).position!=='fixed'});
+       var ends=sections.map(function(el){return el.getBoundingClientRect().bottom+w.scrollY});
+       if(!ends.length)return;
+       var target=Math.ceil(Math.max(400,...ends));
+       if(target>30000)return;
+       if(Math.abs(f.getBoundingClientRect().height-target)>2)f.style.height=target+'px';
+     }catch(_ignored){}
+   }
+   var lastRouteHeight='';
+   setInterval(function(){
+     var f=document.getElementById('hummin-insights-frame');
+     if(!f||f.dataset.hmLoaded!=='true')return;
+     correctInsightsHeight();
+     var route=window.location.pathname;
+     if(route!==lastRouteHeight){lastRouteHeight=route;setTimeout(correctInsightsHeight,100);}
+   },550);
+
    // Gracefully reveal even if a remote asset or iframe stalls. A stalled
    // child must never leave the user permanently blocked.
    setTimeout(function(){if(ended)return;ended=true;obs.disconnect();document.documentElement.classList.remove('hm-booting');var splash=document.getElementById('hummin-boot');if(splash)splash.remove();},max);
@@ -381,8 +403,10 @@ class Component extends DCLogic {`);
     if(window.parent===window)return;
     // Measure the final rendered content rather than the body height, which
     // inherits the iframe viewport and previously caused a resize feedback loop.
+    // The bottom of the final real section is independent of the iframe
+    // viewport. Avoid document/body scrollHeight, which feeds back on itself.
     const elements=Array.from(document.querySelectorAll('main, section, article, footer'));
-    const bottoms=elements.filter(el=>el.getClientRects().length).map(el=>el.getBoundingClientRect().bottom+window.scrollY);
+    const bottoms=elements.filter(el=>el.getClientRects().length && getComputedStyle(el).position!=='fixed').map(el=>el.getBoundingClientRect().bottom+window.scrollY);
     const height=Math.ceil(Math.max(400,...bottoms));
     if(this._lastSentInsightsHeight!==height){
       this._lastSentInsightsHeight=height;
