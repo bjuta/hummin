@@ -16,6 +16,7 @@ jobs:
       # Package lock is added after a connected environment generates/verifies it.
       - run: npm install --no-audit --no-fund
       - run: npm run check:production:config
+      - run: npm run verify:production:migrations
       - run: npm run typecheck
       - run: npm run build
       - run: npm run verify:restoration
