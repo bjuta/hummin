@@ -1,20 +1,25 @@
 import fs from 'node:fs';
 import path from 'node:path';
+import zlib from 'node:zlib';
 const folder='design/sources';
 const read=(name)=>fs.readdirSync(folder).filter(n=>n.startsWith(name+'.')&&n.endsWith('.part')).sort().map(n=>fs.readFileSync(path.join(folder,n),'utf8')).join('');
 const need=(s,old,replace)=>{if(!s.includes(old))throw Error('Original design anchor missing: '+old.slice(0,85));return s.replace(old,replace)};
-function patch(html, fn){
+function patch(html, fn, override){
  const re=/(<script\s+type="__bundler\/template"[^>]*>\s*)([\s\S]*?)(\s*<\/script>)/;
  const m=html.match(re);if(!m)throw Error('Embedded design template missing');
- const tpl=fn(JSON.parse(m[2].trim()));
+ const tpl=fn(override===undefined?JSON.parse(m[2].trim()):override);
  return html.replace(re,(_whole,start,_body,end)=>start+JSON.stringify(tpl).replaceAll('</','<\\/')+end);
 }
 function site(t){
+ t=need(t,'<dc-import name="HUMMIN Insights" on-contact="{{ go_contact }}" on-assess="{{ go_assess }}" on-nav="{{ goPage }}" open-post="{{ insightPost }}" open-nonce="{{ insightNonce }}" hint-size="100%,1200px"></dc-import>',
+ '<iframe title="HUMMIN Insights articles and author profiles" src="/design/insights/index.html" style="width:100%;min-height:1850px;border:0;display:block;background:#F4F5F1" loading="eager" id="hummin-insights-frame"></iframe>');
+ t=need(t,"open: () => this.go('insights', { insightPost: x.slug, insightNonce: Date.now() })","open: () => { window.location.assign('/insights/'+x.slug); }");
+
  t=need(t,'<span>© 2026 HUMMIN</span>','<a href="/newsletter" style="color:#E7EBE6;text-decoration:underline;text-underline-offset:4px">Notes from HUMMIN</a><span>© 2026 HUMMIN</span>');
  t=need(t,'<dc-import name="HUMMIN Assessment v2" on-contact="{{ go_contact }}" hint-size="100%,900px"></dc-import>','<iframe title="HUMMIN Business Assessment" src="/design/assessment/index.html" style="width:100%;min-height:960px;border:0;display:block;background:#1E272A" loading="lazy"></iframe>');
  t=need(t,"page: 'home', menu: false","page: ({'/':'home','/contact':'contact','/about':'about','/assessment':'assess','/how-we-work':'how','/applied-expertise':'core','/engagements':'eng','/who-we-work-with':'who'}[window.location.pathname] || 'home'), menu: false");
- t=need(t,"class Component extends DCLogic {","const HUMMIN_ROUTE_PATHS = {home:'/',how:'/how-we-work',core:'/applied-expertise',eng:'/engagements',who:'/who-we-work-with',assess:'/assessment',about:'/about',contact:'/contact'};\nconst HUMMIN_PATH_PAGES = Object.fromEntries(Object.entries(HUMMIN_ROUTE_PATHS).map(([page,url])=>[url,page]));\nclass Component extends DCLogic {");
- t=need(t,"    this._lastPage = this.state.page;","    this.onPopState = () => { const next=HUMMIN_PATH_PAGES[window.location.pathname]||'home'; this.setState({page:next,menu:false,peekOpen:false}); window.scrollTo({top:0,behavior:'instant'}); };\n    window.addEventListener('popstate', this.onPopState);\n    this.onTurnstileReady = () => this.mountTurnstile(); window.addEventListener('hummin-turnstile-ready',this.onTurnstileReady); requestAnimationFrame(() => this.mountTurnstile());\n    this._lastPage = this.state.page;");
+ t=need(t,"class Component extends DCLogic {","const HUMMIN_ROUTE_PATHS = {home:'/',how:'/how-we-work',core:'/applied-expertise',eng:'/engagements',who:'/who-we-work-with',assess:'/assessment',about:'/about',insights:'/insights',contact:'/contact'};\nconst HUMMIN_PATH_PAGES = Object.fromEntries(Object.entries(HUMMIN_ROUTE_PATHS).map(([page,url])=>[url,page]));\nclass Component extends DCLogic {");
+ t=need(t,"    this._lastPage = this.state.page;","    this.onPopState = () => { const next=HUMMIN_PATH_PAGES[window.location.pathname]||(window.location.pathname.startsWith('/insights/')?'insights':'home'); this.setState({page:next,menu:false,peekOpen:false}); window.scrollTo({top:0,behavior:'instant'}); };\n    window.addEventListener('popstate', this.onPopState);\n    this.onTurnstileReady = () => this.mountTurnstile(); window.addEventListener('hummin-turnstile-ready',this.onTurnstileReady); requestAnimationFrame(() => this.mountTurnstile());\n    this._lastPage = this.state.page;");
  t=need(t,"window.removeEventListener('keydown', this.onKey); if (this.io) this.io.disconnect();","window.removeEventListener('keydown', this.onKey); window.removeEventListener('popstate', this.onPopState);window.removeEventListener('hummin-turnstile-ready',this.onTurnstileReady); if (this.io) this.io.disconnect();");
  t=need(t,"  _go(p, extra) {\n    this.setState({ page: p, menu: false, ...(extra || {}) });","  _go(p, extra) {\n    const path=HUMMIN_ROUTE_PATHS[p]; if(path && window.location.pathname!==path)window.history.pushState({humminPage:p},'',path);\n    this.setState({ page: p, menu: false, ...(extra || {}) });");
  t=need(t,"  submit() {","  mountTurnstile() {\n    if (this.state.page !== 'contact' || window.HUMMIN_CONTACT_READY !== true) return;\n    const host = document.getElementById('hummin-turnstile');\n    if (!host || host.dataset.widget || !window.turnstile?.render) return;\n    try {\n      const id = window.turnstile.render(host,{ sitekey: window.HUMMIN_TURNSTILE_SITE_KEY, theme:'light' });\n      if(id!==undefined){ this._turnstileWidgetId=id; host.dataset.widget='ready'; }\n    }catch(e){ console.error('Turnstile could not render'); }\n  }\n"+"  submit() {");
@@ -155,10 +160,25 @@ function assessment(t){
     "<sc-if value=\"{{ showBooking }}\" hint-placeholder-val=\"{{ false }}\"><p role=\"status\" style=\"font-family:Figtree,sans-serif;font-size:14px;color:#B5532C;padding:8px 0 18px\">{{ liveBookingNotice }}</p>");
   return t;
 }
+const newSiteTemplate=JSON.parse(fs.readFileSync(path.join(folder,'site-v4.template.json'),'utf8'));
+const newManifest=read('site-v4.manifest');
+if(!newManifest||newManifest.length<4000000)throw Error('Latest HUMMIN site bundle resources are incomplete');
+const bundleAsset=JSON.parse(newManifest);
+const fullInsight=zlib.gunzipSync(Buffer.from(bundleAsset['cc88240e-e27d-4718-b37a-5fab22025705'].data,'base64')).toString('utf8');
+function insightTemplate(t){
+ t=need(t,'<script src="./support.js"></script>','<script src="cc0357d2-2a09-4861-907c-461f1ee3894d"></script>');
+ return t;
+}
 for(const [name,fn] of [['site',site],['assessment',assessment]]){
- const src=read(name);if(!src)throw Error('Source missing: '+name);
- let html=patch(src,fn);html=html.replace('<head>','<head>\n<meta name="robots" content="noindex,nofollow">');
+ let src=read(name);if(!src)throw Error('Source missing: '+name);
+ if(name==='site')src=src.replace(/(<script\\s+type="__bundler\\/manifest"[^>]*>\\s*)[\\s\\S]*?(\\s*<\\/script>)/,(_m,a,b)=>a+newManifest+b);
+ let html=patch(src,fn,name==='site'?newSiteTemplate:undefined);html=html.replace('<head>','<head>\n<meta name="robots" content="noindex,nofollow">');
  if(name==='assessment')html=html.replace('</head>','<script>window.humminAssessmentTurnstile=function(){window.dispatchEvent(new Event("hummin-assessment-turnstile"));};</script><script src="https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit&onload=humminAssessmentTurnstile" async defer></script></head>');
  const dir=path.join('public','design',name);fs.mkdirSync(dir,{recursive:true});fs.writeFileSync(path.join(dir,'index.html'),html);
  console.log('Restored high-fidelity '+name+' ('+html.length+' characters)');
 }
+const insightSource=read('site').replace(/(<script\\s+type="__bundler\\/manifest"[^>]*>\\s*)[\\s\\S]*?(\\s*<\\/script>)/,(_m,a,b)=>a+newManifest+b);
+const insightHtml=patch(insightSource,insightTemplate,fullInsight).replace('<head>','<head>\\n<meta name="robots" content="noindex,nofollow">');
+fs.mkdirSync(path.join('public','design','insights'),{recursive:true});
+fs.writeFileSync(path.join('public','design','insights','index.html'),insightHtml);
+console.log('Restored original HUMMIN Insights index and articles ('+insightHtml.length+' characters)');
