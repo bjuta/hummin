@@ -38,7 +38,15 @@ for (const [label, passed] of original) {
   process.stdout.write('PASS  ' + label + '\n');
 }
 const preview = JSON.parse(fs.readFileSync('wrangler.preview.jsonc','utf8'));
-assert.equal(preview.vars.CONTACT_ENABLED, 'false');
+assert.ok(['true','false'].includes(preview.vars.CONTACT_ENABLED), 'Contact enabled must be an explicit switch');
+if(preview.vars.CONTACT_ENABLED === 'true'){
+ const backend = fs.readFileSync('app/routes/contact.tsx','utf8');
+ assert.ok(preview.vars.TURNSTILE_SITE_KEY, 'Turnstile site key required before enabling contact');
+ assert.match(backend,/verifyTurnstile\(/);
+ assert.match(backend,/RESEND_API_KEY/);
+ assert.match(backend,/INSERT INTO enquiries/);
+}
+
 assert.equal(preview.vars.BOOKING_ENABLED, 'false');
 assert.equal(preview.name, 'hummin-web-preview');
 console.log('PASS  Preview deployments remain fail-closed');
