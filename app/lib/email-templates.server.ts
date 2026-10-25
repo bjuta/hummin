@@ -1,4 +1,4 @@
-import {renderBrandEmail, type BrandEmail, type EmailSpec} from "./email-brand.server";
+import {renderBrandEmail, type BrandEmail, type EmailSpec} from "./email-brand.server.ts";
 
 export type ContactDetails = {name:string;businessName:string;email:string;message:string};
 export type ContactEmailOptions = {assetOrigin:string;sentAt?:Date;reference:string};
