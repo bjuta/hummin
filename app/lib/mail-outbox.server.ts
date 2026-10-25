@@ -27,8 +27,8 @@ export async function deliverDue(env:HumminEnv,limit=12):Promise<{sent:number;fa
      continue;
     }
    }
-   if(row.kind==="booking-reminder"){
-    const id=row.id.slice("booking-reminder:".length);
+   if(row.kind==="booking-reminder"||row.kind==="booking-confirmation"){
+    const id=row.id.slice(row.kind==="booking-reminder"?"booking-reminder:".length:"booking-confirmation:".length);
     const booked=await env.DB.prepare("SELECT start_utc,status FROM booking_slots WHERE google_event_id=?").bind(id).first<{start_utc:string;status:string}>();
     if(!booked||booked.status!=="confirmed"){
      await env.DB.prepare("DELETE FROM email_outbox WHERE id=?").bind(row.id).run();
