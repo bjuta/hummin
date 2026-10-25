@@ -14,7 +14,7 @@ concurrency:
 jobs:
   stage:
     runs-on: ubuntu-latest
-    environment: production-staging
+    environment: CF
     steps:
       - name: Validate approved release SHA format
         env:
