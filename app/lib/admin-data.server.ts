@@ -1,5 +1,5 @@
 import type {HumminEnv} from "../../workers/app.ts";
-import {canView,type AdminView,type AdminUser} from "./admin-permissions.server.ts";
+import {canView,type AdminView,type AdminUser} from "./admin-permissions.ts";
 
 export type EnquiryRow={
  id:string;name:string;business_name:string;email:string;message:string;
