@@ -22,7 +22,7 @@ const features = [
  ['Dedicated article URLs', routes.includes('route("insights/:slug"') && insights.includes("'/insights/'+data.slug")],
  ['Author profile URLs', routes.includes('route("insights/author/:author"') && insights.includes("'/insights/author/'+data.author")],
  ['Topic archive URLs', routes.includes('route("insights/topic/:topic"') && insights.includes("'/insights/topic/'+slugify")],
- ['Real browser navigation', insights.includes('window.parent.location.assign(path)')],
+ ['Seamless article navigation (no full document reload)', insights.includes('window.parent.postMessage({humminRoute:path}') && !insights.includes('window.parent.location.assign(path)')],
  ['Article search and filtering', insights.includes('v.noResults') && insights.includes('v.cards = list.map')],
  ['Content-based iframe sizing with no resize feedback', insights.includes('getBoundingClientRect().bottom') && insights.includes('_lastSentInsightsHeight') && !read('app/routes/fidelity.ts').includes('humminInsightsHeight+8')],
  ['Related reading', insights.includes('v.related = rel') && insights.includes('v.hasRelated')],
