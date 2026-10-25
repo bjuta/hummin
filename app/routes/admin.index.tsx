@@ -182,7 +182,7 @@ export default function AdminHome(){
  view==="post"?<InsightsEditorScreen key={selectedId} data={fidelity} original={original} selected={selectedId}/>:
  view==="book"?<BookingsExact records={records}/>:
  view==="clients"?<EngagementsExact records={operations.records} engagements={operations.engagements||[]} milestones={operations.details} selected={selectedId}/>:
- view==="analytics"?<AnalyticsExact/>:
+ view==="analytics"?<AnalyticsExact records={operations.records} conversion={operations.details}/>:
  view==="invoices"?<InvoicesExact/>:
  view==="reports"?<ReportsExact/>:
  view==="settings"?<AssessmentSettingsExact drafts={operations.records}/>:
