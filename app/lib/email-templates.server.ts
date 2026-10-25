@@ -188,3 +188,18 @@ export function insightsDownloadEmail(a:{recipient:string;assetOrigin:string;dow
   footer:"You received this email because you requested a template in HUMMIN Insights."
  },a.assetOrigin);
 }
+
+/** Invitation-only staff access. Sent after an authorised first sign-in. */
+export function staffAccountActivatedEmail(a:{recipient:string;name:string;role:string;assetOrigin:string}){
+ return render({
+  type:"account-welcome",sender:"system",recipient:a.recipient,replyTo:"sales@hummin.org",
+  subject:"Your HUMMIN Admin account is ready",
+  preheader:"You can now access your authorised HUMMIN tools.",
+  kicker:"Account activated",title:"Welcome to HUMMIN Admin.",
+  paragraphs:["Hello "+first(a.name)+", your staff email address is verified. Your account is ready."],
+  rows:[{label:"Access level",value:a.role}],
+  primary:{label:"Open HUMMIN Admin",url:a.assetOrigin+"/admin"},
+  note:"Never share sign-in codes. HUMMIN will not ask you for your code by email or phone.",
+  footer:"You received this because your HUMMIN staff account was activated."
+ },a.assetOrigin);
+}
