@@ -94,6 +94,43 @@ test('Unconfirmed newsletter subscribers never receive queued editions',async()=
  }finally{globalThis.fetch=savedFetch;}
 });
 
+
+test('Production sender identities route through distinct verified domains',async()=>{
+ const env=memoryEnv(),savedFetch=globalThis.fetch,captured=[];
+ env.EMAIL_FROM='HUMMIN <hello@hummin.org>';
+ env.EMAIL_FROM_PEOPLE='HUMMIN <hello@hummin.org>';
+ env.EMAIL_FROM_SYSTEM='HUMMIN Security <security@notify.hummin.org>';
+ env.EMAIL_FROM_NEWSLETTER='Notes from HUMMIN <notes@letters.hummin.org>';
+ globalThis.fetch=async (_url,options)=>{
+  captured.push(JSON.parse(options.body));
+  return {ok:true,async json(){return {id:'provider-'+captured.length}}};
+ };
+ try{
+  const contact={...email,type:'contact-internal',sender:'people',recipient:'sales@hummin.org',replyTo:'owner@example.org'};
+  const otp={...email,type:'account-sign-in',sender:'system',recipient:'owner@example.org'};
+  const optin={...email,type:'newsletter-opt-in',sender:'newsletter',recipient:'owner@example.org'};
+  for(const [key,item] of [['contact:sender',contact],['security:sender',otp],['newsletter-optin:sender',optin]]){
+   await queueEmail(env,key,item);
+   assert.deepEqual(await deliverDue(env),{sent:1,failed:0});
+  }
+  assert.deepEqual(captured.map(x=>x.from),[
+   'HUMMIN <hello@hummin.org>',
+   'HUMMIN Security <security@notify.hummin.org>',
+   'Notes from HUMMIN <notes@letters.hummin.org>'
+  ]);
+  assert.equal(captured[0].reply_to,'owner@example.org');
+  assert.equal(captured[1].reply_to,'sales@hummin.org');
+
+  env.issues.set('issue-verified','approved');
+  env.subscribers.set('owner@example.org','active');
+  const issue={...optin,type:'newsletter-monthly',unsubscribeUrl:'https://hummin.org/newsletter/unsubscribe?token=test'};
+  await queueEmail(env,'newsletter:issue-verified:recipient',issue);
+  assert.deepEqual(await deliverDue(env),{sent:1,failed:0});
+  assert.equal(captured[3].from,env.EMAIL_FROM_NEWSLETTER);
+  assert.match(captured[3].headers['List-Unsubscribe'],/^<https:\/\/hummin.org\//);
+ }finally{globalThis.fetch=savedFetch;}
+});
+
 test('Every active email workflow has a real trigger or explicit feature gate',()=>{
  const read=p=>fs.readFileSync(p,'utf8');
  assert.match(read('app/routes/contact.tsx'),/email_outbox/);
