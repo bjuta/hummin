@@ -7,9 +7,11 @@ const matched = html.match(/<script\s+type="__bundler\/template"[^>]*>\s*([\s\S]
 assert.ok(matched, 'Restored Insights design template must exist');
 const insights = JSON.parse(matched[1]);
 
-const block = insights.match(/const POSTS = \[([\s\S]*?)\];\s*const AUTHORS =/);
-assert.ok(block, 'Insights article corpus must be present');
-const frontSlugs = [...block[1].matchAll(/\bslug:\s*'([^']+)'/g)].map(m => m[1]).sort();
+const start = insights.indexOf('const POSTS = [');
+const end = insights.indexOf('\n];', start);
+assert.ok(start >= 0 && end > start, 'Insights article corpus must be present');
+const corpus = insights.slice(start, end + 3);
+const frontSlugs = [...corpus.matchAll(/\bslug:\s*'([^']+)'/g)].map(m => m[1]).sort();
 const serverSlugs = [...read('app/lib/insights.server.ts').matchAll(/\bslug:"([^"]+)"/g)].map(m => m[1]).sort();
 assert.ok(frontSlugs.length >= 4, 'Expected authored articles are missing');
 assert.deepEqual(frontSlugs, serverSlugs, 'Article URLs and server metadata must match');
