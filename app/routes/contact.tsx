@@ -1,4 +1,5 @@
 import { Form, Link, useActionData, useLoaderData, useNavigation } from "react-router";
+import { enquiryNotification, enquiryAcknowledgement } from "../lib/enquiry-email.server";
 import type { AppLoadContext } from "react-router";
 import { enquiryNotification } from "../lib/enquiry-email.server";
 
@@ -22,20 +23,21 @@ async function verifyTurnstile(secret:string,token:string,hostname:string):Promi
   return body.success===true && body.hostname===hostname;
  }catch{return false;}
 }
-async function notify(enquiry:Visitor,id:string,apiKey:string,from:string){
+async function sendEmail(message:{recipient:string;subject:string;html:string;text:string;replyTo?:string},id:string,apiKey:string,from:string) {
  const res=await fetch("https://api.resend.com/emails",{
   method:"POST",
   headers:{"Authorization":"Bearer "+apiKey,"Content-Type":"application/json","Idempotency-Key":id},
   body:JSON.stringify({
-   from, to:["sales@hummin.org"], reply_to:enquiry.email,
-   ...enquiryNotification(enquiry,id)
+   from,to:[message.recipient],reply_to:message.replyTo||"sales@hummin.org",
+   subject:message.subject,html:message.html,text:message.text
   })
  });
- if(!res.ok)throw new Error("Resend rejected the message ("+res.status+")");
+ if(!res.ok)throw Error("Resend rejected the message ("+res.status+")");
  const body=await res.json() as {id?:string};
- if(!body.id)throw new Error("Resend returned no message ID");
+ if(!body.id)throw Error("Resend returned no message ID");
  return body.id;
 }
+
 export async function loader({context}:{context:AppLoadContext}){
  const env=context.cloudflare.env;
  return { formReady:!!(env.CONTACT_ENABLED==='true'&&env.DB&&env.RESEND_API_KEY&&env.TURNSTILE_SECRET_KEY&&env.TURNSTILE_SITE_KEY&&env.EMAIL_FROM), siteKey:env.TURNSTILE_SITE_KEY||"" };
@@ -65,10 +67,18 @@ export async function action({request,context}:{request:Request;context:AppLoadC
   return error("We couldn't save your enquiry. Please email sales@hummin.org.",503);
  }
  try{
-  const providerId=await notify(visitor,id,env.RESEND_API_KEY,env.EMAIL_FROM);
+  const origin=env.SITE_URL||new URL(request.url).origin;
+  const internal=enquiryNotification(visitor,id,origin,new Date());
+  const providerId=await sendEmail(internal,id+":internal",env.RESEND_API_KEY,env.EMAIL_FROM);
   try{await env.DB.prepare("UPDATE enquiries SET status='accepted', provider_message_id=?, provider_accepted_at=CURRENT_TIMESTAMP WHERE id=?")
     .bind(providerId,id).run();}
   catch{console.error("Provider accepted enquiry but D1 status update failed",id);}
+  // The internal enquiry is already safely stored and accepted.
+  // A sender acknowledgement is helpful but must not falsely turn a successful enquiry into a failed one.
+  try {
+   const acknowledgement=enquiryAcknowledgement(visitor,origin);
+   await sendEmail(acknowledgement,id+":sender",env.RESEND_API_KEY,env.EMAIL_FROM);
+  }catch{console.error("Sender acknowledgement could not be accepted by the email provider",id);}
   return Response.json({ok:true,message:"Your enquiry has been accepted. HUMMIN will review it and respond using the contact details provided."} satisfies Result,{status:200});
  }catch{
   try{await env.DB.prepare("UPDATE enquiries SET status='failed' WHERE id=?").bind(id).run();}
