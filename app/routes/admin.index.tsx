@@ -13,7 +13,7 @@ export async function loader({request,context}:{request:Request;context:AppLoadC
  return Response.json({name:u.name,role:u.role,manage,counts},{headers:privateHeaders});
 }
 export default function AdminHome(){
- const {name,role,manage,counts}=useLoaderData<typeof loader>();
+ const {name,role,manage,counts}=useLoaderData() as {name:string;role:string;manage:boolean;counts:Record<string,number>};
  return <section style={{minHeight:"85vh",background:"#F4F5F1",padding:"clamp(24px,5vw,76px)",fontFamily:"Figtree,Arial,sans-serif",color:"#1E272A"}}>
  <div style={{maxWidth:1100,margin:"auto"}}>
  <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",gap:14,flexWrap:"wrap"}}>
