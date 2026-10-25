@@ -107,7 +107,7 @@ const slugify=(s:string)=>s.toLowerCase().trim().replace(/[^a-z0-9]+/g,"-").repl
 export function InsightsListScreen({data,original}:{data:Data;original:RecordRow[]}){
  const posts=data.records||[];
  const existing=new Set(posts.map(p=>nice(p.source_slug)).filter(Boolean));
- const rows=[...posts.map(p=>({...p,origin:"CMS"})),...original.filter(p=>!existing.has(nice(p.slug))).map(p=>({...p,id:"",source_slug:p.slug,origin:"Bundled",status:"published"}))];
+ const rows:RecordRow[]=[...posts.map(p=>({...p,origin:"CMS"})),...original.filter(p=>!existing.has(nice(p.slug))).map(p=>({...p,id:"",source_slug:p.slug,origin:"Bundled",status:"published"}))];
  return <div style={{display:"grid",gap:12}}><div style={{display:"flex",justifyContent:"flex-end"}}><Link to="/admin?view=post&item=new" style={{...btn,lineHeight:"42px",color:"white"}}>New Post</Link></div>
  <div style={{...panel,padding:0,overflow:"hidden"}}>{rows.map((p,i)=><Link key={nice(p.id)||nice(p.slug)} to={"/admin?view=post&item="+encodeURIComponent(nice(p.id)||"original:"+nice(p.slug))} style={{display:"flex",flexWrap:"wrap",alignItems:"center",gap:"8px 14px",padding:"14px 16px",borderBottom:"1px solid #E7EBE6",color:"#1E272A"}}>
  <span style={{borderRadius:99,padding:"4px 10px",fontSize:11,fontWeight:700,color:p.status==="published"?"#2E6B5C":"#434F4F",background:p.status==="published"?"#DCEBE5":"#E7EBE6"}}>{p.status==="published"?"Published":nice(p.status)}</span>
