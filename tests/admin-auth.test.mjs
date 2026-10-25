@@ -50,3 +50,38 @@ test("Branded account emails use operational links and verified identity fallbac
  assert.ok(mail.includes('env.EMAIL_FROM_PEOPLE'));
  assert.ok(mail.includes('||env.EMAIL_FROM'));
 });
+
+test("HUMMIN Admin keeps the supplied standalone navigation and removes public site chrome",()=>{
+ const shell=read("app/components/admin-chrome.tsx");
+ const app=read("app/root.tsx");
+ const workbench=read("app/routes/admin.index.tsx");
+ assert.match(shell,/hm-menu-popover/);
+ assert.match(shell,/hm-menu-button/);
+ assert.match(shell,/mark-dark\.png/);
+ assert.match(shell,/rgba\(244,245,241/);
+ assert.match(shell,/Newsreader/);
+ assert.match(workbench,/AdminChrome/);
+ assert.match(workbench,/menuItems=\{accessible/);
+ assert.match(app,/pathname\.startsWith\("\/admin\/"\)/);
+});
+test("The OTP is announced, ten-minute limited, autofill compatible and automatically verified",()=>{
+ const login=read("app/routes/admin.login.tsx");
+ const verify=read("app/routes/admin.verify.tsx");
+ assert.match(login,/admin\/verify\?email=/);
+ assert.match(login,/issued=/);
+ assert.match(verify,/Sign-in code requested/);
+ assert.match(verify,/expires 10 minutes/);
+ assert.match(verify,/role="timer"/);
+ assert.match(verify,/autoComplete="one-time-code"/);
+ assert.match(verify,/Array\.from\(\{length:6\}/);
+ assert.match(verify,/next\.length===6/);
+ assert.match(verify,/submit\(payload,\{method:"post"/);
+ assert.match(verify,/change\(e\.target\.value\)/);
+ assert.match(verify,/replace\(\/\\D\/g/);
+});
+test("All branded email headers have rounded top corners",()=>{
+ const mail=signInCodeEmail({recipient:"staff@example.org",name:"Staff",code:"123456",expiresMinutes:10,assetOrigin:"https://hummin.org"});
+ assert.match(mail.html,/border-radius:18px 18px 0 0/);
+ assert.match(mail.html,/max-width:600px/);
+ assert.match(mail.html,/border-radius:18px;overflow:hidden/);
+});
