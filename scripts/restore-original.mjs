@@ -256,6 +256,29 @@ function brandedBoot(html,kind){
      syncInsights();
      ready();
    });
+   // Frame readiness is observable on the same origin. postMessage may be
+   // missed during early parent/child boot; do not leave a finished page hidden.
+   function recoverFrame(){
+     var f=document.getElementById('hummin-insights-frame')||document.getElementById('hummin-assessment-frame');
+     if(!f||f.dataset.hmLoaded==='true')return;
+     try{
+       var child=f.contentWindow;
+       var doc=child&&child.document;
+       if(!doc||doc.readyState!=='complete'||child.__HUMMIN_DESIGN_MOUNTED__!==true||doc.getElementById('hummin-boot')||doc.documentElement.classList.contains('hm-booting'))return;
+       f.dataset.hmLoaded='true';
+       f.style.visibility='visible';
+       var placeholder=f.previousElementSibling;
+       if(placeholder&&placeholder.classList.contains('hm-frame-placeholder'))placeholder.remove();
+       syncInsights();
+       ready();
+     }catch(_ignored){}
+   }
+   var frameCheck=setInterval(function(){
+     recoverFrame();
+     var f=document.getElementById('hummin-insights-frame')||document.getElementById('hummin-assessment-frame');
+     if(f&&f.dataset.hmLoaded==='true')clearInterval(frameCheck);
+   },180);
+   window.addEventListener('load',recoverFrame);
    // Gracefully reveal even if a remote asset or iframe stalls. A stalled
    // child must never leave the user permanently blocked.
    setTimeout(function(){if(ended)return;ended=true;obs.disconnect();document.documentElement.classList.remove('hm-booting');var splash=document.getElementById('hummin-boot');if(splash)splash.remove();},max);
