@@ -24,10 +24,10 @@
   },
   "vars": {
     "SITE_URL": "https://hummin.org",
-    "CONTACT_ENABLED": "false",
-    "BOOKING_ENABLED": "false",
+    "CONTACT_ENABLED": "true",
+    "BOOKING_ENABLED": "true",
     "BOOKING_AVAILABILITY_ENABLED": "false",
-    "ADMIN_AUTH_ENABLED": "false"
+    "ADMIN_AUTH_ENABLED": "true"
   },
   "d1_databases": [
     {
