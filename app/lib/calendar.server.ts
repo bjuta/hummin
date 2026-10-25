@@ -1,7 +1,8 @@
 import type { HumminEnv } from "../../workers/app";
 export type SlotDay = {date:string;slots:string[]};
 const hours:[[number,number],...[number,number][]]=[[9,0],[9,30],[10,0],[11,0],[11,30],[14,0],[14,30],[15,30],[16,0]];
-export const isConfigured=(e:HumminEnv)=>e.BOOKING_ENABLED==="true"&&!!(e.DB&&e.GOOGLE_CALENDAR_ID&&e.GOOGLE_CLIENT_ID&&e.GOOGLE_CLIENT_SECRET&&e.GOOGLE_REFRESH_TOKEN);
+export const hasCalendarCredentials=(e:HumminEnv)=>!!(e.DB&&e.GOOGLE_CALENDAR_ID&&e.GOOGLE_CLIENT_ID&&e.GOOGLE_CLIENT_SECRET&&e.GOOGLE_REFRESH_TOKEN);
+export const isConfigured=(e:HumminEnv)=>e.BOOKING_ENABLED==="true"&&hasCalendarCredentials(e);
 async function accessToken(e:HumminEnv):Promise<string>{
  const body=new URLSearchParams({client_id:e.GOOGLE_CLIENT_ID!,client_secret:e.GOOGLE_CLIENT_SECRET!,refresh_token:e.GOOGLE_REFRESH_TOKEN!,grant_type:"refresh_token"});
  const r=await fetch("https://oauth2.googleapis.com/token",{method:"POST",headers:{"Content-Type":"application/x-www-form-urlencoded"},body});
@@ -19,7 +20,7 @@ function dates():string[]{
  return out;
 }
 export async function liveSlots(e:HumminEnv):Promise<SlotDay[]>{
- if(!isConfigured(e))return [];
+ if(!hasCalendarCredentials(e))return [];
  const days=dates();const token=await accessToken(e);
  const min=new Date(days[0]+"T00:00:00+03:00").toISOString();
  const max=new Date(Date.parse(days[days.length-1]+"T00:00:00+03:00")+86400000).toISOString();
