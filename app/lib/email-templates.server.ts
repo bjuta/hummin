@@ -14,7 +14,7 @@ const render=(d:EmailSpec,origin:string):BrandEmail=>renderBrandEmail(d,origin);
 /** Brand Book 17.1: Contact form, internal. Only sent to HUMMIN. */
 export function contactInternalEmail(person:ContactDetails,options:ContactEmailOptions){
  return render({
-  type:"contact-internal",sender:"system",recipient:"sales@hummin.org",replyTo:person.email,
+  type:"contact-internal",sender:"people",recipient:"sales@hummin.org",replyTo:person.email,
   subject:"New enquiry: "+person.name.replace(/[\r\n\t]/g," ").slice(0,100)+", "+person.businessName.replace(/[\r\n\t]/g," ").slice(0,110),
   preheader:"Sent from the contact form"+(options.sentAt?" at "+clock(options.sentAt):" on hummin.org")+".",
   kicker:"New enquiry",title:person.name+" wants to talk.",
@@ -151,7 +151,7 @@ export function monthlyNewsletterEmail(a:{
  articleUrl:string;unsubscribeUrl:string;assetOrigin:string;heroUrl?:string;heroAlt?:string
 }){
  return render({
-  type:"newsletter-monthly",sender:"people",recipient:a.recipient,replyTo:"sales@hummin.org",
+  type:"newsletter-monthly",sender:"newsletter",recipient:a.recipient,replyTo:"sales@hummin.org",
   subject:"Notes from HUMMIN · "+a.month,
   preheader:a.preheader,
   kicker:"Notes from HUMMIN · "+a.month,
@@ -166,7 +166,7 @@ export function monthlyNewsletterEmail(a:{
 /** Operational double opt-in message. Only verified subscribers receive newsletters. */
 export function newsletterOptInEmail(input:{recipient:string;confirmUrl:string;assetOrigin:string}){
  return render({
-  type:"newsletter-opt-in",sender:"system",recipient:input.recipient,replyTo:"sales@hummin.org",
+  type:"newsletter-opt-in",sender:"newsletter",recipient:input.recipient,replyTo:"sales@hummin.org",
   subject:"Confirm your HUMMIN newsletter subscription",
   preheader:"Confirm that you want to receive Notes from HUMMIN.",
   kicker:"Email confirmation",title:"One step before we write to you.",
