@@ -24,6 +24,7 @@ const features = [
  ['Topic archive URLs', routes.includes('route("insights/topic/:topic"') && insights.includes("'/insights/topic/'+slugify")],
  ['Real browser navigation', insights.includes('window.parent.location.assign(path)')],
  ['Article search and filtering', insights.includes('v.noResults') && insights.includes('v.cards = list.map')],
+ ['Content-based iframe sizing with no resize feedback', insights.includes('getBoundingClientRect().bottom') && insights.includes('_lastSentInsightsHeight') && !read('app/routes/fidelity.ts').includes('humminInsightsHeight+8')],
  ['Related reading', insights.includes('v.related = rel') && insights.includes('v.hasRelated')],
  ['LinkedIn, WhatsApp, X and email sharing', ['linkedin.com/sharing','wa.me/?text=','x.com/intent/post','mailto:?subject='].every(k => insights.includes(k))],
  ['Copy-link confirms only real success', insights.includes("copied = !!document.execCommand('copy')") && insights.includes('copyFailed: !copied') && !insights.includes('then(done, done)')],

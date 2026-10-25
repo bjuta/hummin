@@ -12,7 +12,7 @@ function patch(html, fn, override){
 }
 function site(t){
  t=need(t,'<dc-import name="HUMMIN Insights" on-contact="{{ go_contact }}" on-assess="{{ go_assess }}" on-nav="{{ goPage }}" open-post="{{ insightPost }}" open-nonce="{{ insightNonce }}" hint-size="100%,1200px"></dc-import>',
- '<iframe title="HUMMIN Insights articles and author profiles" src="/design/insights/index.html" style="width:100%;min-height:1850px;border:0;display:block;background:#F4F5F1" loading="eager" id="hummin-insights-frame"></iframe>');
+ '<iframe title="HUMMIN Insights articles and author profiles" src="/design/insights/index.html" style="width:100%;height:1250px;min-height:400px;border:0;display:block;background:#F4F5F1" loading="eager" id="hummin-insights-frame"></iframe>');
  t=need(t,"open: () => this.go('insights', { insightPost: x.slug, insightNonce: Date.now() })","open: () => { window.location.assign('/insights/'+x.slug); }");
 
  t=need(t,'<span>© 2026 HUMMIN</span>','<a href="/newsletter" style="color:#E7EBE6;text-decoration:underline;text-underline-offset:4px">Notes from HUMMIN</a><span>© 2026 HUMMIN</span>');
@@ -177,12 +177,24 @@ function insightTemplate(t){
     }else if(parts[0]==='insights' && parts[1] && POSTS.some(x=>x.slug===parts[1]))this.setState({view:'post',slug:parts[1]});
     this._heightObserver=new ResizeObserver(()=>this.sendHeight());
     this._heightObserver.observe(document.body);
-    this.sendHeight();
+    window.addEventListener('resize',this._onInsightsResize=()=>this.sendHeight());
+    requestAnimationFrame(()=>this.sendHeight());
   }
-  sendHeight(){if(window.parent!==window)window.parent.postMessage({humminInsightsHeight:Math.max(document.body.scrollHeight,document.documentElement.scrollHeight)},window.location.origin);}
+  sendHeight(){
+    if(window.parent===window)return;
+    // Measure the final rendered content rather than the body height, which
+    // inherits the iframe viewport and previously caused a resize feedback loop.
+    const elements=Array.from(document.querySelectorAll('main, section, article, footer'));
+    const bottoms=elements.filter(el=>el.getClientRects().length).map(el=>el.getBoundingClientRect().bottom+window.scrollY);
+    const height=Math.ceil(Math.max(400,...bottoms));
+    if(this._lastSentInsightsHeight!==height){
+      this._lastSentInsightsHeight=height;
+      window.parent.postMessage({humminInsightsHeight:height},window.location.origin);
+    }
+  }
  `;
  t=need(t,oldMount,mounted);
- t=need(t,"  componentWillUnmount() { clearTimeout(this._ct); }","  componentWillUnmount() { clearTimeout(this._ct);this._heightObserver?.disconnect(); }");
+ t=need(t,"  componentWillUnmount() { clearTimeout(this._ct); }","  componentWillUnmount() { clearTimeout(this._ct);this._heightObserver?.disconnect();if(this._onInsightsResize)window.removeEventListener('resize',this._onInsightsResize); }");
  t=need(t,"  go(view, extra) { this.setState({ view, ...(extra || {}) }); const sc = this.scroller(); if (sc) sc.scrollTop = 0; else window.scrollTo({ top: 0 }); }",
  `  go(view,extra){
     const data=extra||{};

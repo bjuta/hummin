@@ -28,7 +28,7 @@ export async function loader({ request, context }: { request: Request; context: 
    publisher:{"@type":"Organization",name:"HUMMIN",url:"https://hummin.org"},mainEntityOfPage:insight.canonical,keywords:article.topics.join(", ")};
   return base+'<meta property="article:published_time" content="'+article.date+'"><script type="application/ld+json">'+JSON.stringify(data)+'</script>';
  })():'';
- const resize='<script>window.addEventListener("message",function(e){if(e.origin!==window.location.origin||!e.data||!Number.isFinite(e.data.humminInsightsHeight))return;var f=document.getElementById("hummin-insights-frame");if(f)f.style.height=Math.min(40000,Math.max(800,e.data.humminInsightsHeight+8))+"px";});</script>';
+ const resize='<script>window.addEventListener("message",function(e){if(e.origin!==window.location.origin||!e.data||!Number.isFinite(e.data.humminInsightsHeight))return;var f=document.getElementById("hummin-insights-frame");if(f&&e.source===f.contentWindow)f.style.height=Math.min(20000,Math.max(400,Math.ceil(e.data.humminInsightsHeight)))+"px";});</script>';
  const html=(await response.text()).replace("</head>",meta+config+script+resize+"</head>");
  return new Response(html,{status:response.status,headers:{"Content-Type":"text/html; charset=utf-8","X-Robots-Tag":"noindex, nofollow","Cache-Control":"no-store"}});
 }
