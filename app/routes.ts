@@ -7,6 +7,7 @@ export default [
  route("who-we-work-with","routes/fidelity.ts",{id:"original-clients"}),
  route("assessment","routes/fidelity.ts",{id:"original-assessment"}),
  route("insights","routes/fidelity.ts",{id:"insights-index"}),
+ route("insights/download/monday-template","routes/insights.download.tsx"),
  route("insights/author/:author","routes/fidelity.ts",{id:"insights-author"}),
  route("insights/topic/:topic","routes/fidelity.ts",{id:"insights-topic"}),
  route("insights/:slug","routes/fidelity.ts",{id:"insights-article"}),
