@@ -10,5 +10,6 @@ export default [
  route("contact","routes/fidelity.ts",{id:"original-contact"}),
  route("api/booking/slots","routes/booking.slots.ts"),
  route("api/booking/reserve","routes/booking.reserve.ts"),
+ route("api/booking/integration-test","routes/booking.integration-test.ts"),
  route("privacy","routes/privacy.tsx")
 ] satisfies RouteConfig;
