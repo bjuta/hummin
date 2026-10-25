@@ -17,7 +17,7 @@ function site(t){
 
  t=need(t,'<span>© 2026 HUMMIN</span>','<a href="/newsletter" style="color:#E7EBE6;text-decoration:underline;text-underline-offset:4px">Notes from HUMMIN</a><span>© 2026 HUMMIN</span>');
  t=need(t,'<dc-import name="HUMMIN Assessment v2" on-contact="{{ go_contact }}" hint-size="100%,900px"></dc-import>','<iframe title="HUMMIN Business Assessment" src="/design/assessment/index.html" style="width:100%;min-height:960px;border:0;display:block;background:#1E272A" loading="lazy"></iframe>');
- t=need(t,"page: 'home', menu: false","page: ({'/':'home','/contact':'contact','/about':'about','/assessment':'assess','/how-we-work':'how','/applied-expertise':'core','/engagements':'eng','/who-we-work-with':'who'}[window.location.pathname] || 'home'), menu: false");
+ t=need(t,"page: 'home', menu: false","page: ({'/':'home','/contact':'contact','/about':'about','/assessment':'assess','/how-we-work':'how','/applied-expertise':'core','/engagements':'eng','/who-we-work-with':'who','/insights':'insights'}[window.location.pathname] || (window.location.pathname.startsWith('/insights/')?'insights':'home')), menu: false");
  t=need(t,"class Component extends DCLogic {","const HUMMIN_ROUTE_PATHS = {home:'/',how:'/how-we-work',core:'/applied-expertise',eng:'/engagements',who:'/who-we-work-with',assess:'/assessment',about:'/about',insights:'/insights',contact:'/contact'};\nconst HUMMIN_PATH_PAGES = Object.fromEntries(Object.entries(HUMMIN_ROUTE_PATHS).map(([page,url])=>[url,page]));\nclass Component extends DCLogic {");
  t=need(t,"    this._lastPage = this.state.page;","    this.onPopState = () => { const next=HUMMIN_PATH_PAGES[window.location.pathname]||(window.location.pathname.startsWith('/insights/')?'insights':'home'); this.setState({page:next,menu:false,peekOpen:false}); window.scrollTo({top:0,behavior:'instant'}); };\n    window.addEventListener('popstate', this.onPopState);\n    this.onTurnstileReady = () => this.mountTurnstile(); window.addEventListener('hummin-turnstile-ready',this.onTurnstileReady); requestAnimationFrame(() => this.mountTurnstile());\n    this._lastPage = this.state.page;");
  t=need(t,"window.removeEventListener('keydown', this.onKey); if (this.io) this.io.disconnect();","window.removeEventListener('keydown', this.onKey); window.removeEventListener('popstate', this.onPopState);window.removeEventListener('hummin-turnstile-ready',this.onTurnstileReady); if (this.io) this.io.disconnect();");
@@ -171,13 +171,13 @@ function insightTemplate(t){
 }
 for(const [name,fn] of [['site',site],['assessment',assessment]]){
  let src=read(name);if(!src)throw Error('Source missing: '+name);
- if(name==='site')src=src.replace(/(<script\\s+type="__bundler\\/manifest"[^>]*>\\s*)[\\s\\S]*?(\\s*<\\/script>)/,(_m,a,b)=>a+newManifest+b);
+ if(name==='site')src=src.replace(/(<script\s+type="__bundler\/manifest"[^>]*>\s*)[\s\S]*?(\s*<\/script>)/,(_m,a,b)=>a+newManifest+b);
  let html=patch(src,fn,name==='site'?newSiteTemplate:undefined);html=html.replace('<head>','<head>\n<meta name="robots" content="noindex,nofollow">');
  if(name==='assessment')html=html.replace('</head>','<script>window.humminAssessmentTurnstile=function(){window.dispatchEvent(new Event("hummin-assessment-turnstile"));};</script><script src="https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit&onload=humminAssessmentTurnstile" async defer></script></head>');
  const dir=path.join('public','design',name);fs.mkdirSync(dir,{recursive:true});fs.writeFileSync(path.join(dir,'index.html'),html);
  console.log('Restored high-fidelity '+name+' ('+html.length+' characters)');
 }
-const insightSource=read('site').replace(/(<script\\s+type="__bundler\\/manifest"[^>]*>\\s*)[\\s\\S]*?(\\s*<\\/script>)/,(_m,a,b)=>a+newManifest+b);
+const insightSource=read('site').replace(/(<script\s+type="__bundler\/manifest"[^>]*>\s*)[\s\S]*?(\s*<\/script>)/,(_m,a,b)=>a+newManifest+b);
 const insightHtml=patch(insightSource,insightTemplate,fullInsight).replace('<head>','<head>\\n<meta name="robots" content="noindex,nofollow">');
 fs.mkdirSync(path.join('public','design','insights'),{recursive:true});
 fs.writeFileSync(path.join('public','design','insights','index.html'),insightHtml);
