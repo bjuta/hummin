@@ -6,8 +6,15 @@ export async function action({ request, context }: { request: Request; context: 
  const reject=(status:number)=>Response.json({ok:false,message:"Test booking unavailable"},{status,headers:{"Cache-Control":"no-store"}});
  // Deliberately private preview-only route: never enabled in production or when public booking is on.
  if(env.SITE_URL!=="https://hummin-web-preview.grimpossible.workers.dev" || env.BOOKING_ENABLED!=="false" || !env.BOOKING_TEST_TOKEN || !hasCalendarCredentials(env))return reject(404);
- if(request.headers.get("x-hummin-test-token")!==env.BOOKING_TEST_TOKEN)return reject(403);
  if(!env.DB)return reject(503);
+ // One-time administration-issued nonce from D1; the primary Worker secret remains required.
+ // This grants exactly one test invocation without exposing the dashboard-held secret.
+ const nonce=request.headers.get("x-hummin-admin-nonce");
+ if(nonce){
+  if(!/^[A-Za-z0-9_-]{48,80}$/.test(nonce))return reject(403);
+  const consumed=await env.DB.prepare("DELETE FROM integration_test_nonces WHERE nonce=? AND created_at > datetime('now','-10 minutes') RETURNING nonce").bind(nonce).first<{nonce:string}>();
+  if(!consumed)return reject(403);
+ }else if(request.headers.get("x-hummin-test-token")!==env.BOOKING_TEST_TOKEN)return reject(403);
  const name="HUMMIN integration test",email="grimpossible@gmail.com";
  try{
   const previous=await env.DB.prepare("SELECT start_utc,google_event_id FROM booking_slots WHERE name=? AND email=? AND status='confirmed' LIMIT 1").bind(name,email).first<{start_utc:string;google_event_id:string}>();
