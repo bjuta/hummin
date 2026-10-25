@@ -35,6 +35,9 @@ function site(t){
 }
 function assessment(t){
   // Restore the exported assessment rather than redrawing its design.
+  t=need(t,"class Component extends DCLogic {","class Component extends DCLogic {\n  componentDidMount() {\n    fetch('/api/email/config',{cache:'no-store'}).then(r=>r.json()).then(cfg=>{this._emailConfig=cfg;this.mountEmailChallenge();}).catch(()=>{this._emailConfig={ready:false};});\n    this._mailObserver=new MutationObserver(()=>this.mountEmailChallenge());\n    this._mailObserver.observe(document.body,{childList:true,subtree:true});\n    this._emailReady=()=>this.mountEmailChallenge();\n    window.addEventListener('hummin-assessment-turnstile',this._emailReady);\n  }\n  mountEmailChallenge(){\n    if(!this._emailConfig?.ready||!window.turnstile?.render)return;\n    const el=document.getElementById('assessment-turnstile');\n    if(!el||el.dataset.rendered)return;\n    el.dataset.rendered='true';\n    this._emailWidget=window.turnstile.render(el,{sitekey:this._emailConfig.siteKey,theme:'light'});\n  }\n");
+  t=need(t,"componentWillUnmount() { if (this._ics) URL.revokeObjectURL(this._ics); }","componentWillUnmount() { if(this._mailObserver)this._mailObserver.disconnect();if(this._emailReady)window.removeEventListener('hummin-assessment-turnstile',this._emailReady);if (this._ics) URL.revokeObjectURL(this._ics); }");
+  t=need(t,"v.unlocked = s.unlocked; v.locked = !s.unlocked; v.gateEmail = s.gate.email;","v.unlocked = s.unlocked; v.locked = !s.unlocked; v.gateEmail = s.gate.email; v.assessmentStatus=s.assessmentStatus;");
   t=need(t,"bookErr: {}, booked: false }","bookErr: {}, booked: false, assessmentSending: false, assessmentStatus: null }");
   t=need(t,"A copy of your plan is on its way to {{ gateEmail }}.","Your plan is unlocked in this browser. No email has been sent.");
   const oldState="bookErr: {}, booked: false, assessmentSending: false, assessmentStatus: null }";
