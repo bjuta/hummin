@@ -164,6 +164,15 @@ const newSiteTemplate=JSON.parse(fs.readFileSync(path.join(folder,'site-v4.templ
 const newManifest=read('site-v4.manifest');
 if(!newManifest||newManifest.length<4000000)throw Error('Latest HUMMIN site bundle resources are incomplete');
 const bundleAsset=JSON.parse(newManifest);
+// Extract the exact official hummingbird symbol already used in the website
+// navigation. Never substitute a re-drawn or typography-only approximation.
+const officialSymbol=bundleAsset['69600b5c-99d3-4ec0-9520-3db39d09fc81'];
+if(!officialSymbol||officialSymbol.mime!=='image/svg+xml'||!officialSymbol.compressed)throw Error('Canonical HUMMIN symbol missing from design bundle');
+const symbolSvg=zlib.gunzipSync(Buffer.from(officialSymbol.data,'base64')).toString('utf8');
+if(!/<svg[\\s>]/i.test(symbolSvg)||/<script[\\s>]/i.test(symbolSvg))throw Error('Canonical HUMMIN symbol is not safe SVG');
+fs.mkdirSync('public/brand',{recursive:true});
+fs.writeFileSync('public/brand/hummin-symbol.svg',symbolSvg);
+console.log('Extracted official HUMMIN logo symbol ('+symbolSvg.length+' characters)');
 const fullInsight=zlib.gunzipSync(Buffer.from(bundleAsset['cc88240e-e27d-4718-b37a-5fab22025705'].data,'base64')).toString('utf8');
 function insightTemplate(t){
  t=need(t,'<script src="./support.js"></script>','<script src="cc0357d2-2a09-4861-907c-461f1ee3894d"></script>');
