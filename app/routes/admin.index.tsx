@@ -6,7 +6,7 @@ import {canView,resolveView,type AdminView,type AdminRole} from "../lib/admin-pe
 import {AdminChrome} from "../components/admin-chrome.tsx";
 import {PipelineScreen,LeadsScreen,LeadDetailScreen,InboxScreen,InsightsListScreen,InsightsEditorScreen} from "../components/admin-source-screens.tsx";
 
-import {insightsPosts} from "../lib/insights.server.ts";
+
 import {DashboardExact,BookingsExact,EngagementsExact,AnalyticsExact,InvoicesExact,ReportsExact,AssessmentSettingsExact,TeamExact,EmailExact,AudienceExact} from "../components/admin-other-screens.tsx";
 
 const PAGES:{view:AdminView;label:string;short:string}[]=[
@@ -35,10 +35,11 @@ export async function loader({request,context}:{request:Request;context:AppLoadC
  const params=new URL(request.url).searchParams,view=resolveView(params.get("view")),selectedId=params.get("item");
  const {loadAdminView,enquiryNotes}=await import("../lib/admin-data.server.ts");
  const {adminPageData}=await import("../lib/admin-source.server.ts");
+ const {insightsPosts}=await import("../lib/insights.server.ts");
  const section=await loadAdminView(env,u,view);
  const notes=await enquiryNotes(env,u,null);
  const fidelity=["pipe","leads","lead","inbox","posts","post"].includes(view)&&canView(u.role,view)?await adminPageData(env,u,view,selectedId||""):{records:[]};
- return Response.json({user:{name:u.name,role:u.role},view,section,notes,fidelity,selectedId:selectedId||"",saved:params.get("saved")==="1"},{headers:privateHeaders});
+ return Response.json({user:{name:u.name,role:u.role},view,section,notes,fidelity,original:insightsPosts,selectedId:selectedId||"",saved:params.get("saved")==="1"},{headers:privateHeaders});
 }
 export async function action({request,context}:{request:Request;context:AppLoadContext}){
  const env=context.cloudflare.env,u=await sessionUser(env,request);
@@ -55,7 +56,7 @@ export async function action({request,context}:{request:Request;context:AppLoadC
  const view=operation.startsWith("post_")?"post":operation==="move_assessment"?"pipe":operation==="assessment_note"?"lead":operation.startsWith("inbox_")?"inbox":"dash";
  return redirect("/admin?view="+view+"&item="+encodeURIComponent(("id" in result&&result.id)?String(result.id):id)+"&saved=1",{headers:privateHeaders});
 }
-type Load={user:{name:string;role:AdminRole};view:AdminView;section:{restricted:boolean;counts:Record<string,number>;records:Record<string,unknown>[];stats?:Record<string,unknown>[]};notes:Record<string,unknown>[];fidelity:{records:Record<string,unknown>[];notes?:Record<string,unknown>[];replies?:Record<string,unknown>[];members?:Record<string,unknown>[]};selectedId:string;saved:boolean};
+type Load={user:{name:string;role:AdminRole};view:AdminView;section:{restricted:boolean;counts:Record<string,number>;records:Record<string,unknown>[];stats?:Record<string,unknown>[]};notes:Record<string,unknown>[];fidelity:{records:Record<string,unknown>[];notes?:Record<string,unknown>[];replies?:Record<string,unknown>[];members?:Record<string,unknown>[]};original:Record<string,unknown>[];selectedId:string;saved:boolean};
 const stages=["new","contacted","exploring","proposal","won","lost"];
 const stageTitle=(s:unknown)=>text(s).replace(/_/g," ").replace(/^./,c=>c.toUpperCase());
 const Head=({columns}:{columns:string[]})=><div className="hm-th">{columns.map(h=><span key={h}>{h}</span>)}</div>;
@@ -118,7 +119,7 @@ function Section({view,records,counts,notes,selectedId}:{view:AdminView;records:
 export default function AdminHome(){
  const data=useLoaderData() as Load;
  const response=useActionData() as {ok:boolean;message:string}|undefined;
- const {user,view,section,notes,fidelity,selectedId,saved}=data;
+ const {user,view,section,notes,fidelity,original,selectedId,saved}=data;
  const records=(section.records||[]).map(item),counts=section.counts||{};
  const accessible=PAGES.filter(p=>canView(user.role,p.view));
  const current=PAGES.find(p=>p.view===view);
@@ -173,7 +174,7 @@ export default function AdminHome(){
  view==="leads"?<LeadsScreen data={fidelity}/>:
  view==="lead"?<LeadDetailScreen data={fidelity} selected={selectedId}/>:
  view==="inbox"?<InboxScreen data={fidelity} selected={selectedId}/>:
- view==="posts"?<InsightsListScreen data={fidelity} original={insightsPosts as unknown as Record<string,unknown>[]}/>:
+ view==="posts"?<InsightsListScreen data={fidelity} original={original}/>:
  view==="post"?<InsightsEditorScreen key={selectedId} data={fidelity} original={insightsPosts as unknown as Record<string,unknown>[]} selected={selectedId}/>:
  view==="book"?<BookingsExact records={records}/>:
  view==="clients"?<EngagementsExact/>:
