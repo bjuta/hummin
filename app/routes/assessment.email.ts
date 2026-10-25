@@ -1,6 +1,6 @@
 import type {AppLoadContext} from "react-router";
 import {assessmentResultsEmail} from "../lib/email-templates.server.ts";
-import {queueEmail,deliverDue} from "../lib/mail-outbox.server.ts";
+import {deliverDue} from "../lib/mail-outbox.server.ts";
 const validEmail=(x:string)=>x.length<=254&&/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(x);
 export async function action({request,context}:{request:Request;context:AppLoadContext}){
  const env=context.cloudflare.env;
@@ -29,9 +29,14 @@ export async function action({request,context}:{request:Request;context:AppLoadC
   bookingUrl:(env.SITE_URL||new URL(request.url).origin)+"/assessment",resultsUrl:(env.SITE_URL||new URL(request.url).origin)+"/assessment",
   assetOrigin:env.SITE_URL||new URL(request.url).origin});
  try{
-  await env.DB.prepare("INSERT INTO assessment_deliveries(id,email,name,business_name,score,goal,summary) VALUES(?,?,?,?,?,?,?)")
-    .bind(id,email,name,business,score,goal,JSON.stringify({priorities,cost})).run();
-  await queueEmail(env,"assessment-results:"+id,mail);
+  const payload=JSON.stringify(mail);
+  if(payload.length>35000)throw Error("Assessment email too large");
+  await env.DB.batch([
+   env.DB.prepare("INSERT INTO assessment_deliveries(id,email,name,business_name,score,goal,summary) VALUES(?,?,?,?,?,?,?)")
+    .bind(id,email,name,business,score,goal,JSON.stringify({priorities,cost})),
+   env.DB.prepare("INSERT INTO email_outbox(id,kind,recipient,payload) VALUES(?,?,?,?)")
+    .bind("assessment-results:"+id,mail.type,mail.recipient,payload)
+  ]);
   context.cloudflare.ctx.waitUntil(deliverDue(env,3).catch(()=>({sent:0,failed:0})));
   return Response.json({ok:true,queued:true,message:"Your plan is unlocked. We have queued a copy for email delivery."},{headers:{"Cache-Control":"no-store"}});
  }catch{console.error("Assessment email could not be queued",id);return err("We could not queue your email. Please try again.",503);}
