@@ -1,7 +1,7 @@
 import {Form,useActionData,useLoaderData} from "react-router";
 import type {AppLoadContext} from "react-router";
 import {newsletterOptInEmail} from "../lib/email-templates.server.ts";
-import {queueEmail,deliverDue} from "../lib/mail-outbox.server.ts";
+import {deliverDue} from "../lib/mail-outbox.server.ts";
 type Result={ok:boolean;message:string};
 export async function loader({context}:{context:AppLoadContext}){
  const env=context.cloudflare.env;
@@ -26,9 +26,13 @@ export async function action({request,context}:{request:Request;context:AppLoadC
  if(present?.status==="active")return Response.json({ok:true,message:"If you have a subscription, it is already active."} satisfies Result);
  const key=crypto.randomUUID(),assetOrigin=e.SITE_URL||new URL(request.url).origin;
  try{
-  await e.DB.prepare("INSERT INTO newsletter_subscribers(email,status,token) VALUES(?,'pending',?) ON CONFLICT(email) DO UPDATE SET status='pending',token=excluded.token,subscribed_at=NULL,unsubscribed_at=NULL").bind(email,key).run();
   const message=newsletterOptInEmail({recipient:email,confirmUrl:assetOrigin+"/newsletter/confirm?token="+encodeURIComponent(key),assetOrigin});
-  await queueEmail(e,"newsletter-optin:"+key,message);
+  const payload=JSON.stringify(message);
+  if(payload.length>35000)throw Error("Email too large");
+  await e.DB.batch([
+   e.DB.prepare("INSERT INTO newsletter_subscribers(email,status,token) VALUES(?,'pending',?) ON CONFLICT(email) DO UPDATE SET status='pending',token=excluded.token,subscribed_at=NULL,unsubscribed_at=NULL").bind(email,key),
+   e.DB.prepare("INSERT INTO email_outbox(id,kind,recipient,payload) VALUES(?,?,?,?)").bind("newsletter-optin:"+key,message.type,email,payload)
+  ]);
   context.cloudflare.ctx.waitUntil(deliverDue(e,3).catch(()=>({sent:0,failed:0})));
   return Response.json({ok:true,message:"Check your inbox and confirm your subscription. We will not send newsletters until you confirm."} satisfies Result);
  }catch{console.error("Newsletter opt-in could not be queued");return fail("We could not send a confirmation email. Please try again.",503);}
