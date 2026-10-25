@@ -19,6 +19,7 @@ jobs:
       - run: npm run verify:production:migrations
       - run: npm run verify:production:wrangler-migrations
       - run: npm run verify:seo
+      - run: npm run verify:boot
       - run: npm run typecheck
       - run: npm run build
       - name: Validate production Vite Worker bundle
