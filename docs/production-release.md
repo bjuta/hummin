@@ -35,10 +35,18 @@ Prepared 25 October 2026. **Production site and Google Workspace DNS are not cha
 - [x] Production configuration is fail-closed and passed CI.
 - [x] Manually gated `.github/workflows/stage-production.yml` created for migration and isolated Worker staging.
 - [ ] **Workflow has not been executed**. It needs an authorised GitHub production-staging environment and Cloudflare API token/account ID GitHub secrets.
-- [ ] Since the workflow is introduced on a development branch, GitHub may require it to exist on the default branch before a `workflow_dispatch` run is available.
+- [x] The manual workflow is registered on the default branch and follows the SHA-pinned development release.
 - [ ] Execute the manual staging workflow only after the approval and secrets are in place; review its logs and confirm the production `d1_migrations` history.
+- [ ] The CI workflow now runs a Wrangler-native local D1 migration rehearsal, in addition to the SQLite schema check. Require both checks green on the approved release SHA.
 - [ ] Confirm the Worker hostname is correct for the Cloudflare account. Do not introduce public routes in the workflow.
 - [ ] Confirm the Worker renders correctly and service flags are false.
 - [ ] Deploy the public domain only after service-gate acceptance.
 
 The preview D1 was constructed using direct SQL and does **not** currently have a Wrangler `d1_migrations` table. Do not use preview migration history as a production baseline. Use tracked migrations on the empty production database.
+
+## GitHub credential handoff (no secret values in source or chat)
+1. Open the [GitHub repository Environments settings](https://github.com/bjuta/hummin/settings/environments) and configure `production-staging` with any required reviewer approval.
+2. Add environment-scoped secrets `CLOUDFLARE_API_TOKEN` (minimum Worker and D1 permissions for this account) and `CLOUDFLARE_ACCOUNT_ID`. Do not place token strings into commit history, email or a chat message.
+3. In [Stage production infrastructure](https://github.com/bjuta/hummin/actions/workflows/stage-production.yml), choose **Run workflow**, select `main`, and enter the exact full 40-character **verified** development commit SHA for `release_sha`.
+4. The job checks out the development branch and fails if its HEAD has moved; approval must be repeated for a different SHA.
+5. Confirm production migration history and isolated Worker URL in the job logs before considering any public-domain cutover. The job must never configure zone routes.
