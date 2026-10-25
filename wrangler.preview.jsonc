@@ -11,7 +11,7 @@
     "SITE_URL": "https://hummin-web-preview.grimpossible.workers.dev",
     "CONTACT_ENABLED": "false",
     "BOOKING_ENABLED": "false",
-    "TURNSTILE_SITE_KEY": ""
+    "TURNSTILE_SITE_KEY": "0x4AAAAAAFk826tr9GZGfmXb"
   },
   "d1_databases": [{
     "binding": "DB",
