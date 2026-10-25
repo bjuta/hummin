@@ -167,8 +167,26 @@ const bundleAsset=JSON.parse(newManifest);
 const fullInsight=zlib.gunzipSync(Buffer.from(bundleAsset['cc88240e-e27d-4718-b37a-5fab22025705'].data,'base64')).toString('utf8');
 function insightTemplate(t){
  t=need(t,'<script src="./support.js"></script>','<script src="cc0357d2-2a09-4861-907c-461f1ee3894d"></script>');
+ t=need(t,"class Component extends DCLogic {",`function HUMMIN_applyPublishedPosts(newPosts){
+  if(!Array.isArray(newPosts)||!newPosts.length)return false;
+  const all=POSTS.slice();let changed=false;
+  for(const item of newPosts){
+    if(!item||typeof item.slug!=='string'||!Array.isArray(item.blocks))continue;
+    const originalIndex=all.findIndex(p=>p.slug===(item.sourceSlug||item.slug));
+    const original=originalIndex>=0?all[originalIndex]:null;
+    const replacement={...(original||{}),...item};
+    if(!['guide','opinion','news'].includes(replacement.type)||!AUTHORS[replacement.author])continue;
+    if(originalIndex>=0)all.splice(originalIndex,1,replacement);
+    else all.push(replacement);
+    changed=true;
+  }
+  if(changed){POSTS.splice(0,POSTS.length,...all);SORTED.splice(0,SORTED.length,...all.slice().sort((a,b)=>b.date.localeCompare(a.date)));}
+  return changed;
+}
+class Component extends DCLogic {`);
  const oldMount="  componentDidMount() { this._nonce = this.props.openNonce; if (this.props.openPost) this.setState({ view: 'post', slug: this.props.openPost }); }";
  const mounted=`  componentDidMount() {
+    this._insightsAlive=true;
     const locationPath = window.parent!==window ? window.parent.location.pathname : window.location.pathname;
     const parts=locationPath.split('/').filter(Boolean);
     if(parts[0]==='insights' && parts[1]==='author' && ['team','muiruri'].includes(parts[2]))this.setState({view:'author',author:parts[2]});
@@ -179,6 +197,17 @@ function insightTemplate(t){
     this._heightObserver.observe(document.body);
     window.addEventListener('resize',this._onInsightsResize=()=>this.sendHeight());
     requestAnimationFrame(()=>this.sendHeight());
+    fetch('/api/insights/publications',{cache:'no-store'})
+      .then(r=>r.ok?r.json():Promise.reject(Error('Insights publication feed unavailable')))
+      .then(data=>{
+        if(!this._insightsAlive||!HUMMIN_applyPublishedPosts(data.posts))return;
+        const here=window.parent!==window?window.parent.location.pathname:window.location.pathname;
+        const articleSlug=here.split('/').filter(Boolean)[1];
+        if(articleSlug&&POSTS.some(p=>p.slug===articleSlug))this.setState({view:'post',slug:articleSlug});
+        else this.forceUpdate();
+        requestAnimationFrame(()=>this.sendHeight());
+      })
+      .catch(()=>{ /* Static editorial catalogue stays visible if the CMS feed is unavailable. */ });
   }
   sendHeight(){
     if(window.parent===window)return;
@@ -194,7 +223,7 @@ function insightTemplate(t){
   }
  `;
  t=need(t,oldMount,mounted);
- t=need(t,"  componentWillUnmount() { clearTimeout(this._ct); }","  componentWillUnmount() { clearTimeout(this._ct);this._heightObserver?.disconnect();if(this._onInsightsResize)window.removeEventListener('resize',this._onInsightsResize); }");
+ t=need(t,"  componentWillUnmount() { clearTimeout(this._ct); }","  componentWillUnmount() { this._insightsAlive=false;clearTimeout(this._ct);this._heightObserver?.disconnect();if(this._onInsightsResize)window.removeEventListener('resize',this._onInsightsResize); }");
  t=need(t,"  go(view, extra) { this.setState({ view, ...(extra || {}) }); const sc = this.scroller(); if (sc) sc.scrollTop = 0; else window.scrollTo({ top: 0 }); }",
  `  go(view,extra){
     const data=extra||{};
