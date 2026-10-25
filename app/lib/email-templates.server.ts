@@ -159,3 +159,17 @@ export function monthlyNewsletterEmail(a:{
   footer:"You receive this because you subscribed on hummin.org. Unsubscribe: "+a.unsubscribeUrl
  },a.assetOrigin);
 }
+
+/** Operational double opt-in message. Only verified subscribers receive newsletters. */
+export function newsletterOptInEmail(input:{recipient:string;confirmUrl:string;assetOrigin:string}){
+ return render({
+  type:"newsletter-opt-in",sender:"system",recipient:input.recipient,replyTo:"sales@hummin.org",
+  subject:"Confirm your HUMMIN newsletter subscription",
+  preheader:"Confirm that you want to receive Notes from HUMMIN.",
+  kicker:"Email confirmation",title:"One step before we write to you.",
+  paragraphs:["Please confirm that you want to receive Notes from HUMMIN. We send an occasional practical note about building and running a business."],
+  primary:{label:"Confirm Subscription",url:input.confirmUrl},
+  note:"If you did not ask for these emails, simply ignore this message. We will not subscribe you.",
+  footer:"Sent because this email address was entered on the HUMMIN newsletter form."
+ },input.assetOrigin);
+}
