@@ -29,6 +29,5 @@ jobs:
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-      - name: Confirm staging Worker is reachable
-        run: |
-          curl --fail --silent --show-error --max-time 20 https://hummin-web-production.grimpossible.workers.dev/ >/dev/null
+      - name: Verify staging is safe before any domain cutover
+        run: node scripts/check-production-staging.mjs
