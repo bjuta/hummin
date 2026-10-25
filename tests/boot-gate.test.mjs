@@ -42,3 +42,10 @@ test("A lost iframe ready message cannot leave Insights or Assessment permanentl
  assert.match(restore,/f\.style\.visibility='visible'/);
  assert.match(restore,/setInterval\(function\(\)/);
 });
+
+test("Insights height is reconciled after child layout changes without viewport feedback",()=>{
+ assert.match(restore,/function correctInsightsHeight\(\)/);
+ assert.match(restore,/getBoundingClientRect\(\)\.bottom\+w\.scrollY/);
+ assert.match(restore,/position!=='fixed'/);
+ assert.match(restore,/Math\.abs\(f\.getBoundingClientRect\(\)\.height-target\)>2/);
+});
