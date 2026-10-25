@@ -1,5 +1,6 @@
 import { Form, Link, useActionData, useLoaderData, useNavigation } from "react-router";
 import { enquiryNotification, enquiryAcknowledgement } from "../lib/enquiry-email.server";
+import {deliverDue} from "../lib/mail-outbox.server.ts";
 import type { AppLoadContext } from "react-router";
 
 type Result = { ok:boolean; message:string };
@@ -58,33 +59,25 @@ export async function action({request,context}:{request:Request;context:AppLoadC
  if(!await verifyTurnstile(env.TURNSTILE_SECRET_KEY,clean(form.get("cf-turnstile-response")),hostname))
    return error("Verification was unsuccessful. Please try again.",400);
  const id=crypto.randomUUID();
+ const assetOrigin=env.SITE_URL||new URL(request.url).origin;
+ let internal,visitorReceipt;
  try{
-  await env.DB.prepare("INSERT INTO enquiries (id,name,business_name,email,message,status) VALUES (?,?,?,?,?,'pending')")
-   .bind(id,visitor.name,visitor.businessName,visitor.email,visitor.message).run();
+  internal=enquiryNotification(visitor,id,assetOrigin,new Date());
+  visitorReceipt=enquiryAcknowledgement(visitor,assetOrigin);
+  // D1 batch commits the enquiry and both emails atomically.
+  const requests=[
+   env.DB.prepare("INSERT INTO enquiries (id,name,business_name,email,message,status) VALUES(?,?,?,?,?,'pending')").bind(id,visitor.name,visitor.businessName,visitor.email,visitor.message),
+   env.DB.prepare("INSERT INTO email_outbox (id,kind,recipient,payload) VALUES(?,?,?,?)").bind("contact-internal:"+id,internal.type,internal.recipient,JSON.stringify(internal)),
+   env.DB.prepare("INSERT INTO email_outbox (id,kind,recipient,payload) VALUES(?,?,?,?)").bind("contact-received:"+id,visitorReceipt.type,visitorReceipt.recipient,JSON.stringify(visitorReceipt))
+  ];
+  await env.DB.batch(requests);
  }catch{
-  console.error("Failed to persist HUMMIN enquiry");
-  return error("We couldn't save your enquiry. Please email sales@hummin.org.",503);
+  console.error("HUMMIN enquiry and email queue transaction failed");
+  return error("We couldn't accept the enquiry. Please email sales@hummin.org directly.",503);
  }
- try{
-  const origin=env.SITE_URL||new URL(request.url).origin;
-  const internal=enquiryNotification(visitor,id,origin,new Date());
-  const providerId=await sendEmail(internal,id+":internal",env.RESEND_API_KEY,env.EMAIL_FROM);
-  try{await env.DB.prepare("UPDATE enquiries SET status='accepted', provider_message_id=?, provider_accepted_at=CURRENT_TIMESTAMP WHERE id=?")
-    .bind(providerId,id).run();}
-  catch{console.error("Provider accepted enquiry but D1 status update failed",id);}
-  // The internal enquiry is already safely stored and accepted.
-  // A sender acknowledgement is helpful but must not falsely turn a successful enquiry into a failed one.
-  try {
-   const acknowledgement=enquiryAcknowledgement(visitor,origin);
-   await sendEmail(acknowledgement,id+":sender",env.RESEND_API_KEY,env.EMAIL_FROM);
-  }catch{console.error("Sender acknowledgement could not be accepted by the email provider",id);}
-  return Response.json({ok:true,message:"Your enquiry has been accepted. HUMMIN will review it and respond using the contact details provided."} satisfies Result,{status:200});
- }catch{
-  try{await env.DB.prepare("UPDATE enquiries SET status='failed' WHERE id=?").bind(id).run();}
-  catch{console.error("Could not mark failed enquiry",id);}
-  console.error("Notification service did not confirm acceptance",id);
-  return error("We couldn't confirm delivery of your enquiry. Please email sales@hummin.org directly.",503);
- }
+ // Provider delivery is independently retried on Worker cron.
+ context.cloudflare.ctx.waitUntil(deliverDue(env,3).catch(()=>({sent:0,failed:0})));
+ return Response.json({ok:true,message:"Your enquiry is received and your email acknowledgement has been queued."} satisfies Result,{status:200});
 }
 export default function Contact(){
  const {formReady,siteKey}=useLoaderData<typeof loader>();
