@@ -68,7 +68,7 @@ export function assessmentResultsEmail(a:AssessmentInput){
  },a.assetOrigin);
 }
 
-type Appointment = {recipient:string;name:string;start:Date;end:Date;host:string;meetUrl:string;assetOrigin:string;calendarUrl?:string};
+type Appointment = {recipient:string;name:string;start:Date;end:Date;host:string;meetUrl?:string;assetOrigin:string;calendarUrl?:string};
 /** Brand Book 17.4: Booking confirmation, with actual appointment details. */
 export function bookingConfirmationEmail(a:Appointment){
  return render({
@@ -77,9 +77,9 @@ export function bookingConfirmationEmail(a:Appointment){
   preheader:"30 minutes on Google Meet with "+a.host+".",
   kicker:"Booking confirmed",title:"You are booked in.",
   paragraphs:["We will go through your assessment answers, check the cost estimate against your real figures, and tell you honestly whether we can help. No preparation needed."],
-  rows:[{label:"When",value:dayAndTime(a.start)+" to "+clock(a.end)},{label:"Where",value:"Google Meet. The link is in your calendar invitation."},{label:"With",value:a.host}],
-  primary:{label:"Join the Call",url:a.meetUrl},
-  ...(a.calendarUrl?{secondary:{label:"Add to Calendar",url:a.calendarUrl}}:{}),
+  rows:[{label:"When",value:dayAndTime(a.start)+" to "+clock(a.end)},{label:"Where",value:a.meetUrl?"Google Meet. The link is in your calendar invitation.":"Joining details are in your Google Calendar invitation."},{label:"With",value:a.host}],
+  primary:{label:a.meetUrl?"Join the Call":"View Calendar Invitation",url:a.meetUrl||a.calendarUrl||""},
+  ...(a.meetUrl&&a.calendarUrl?{secondary:{label:"Add to Calendar",url:a.calendarUrl}}:{}),
   note:"Need to change the time? Reply to this email and we will find another slot.",
   footer:"You received this because you booked a call on hummin.org."
  },a.assetOrigin);
@@ -92,7 +92,7 @@ export function bookingReminderEmail(a:Appointment){
   preheader:"A reminder of your call with HUMMIN.",
   kicker:"Reminder",title:"See you tomorrow at "+clock(a.start).replace(" EAT","")+".",
   paragraphs:["A quick reminder of your 30-minute results review with "+a.host+", "+dayAndTime(a.start)+"."],
-  primary:{label:"Join the Call",url:a.meetUrl},
+  primary:{label:a.meetUrl?"Join the Call":"View Calendar Invitation",url:a.meetUrl||a.calendarUrl||""},
   note:"Can no longer make it? Reply to this email and we will rearrange.",
   footer:"Sent 24 hours before your booking."
  },a.assetOrigin);
