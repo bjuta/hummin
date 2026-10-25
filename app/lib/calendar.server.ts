@@ -77,3 +77,18 @@ export async function reserve(e:HumminEnv,input:{start:string;name:string;email:
   throw error;
  }
 }
+export type CalendarBooking = {
+ status:"confirmed"|"cancelled";start?:string;end?:string;meetUrl?:string;calendarUrl?:string;
+};
+/** Read Google as the authority for event cancellation or movement before reminders. */
+export async function readBookingEvent(env:HumminEnv,eventId:string):Promise<CalendarBooking>{
+ if(!hasCalendarCredentials(env)||!eventId)throw Error("Booking calendar unavailable");
+ const token=await accessToken(env);
+ const endpoint="https://www.googleapis.com/calendar/v3/calendars/"+encodeURIComponent(env.GOOGLE_CALENDAR_ID!)+"/events/"+encodeURIComponent(eventId);
+ const res=await fetch(endpoint,{headers:{Authorization:"Bearer "+token},cache:"no-store"});
+ if(res.status===404||res.status===410)return {status:"cancelled"};
+ if(!res.ok)throw Error("Google Calendar event read failed");
+ const e=await res.json() as {status?:string;start?:{dateTime?:string};end?:{dateTime?:string};hangoutLink?:string;htmlLink?:string;conferenceData?:{entryPoints?:{entryPointType?:string;uri?:string}[]}};
+ if(e.status==="cancelled")return {status:"cancelled"};
+ return {status:"confirmed",start:e.start?.dateTime,end:e.end?.dateTime,calendarUrl:e.htmlLink||"",meetUrl:e.hangoutLink||e.conferenceData?.entryPoints?.find(x=>x.entryPointType==="video")?.uri||""};
+}
