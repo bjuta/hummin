@@ -1,5 +1,6 @@
 import { Form, Link, useActionData, useLoaderData, useNavigation } from "react-router";
 import type { AppLoadContext } from "react-router";
+import { enquiryNotification } from "../lib/enquiry-email.server";
 
 type Result = { ok:boolean; message:string };
 type Visitor = { name:string; businessName:string; email:string; message:string };
@@ -27,8 +28,7 @@ async function notify(enquiry:Visitor,id:string,apiKey:string,from:string){
   headers:{"Authorization":"Bearer "+apiKey,"Content-Type":"application/json","Idempotency-Key":id},
   body:JSON.stringify({
    from, to:["sales@hummin.org"], reply_to:enquiry.email,
-   subject:"HUMMIN website enquiry · "+id.slice(0,8),
-   text:["New website enquiry","Reference: "+id,"Name: "+enquiry.name,"Business: "+enquiry.businessName,"Email: "+enquiry.email,"", "Message:",enquiry.message].join("\n")
+   ...enquiryNotification(enquiry,id)
   })
  });
  if(!res.ok)throw new Error("Resend rejected the message ("+res.status+")");
