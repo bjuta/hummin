@@ -12,11 +12,11 @@ function patch(html, fn, override){
 }
 function site(t){
  t=need(t,'<dc-import name="HUMMIN Insights" on-contact="{{ go_contact }}" on-assess="{{ go_assess }}" on-nav="{{ goPage }}" open-post="{{ insightPost }}" open-nonce="{{ insightNonce }}" hint-size="100%,1200px"></dc-import>',
- '<iframe title="HUMMIN Insights articles and author profiles" src="/design/insights/index.html" style="width:100%;height:1250px;min-height:400px;border:0;display:block;background:#F4F5F1" loading="eager" id="hummin-insights-frame"></iframe>');
+ '<div class="hm-frame-shell" style="position:relative;min-height:580px;background:#F4F5F1"><div class="hm-frame-placeholder" role="status" style="position:absolute;inset:0;padding:clamp(28px,5vw,68px);background:#F4F5F1;color:#1E272A"><span style="font:600 12px Figtree,Arial,sans-serif;letter-spacing:.12em;color:#B5532C">HUMMIN / INSIGHTS</span><p style="font:400 clamp(32px,4vw,52px) Newsreader,Georgia,serif;margin:18px 0 0">Practical notes for owners.</p></div><iframe title="HUMMIN Insights articles and author profiles" src="/design/insights/index.html" style="width:100%;height:1250px;min-height:400px;border:0;display:block;background:#F4F5F1;visibility:hidden" loading="eager" id="hummin-insights-frame"></iframe></div>');
  t=need(t,"open: () => this.go('insights', { insightPost: x.slug, insightNonce: Date.now() })","open: () => this.go('insights', { insightPost: x.slug, insightNonce: Date.now() })");
 
  t=need(t,'<span>© 2026 HUMMIN</span>','<a href="/newsletter" style="color:#E7EBE6;text-decoration:underline;text-underline-offset:4px">Notes from HUMMIN</a><span>© 2026 HUMMIN</span>');
- t=need(t,'<dc-import name="HUMMIN Assessment v2" on-contact="{{ go_contact }}" hint-size="100%,900px"></dc-import>','<iframe title="HUMMIN Business Assessment" src="/design/assessment/index.html" style="width:100%;min-height:960px;border:0;display:block;background:#1E272A" loading="eager" id="hummin-assessment-frame"></iframe>');
+ t=need(t,'<dc-import name="HUMMIN Assessment v2" on-contact="{{ go_contact }}" hint-size="100%,900px"></dc-import>','<div class="hm-frame-shell" style="position:relative;min-height:960px;background:#1E272A"><div class="hm-frame-placeholder" role="status" style="position:absolute;inset:0;padding:clamp(28px,5vw,68px);background:#1E272A;color:#F4F5F1"><span style="font:600 12px Figtree,Arial,sans-serif;letter-spacing:.12em;color:#E58A5F">HUMMIN / ASSESSMENT</span><p style="font:400 clamp(32px,4vw,52px) Newsreader,Georgia,serif;margin:18px 0 0">Understand what is holding your business back.</p></div><iframe title="HUMMIN Business Assessment" src="/design/assessment/index.html" style="width:100%;min-height:960px;border:0;display:block;background:#1E272A;visibility:hidden" loading="eager" id="hummin-assessment-frame"></iframe></div>');
  t=need(t,"page: 'home', menu: false","page: ({'/':'home','/contact':'contact','/about':'about','/assessment':'assess','/how-we-work':'how','/applied-expertise':'core','/engagements':'eng','/who-we-work-with':'who','/insights':'insights'}[window.location.pathname] || (window.location.pathname.startsWith('/insights/')?'insights':'home')), menu: false");
  t=need(t,"class Component extends DCLogic {","const HUMMIN_ROUTE_PATHS = {home:'/',how:'/how-we-work',core:'/applied-expertise',eng:'/engagements',who:'/who-we-work-with',assess:'/assessment',about:'/about',insights:'/insights',contact:'/contact'};\nconst HUMMIN_PATH_PAGES = Object.fromEntries(Object.entries(HUMMIN_ROUTE_PATHS).map(([page,url])=>[url,page]));\nclass Component extends DCLogic {");
  t=need(t,"    this._lastPage = this.state.page;","    this.onPopState = () => { const next=HUMMIN_PATH_PAGES[window.location.pathname]||(window.location.pathname.startsWith('/insights/')?'insights':'home'); this.setState({page:next,menu:false,peekOpen:false}); window.scrollTo({top:0,behavior:'instant'}); };\n    window.addEventListener('popstate', this.onPopState);\n    this.onTurnstileReady = () => this.mountTurnstile(); window.addEventListener('hummin-turnstile-ready',this.onTurnstileReady); requestAnimationFrame(() => this.mountTurnstile());\n    window.__HUMMIN_DESIGN_MOUNTED__=true;window.dispatchEvent(new Event('hummin-design-mounted'));\n    this._lastPage = this.state.page;");
@@ -200,8 +200,11 @@ function brandedBoot(html,kind){
      Promise.resolve(fonts()).then(frame).then(function(){
        document.documentElement.classList.remove('hm-booting');
        var splash=document.getElementById('hummin-boot');
-       if(splash){splash.classList.add('hm-ready');setTimeout(function(){splash.remove()},350)}
-       try{window.parent!==window&&window.parent.postMessage({humminDesignReady:true,kind:window.__HUMMIN_BOOT_KIND__},window.location.origin)}catch(e){}
+       if(splash)splash.classList.add('hm-ready');
+       setTimeout(function(){
+         if(splash)splash.remove();
+         try{if(window.parent!==window)window.parent.postMessage({humminDesignReady:true,kind:window.__HUMMIN_BOOT_KIND__},window.location.origin)}catch(e){}
+       },350);
      });
    }
    var obs=new MutationObserver(ready);
@@ -209,13 +212,31 @@ function brandedBoot(html,kind){
    document.addEventListener('DOMContentLoaded',function(){setTimeout(ready,460)});
    window.addEventListener('hummin-design-mounted',function(){setTimeout(ready,160)},{once:true});
    window.addEventListener('load',ready,{once:true});
+   function syncInsights(){
+     var f=document.getElementById('hummin-insights-frame');
+     if(f&&f.dataset.hmLoaded==='true'&&window.location.pathname.startsWith('/insights'))
+       f.contentWindow.postMessage({humminNavigate:window.location.pathname},window.location.origin);
+   }
+   window.addEventListener('popstate',syncInsights);
+   window.addEventListener('hummin-route-change',syncInsights);
    window.addEventListener('message',function(e){
-     if(e.origin!==location.origin||!e.data||e.data.humminDesignReady!==true)return;
+     if(e.origin!==location.origin||!e.data)return;
      var child=document.getElementById('hummin-insights-frame')||document.getElementById('hummin-assessment-frame');
-     if(child&&e.source===child.contentWindow){
-       var f=child;if(f)f.dataset.hmLoaded='true';
-       ready();
+     if(!child||e.source!==child.contentWindow)return;
+     if(typeof e.data.humminRoute==='string'&&child.id==='hummin-insights-frame'){
+       var newPath=e.data.humminRoute;
+       if(/^\/insights(?:\/(?:[a-z0-9-]+|author\/[a-z0-9-]+|topic\/[a-z0-9-]+))?$/.test(newPath)&&newPath!==window.location.pathname){
+         window.history.pushState({humminPage:'insights'},'',newPath);
+       }
+       return;
      }
+     if(e.data.humminDesignReady!==true)return;
+     child.dataset.hmLoaded='true';
+     child.style.visibility='visible';
+     var placeholder=child.previousElementSibling;
+     if(placeholder&&placeholder.classList.contains('hm-frame-placeholder'))placeholder.remove();
+     syncInsights();
+     ready();
    });
    // Gracefully reveal even if a remote asset or iframe stalls. A stalled
    // child must never leave the user permanently blocked.
