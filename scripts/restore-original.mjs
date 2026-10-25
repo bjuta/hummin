@@ -222,6 +222,19 @@ function brandedBoot(html,kind){
      if(e.origin!==location.origin||!e.data)return;
      var child=document.getElementById('hummin-insights-frame')||document.getElementById('hummin-assessment-frame');
      if(!child||e.source!==child.contentWindow)return;
+     if(typeof e.data.humminInsightsHeight==='number'&&child.id==='hummin-insights-frame'){
+       var size=Math.ceil(e.data.humminInsightsHeight);
+       if(Number.isFinite(size)&&size>=400&&size<=30000)child.style.height=size+'px';
+       return;
+     }
+     if(typeof e.data.humminPublicRoute==='string'&&child.id==='hummin-insights-frame'){
+       var page=e.data.humminPublicRoute;
+       if(['/assessment','/contact','/applied-expertise'].includes(page)){
+         if(page!==window.location.pathname)window.history.pushState({humminPage:page},'',page);
+         window.dispatchEvent(new Event('popstate'));
+       }
+       return;
+     }
      if(typeof e.data.humminRoute==='string'&&child.id==='hummin-insights-frame'){
        var newPath=e.data.humminRoute;
        if(/^\/insights(?:\/(?:[a-z0-9-]+|author\/[a-z0-9-]+|topic\/[a-z0-9-]+))?$/.test(newPath)&&newPath!==window.location.pathname){
@@ -364,9 +377,9 @@ class Component extends DCLogic {`);
     window.history.pushState({},'',path);
     window.scrollTo({top:0});
   }`);
- t=need(t,"    v.toAssess = () => this.props.onAssess && this.props.onAssess();","    v.toAssess = () => window.parent.location.assign('/assessment');");
- t=need(t,"    v.toContact = () => this.props.onContact && this.props.onContact();","    v.toContact = () => window.parent.location.assign('/contact');");
- t=need(t,"    v.toCore = () => this.props.onNav && this.props.onNav('core');","    v.toCore = () => window.parent.location.assign('/applied-expertise');");
+ t=need(t,"    v.toAssess = () => this.props.onAssess && this.props.onAssess();","    v.toAssess = () => window.parent.postMessage({humminPublicRoute:'/assessment'},window.location.origin);");
+ t=need(t,"    v.toContact = () => this.props.onContact && this.props.onContact();","    v.toContact = () => window.parent.postMessage({humminPublicRoute:'/contact'},window.location.origin);");
+ t=need(t,"    v.toCore = () => this.props.onNav && this.props.onNav('core');","    v.toCore = () => window.parent.postMessage({humminPublicRoute:'/applied-expertise'},window.location.origin);");
  t=need(t,"const url = 'https://hummin.org/insights/' + p.slug","const url = window.parent.location.origin + '/insights/' + p.slug");
  t=need(t,"    v.copyLink = () => { const done = () => { this.setState({ copied: true }); clearTimeout(this._ct); this._ct = setTimeout(() => this.setState({ copied: false }), 1800); }; if (navigator.clipboard) navigator.clipboard.writeText(url).then(done, done); else done(); };","    v.copyLink = async () => {\n      let copied = false;\n      try {\n        if (navigator.clipboard && typeof navigator.clipboard.writeText === 'function') {\n          await navigator.clipboard.writeText(url);\n          copied = true;\n        }\n      } catch (_ignored) {}\n      if (!copied) {\n        const field = document.createElement('textarea');\n        field.value = url;\n        field.setAttribute('readonly', '');\n        field.style.position = 'fixed';\n        field.style.left = '-9999px';\n        document.body.appendChild(field);\n        field.select();\n        try { copied = !!document.execCommand('copy'); } catch (_ignored) {}\n        field.remove();\n      }\n      clearTimeout(this._ct);\n      this.setState({ copied, copyFailed: !copied });\n      this._ct = setTimeout(() => this.setState({ copied: false, copyFailed: false }), 2600);\n      if (!copied && typeof window.prompt === 'function') window.prompt('Copy this article link:', url);\n    };");
  t=need(t,"    v.copyLabel = s.copied ? 'Link copied ✓' : 'Copy link'; v.copyBg = s.copied ? '#DCEBE5' : 'transparent';","    v.copyLabel = s.copied ? 'Link copied ✓' : s.copyFailed ? 'Copy manually' : 'Copy link'; v.copyBg = s.copied ? '#DCEBE5' : 'transparent';");
