@@ -118,7 +118,6 @@ export function InsightsEditorScreen({data,original,selected}:{data:Data;origina
  const found=data.records.find(r=>r.id===selected),seed=selected.startsWith("original:")?original.find(p=>p.slug===selected.slice(9)):null;
  const starting=found?toPost(found):seed?{slug:nice(seed.slug),source_slug:nice(seed.slug),title:nice(seed.title),excerpt:nice(seed.excerpt),type:nice(seed.type).replace(/^./,x=>x.toUpperCase()),author:nice(seed.author),status:"published",topics:(seed.topics as string[])||[],blocks:[]}: {slug:"",title:"",excerpt:"",type:"Guide",author:"HUMMIN",status:"draft",topics:[],blocks:[{t:"p",text:""}]};
  const [post,setPost]=useState<EditorPost>(starting);
- const [publish,setPublish]=useState(false);
  const navigation=useNavigation(),pending=navigation.state!=="idle";
  const change=(x:Partial<EditorPost>)=>setPost(p=>({...p,...x}));
  const block=(i:number,patch:Partial<{t:string;text:string}>)=>change({blocks:post.blocks.map((b,k)=>k===i?{...b,...patch}:b)});
@@ -126,7 +125,7 @@ export function InsightsEditorScreen({data,original,selected}:{data:Data;origina
  const words=post.blocks.reduce((sum,b)=>sum+b.text.trim().split(/\s+/).filter(Boolean).length,0);
  return <div style={{display:"flex",flexWrap:"wrap",gap:16,alignItems:"start"}}>
  <Form method="post" id="insights-editor-form" style={{display:"contents"}}>
- <input type="hidden" name="operation" value={publish?"post_publish":"post_save"}/><input type="hidden" name="id" value={post.id||""}/><input type="hidden" name="source_slug" value={post.source_slug||""}/><input type="hidden" name="blocks" value={JSON.stringify(post.blocks)}/><input type="hidden" name="topics" value={JSON.stringify(post.topics)}/><input type="hidden" name="title" value={post.title}/><input type="hidden" name="excerpt" value={post.excerpt}/><input type="hidden" name="type" value={post.type}/><input type="hidden" name="slug" value={post.slug}/>
+ <input type="hidden" name="id" value={post.id||""}/><input type="hidden" name="source_slug" value={post.source_slug||""}/><input type="hidden" name="blocks" value={JSON.stringify(post.blocks)}/><input type="hidden" name="topics" value={JSON.stringify(post.topics)}/><input type="hidden" name="title" value={post.title}/><input type="hidden" name="excerpt" value={post.excerpt}/><input type="hidden" name="type" value={post.type}/><input type="hidden" name="slug" value={post.slug}/>
  <div style={{...panel,flex:"3 1 520px",maxWidth:820,display:"grid",gap:10,padding:"clamp(16px,3vw,36px)"}}>
  <input aria-label="Title" placeholder="Title" value={post.title} onChange={e=>change({title:e.target.value,...(!post.id&&!post.source_slug?{slug:slugify(e.target.value)}:{})})} style={{border:0,outline:0,font:"400 clamp(28px,3.4vw,40px)/1.1 Newsreader,serif",width:"100%"}}/>
  <textarea aria-label="Summary" value={post.excerpt} rows={2} placeholder="One-sentence summary" onChange={e=>change({excerpt:e.target.value})} style={{border:0,outline:0,resize:"vertical",fontSize:16,lineHeight:1.5,padding:"0 0 10px",borderBottom:"1px solid #E7EBE6"}}/>
@@ -146,8 +145,8 @@ export function InsightsEditorScreen({data,original,selected}:{data:Data;origina
  <label style={muted}>URL slug<input style={field} value={post.slug} onChange={e=>change({slug:slugify(e.target.value)})} maxLength={120}/></label>
  <div><span style={muted}>Topics</span><div style={{display:"flex",flexWrap:"wrap",gap:6,marginTop:6}}>{topicOptions.map(t=><button key={t} type="button" aria-pressed={post.topics.includes(t)} onClick={()=>change({topics:post.topics.includes(t)?post.topics.filter(x=>x!==t):[...post.topics,t]})} style={{padding:"6px 10px",borderRadius:99,fontSize:12,fontWeight:600,border:"1px solid #D0D8D2",background:post.topics.includes(t)?"#1E272A":"white",color:post.topics.includes(t)?"white":"#1E272A"}}>{t}</button>)}</div></div>
  <span style={muted}>{post.author||"HUMMIN"} · {words} words · {Math.max(1,Math.ceil(words/220))} min read</span>
- <button type="submit" style={btn} disabled={pending} onClick={()=>setPublish(false)}>Save Draft</button>
- <button type="submit" style={{...btn,background:"#1E272A"}} disabled={pending} onClick={()=>setPublish(true)}>{post.status==="published"?"Update":"Publish"}</button>
+ <button type="submit" name="operation" value="post_save" style={btn} disabled={pending}>Save Draft</button>
+ <button type="submit" name="operation" value="post_publish" style={{...btn,background:"#1E272A"}} disabled={pending}>{post.status==="published"?"Update":"Publish"}</button>
  <small style={{...muted,lineHeight:1.6}}>CMS records are stored and versioned. Public article rendering still uses the current bundled source; publishing to the public site will only be enabled after the rendering adapter is validated.</small>
  </div></div></Form></div>;
 }
