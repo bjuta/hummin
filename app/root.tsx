@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link, NavLink, Outlet, Links, Meta, Scripts, ScrollRestoration, isRouteErrorResponse } from "react-router";
+import { Link, NavLink, Outlet, Links, Meta, Scripts, ScrollRestoration, isRouteErrorResponse, useLocation } from "react-router";
 import "./site.css";
 
 const navigation = [
@@ -37,7 +37,7 @@ function Header(){
   </header>;
 }
 function Footer(){return <footer className="site-footer"><div className="footer-inner"><Link to="/" className="footer-brand">HUMMIN</Link><span>Embedded advisory and execution · Nairobi, Kenya</span><a href="mailto:sales@hummin.org">sales@hummin.org</a><span>© {new Date().getFullYear()} HUMMIN</span><Link to="/privacy">Privacy</Link></div></footer>;}
-export default function App(){return <><Header/><main id="main" tabIndex={-1}><Outlet/></main><Footer/></>;}
+export default function App(){const {pathname}=useLocation();if(pathname==="/admin"||pathname.startsWith("/admin/"))return <Outlet/>;return <><Header/><main id="main" tabIndex={-1}><Outlet/></main><Footer/></>;}
 export function ErrorBoundary({error}:{error:unknown}){
  const missing=isRouteErrorResponse(error)&&error.status===404;
  return <div className="section wrap"><p className="eyebrow">{missing?"Page not found":"Something went wrong"}</p><h1>{missing?"This page isn't here.":"We couldn't load this page."}</h1><p>Please return to the homepage or contact us directly.</p><Link className="button button-dark" to="/">Back to HUMMIN</Link></div>;
