@@ -32,3 +32,44 @@ export async function revoke(e:HumminEnv,r:Request){
  const value=cookieValue(r);
  if(value&&adminReady(e))await e.DB!.prepare("UPDATE admin_sessions SET revoked_at=CURRENT_TIMESTAMP WHERE token_hash=?").bind(await mac(e,"session",value)).run();
 }
+
+export async function sendAdminCode(e:HumminEnv,emailInput:string,origin:string,wait:(p:Promise<unknown>)=>void){
+ if(!adminReady(e))return;
+ const email=emailInput.trim().toLowerCase();
+ if(!validEmail(email))return;
+ const user=await e.DB!.prepare("SELECT id,email,name,role,status FROM admin_users WHERE email=? AND status IN ('active','invited')").bind(email).first<AdminUser>();
+ if(!user)return;
+ const latest=await e.DB!.prepare("SELECT COUNT(*) n FROM admin_auth_challenges WHERE user_id=? AND created_at>datetime('now','-15 minutes')").bind(user.id).first<{n:number}>();
+ if((latest?.n||0)>=3)return;
+ const value=code(),id=crypto.randomUUID();
+ const digest=await mac(e,"code:"+user.id,value);
+ const message=signInCodeEmail({recipient:user.email,name:user.name,code:value,expiresMinutes:10,assetOrigin:origin});
+ const payload=JSON.stringify(message);
+ if(payload.length>35000)throw Error("Account email too large");
+ await e.DB!.batch([
+  e.DB!.prepare("UPDATE admin_auth_challenges SET used_at=CURRENT_TIMESTAMP WHERE user_id=? AND used_at IS NULL").bind(user.id),
+  e.DB!.prepare("INSERT INTO admin_auth_challenges(id,user_id,code_hash,expires_at) VALUES(?,?,?,?)").bind(id,user.id,digest,new Date(Date.now()+600000).toISOString()),
+  e.DB!.prepare("INSERT INTO email_outbox(id,kind,recipient,payload) VALUES(?,?,?,?)").bind("admin-login:"+id,message.type,message.recipient,payload)
+ ]);
+ wait(deliverDue(e,3).catch(()=>({sent:0,failed:1})));
+}
+export async function completeAdminCode(e:HumminEnv,emailInput:string,input:string):Promise<string|null>{
+ if(!adminReady(e))return null;
+ const email=emailInput.trim().toLowerCase(),value=input.trim();
+ if(!validEmail(email)||!/^\d{6}$/.test(value))return null;
+ const user=await e.DB!.prepare("SELECT id,email,name,role,status FROM admin_users WHERE email=? AND status IN ('invited','active')").bind(email).first<AdminUser>();
+ if(!user)return null;
+ const challenge=await e.DB!.prepare("SELECT id,code_hash FROM admin_auth_challenges WHERE user_id=? AND used_at IS NULL AND expires_at>? AND attempts<5 ORDER BY created_at DESC LIMIT 1").bind(user.id,new Date().toISOString()).first<{id:string;code_hash:string}>();
+ if(!challenge)return null;
+ const attempts=await e.DB!.prepare("UPDATE admin_auth_challenges SET attempts=attempts+1 WHERE id=? AND used_at IS NULL AND attempts<5 AND expires_at>?").bind(challenge.id,new Date().toISOString()).run();
+ if(attempts.meta?.changes!==1)return null;
+ if(await mac(e,"code:"+user.id,value)!==challenge.code_hash)return null;
+ const consumed=await e.DB!.prepare("UPDATE admin_auth_challenges SET used_at=CURRENT_TIMESTAMP WHERE id=? AND used_at IS NULL AND attempts<=5").bind(challenge.id).run();
+ if(consumed.meta?.changes!==1)return null;
+ const session=token(),hash=await mac(e,"session",session);
+ await e.DB!.batch([
+  e.DB!.prepare("INSERT INTO admin_sessions(token_hash,user_id,expires_at) VALUES(?,?,?)").bind(hash,user.id,new Date(Date.now()+AGE*1000).toISOString()),
+  e.DB!.prepare("UPDATE admin_users SET status='active',verified_at=COALESCE(verified_at,CURRENT_TIMESTAMP) WHERE id=? AND status IN ('invited','active')").bind(user.id)
+ ]);
+ return session;
+}
