@@ -16,7 +16,8 @@
     "prebuild": "node scripts/restore-original.mjs && node scripts/build-insights-downloads.mjs",
     "verify:restoration": "node scripts/verify-restored.mjs",
     "verify:email": "node --experimental-strip-types --test tests/enquiry-email.test.mjs tests/email-workflows.test.mjs",
-    "verify:insights": "node scripts/verify-insights.mjs"
+    "verify:insights": "node scripts/verify-insights.mjs",
+    "verify:admin": "node --experimental-strip-types --test tests/admin-auth.test.mjs"
   },
   "dependencies": {
     "isbot": "5.1.32",
