@@ -32,7 +32,7 @@ const original = [
   ['No generated availability', !assessment.includes('const SL = [[9, 0]') && !assessment.includes('const full = x =>')],
   ['No fake event confirmation', !assessment.includes("UID:' + Date.now()")],
   ['Preview booking status visible', assessment.includes('liveBookingNotice')],
-  ['No claimed email plan delivery', assessment.includes('No email has been sent.')],
+  ['Assessment email is triggered by a real verified request', assessment.includes("fetch('/api/assessment/email'") && assessment.includes('assessment-turnstile') && assessment.includes('queued for delivery')],
 ];
 for (const [label, passed] of original) {
   assert.ok(passed, label);
