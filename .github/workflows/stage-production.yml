@@ -43,6 +43,10 @@ jobs:
         run: npm run build
         env:
           HUMMIN_DEPLOY_TARGET: production
+      - name: Validate production Worker package before deployment
+        run: |
+          node scripts/verify-production-bundle.mjs
+          npx wrangler deploy --config build/server/wrangler.json --dry-run --outdir .wrangler/production-package-check
       - name: Verify staging deployment credentials
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
