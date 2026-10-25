@@ -81,7 +81,8 @@ export async function adminPageMutation(e:HumminEnv,u:AdminUser,operation:string
   ]);
   return {ok:true,message:"Reply queued for delivery"};
  }
- if(["post_save","post_publish"].includes(operation)){
+ if(operation==="post_publish")return {ok:false,message:"Public publishing is not enabled until the CMS-to-website rendering adapter is validated."};
+ if(operation==="post_save"){
   if(!canWrite(u))return {ok:false,message:"Forbidden"};
   const title=String(form.get("title")||"").trim(),excerpt=String(form.get("excerpt")||"").trim(),type=String(form.get("type")||"Guide");
   const raw=String(form.get("blocks")||"[]"),topicsRaw=String(form.get("topics")||"[]");
