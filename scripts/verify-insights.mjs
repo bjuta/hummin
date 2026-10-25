@@ -1,5 +1,6 @@
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
+import vm from 'node:vm';
 
 const read = file => fs.readFileSync(file, 'utf8');
 const html = read('public/design/insights/index.html');
@@ -16,6 +17,23 @@ const serverSlugs = [...read('app/lib/insights.server.ts').matchAll(/\bslug:"([^
 assert.ok(frontSlugs.length >= 4, 'Expected authored articles are missing');
 assert.deepEqual(frontSlugs, serverSlugs, 'Article URLs and server metadata must match');
 
+// The video regression was a full navigation followed by two independent
+// iframe loading screens. Keep routes in-page and reveal the child once ready.
+const sitePage=JSON.parse(read('public/design/site/index.html').match(/<script\s+type="__bundler\/template"[^>]*>\s*([\s\S]*?)\s*<\/script>/)[1]);
+assert.ok(sitePage.includes("open: () => this.go('insights'"),'Homepage article card must stay in the application');
+assert.ok(!sitePage.includes("window.location.assign('/insights/'+x.slug)"),'Homepage article must not force a second document load');
+assert.ok(sitePage.includes('visibility:hidden')&&sitePage.includes('hm-frame-placeholder'),'Nested route must wait for a finished child frame');
+assert.ok(insights.includes('window.parent.postMessage({humminRoute:path}'),'Article navigation must be forwarded to the parent');
+assert.ok(!insights.includes('window.parent.location.assign(path)'),'Article navigation must never reload the parent document');
+for(const name of ['site','assessment','insights']){
+ const page=name==='site'?sitePage:name==='insights'?insights:JSON.parse(read('public/design/assessment/index.html').match(/<script\s+type="__bundler\/template"[^>]*>\s*([\s\S]*?)\s*<\/script>/)[1]);
+ const scripts=[...page.matchAll(/<script\s+type="text\/x-dc"[^>]*>([\s\S]*?)<\/script>/g)];
+ assert.ok(scripts.length,name+' requires a runtime script');
+ for(const [i,match] of scripts.entries()){
+  assert.doesNotThrow(()=>new vm.Script(match[1],{filename:name+'-runtime-'+i+'.js'}),name+' must contain valid runtime JavaScript');
+ }
+}
+console.log('PASS Insights: seamless navigation and embedded runtime syntax');
 const routes = read('app/routes.ts');
 const loader = read('app/routes/fidelity.ts');
 const features = [
