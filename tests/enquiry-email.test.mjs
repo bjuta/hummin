@@ -1,5 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
+import fs from 'node:fs';
 import { enquiryNotification,enquiryAcknowledgement } from '../app/lib/enquiry-email.server.ts';
 import {
  contactInternalEmail,contactReceivedEmail,assessmentResultsEmail,
@@ -32,8 +33,7 @@ test('All nine brand-book email types are present, unique, and complete',()=>{
   assert.ok(x.subject && x.preheader && x.text && x.html && x.recipient);
   assert.match(x.html,/max-width:600px/);
   assert.match(x.html,/mark-light\.png/);
-  assert.match(x.html,/mark-dark\.png/);
-  assert.match(x.html,/motif\.svg/);
+  assert.doesNotMatch(x.html,/mark-dark\.png|motif\.svg/);
   assert.match(x.html,/#1E272A/);
   assert.match(x.html,/#B5532C/);
   assert.match(x.html,/Embedded advisory and execution/);
@@ -94,4 +94,13 @@ test('Newsletter verification is never confused with a monthly edition',()=>{
  assert.equal(mail.sender,'newsletter');
  assert.match(mail.html,/Confirm Subscription/);
  assert.match(mail.text,/confirm/);
+});
+
+test('Email header mark exists and is hosted on the active production Worker',()=>{
+ const png=fs.readFileSync('public/email/mark-light.png');
+ assert.ok(png.length>200);
+ assert.equal(png.subarray(0,8).toString('hex'),'89504e470d0a1a0a');
+ const mail=enquiryNotification(contact,'reference-email-logo','https://hummin.org');
+ assert.match(mail.html,/https:\/\/hummin-web-production\.grimpossible\.workers\.dev\/email\/mark-light\.png/);
+ assert.doesNotMatch(mail.html,/https:\/\/hummin\.org\/email\/mark-light\.png/);
 });
