@@ -40,11 +40,15 @@ export async function loader({ request, context }: { request: Request; context: 
   return base+'<meta property="article:published_time" content="'+article.date+'"><script type="application/ld+json">'+JSON.stringify(data)+'</script>';
  })():'';
  const resize='<script>window.addEventListener("message",function(e){if(e.origin!==window.location.origin||!e.data||!Number.isFinite(e.data.humminInsightsHeight))return;var f=document.getElementById("hummin-insights-frame");if(f&&e.source===f.contentWindow)f.style.height=Math.min(20000,Math.max(400,Math.ceil(e.data.humminInsightsHeight)))+"px";});</script>';
- const html=(await response.text()).replace("</head>",meta+config+script+resize+"</head>");
+ let html=(await response.text()).replace("</head>",meta+config+script+resize+"</head>");
  // Stage and preview Workers are always excluded from indexing. Only the
  // explicitly approved public hostnames may be indexed after domain cutover.
  const hostname=new URL(request.url).hostname.toLowerCase();
  const isPublicHost=hostname==="hummin.org"||hostname==="www.hummin.org";
+ // The restored design assets themselves are intentionally noindex to avoid
+ // indexing duplicate raw design paths. Strip that tag only from approved
+ // public-facing route responses on the real HUMMIN domain.
+ if(isPublicHost)html=html.replace('<meta name="robots" content="noindex,nofollow">','');
  const headers:Record<string,string>={"Content-Type":"text/html; charset=utf-8","Cache-Control":"no-store"};
  if(!isPublicHost)headers["X-Robots-Tag"]="noindex, nofollow";
  return new Response(html,{status:response.status,headers});
