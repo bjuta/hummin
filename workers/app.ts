@@ -1,4 +1,5 @@
 import { createRequestHandler } from "react-router";
+import {runMailWorker} from "../app/lib/mail-cron.server.ts";
 import type { D1Database, ExecutionContext, Fetcher } from "@cloudflare/workers-types";
 
 export interface HumminEnv {
@@ -31,5 +32,8 @@ const requestHandler = createRequestHandler(
 export default {
   fetch(request: Request, env: HumminEnv, ctx: ExecutionContext) {
     return requestHandler(request, { cloudflare: { env, ctx } });
+  },
+  async scheduled(_controller:ScheduledController,env:HumminEnv,ctx:ExecutionContext){
+    ctx.waitUntil(runMailWorker(env).then(()=>undefined).catch(e=>console.error("Scheduled email delivery failed",e instanceof Error?e.message:"unknown")));
   }
 };
