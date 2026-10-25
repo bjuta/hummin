@@ -302,7 +302,7 @@ class Component extends DCLogic {`);
     this._onHumminRouteMessage=(event)=>{
       if(event.origin!==window.location.origin||event.source!==window.parent)return;
       const path=event.data?.humminNavigate;
-      if(typeof path!=='string'||!/^\/insights(?:\/[^?#]*)?$/.test(path))return;
+      if(typeof path!=='string'||(path!=='/insights'&&!path.startsWith('/insights/')))return;
       const parts=path.split('/').filter(Boolean);
       if(parts[1]==='author'&&AUTHORS[parts[2]])this.setState({view:'author',slug:null,author:parts[2],topic:null});
       else if(parts[1]==='topic'){
