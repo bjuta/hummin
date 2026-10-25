@@ -22,7 +22,8 @@
 - [ ] Calendar credentials exist in preview and a historical confirmed record is present; earlier documentation claims a test dated 28 October 2026, which is later than this audit date. Repeat and record a contemporaneous acceptance with timestamp and consent before marking Google Calendar verified.
 - [ ] Confirm invitation receipt, cancellation/reconciliation behaviour, and an end-to-end appointment through the published assessment UI.
 - [x] Source implementation: D1-backed anonymous rate limits, booking Turnstile verification and dual booking feature gates (commit `b59832d6`, pending end-to-end acceptance).
-- [ ] Deploy migration `0010_booking_abuse.sql` through Wrangler to both isolated D1 environments before enabling booking. Confirm DB table and quotas behave under concurrent requests.
+- [x] Preview D1 schema for `0010_booking_abuse.sql` applied directly and all three objects verified on 26 October 2026. Preview has no Wrangler migration ledger; do not present this as a tracked migration.
+- [ ] Apply `0010_booking_abuse.sql` through the approved Wrangler workflow to isolated Production Staging. Confirm D1 migration ledger and quota behavior before activation.
 - [ ] Run controlled Turnstile browser acceptance on an authorised preview hostname; verify success, replay rejection, wrong action, missing token, and rate limiting.
 - [ ] Verify one genuine Google Calendar reservation (FreeBusy, invitation receipt, Meet link, Google event and D1 record), conflicting simultaneous requests and moved/cancelled appointment reconciliation.
 - [ ] Verify Google event insert timeout and database confirmation failures recover without creating ghost bookings; verify booking confirmation and reminder messages arrive in intended inboxes.
