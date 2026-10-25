@@ -146,7 +146,7 @@ export function InsightsEditorScreen({data,original,selected}:{data:Data;origina
  <div><span style={muted}>Topics</span><div style={{display:"flex",flexWrap:"wrap",gap:6,marginTop:6}}>{topicOptions.map(t=><button key={t} type="button" aria-pressed={post.topics.includes(t)} onClick={()=>change({topics:post.topics.includes(t)?post.topics.filter(x=>x!==t):[...post.topics,t]})} style={{padding:"6px 10px",borderRadius:99,fontSize:12,fontWeight:600,border:"1px solid #D0D8D2",background:post.topics.includes(t)?"#1E272A":"white",color:post.topics.includes(t)?"white":"#1E272A"}}>{t}</button>)}</div></div>
  <span style={muted}>{post.author||"HUMMIN"} · {words} words · {Math.max(1,Math.ceil(words/220))} min read</span>
  <button type="submit" name="operation" value="post_save" style={btn} disabled={pending}>Save Draft</button>
- <button type="submit" name="operation" value="post_publish" style={{...btn,background:"#1E272A"}} disabled={pending}>{post.status==="published"?"Update":"Publish"}</button>
+ <button type="submit" name="operation" value="post_publish" style={{...btn,background:"#1E272A",opacity:.5}} disabled title="Public publishing is not connected yet">{post.status==="published"?"Update":"Publish"}</button>
  <small style={{...muted,lineHeight:1.6}}>CMS records are stored and versioned. Public article rendering still uses the current bundled source; publishing to the public site will only be enabled after the rendering adapter is validated.</small>
  </div></div></Form></div>;
 }
