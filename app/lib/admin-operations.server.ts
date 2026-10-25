@@ -16,6 +16,11 @@ export async function operationsData(env:HumminEnv,u:AdminUser,view:string,selec
   const settings=await db.prepare("SELECT kind,subject,preheader,enabled,revision,updated_at FROM admin_email_template_settings ORDER BY kind").all();
   return {records:settings.results||[],details:[]};
  }
+ if(view==="analytics"&&(u.role==="owner"||u.role==="sales")){
+  const daily=await db.prepare("SELECT day,path,channel,views FROM web_analytics_daily WHERE day>=date('now','-90 days') ORDER BY day DESC,views DESC LIMIT 1000").all();
+  const conversion=await db.prepare("SELECT (SELECT COUNT(*) FROM enquiries WHERE submitted_at>=datetime('now','-30 days')) AS enquiries,(SELECT COUNT(*) FROM assessment_deliveries WHERE created_at>=datetime('now','-30 days')) AS assessments,(SELECT COUNT(*) FROM booking_slots WHERE created_at>=datetime('now','-30 days') AND status='confirmed') AS bookings").first();
+  return {records:daily.results||[],details:conversion?[conversion]:[]};
+ }
  if(view==="settings"&&u.role==="owner"){
   const draft=await db.prepare("SELECT assumptions_json,weights_json,revision,updated_at FROM admin_assessment_drafts WHERE id=1").first();
   return {records:draft?[draft]:[],details:[]};
