@@ -160,6 +160,67 @@ function assessment(t){
     "<sc-if value=\"{{ showBooking }}\" hint-placeholder-val=\"{{ false }}\"><p role=\"status\" style=\"font-family:Figtree,sans-serif;font-size:14px;color:#B5532C;padding:8px 0 18px\">{{ liveBookingNotice }}</p>");
   return t;
 }
+// Shared boot coordinator for every restored design: site, Insights, assessment.
+// A deterministic overlay masks the raw custom-element bootstrap, including
+// brief unstyled template and hydration frames across all routes.
+function brandedBoot(html,kind){
+ const script=String.raw`<style id="hummin-boot-css">
+ html.hm-booting,html.hm-booting body{background:#1E272A!important}
+ html.hm-booting body>x-dc{visibility:hidden!important}
+ #hummin-boot{position:fixed;inset:0;z-index:2147483000;background:#1E272A;display:grid;place-items:center;opacity:1;transition:opacity .28s ease;pointer-events:auto}
+ #hummin-boot.hm-ready{opacity:0;pointer-events:none}
+ .hm-boot-inner{display:grid;justify-items:center;gap:21px;padding:24px}
+ .hm-boot-symbol{width:clamp(76px,11vw,116px);height:auto;display:block;animation:hm-breathe 1.8s ease-in-out infinite}
+ .hm-boot-name{font-family:Figtree,Arial,sans-serif;color:#F4F5F1;font-size:clamp(15px,2.6vw,22px);font-weight:650;letter-spacing:.24em}
+ .hm-boot-track{width:72px;height:2px;background:rgba(244,245,241,.18);overflow:hidden;border-radius:10px}
+ .hm-boot-track:after{content:"";display:block;width:35%;height:100%;background:#B5532C;animation:hm-progress 1.45s ease-in-out infinite}
+ @keyframes hm-breathe{50%{opacity:.78;transform:translateY(-3px)}}@keyframes hm-progress{0%{transform:translateX(-100%)}100%{transform:translateX(310%)}}
+ @media(prefers-reduced-motion:reduce){.hm-boot-symbol,.hm-boot-track:after{animation:none}#hummin-boot{transition:none}}
+ </style>
+ <script>document.documentElement.classList.add('hm-booting');window.__HUMMIN_BOOT_KIND__=__KIND__;</script>`;
+ const cover=String.raw`<div id="hummin-boot" role="status" aria-label="HUMMIN is loading"><div class="hm-boot-inner"><img class="hm-boot-symbol" src="/brand/hummin-symbol.svg" alt=""><span class="hm-boot-name">HUMMIN</span><span class="hm-boot-track" aria-hidden="true"></span></div></div>
+ <script id="hummin-boot-control">(function(){
+   var ended=false,started=Date.now(),max=12000;
+   function frame(){return new Promise(function(resolve){requestAnimationFrame(function(){requestAnimationFrame(resolve)})})}
+   function fonts(){return document.fonts&&document.fonts.ready?Promise.race([document.fonts.ready,new Promise(function(resolve){setTimeout(resolve,1800)})]):Promise.resolve()}
+   function ready(){
+     if(ended)return;
+     var root=document.querySelector('x-dc');
+     if(!root||!root.children.length)return;
+     var text=root.textContent||'';
+     if(text.indexOf('HUMMIN')<0&&Date.now()-started<2500)return;
+     // For the main site, wait for the Insights iframe when present. It shares
+     // the same boot protocol and exposes a loaded state.
+     var iframe=document.getElementById('hummin-insights-frame');
+     if(iframe&&!iframe.dataset.hmLoaded&&Date.now()-started<5500)return;
+     ended=true;
+     Promise.resolve(fonts()).then(frame).then(function(){
+       document.documentElement.classList.remove('hm-booting');
+       var splash=document.getElementById('hummin-boot');
+       if(splash){splash.classList.add('hm-ready');setTimeout(function(){splash.remove()},350)}
+       try{window.parent!==window&&window.parent.postMessage({humminDesignReady:true,kind:window.__HUMMIN_BOOT_KIND__},window.location.origin)}catch(e){}
+     });
+   }
+   var obs=new MutationObserver(ready);
+   obs.observe(document.documentElement,{childList:true,subtree:true});
+   document.addEventListener('DOMContentLoaded',ready);
+   window.addEventListener('load',ready,{once:true});
+   window.addEventListener('message',function(e){
+     if(e.origin!==location.origin||!e.data||e.data.humminDesignReady!==true)return;
+     if(e.source===document.getElementById('hummin-insights-frame')?.contentWindow){
+       var f=document.getElementById('hummin-insights-frame');if(f)f.dataset.hmLoaded='true';
+       ready();
+     }
+   });
+   // Never trap users behind an endless loading screen on failed assets.
+   setTimeout(function(){if(!ended)ready()},max);
+   ready();
+ })();</script>`;
+ const init=script.replace('__KIND__',JSON.stringify(kind));
+ html=html.replace('<head>','<head>'+init);
+ html=html.replace('<body>','<body>'+cover);
+ return html;
+}
 const newSiteTemplate=JSON.parse(fs.readFileSync(path.join(folder,'site-v4.template.json'),'utf8'));
 const newManifest=read('site-v4.manifest');
 if(!newManifest||newManifest.length<4000000)throw Error('Latest HUMMIN site bundle resources are incomplete');
@@ -259,13 +320,13 @@ class Component extends DCLogic {`);
 for(const [name,fn] of [['site',site],['assessment',assessment]]){
  let src=read(name);if(!src)throw Error('Source missing: '+name);
  if(name==='site')src=src.replace(/(<script\s+type="__bundler\/manifest"[^>]*>\s*)[\s\S]*?(\s*<\/script>)/,(_m,a,b)=>a+newManifest+b);
- let html=patch(src,fn,name==='site'?newSiteTemplate:undefined);html=html.replace('<head>','<head>\n<meta name="robots" content="noindex,nofollow">');
+ let html=patch(src,fn,name==='site'?newSiteTemplate:undefined);html=html.replace('<head>','<head>\n<meta name="robots" content="noindex,nofollow">');html=brandedBoot(html,name);
  if(name==='assessment')html=html.replace('</head>','<script>window.humminAssessmentTurnstile=function(){window.dispatchEvent(new Event("hummin-assessment-turnstile"));};</script><script src="https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit&onload=humminAssessmentTurnstile" async defer></script></head>');
  const dir=path.join('public','design',name);fs.mkdirSync(dir,{recursive:true});fs.writeFileSync(path.join(dir,'index.html'),html);
  console.log('Restored high-fidelity '+name+' ('+html.length+' characters)');
 }
 const insightSource=read('site').replace(/(<script\s+type="__bundler\/manifest"[^>]*>\s*)[\s\S]*?(\s*<\/script>)/,(_m,a,b)=>a+newManifest+b);
-const insightHtml=patch(insightSource,insightTemplate,fullInsight).replace('<head>','<head>\\n<meta name="robots" content="noindex,nofollow">');
+const insightHtml=brandedBoot(patch(insightSource,insightTemplate,fullInsight).replace('<head>','<head>\\n<meta name="robots" content="noindex,nofollow">'),'insights');
 fs.mkdirSync(path.join('public','design','insights'),{recursive:true});
 fs.writeFileSync(path.join('public','design','insights','index.html'),insightHtml);
 console.log('Restored original HUMMIN Insights index and articles ('+insightHtml.length+' characters)');
