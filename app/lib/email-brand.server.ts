@@ -18,6 +18,7 @@ export type BrandEmail = {
  recipient: string;
  sender: "people" | "system";
  replyTo?: string;
+ unsubscribeUrl?: string;
 };
 
 export type EmailSpec = {
@@ -38,6 +39,7 @@ export type EmailSpec = {
  secondary?: {label:string;url:string};
  note?: string;
  footer: string;
+ unsubscribeUrl?: string;
  heroImage?: {url:string;alt:string};
 };
 
@@ -87,7 +89,8 @@ export function renderBrandEmail(spec:EmailSpec,assetOrigin:string):BrandEmail {
   ...(spec.primary?[spec.primary.label+": "+url(spec.primary.url)]:[]),
   ...(spec.secondary?[spec.secondary.label+": "+url(spec.secondary.url)]:[]),
   ...(spec.note?[spec.note]:[]),
-  spec.footer
+  spec.footer,
+  ...(spec.unsubscribeUrl?["Unsubscribe: "+url(spec.unsubscribeUrl)]:[])
  ];
  const text=[
   "HUMMIN", "", ...messageParts.filter(Boolean),"",
@@ -125,8 +128,10 @@ export function renderBrandEmail(spec:EmailSpec,assetOrigin:string):BrandEmail {
  '<div style="padding-top:9px;">Embedded advisory and execution. Nairobi, Kenya</div>'+
  '<div style="padding-top:5px;"><a href="https://hummin.org" style="color:'+EMBER+';font-weight:600;text-decoration:none;">hummin.org</a> &nbsp;·&nbsp; <a href="mailto:sales@hummin.org" style="color:'+EMBER+';font-weight:600;text-decoration:none;">sales@hummin.org</a></div>'+
  '<div style="padding-top:8px;">'+e(spec.footer)+'</div>'+
+ (spec.unsubscribeUrl?'<div style="padding-top:10px;"><a href="'+e(url(spec.unsubscribeUrl))+'" style="color:'+EMBER+';text-decoration:underline;text-underline-offset:3px;">Unsubscribe from Notes from HUMMIN</a></div>':"")+
  '</td></tr></table></td></tr></table></body></html>';
  return {type:spec.type,recipient:spec.recipient, sender:spec.sender,
   ...(spec.replyTo?{replyTo:spec.replyTo}:{}),
+  ...(spec.unsubscribeUrl?{unsubscribeUrl:url(spec.unsubscribeUrl)}:{}),
   subject:spec.subject,preheader:spec.preheader,html,text};
 }
