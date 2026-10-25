@@ -156,7 +156,8 @@ export function monthlyNewsletterEmail(a:{
   title:a.title,paragraphs:a.paragraphs,
   ...(a.heroUrl?{heroImage:{url:a.heroUrl,alt:a.heroAlt||"Editorial photograph"}}:{}),
   primary:{label:"Read the Full Note",url:a.articleUrl},
-  footer:"You receive this because you subscribed on hummin.org. Unsubscribe: "+a.unsubscribeUrl
+  footer:"You receive this because you subscribed on hummin.org.",
+  unsubscribeUrl:a.unsubscribeUrl
  },a.assetOrigin);
 }
 
