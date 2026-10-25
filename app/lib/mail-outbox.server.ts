@@ -1,5 +1,6 @@
 import type {HumminEnv} from "../../workers/app";
 import type {BrandEmail} from "./email-brand.server.ts";
+import {readBookingEvent} from "./calendar.server.ts";
 export async function queueEmail(env:HumminEnv,key:string,email:BrandEmail,delay?:Date){
  if(!env.DB)throw Error("Mail database is not available");
  const payload=JSON.stringify(email);
@@ -23,6 +24,19 @@ export async function deliverDue(env:HumminEnv,limit=12):Promise<{sent:number;fa
     const active=await env.DB.prepare("SELECT status FROM newsletter_subscribers WHERE email=?").bind(row.recipient).first<{status:string}>();
     if(approved?.status!=="approved"||active?.status!=="active"){
      await env.DB.prepare("DELETE FROM email_outbox WHERE id=? AND status='sending'").bind(row.id).run();
+     continue;
+    }
+   }
+   if(row.kind==="booking-reminder"){
+    const id=row.id.slice("booking-reminder:".length);
+    const booked=await env.DB.prepare("SELECT start_utc,status FROM booking_slots WHERE google_event_id=?").bind(id).first<{start_utc:string;status:string}>();
+    if(!booked||booked.status!=="confirmed"){
+     await env.DB.prepare("DELETE FROM email_outbox WHERE id=?").bind(row.id).run();
+     continue;
+    }
+    const calendar=await readBookingEvent(env,id);
+    if(calendar.status!=="confirmed"||!calendar.start||Date.parse(calendar.start)!==Date.parse(booked.start_utc)){
+     await env.DB.prepare("DELETE FROM email_outbox WHERE id=?").bind(row.id).run();
      continue;
     }
    }
