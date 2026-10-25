@@ -40,7 +40,7 @@ export async function liveSlots(e:HumminEnv):Promise<SlotDay[]>{
   return {date,slots};
  });
 }
-export async function reserve(e:HumminEnv,input:{start:string;name:string;email:string;phone:string}):Promise<{eventId:string;calendarUrl:string}>{
+export async function reserve(e:HumminEnv,input:{start:string;name:string;email:string;phone:string}):Promise<{eventId:string;calendarUrl:string;meetUrl:string}>{
  if(!isConfigured(e)||!e.DB)throw Error("Booking is not configured");
  const days=await liveSlots(e);
  if(!days.some(d=>d.slots.includes(input.start)))throw Error("That time is no longer available");
@@ -59,7 +59,7 @@ export async function reserve(e:HumminEnv,input:{start:string;name:string;email:
    body:JSON.stringify({summary:"HUMMIN business assessment results review",description:"30-minute consultation arranged on hummin.org.",start:{dateTime:input.start},end:{dateTime:end},attendees:[{email:input.email}],conferenceData:{createRequest:{requestId:holdId,conferenceSolutionKey:{type:"hangoutsMeet"}}}})
   });
   if(!result.ok)throw Error("Calendar did not accept the appointment");
-  const event=await result.json() as {id?:string;htmlLink?:string};
+  const event=await result.json() as {id?:string;htmlLink?:string;hangoutLink?:string;conferenceData?:{entryPoints?:{entryPointType?:string;uri?:string}[]}};
   if(!event.id)throw Error("Calendar did not confirm the appointment");
   // An event in Google Calendar is not a complete booking until D1 also records it.
   // Leave its hold in place if D1 fails; do not remove it and accidentally free the slot.
@@ -70,7 +70,7 @@ export async function reserve(e:HumminEnv,input:{start:string;name:string;email:
    console.error("Calendar event was created but booking persistence failed; manual reconciliation required",holdId);
    throw Error("BOOKING_RECONCILIATION_REQUIRED");
   }
-  return {eventId:event.id,calendarUrl:event.htmlLink||""};
+  return {eventId:event.id,calendarUrl:event.htmlLink||"",meetUrl:event.hangoutLink||event.conferenceData?.entryPoints?.find(p=>p.entryPointType==="video")?.uri||""};
  }catch(error){
   if(error instanceof Error && error.message==="BOOKING_RECONCILIATION_REQUIRED")throw error;
   try{await e.DB.prepare("DELETE FROM booking_slots WHERE id=? AND status='held'").bind(holdId).run();}catch{console.error("Unable to release booking hold",holdId);}
