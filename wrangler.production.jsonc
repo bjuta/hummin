@@ -1,0 +1,37 @@
+{
+  "name": "hummin-web-production",
+  "main": "./workers/app.ts",
+  "compatibility_date": "2026-10-01",
+  "compatibility_flags": [
+    "nodejs_compat"
+  ],
+  "workers_dev": true,
+  "observability": {
+    "enabled": true
+  },
+  "triggers": {
+    "crons": [
+      "*/5 * * * *"
+    ]
+  },
+  "assets": {
+    "directory": "./build/client",
+    "binding": "ASSETS"
+  },
+  "vars": {
+    "SITE_URL": "https://hummin.org",
+    "CONTACT_ENABLED": "false",
+    "BOOKING_ENABLED": "false",
+    "BOOKING_AVAILABILITY_ENABLED": "false",
+    "ADMIN_AUTH_ENABLED": "false",
+    "TURNSTILE_SITE_KEY": ""
+  },
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "hummin-web-production",
+      "database_id": "acd04e85-a433-463b-865f-a01f8aac3e27",
+      "migrations_dir": "migrations"
+    }
+  ]
+}
