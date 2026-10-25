@@ -167,6 +167,41 @@ const bundleAsset=JSON.parse(newManifest);
 const fullInsight=zlib.gunzipSync(Buffer.from(bundleAsset['cc88240e-e27d-4718-b37a-5fab22025705'].data,'base64')).toString('utf8');
 function insightTemplate(t){
  t=need(t,'<script src="./support.js"></script>','<script src="cc0357d2-2a09-4861-907c-461f1ee3894d"></script>');
+ const oldMount="  componentDidMount() { this._nonce = this.props.openNonce; if (this.props.openPost) this.setState({ view: 'post', slug: this.props.openPost }); }";
+ const mounted=`  componentDidMount() {
+    const locationPath = window.parent!==window ? window.parent.location.pathname : window.location.pathname;
+    const parts=locationPath.split('/').filter(Boolean);
+    if(parts[0]==='insights' && parts[1]==='author' && ['team','muiruri'].includes(parts[2]))this.setState({view:'author',author:parts[2]});
+    else if(parts[0]==='insights' && parts[1]==='topic'){
+      const name=TOPICS.find(x=>slugify(x.name)===parts[2]);if(name)this.setState({view:'topic',topic:name.name});
+    }else if(parts[0]==='insights' && parts[1] && POSTS.some(x=>x.slug===parts[1]))this.setState({view:'post',slug:parts[1]});
+    this._heightObserver=new ResizeObserver(()=>this.sendHeight());
+    this._heightObserver.observe(document.body);
+    this.sendHeight();
+  }
+  sendHeight(){if(window.parent!==window)window.parent.postMessage({humminInsightsHeight:Math.max(document.body.scrollHeight,document.documentElement.scrollHeight)},window.location.origin);}
+ `;
+ t=need(t,oldMount,mounted);
+ t=need(t,"  componentWillUnmount() { clearTimeout(this._ct); }","  componentWillUnmount() { clearTimeout(this._ct);this._heightObserver?.disconnect(); }");
+ t=need(t,"  go(view, extra) { this.setState({ view, ...(extra || {}) }); const sc = this.scroller(); if (sc) sc.scrollTop = 0; else window.scrollTo({ top: 0 }); }",
+ `  go(view,extra){
+    const data=extra||{};
+    const path=view==='post' ? '/insights/'+data.slug : view==='author' ? '/insights/author/'+data.author : view==='topic' ? '/insights/topic/'+slugify(data.topic||'') : '/insights';
+    if(window.parent!==window){window.parent.location.assign(path);return;}
+    this.setState({view,...data});
+    window.history.pushState({},'',path);
+    window.scrollTo({top:0});
+  }`);
+ t=need(t,"    v.toAssess = () => this.props.onAssess && this.props.onAssess();","    v.toAssess = () => window.parent.location.assign('/assessment');");
+ t=need(t,"    v.toContact = () => this.props.onContact && this.props.onContact();","    v.toContact = () => window.parent.location.assign('/contact');");
+ t=need(t,"    v.toCore = () => this.props.onNav && this.props.onNav('core');","    v.toCore = () => window.parent.location.assign('/applied-expertise');");
+ t=need(t,"const url = 'https://hummin.org/insights/' + p.slug","const url = window.parent.location.origin + '/insights/' + p.slug");
+ const oldSubscribe="    v.subscribe = () => { if (!EMAIL_RE.test(s.subEmail.trim())) { this.setState({ subErr: 'Enter a valid email, such as name@business.com.' }); const el = document.getElementById('sub-email'); if (el) el.focus(); return; } this.setState({ subDone: true }); };";
+ t=need(t,oldSubscribe,"    v.subscribe = () => { if (!EMAIL_RE.test(s.subEmail.trim())) { this.setState({ subErr: 'Enter a valid email, such as name@business.com.' }); return; } window.parent.location.assign('/newsletter?email='+encodeURIComponent(s.subEmail.trim())); };");
+ t=need(t,"      send: () => this.setState(s => ({ dl: { ...s.dl, [id]: EMAIL_RE.test((s.dlEmail[id] || '').trim()) ? 'sent' : 'err' } })) };",
+ "      send: () => { const value=(this.state.dlEmail[id]||'').trim(); if(!EMAIL_RE.test(value)){this.setState(s=>({dl:{...s.dl,[id]:'err'}}));return;}window.parent.location.assign('/insights/download/'+encodeURIComponent(id)+'?email='+encodeURIComponent(value)); } };");
+ t=need(t,"act: () => { if (d.gated) { this.setState(s => ({ dl: { ...s.dl, [id]: 'form' } })); setTimeout(() => { const el = document.getElementById('dl-' + id); if (el) el.focus(); }, 60); } else this.setState(s => ({ dl: { ...s.dl, [id]: 'done' } })); },",
+ "act: () => { if(d.gated){this.setState(s=>({dl:{...s.dl,[id]:'form'}}));}else{window.open('/downloads/enquiry-log.pdf','_blank','noopener');} },");
  return t;
 }
 for(const [name,fn] of [['site',site],['assessment',assessment]]){
