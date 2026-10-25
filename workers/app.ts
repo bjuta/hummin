@@ -18,6 +18,7 @@ export interface HumminEnv {
   SITE_URL?: string;
   CONTACT_ENABLED?: string;
   BOOKING_ENABLED?: string;
+  BOOKING_AVAILABILITY_ENABLED?: string;
   GOOGLE_CALENDAR_ID?: string;
   GOOGLE_CLIENT_ID?: string;
   GOOGLE_CLIENT_SECRET?: string;

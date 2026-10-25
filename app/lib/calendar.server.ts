@@ -2,7 +2,7 @@ import type { HumminEnv } from "../../workers/app";
 export type SlotDay = {date:string;slots:string[]};
 const hours:[[number,number],...[number,number][]]=[[9,0],[9,30],[10,0],[11,0],[11,30],[14,0],[14,30],[15,30],[16,0]];
 export const hasCalendarCredentials=(e:HumminEnv)=>!!(e.DB&&e.GOOGLE_CALENDAR_ID&&e.GOOGLE_CLIENT_ID&&e.GOOGLE_CLIENT_SECRET&&e.GOOGLE_REFRESH_TOKEN);
-export const isConfigured=(e:HumminEnv)=>e.BOOKING_ENABLED==="true"&&hasCalendarCredentials(e);
+export const isConfigured=(e:HumminEnv)=>e.BOOKING_ENABLED==="true"&&e.BOOKING_AVAILABILITY_ENABLED==="true"&&hasCalendarCredentials(e);
 async function accessToken(e:HumminEnv):Promise<string>{
  const body=new URLSearchParams({client_id:e.GOOGLE_CLIENT_ID!,client_secret:e.GOOGLE_CLIENT_SECRET!,refresh_token:e.GOOGLE_REFRESH_TOKEN!,grant_type:"refresh_token"});
  const r=await fetch("https://oauth2.googleapis.com/token",{method:"POST",headers:{"Content-Type":"application/x-www-form-urlencoded"},body});

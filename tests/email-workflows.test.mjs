@@ -1,6 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
+import {hasCalendarCredentials,isConfigured} from '../app/lib/calendar.server.ts';
 import {queueEmail,deliverDue} from '../app/lib/mail-outbox.server.ts';
 import {contactReceivedEmail} from '../app/lib/email-templates.server.ts';
 
@@ -142,4 +143,16 @@ test('Every active email workflow has a real trigger or explicit feature gate',(
  assert.match(read('app/routes/newsletter.unsubscribe.tsx'),/status='unsubscribed'/);
  assert.match(read('app/lib/newsletter-runner.server.ts'),/status='approved'/);
  assert.match(read('workers/app.ts'),/scheduled\(/);
+});
+
+test('Booking remains closed unless both feature gates and Google credentials are ready',()=>{
+ const calendar={DB:{},GOOGLE_CALENDAR_ID:'test-calendar',GOOGLE_CLIENT_ID:'test-id',GOOGLE_CLIENT_SECRET:'test-secret',GOOGLE_REFRESH_TOKEN:'test-refresh'};
+ assert.equal(hasCalendarCredentials(calendar),true);
+ for(const [booking,availability] of [['false','false'],['true','false'],['false','true']]){
+  assert.equal(isConfigured({...calendar,BOOKING_ENABLED:booking,BOOKING_AVAILABILITY_ENABLED:availability}),false);
+ }
+ assert.equal(isConfigured({...calendar,BOOKING_ENABLED:'true',BOOKING_AVAILABILITY_ENABLED:'true'}),true);
+ assert.equal(isConfigured({...calendar,BOOKING_ENABLED:'true',BOOKING_AVAILABILITY_ENABLED:'true',GOOGLE_REFRESH_TOKEN:undefined}),false);
+ assert.match(fs.readFileSync('app/routes/booking.slots.ts','utf8'),/!isConfigured\(env\)/);
+ assert.match(fs.readFileSync('app/routes/booking.reserve.ts','utf8'),/!isConfigured\(env\)/);
 });

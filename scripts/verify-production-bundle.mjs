@@ -4,6 +4,7 @@ const cfg=JSON.parse(readFileSync("build/server/wrangler.json","utf8"));
 assert.equal(cfg.name,"hummin-web-production");
 assert.equal(cfg.vars.CONTACT_ENABLED,"true");
 assert.equal(cfg.vars.BOOKING_ENABLED,"true");
+assert.equal(cfg.vars.BOOKING_AVAILABILITY_ENABLED,"false","Unvalidated public calendar reservations must remain closed");
 assert.equal(cfg.vars.ADMIN_AUTH_ENABLED,"true");
 assert.equal(cfg.d1_databases?.[0]?.database_id,"acd04e85-a433-463b-865f-a01f8aac3e27");
 assert.ok(cfg.main,"Bundled server entry required");
