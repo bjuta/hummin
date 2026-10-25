@@ -36,6 +36,7 @@ jobs:
       - run: npm install --no-audit --no-fund
       - run: npm run check:production:config
       - run: npm run verify:production:migrations
+      - run: npm run verify:production:wrangler-migrations
       - run: npm run verify:seo
       - run: npm run typecheck
       - run: npm run build
