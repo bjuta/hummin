@@ -112,6 +112,12 @@ for(const width of [390,768,1440]){
     }
    }
    if(kind==="contact")assert.ok(await page.locator(".hr-contact-form").count()||await page.getByText("temporarily unavailable").count());
+   if(kind==="contact"){
+    const icons=page.locator(".hr-contact-icon");
+    assert.equal(await icons.count(),2,"Original source mail and Nairobi location icons");
+    const decoded=await icons.evaluateAll(async items=>Promise.all(items.map(async img=>{try{await img.decode();return img.naturalWidth>8}catch{return false}})));
+    assert.ok(decoded.every(Boolean),"Original contact SVG assets must decode");
+   }
    if(width===1440&&kind==="eng"){
     await page.getByRole("tab",{name:"Residency"}).click();
     assert.equal(await page.getByRole("tab",{name:"Residency"}).getAttribute("aria-selected"),"true","Residency comparison panel responds");
