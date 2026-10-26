@@ -43,7 +43,10 @@ for(const width of [390,1440]){
     assert.equal(information.iframe,0);
    }
    if(entry==="insights"){
-    assert.ok(await page.locator(".hr-insights-card").count()>=4,"Original HUMMIN posts");
+    assert.equal(await page.locator(".hr-insights-featured").count(),1,"Source featured editorial article");
+    assert.ok(await page.locator(".hr-insights-landing-card").count()>=3,"Original Latest cards");
+    assert.equal(await page.locator(".hr-insights-download-card").count(),2,"Source tools");
+    assert.equal(await page.locator(".ra-source-newsletter").count(),1,"Source newsletter");
     await page.getByRole("button",{name:"Guides"}).click();
     assert.ok(await page.locator(".hr-insights-card").count()>=1);
     await page.getByRole("button",{name:"All",exact:true}).click();
