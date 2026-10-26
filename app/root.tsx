@@ -46,7 +46,7 @@ function Header(){
           <svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg>}
         </button>
         <Link to="/" className="hm-site-brand" onClick={()=>setMenu(false)} aria-label="HUMMIN, go to home page">
-          <img src="/email/mark-dark.png" width="42" height="42" alt=""/>
+          <img src="/brand/hummin-symbol.svg" width="42" height="42" alt=""/>
           <span>HUMMIN</span>
         </Link>
       </div>
