@@ -61,7 +61,7 @@ export function ReactInsightArticle({post,posts,base}:Props){
     <Link to={base} className="ra-source-back">← All Insights</Link>
     <div className="ra-source-pills"><span>{post.type==="guide"?"Guide":post.type==="opinion"?"Opinion":"News"}</span>{post.topics.map(t=><Link key={t} to={base+"/topic/"+articleId(t)}>{t}</Link>)}</div>
     <h1>{post.title}</h1><p>{post.excerpt}</p>
-    <div className="ra-source-byline"><Link to={base+"/author/"+post.author} className="ra-source-avatar"><img src="/brand/hummin-symbol.svg" alt=""/></Link><Link to={base+"/author/"+post.author}>{authors[post.author]}</Link><time dateTime={post.date}>{niceDate(post.date)}</time><span>{minutes(post)} min read</span></div>
+    <div className="ra-source-byline"><Link to={base+"/author/"+post.author} className="ra-source-avatar" aria-label={"Read more about "+authors[post.author]}><img src="/brand/hummin-symbol.svg" alt=""/></Link><Link to={base+"/author/"+post.author}>{authors[post.author]}</Link><time dateTime={post.date}>{niceDate(post.date)}</time><span>{minutes(post)} min read</span></div>
    </div>
   </header>
   <div className="ra-source-body">
