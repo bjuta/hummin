@@ -16,7 +16,7 @@ for(const width of [390,1440]){
    await page.waitForTimeout(2800);
    const body=await page.evaluate(()=>({title:document.title,height:document.scrollingElement.scrollHeight,h1:document.querySelector("h1")?.innerText.slice(0,90),hasOriginal:!!document.querySelector("[data-dc-tpl]"),iframe:document.querySelectorAll("iframe").length}));
    console.log("REFERENCE",path,width,response.status(),JSON.stringify(body));
-   await page.screenshot({path:"artifacts/original-parity/"+width+"-"+(path.replaceAll("/","_")||"root")+".png",animations:"disabled",fullPage:false});
+   await page.screenshot({path:"artifacts/original-parity/"+width+"-"+(path.replaceAll("/","_")||"root")+".png",animations:"disabled",fullPage:["/","/how-we-work","/applied-expertise","/engagements","/who-we-work-with","/about"].includes(path)});
   }catch(e){console.log("REFERENCE ERROR",path,width,String(e).slice(0,240))}
   finally{await page.close()}
  }
