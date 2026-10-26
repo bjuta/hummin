@@ -128,9 +128,9 @@ function Engagements(){
  return <div className="hr-page"><Hero page="eng"/><section className="hr-section">
   <div className="hr-section-headline"><SectionTitle>Compare the three.</SectionTitle><div className="hr-pill-tabs" role="tablist" aria-label="Choose an engagement">{TIERS.map((t,i)=><button key={t.name} role="tab" aria-selected={active===i} id={"hr-tier-tab-"+i} aria-controls="hr-tier-panel" onClick={()=>setActive(i)} className={active===i?"active":""}>{t.name}</button>)}</div></div>
   <div className="hr-comparison-scroll" role="tabpanel" id="hr-tier-panel" aria-labelledby={"hr-tier-tab-"+active} tabIndex={0}><div className="hr-comparison">
-   <div/><>{TIERS.map((t,i)=><button key={t.name} type="button" className={"hr-comparison-head"+(active===i?" active":"")} onClick={()=>setActive(i)}><span>{t.tag}</span><strong>{t.name}</strong></button>)}</>
-   {TIER_ROWS.map(([label,key])=><div className="hr-comparison-row" key={label}><strong>{label}</strong>{TIERS.map((t,i)=><div key={t.name} className={active===i?"active":""}>{t[key as typeof keys[number]]}</div>)}</div>)}
-  </div></div><div className="hr-engagement-cta"><HButton to="/contact">Discuss a {TIERS[active].name} →</HButton><span>Not sure which fits? Most clients start with a Review.</span></div>
+   <div/><>{TIERS.map((t,i)=><button key={t.name} type="button" className={"hr-comparison-head hr-tier-"+i+(active===i?" active":"")} onClick={()=>setActive(i)}><span>{t.tag}</span><strong>{t.name}</strong></button>)}</>
+   {TIER_ROWS.map(([label,key])=><div className="hr-comparison-row" key={label}><strong>{label}</strong>{TIERS.map((t,i)=><div key={t.name} className={"hr-comparison-cell hr-tier-"+i+(active===i?" active":"")}>{t[key as typeof keys[number]]}</div>)}</div>)}
+  </div></div><div className="hr-engagement-cta"><HButton to="/contact">Discuss a {TIERS[active].name}</HButton><span>Not sure which fits? Most clients start with a Review.</span></div>
  </section><section className="hr-residency"><img src="/brand/residency.webp" alt="A HUMMIN professional working at a client desk" loading="lazy"/><div><span className="hr-eyebrow">About Residency</span><h2>Inside your team. Employed by HUMMIN.</h2><p>Resident professionals stay HUMMIN employees. We manage and support them. Their role, hours, access to information, and who they report to are agreed in writing before they start. Final decisions stay with you.</p></div></section></div>;
 }
 function Who(){
