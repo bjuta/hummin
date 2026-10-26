@@ -1,6 +1,6 @@
 import {Link,useLoaderData} from "react-router";
 import {useMemo,useState} from "react";
-import {insightsAuthors,insightTopics,insightTopicSlug} from "../lib/insights.server";
+import {insightsAuthors,insightTopics,insightTopicSlug} from "../lib/react-insights-meta";
 import "./react-insights.css";
 type Block={t:"p"|"h"|"ul"|"ol"|"dl"|"assess";text?:string;items?:string[];id?:string};
 export type ReactPost={slug:string;title:string;excerpt:string;type:"guide"|"opinion"|"news";author:"team"|"muiruri";date:string;topics:string[];blocks:Block[];featured?:boolean;steps?:string};
