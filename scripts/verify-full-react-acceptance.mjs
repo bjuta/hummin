@@ -51,7 +51,8 @@ for(const width of [390,1440]){
     assert.ok(await page.locator(".hr-insights-card").count()>=1);
    }
    if(entry==="insights/enquiries-30-day-fix"){
-    assert.ok(await page.locator(".hr-insights-article").innerText().then(s=>s.includes("When sales slow down")));
+    assert.ok(await page.locator(".ra-source-article").innerText().then(s=>s.includes("When sales slow down")));
+    for(const selector of [".ra-source-hero",".ra-source-figure",".ra-source-ol",".ra-source-download",".ra-source-assessment",".ra-source-sidebar",".ra-source-share",".ra-source-author",".ra-source-read-next",".ra-source-newsletter"])assert.equal(await page.locator(selector).count(),1,entry+" must retain "+selector);
     assert.equal(information.iframe,0);
    }
    if(entry==="assessment"&&width===390){
