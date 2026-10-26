@@ -2,6 +2,7 @@ import type {HumminEnv} from "../../workers/app";
 import {readBookingEvent,hasCalendarCredentials} from "./calendar.server.ts";
 import {bookingConfirmationEmail,bookingReminderEmail} from "./email-templates.server.ts";
 import {queueEmail} from "./mail-outbox.server.ts";
+import {bookingEmailKey} from "./booking-email-keys.server.ts";
 /** Recover messages for booked appointments even when initial enqueue was interrupted. */
 export async function reconcileBookingEmails(env:HumminEnv):Promise<number>{
  if(!env.DB||!env.SITE_URL||!env.RESEND_API_KEY||!env.EMAIL_FROM||!hasCalendarCredentials(env))return 0;
@@ -9,7 +10,7 @@ export async function reconcileBookingEmails(env:HumminEnv):Promise<number>{
   .bind(new Date(Date.now()-1800000).toISOString()).all<{start_utc:string;end_utc:string;name:string;email:string;google_event_id:string}>();
  let queued=0;
  for(const row of bookings.results||[]){
-  const confirmationKey="booking-confirmation:"+row.google_event_id,reminderKey="booking-reminder:"+row.google_event_id;
+  const confirmationKey=bookingEmailKey("booking-confirmation",row.google_event_id,row.start_utc),reminderKey=bookingEmailKey("booking-reminder",row.google_event_id,row.start_utc);
   const tracked=await env.DB.prepare("SELECT id FROM email_outbox WHERE id=? OR id=?").bind(confirmationKey,reminderKey).all<{id:string}>();
   const keys=new Set((tracked.results||[]).map(x=>x.id));
   const reminderAt=new Date(Date.parse(row.start_utc)-86400000);
