@@ -96,3 +96,10 @@ The earlier portions of this file document historical development states and mus
 ### Final browser release-audit evidence (26 October 2026)
 
 [Final HUMMIN Staging Browser Audit #40302765186](https://github.com/bjuta/hummin/actions/runs/40302765186) passed: **18 route/viewport checks, zero browser audit failures and zero warnings**. Six routes tested at mobile 390px, tablet 768px and desktop 1440px. Accessibility scans covered both legal documents and both embedded design experiences at all widths. Keyboard activation of legal table-of-contents links was verified. CI screenshots and the JSON summary are stored in the run's `hummin-staging-browser-evidence` artifact. These are automated tests, not an independent manual usability or legal acceptance. No public-domain DNS or routes changed.
+
+## Staging rollback result (26 October 2026)
+
+- [x] Cloudflare staging Worker rollback rehearsed successfully: serving version `2cd3ae82-a012-4389-81f9-f77019c6e185` was temporarily changed to verified prior version `a8018acf-3935-4fd1-a4e5-4f9113a51441` and restored to `2cd3ae82-a012-4389-81f9-f77019c6e185` with successful API read-backs.
+- [x] Final Worker retains 19 bindings. Staging D1 still has one confirmed booking, one enquiry and zero failed email records. No database restoration, public routing change or DNS edit took place.
+- [ ] Public hostname rollback has not been exercised, and D1 time-travel restore has not been attempted; these remain distinct recovery activities.
+- [ ] Data retention policy needs owner approval before any destructive cleanup. Current scheduled worker removes expired booking rate-limit entries; it does not automatically delete enquiry, assessment, booking, or outbox personal records. Approve lawful retention periods and exceptions before implementing such deletion.
