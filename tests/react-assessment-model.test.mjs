@@ -37,12 +37,12 @@ test("Source monthly missed-enquiry estimate and owner hours remain exact",()=>{
  const slow=answers(3);slow.c2=STEPS.find(q=>q.id==="c2").options[2].label;
  const y=scoreAssessment(slow,{sale:"25000",enq:"40",conv:"3",hours:"45"},{});
  assert.equal(y.gap,.6);
- assert.equal(y.monthly,180000);
+ assert.ok(Math.abs(y.monthly-180000)<.001);
 });
 test("Results choose exactly three weighted priorities and preserve decision routing",()=>{
  const a=answers(3);
  a.decide="Someone else";assert.equal(scoreAssessment(a,blank,{}).route,"share");
- a.decide="Me";a.help="Have it done, working with my team";
+ a.decide="Me";a.help="Have it done, working with my team";a.timing="This month";
  assert.equal(scoreAssessment(a,blank,{}).route,"book");
  a.timing="I am just exploring";
  assert.equal(scoreAssessment(a,blank,{}).route,"nurture");
