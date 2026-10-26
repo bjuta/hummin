@@ -74,4 +74,11 @@ for(const name of requiredIcons){
  if(!extractedIcons.has(name+'.svg')||!extractedIcons.has(name+'-light.svg'))
   throw Error('Original HUMMIN Lucide icon pair missing: '+name);
 }
+// The source's dark carousel arrow is a separately coloured, signed SVG
+// without a Lucide class attribute; preserve its exact original resource.
+const darkArrow=manifest['cdda5423-6a0a-4897-8150-8b83c9da8fcc'];
+if(!darkArrow||darkArrow.mime!=='image/svg+xml')throw Error('Original dark carousel arrow missing');
+const darkArrowBytes=zlib.gunzipSync(Buffer.from(darkArrow.data,'base64'));
+if(!darkArrowBytes.toString('utf8').includes('<svg'))throw Error('Invalid original dark arrow');
+fs.writeFileSync(path.join(iconDirectory,'arrow-right-light.svg'),darkArrowBytes);
 console.log('Recovered original HUMMIN static Lucide icons',extractedIcons.size);
