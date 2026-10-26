@@ -21,7 +21,7 @@ export function Hero({page}:{page:Page|"contact"}){
    style={{background:page==="home"?"radial-gradient(circle at 72% 28%,#5E6967 0%,#2A3538 38%,#1E272A 70%)":HERO_STYLE[page as keyof typeof HERO_STYLE]?.bg}}>
    {art?<img className="hr-hero-photo" src={art} alt={imageAlt} loading={page==="home"?"eager":"lazy"}/>:null}
    <div className="hr-hero-gradient" aria-hidden="true"/>
-   <img className="hr-hero-motif" src="/brand/hummin-symbol.svg" alt="" aria-hidden="true"/>
+   <img className="hr-hero-motif" src="/brand/hummin-mark-mist.svg" alt="" aria-hidden="true"/>
    <div className="hr-hero-chips">
     <span>{page!=="home"?<img className="hr-hero-chip-icon" src={"/brand/icons/"+h.iconPaper+"-light.svg"} alt="" aria-hidden="true"/>:null}{page==="home"?"Embedded advisory and execution":h.label}</span>
     <span>{page==="home"?"Nairobi, Kenya":HERO_STYLE[page as keyof typeof HERO_STYLE]?.chip}</span>
