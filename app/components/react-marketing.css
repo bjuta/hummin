@@ -316,3 +316,6 @@
 .hr-definition-entries p{margin:0;font-size:clamp(18px,1.7cqw,21px);line-height:1.55}
 .hr-definition-entries em{font-family:Newsreader,Georgia,serif;font-weight:400;font-size:1.08em;color:#5E6967}
 .hr-definition-entries b{font-weight:700}
+
+/* The original commitments block is a dark, four-column section. */
+.hr-dark-section{display:grid;background:#1E272A;color:#F4F5F1}
