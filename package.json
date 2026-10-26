@@ -23,7 +23,7 @@
     "verify:admin-operations": "node --experimental-strip-types --test tests/admin-operations.test.mjs",
     "verify:analytics": "node --experimental-strip-types --test tests/analytics-events.test.mjs",
     "db:production": "wrangler d1 migrations apply hummin-web-production --config wrangler.production.jsonc --remote",
-    "deploy:production:staging": "HUMMIN_DEPLOY_TARGET=production npm run build && wrangler deploy --config build/server/wrangler.json",
+    "deploy:production:staging": "npm run verify:html-removal-ready && HUMMIN_DEPLOY_TARGET=production npm run build && wrangler deploy --config build/server/wrangler.json",
     "check:production:config": "node scripts/check-production-config.mjs",
     "verify:production:migrations": "node --experimental-sqlite scripts/verify-production-migrations.mjs",
     "verify:seo": "node --experimental-strip-types --test tests/seo-release.test.mjs tests/privacy-release.test.mjs tests/react-navigation.test.mjs tests/native-react-pages.test.mjs tests/react-assessment-model.test.mjs",
