@@ -62,3 +62,5 @@ jobs:
             assert.ok(typeof v.siteKey==='string'&&v.siteKey.length>5,'Turnstile challenge available');
             console.log('PASS isolated staging: live Google slots, Turnstile key, dual booking flags');
           "
+      - name: Validate deployed Privacy and Terms and staging routes
+        run: node scripts/check-production-staging.mjs
