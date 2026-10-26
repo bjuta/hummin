@@ -47,7 +47,7 @@ for(const width of [390,1440]){
     await page.getByRole("button",{name:"Guides"}).click();
     assert.ok(await page.locator(".hr-insights-card").count()>=1);
     await page.getByRole("button",{name:"All",exact:true}).click();
-    await page.getByPlaceholder("Find an article…").fill("enquiries");
+    await page.getByPlaceholder("Search guides, opinion, and news").fill("enquiries");
     assert.ok(await page.locator(".hr-insights-card").count()>=1);
    }
    if(entry==="insights/enquiries-30-day-fix"){
