@@ -136,31 +136,57 @@ async function stableBookingDiscrepancy(e:HumminEnv,id:string,eventId:string,sta
  .bind(id,eventId,state,start).run();
  return false;
 }
-/** Free an old slot only after a Google cancellation or move is confirmed twice. */
+/**
+ * Google is authoritative, but one transient observation never changes an
+ * appointment. A move retains the attendee, event ID and booking record;
+ * cancellation removes the slot only after an append-only audit is written.
+ */
 export async function reconcileConfirmedBookingChanges(e:HumminEnv){
- if(!hasCalendarCredentials(e)||!e.DB)return {archived:0,deferred:0};
+ if(!hasCalendarCredentials(e)||!e.DB)return {archived:0,moved:0,deferred:0};
  const rows=await e.DB.prepare("SELECT id,start_utc,email,google_event_id FROM booking_slots WHERE status='confirmed' AND google_event_id IS NOT NULL AND start_utc>? ORDER BY start_utc LIMIT 50")
  .bind(new Date(Date.now()-1800000).toISOString()).all<{id:string;start_utc:string;email:string;google_event_id:string}>();
- let archived=0,deferred=0;
+ let archived=0,movedCount=0,deferred=0;
  for(const row of rows.results||[]){
   try{
    const remote=await readBookingEvent(e,row.google_event_id);
-   const moved=remote.status==="confirmed"&&remote.start&&Date.parse(remote.start)!==Date.parse(row.start_utc);
-   if(remote.status==="confirmed"&&!moved){await clearBookingDiscrepancy(e,row.id);continue;}
-   if(remote.status==="confirmed"&&!remote.attendees?.some(x=>x.toLowerCase()===row.email.toLowerCase())){
-    deferred++;console.error("Booking attendee mismatch requires review",row.id);continue;
+   if(remote.status==="confirmed"){
+    if(!remote.start||!Number.isFinite(Date.parse(remote.start))){deferred++;continue;}
+    if(Date.parse(remote.start)===Date.parse(row.start_utc)){
+     await clearBookingDiscrepancy(e,row.id);continue;
+    }
+    if(!remote.attendees?.some(x=>x.toLowerCase()===row.email.toLowerCase())){
+     deferred++;console.error("Booking attendee mismatch requires review",row.id);continue;
+    }
    }
    const reason:BookingMismatch=remote.status==="cancelled"?"cancelled":"moved";
-   const observedStart=reason==="moved"?remote.start||"":"";
+   const observedStart=reason==="moved"?new Date(remote.start!).toISOString():"";
    if(!await stableBookingDiscrepancy(e,row.id,row.google_event_id,reason,observedStart)){deferred++;continue;}
-   await e.DB.batch([
-    e.DB.prepare("INSERT OR IGNORE INTO booking_change_audit(booking_id,google_event_id,previous_start,observed_start,reason) VALUES(?,?,?,?,?)").bind(row.id,row.google_event_id,row.start_utc,observedStart,reason),
-    e.DB.prepare("DELETE FROM booking_slots WHERE id=? AND status='confirmed'").bind(row.id),
-    e.DB.prepare("DELETE FROM email_outbox WHERE id IN (?,?) AND status IN ('pending','failed')").bind("booking-reminder:"+row.google_event_id,"booking-confirmation:"+row.google_event_id),
-    e.DB.prepare("DELETE FROM booking_discrepancies WHERE booking_id=?").bind(row.id)
-   ]);
-   archived++;
+   const audit=e.DB.prepare("INSERT INTO booking_change_history(id,booking_id,google_event_id,previous_start,observed_start,reason) VALUES(?,?,?,?,?,?)")
+    .bind(crypto.randomUUID(),row.id,row.google_event_id,row.start_utc,observedStart,reason);
+   const clearOldEmails=e.DB.prepare("DELETE FROM email_outbox WHERE status IN ('pending','failed') AND (id=? OR id=? OR id LIKE ? OR id LIKE ?)")
+    .bind("booking-confirmation:"+row.google_event_id,"booking-reminder:"+row.google_event_id,
+      "booking-confirmation:"+row.google_event_id+":%","booking-reminder:"+row.google_event_id+":%");
+   if(reason==="moved"){
+    const endTime=remote.end?Date.parse(remote.end):NaN;
+    const startTime=Date.parse(observedStart);
+    if(!Number.isFinite(endTime)||endTime<=startTime||endTime-startTime>4*3600000){
+     deferred++;console.error("Rescheduled booking has invalid Google end time",row.id);continue;
+    }
+    const update=e.DB.prepare("UPDATE booking_slots SET start_utc=?,end_utc=? WHERE id=? AND status='confirmed' AND start_utc=?")
+      .bind(observedStart,new Date(endTime).toISOString(),row.id,row.start_utc);
+    const results=await e.DB.batch([update,audit,clearOldEmails,
+     e.DB.prepare("DELETE FROM booking_discrepancies WHERE booking_id=?").bind(row.id)]);
+    if(results[0]?.meta?.changes!==1)throw Error("Booking move was not persisted");
+    movedCount++;
+   }else{
+    const results=await e.DB.batch([
+     e.DB.prepare("DELETE FROM booking_slots WHERE id=? AND status='confirmed' AND start_utc=?").bind(row.id,row.start_utc),
+     audit,clearOldEmails,e.DB.prepare("DELETE FROM booking_discrepancies WHERE booking_id=?").bind(row.id)
+    ]);
+    if(results[0]?.meta?.changes!==1)throw Error("Booking cancellation was not persisted");
+    archived++;
+   }
   }catch{deferred++;console.error("Booking change reconciliation failed",row.id);}
  }
- return {archived,deferred};
+ return {archived,moved:movedCount,deferred};
 }
