@@ -1,6 +1,7 @@
 import type {HumminEnv} from "../../workers/app";
 import type {BrandEmail} from "./email-brand.server.ts";
 import {readBookingEvent} from "./calendar.server.ts";
+import {bookingEmailIdentity} from "./booking-email-keys.server.ts";
 export async function queueEmail(env:HumminEnv,key:string,email:BrandEmail,delay?:Date){
  if(!env.DB)throw Error("Mail database is not available");
  const payload=JSON.stringify(email);
@@ -28,9 +29,11 @@ export async function deliverDue(env:HumminEnv,limit=12):Promise<{sent:number;fa
     }
    }
    if(row.kind==="booking-reminder"||row.kind==="booking-confirmation"){
-    const id=row.id.slice(row.kind==="booking-reminder"?"booking-reminder:".length:"booking-confirmation:".length);
+    const identity=bookingEmailIdentity(row.kind,row.id);
+    if(!identity)throw Error("Invalid booking outbox identity");
+    const id=identity.eventId;
     const booked=await env.DB.prepare("SELECT start_utc,status FROM booking_slots WHERE google_event_id=?").bind(id).first<{start_utc:string;status:string}>();
-    if(!booked||booked.status!=="confirmed"){
+    if(!booked||booked.status!=="confirmed"||(identity.startMs!==null&&Date.parse(booked.start_utc)!==identity.startMs)){
      await env.DB.prepare("DELETE FROM email_outbox WHERE id=?").bind(row.id).run();
      continue;
     }
