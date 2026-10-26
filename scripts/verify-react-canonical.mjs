@@ -72,7 +72,8 @@ for(const width of [390,768,1440]){
    if(kind==="assessment")assert.ok(await page.getByRole("button",{name:/Start the Assessment/}).count());
    if(kind==="contact")assert.ok(await page.locator(".hr-contact-form").count()||await page.getByText("temporarily unavailable").count());
    if(kind==="insights")assert.ok(await page.locator(".hr-insights-card").count()>=4);
-   if(kind==="article")assert.ok(await page.locator(".hr-insights-article").innerText().then(x=>x.includes("When sales slow down")));
+   if(kind==="article")assert.ok(await page.locator(".ra-source-article").innerText().then(x=>x.includes("When sales slow down")));
+   if(kind==="article"){for(const selector of [".ra-source-hero",".ra-source-figure",".ra-source-ol",".ra-source-download",".ra-source-assessment",".ra-source-sidebar",".ra-source-share",".ra-source-author",".ra-source-read-next",".ra-source-newsletter"])assert.equal(await page.locator(selector).count(),1,path+" missing original editorial feature: "+selector);}
    if(kind==="terms")assert.equal(await page.locator(".hummin-legal-section").count(),12);
    if(kind==="privacy")assert.equal(await page.locator(".hummin-legal-section").count(),8);
    // The legal article enters with a short opacity/translation animation.
