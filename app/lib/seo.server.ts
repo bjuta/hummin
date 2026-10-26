@@ -5,6 +5,17 @@ import {publishedInsights} from "./insights-public.server.ts";
 export function isHumminPublicHost(host:string){
  return host.toLowerCase()==="hummin.org"||host.toLowerCase()==="www.hummin.org";
 }
+/**
+ * A robots.txt disallow is not sufficient to exclude an unlinked staging page
+ * from search. Apply noindex to every Worker response on non-public hosts,
+ * including privacy, Admin, JSON endpoints, 404s and redirects.
+ */
+export function protectNonPublicResponse(host:string,response:Response):Response{
+ if(isHumminPublicHost(host))return response;
+ const guarded=new Response(response.body,response);
+ guarded.headers.set("X-Robots-Tag","noindex, nofollow");
+ return guarded;
+}
 export function robotsPolicy(host:string){
  if(!isHumminPublicHost(host))return "User-agent: *\nDisallow: /\n";
  return [
