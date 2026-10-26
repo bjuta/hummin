@@ -65,7 +65,7 @@ export function ReactInsightArticle({post,posts,base}:Props){
   <div className="ra-source-body">
    <div className="ra-source-article-grid">
     <article className="ra-source-article">
-     {post.figure?<figure className="ra-source-figure"><div><img src="/brand/hummin-symbol.svg" alt="" aria-hidden="true"/></div><figcaption>{post.figure}</figcaption></figure>:null}
+     {post.figure?<figure className="ra-source-figure"><div><img src="/brand/insights-article-figure.svg" alt="" aria-hidden="true"/></div><figcaption>{post.figure}</figcaption></figure>:null}
      {post.blocks.map((b,i)=><SourceBlock key={i} b={b}/>)}
      <div className="ra-source-share"><span>Share</span>{share.map(s=><a key={s.label} href={s.url} target={s.label==="Email"?undefined:"_blank"} rel={s.label==="Email"?undefined:"noopener noreferrer"}>{s.label}</a>)}<button type="button" onClick={async()=>{try{await navigator.clipboard.writeText(url);setCopied(true)}catch{setCopied(false)}}}>{copied?"Copied ✓":"Copy link"}</button></div>
      <div className="ra-source-author"><div className="ra-source-author-avatar"><img src="/brand/hummin-symbol.svg" alt=""/></div><div><strong>{authors[post.author]}</strong><p>{post.author==="team"?"Guides and news from the people who do the work.":"Founder and Managing Director, HUMMIN"}</p></div><Link to={base+"/author/"+post.author}>More from {post.author==="team"?"the team":"Muiruri"}</Link></div>
