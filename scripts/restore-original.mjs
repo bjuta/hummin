@@ -15,6 +15,15 @@ function patch(html, fn, override){
  return html.replace(re,(_whole,start,_body,end)=>start+JSON.stringify(tpl).replaceAll('</','<\\/')+end);
 }
 function site(t){
+ // Original hero typography ignored pointer events, unlike CTA buttons.
+ // Restore scroll/touch hit-testing without altering the visible design.
+ for(const gap of ["28px","24px"]){
+   const before='<div style="position:relative;pointer-events:none;width:100%;margin:0 auto;padding:0 clamp(20px,5cqw,64px) clamp(32px,5cqw,64px);display:grid;gap:'+gap+'">';
+   t=need(t,before,before.replace("pointer-events:none","pointer-events:auto"));
+ }
+ const badges='<div style="position:absolute;pointer-events:none;top:clamp(20px,3cqw,32px);left:clamp(20px,5cqw,64px);right:clamp(20px,5cqw,64px);display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap">';
+ t=need(t,badges,badges.replace("pointer-events:none","pointer-events:auto"));
+ t=need(t,badges,badges.replace("pointer-events:none","pointer-events:auto"));
  t=need(t,'<dc-import name="HUMMIN Insights" on-contact="{{ go_contact }}" on-assess="{{ go_assess }}" on-nav="{{ goPage }}" open-post="{{ insightPost }}" open-nonce="{{ insightNonce }}" hint-size="100%,1200px"></dc-import>',
  '<div class="hm-frame-shell" style="position:relative;min-height:580px;background:#F4F5F1"><div class="hm-frame-placeholder" role="status" style="position:absolute;inset:0;padding:clamp(28px,5vw,68px);background:#F4F5F1;color:#1E272A"><span style="font:600 12px Figtree,Arial,sans-serif;letter-spacing:.12em;color:#B5532C">HUMMIN / INSIGHTS</span><p style="font:400 clamp(32px,4vw,52px) Newsreader,Georgia,serif;margin:18px 0 0">Practical notes for owners.</p></div><iframe title="HUMMIN Insights articles and author profiles" src="/design/insights/index.html" style="width:100%;height:1250px;min-height:400px;border:0;display:block;background:#F4F5F1;visibility:hidden" loading="eager" id="hummin-insights-frame"></iframe></div>');
  t=need(t,"open: () => this.go('insights', { insightPost: x.slug, insightNonce: Date.now() })","open: () => this.go('insights', { insightPost: x.slug, insightNonce: Date.now() })");
