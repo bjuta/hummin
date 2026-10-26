@@ -48,7 +48,10 @@ test("Staging route cannot accidentally expose incomplete React migration on pub
  }
  const insights=read("app/routes/react.insights.preview.tsx");
  assert.match(insights,/loadReactInsights/,"Insights uses one native CMS loader on Preview and canonical routes");
- assert.match(insights,/preview:!canonical/);
+ assert.match(insights,/react-insights-loader\.server/);
+ const shared=read("app/lib/react-insights-loader.server.ts");
+ assert.match(shared,/preview:!canonical/);
+ assert.match(shared,/publishedInsights/);
 
  assert.match(read("app/routes/fidelity.ts"),/\/design\/site\/index.html/,"Live public host legacy responses remain until acceptance");
 });
