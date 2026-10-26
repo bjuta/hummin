@@ -29,10 +29,12 @@ function EditorialCard({post,base}:{post:ReactPost;base:string}){
  return <Link to={base+"/"+post.slug} className={"ra-source-related-card ra-source-related-"+post.type}><span className="ra-related-top"><span>{post.type==="guide"?"Guide":post.type==="opinion"?"Opinion":"News"}</span><span>{minutes(post)} min read</span></span><strong>{post.title}</strong></Link>;
 }
 function Newsletter(){
- const [email,setEmail]=useState(""),[token,setToken]=useState(""),[key,setKey]=useState(""),[busy,setBusy]=useState(false),[status,setStatus]=useState(""),[done,setDone]=useState(false);
+ const [email,setEmail]=useState(""),[token,setToken]=useState(""),[key,setKey]=useState(""),[busy,setBusy]=useState(false),[challenge,setChallenge]=useState(false),[status,setStatus]=useState(""),[done,setDone]=useState(false);
  useEffect(()=>{fetch("/api/email/config",{cache:"no-store"}).then(r=>r.json()).then((raw:unknown)=>{const d=raw as {ready?:boolean;siteKey?:string};if(d.ready&&d.siteKey)setKey(d.siteKey)}).catch(()=>{});},[]);
  const subscribe=async(e:React.FormEvent)=>{
-  e.preventDefault();if(!token||!email.trim()||busy)return;
+  e.preventDefault();if(!email.trim()||busy)return;
+  if(!challenge){setChallenge(true);setStatus("Complete the security verification to confirm your request.");return;}
+  if(!token){setStatus("Complete verification to subscribe.");return;}
   setBusy(true);setStatus("");
   try{
    const form=new FormData();form.set("email",email.trim());form.set("cf-turnstile-response",token);
@@ -44,7 +46,7 @@ function Newsletter(){
   finally{setBusy(false);}
  };
  return <section className="ra-source-newsletter" aria-label="Newsletter"><div className="ra-source-newsletter-copy"><span>NOTES FROM HUMMIN</span><h2>Get new Insights by email.</h2><p>Sent when we publish something useful, not on a schedule. Unsubscribe in one click.</p></div>
-  <div className="ra-source-newsletter-entry">{done?<p role="status">{status}</p>:key?<form onSubmit={subscribe}><div><label><span className="ra-visually-hidden">Work email</span><input type="email" required value={email} onChange={e=>setEmail(e.target.value)} placeholder="name@business.com" maxLength={254}/></label><button type="submit" disabled={busy||!token}>{busy?"Subscribing…":"Subscribe"}</button></div><ReactTurnstile siteKey={key} onToken={setToken}/><p role="status">{status}</p></form>:<Link to="/newsletter">Subscribe to Notes from HUMMIN</Link>}</div>
+  <div className="ra-source-newsletter-entry">{done?<p role="status">{status}</p>:key?<form onSubmit={subscribe}><div><label><span className="ra-visually-hidden">Work email</span><input type="email" required value={email} onChange={e=>setEmail(e.target.value)} placeholder="name@business.com" maxLength={254}/></label><button type="submit" disabled={busy}>{busy?"Subscribing…":challenge?"Confirm subscription":"Subscribe"}</button></div>{challenge?<ReactTurnstile siteKey={key} onToken={setToken}/>:null}<p role="status">{status}</p></form>:<Link to="/newsletter">Subscribe to Notes from HUMMIN</Link>}</div>
  </section>;
 }
 export function ReactInsightArticle({post,posts,base}:Props){
