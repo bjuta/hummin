@@ -30,7 +30,7 @@ function EditorialCard({post,base}:{post:ReactPost;base:string}){
 }
 function Newsletter(){
  const [email,setEmail]=useState(""),[token,setToken]=useState(""),[key,setKey]=useState(""),[busy,setBusy]=useState(false),[status,setStatus]=useState(""),[done,setDone]=useState(false);
- useEffect(()=>{fetch("/api/email/config",{cache:"no-store"}).then(r=>r.json()).then((d:{ready?:boolean;siteKey?:string})=>{if(d.ready&&d.siteKey)setKey(d.siteKey)}).catch(()=>{});},[]);
+ useEffect(()=>{fetch("/api/email/config",{cache:"no-store"}).then(r=>r.json()).then((raw:unknown)=>{const d=raw as {ready?:boolean;siteKey?:string};if(d.ready&&d.siteKey)setKey(d.siteKey)}).catch(()=>{});},[]);
  const subscribe=async(e:React.FormEvent)=>{
   e.preventDefault();if(!token||!email.trim()||busy)return;
   setBusy(true);setStatus("");
