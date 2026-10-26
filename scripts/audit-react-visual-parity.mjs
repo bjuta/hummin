@@ -59,6 +59,15 @@ async function capture(context,origin,path){
         window.scrollTo(0,maxHeight);await sleep(320);
         maxHeight=Math.max(root.scrollHeight,document.body?.scrollHeight||0);
       }
+      // Source app reveals individual sub-sections via IntersectionObserver
+      // as they enter the *frame* viewport. Traverse these exact source nodes
+      // once more instead of making blank sections appear via CSS overrides.
+      const unrevealed=Array.from(document.querySelectorAll('[data-rise]')).filter(el=>{
+        const st=getComputedStyle(el);
+        return el.getClientRects().length>0&&(st.opacity==="0"||st.visibility==="hidden");
+      }).slice(0,36);
+      for(const el of unrevealed){el.scrollIntoView({block:"center",behavior:"instant"});await sleep(80)}
+      await sleep(400);
       window.scrollTo(0,scrollY);
       document.documentElement.style.scrollBehavior=smooth;
       await document.fonts.ready;
