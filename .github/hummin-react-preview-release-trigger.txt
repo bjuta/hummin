@@ -39,3 +39,5 @@ React legal CTA accessibility follow-up: deploy bcde3a1035cb394146fd12c723a45482
 2026-10-26 one isolated Preview build retry correcting React Router server/client import boundary for shared Insights CMS loader. Prior static tests and typecheck passed; verify production bundling and deploy preview only, never public routing.
 
 2026-10-26 final isolated preview verification of owner-source component consolidation, fixed server/client Insights boundary, and corrected route-contract test. No visual 42-check run, no public hostname routing, no production DB writes, no real booking/email.
+
+2026-10-26 source-faithful UI regression candidate: replace numbered navigation with icon-led original menu; restore original two-tone peek dialogs, upper labels, details, dual CTAs, true source topic/tier variants and scroll/keyboard behaviour. One isolated React Preview build only; no public cutover, no real form/booking/email submissions, no full visual-audit workflow.
