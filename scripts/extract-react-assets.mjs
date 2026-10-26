@@ -47,3 +47,31 @@ for(const [name,id] of Object.entries(originalFonts)){
  if(bytes.toString('ascii',0,4)!=='wOF2')throw Error('Invalid WOFF2 source: '+name);
  fs.writeFileSync(path.join('public/brand/fonts',name),bytes);
 }
+
+/* Recover the exact Lucide v0.460.0 SVGs shipped with HUMMIN's approved
+ * design package, including its white-on-dark paper-icon variants.
+ * No CDN calls, emoji substitutes, approximate paths or new dependencies. */
+const iconDirectory='public/brand/icons';
+fs.mkdirSync(iconDirectory,{recursive:true});
+const extractedIcons=new Set();
+for(const item of Object.values(manifest)){
+ if(item.mime!=='image/svg+xml'||!item.data)continue;
+ let svg=Buffer.from(item.data,'base64');
+ if(item.compressed)svg=zlib.gunzipSync(svg);
+ const source=svg.toString('utf8');
+ const icon=source.match(/class="lucide lucide-([a-z0-9-]+)"/);
+ if(!icon)continue;
+ const light=/stroke="#F4F5F1"/i.test(source);
+ const name=icon[1]+(light?'-light':'')+'.svg';
+ if(/<script\b/i.test(source)||!source.includes('<svg'))throw Error('Unsafe original Lucide icon '+name);
+ fs.writeFileSync(path.join(iconDirectory,name),svg);
+ extractedIcons.add(name);
+}
+const requiredIcons=['route','layers','handshake','users','building-2','mail',
+ 'compass','monitor-smartphone','megaphone','workflow','user-round-check',
+ 'chart-column','briefcase','key-round','clock','target'];
+for(const name of requiredIcons){
+ if(!extractedIcons.has(name+'.svg')||!extractedIcons.has(name+'-light.svg'))
+  throw Error('Original HUMMIN Lucide icon pair missing: '+name);
+}
+console.log('Recovered original HUMMIN static Lucide icons',extractedIcons.size);
