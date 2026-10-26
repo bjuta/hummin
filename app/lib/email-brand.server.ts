@@ -5,7 +5,7 @@
  */
 export type MailType =
  | "contact-internal" | "contact-received" | "assessment-results"
- | "booking-confirmation" | "booking-reminder"
+ | "booking-confirmation" | "booking-reminder" | "booking-internal"
  | "account-sign-in" | "account-welcome" | "account-password-reset"
  | "newsletter-monthly" | "newsletter-opt-in" | "insights-download";
 
@@ -45,7 +45,7 @@ export type EmailSpec = {
 
 export const emailTypes: readonly MailType[] = [
  "contact-internal","contact-received","assessment-results",
- "booking-confirmation","booking-reminder",
+ "booking-confirmation","booking-reminder","booking-internal",
  "account-sign-in","account-welcome","account-password-reset","newsletter-monthly","newsletter-opt-in","insights-download"
 ] as const;
 
