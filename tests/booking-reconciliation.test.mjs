@@ -97,7 +97,9 @@ function pendingHarness(found=false){
  const date=new Date(Date.now()+3*86400000).toISOString(),id="pending-test-1";
  const row={id,email:"owner@example.org",start_utc:date,google_event_id:"googlepending001"};
  const discrepancy=new Map();let held=true,confirmed=false;
- const db={prepare(sql){return {bind(...args){return {
+ const db={prepare(sql){return {
+  async all(){if(sql.includes("FROM booking_slots WHERE status='held'"))return {results:held?[row]:[]};throw Error("Unexpected select: "+sql);},
+  bind(...args){return {
   async all(){if(sql.includes("FROM booking_slots WHERE status='held'"))return {results:held?[row]:[]};throw Error("Unexpected select: "+sql);},
   async first(){if(sql.startsWith("SELECT observed_state"))return discrepancy.get(args[0])||null;throw Error("Unexpected first: "+sql);},
   async run(){
