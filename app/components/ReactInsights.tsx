@@ -1,6 +1,6 @@
 import {Link,useLoaderData} from "react-router";
 import {useMemo,useState} from "react";
-import {insightsAuthors,insightTopics,insightTopicSlug} from "../lib/react-insights-meta";
+import {insightsAuthors,insightTopics,insightTopicSlug,insightTopicLeads} from "../lib/react-insights-meta";
 import "./react-insights.css";
 import "./react-insights-source-index.css";
 import {ReactAssessmentPromotion} from "./ReactAssessmentPromotion";
@@ -34,6 +34,16 @@ function SourceLandingCard({p,base}:{p:ReactPost;base:string}){
    <div className="hr-insights-landing-card-copy">{p.slug==="five-monday-figures"?<span className="hr-insights-guide-caption">FIVE FIGURES, TEN MINUTES</span>:p.type==="news"?<span className="hr-insights-guide-date">{fmtDate(p.date)}</span>:p.type==="opinion"?<span className="hr-insights-opinion-quote" aria-hidden="true">“</span>:null}
      <h3>{p.title}</h3><p>{p.excerpt}</p></div>
    <div className="hr-insights-landing-card-author"><span className="hr-insights-landing-avatar"><img src="/brand/hummin-symbol.svg" alt=""/></span><strong>{insightsAuthors[p.author].name}</strong><time dateTime={p.date}>{new Date(p.date+"T12:00:00Z").toLocaleDateString("en-KE",{day:"numeric",month:"short",timeZone:"UTC"})}</time></div>
+ </Link>;
+}
+/** The original Insights topic/author list card has a compact author/date footer,
+ * rather than the generic teaser buttons formerly substituted in React. */
+function SourceListCard({p,base}:{p:ReactPost;base:string}){
+ const read=p.slug==="enquiries-30-day-fix"?"2 min read":p.slug==="five-monday-figures"?"2 min read":p.type==="news"?"1 min read":"3 min read";
+ return <Link className={"hr-insights-source-list-card hr-insights-landing-"+p.type} to={base+"/"+p.slug}>
+  <span className="hr-insights-source-list-card-top"><span>{p.type==="guide"?"Guide":p.type==="opinion"?"Opinion":"News"}</span><span>{read}</span></span>
+  <span className="hr-insights-source-list-card-middle"><strong>{p.title}</strong><span>{p.excerpt}</span></span>
+  <span className="hr-insights-source-list-card-foot"><strong>{insightsAuthors[p.author].name}</strong><time dateTime={p.date}>{new Date(p.date+"T12:00:00Z").toLocaleDateString("en-KE",{day:"numeric",month:"short",timeZone:"UTC"})}</time></span>
  </Link>;
 }
 function SourceDownloads(){
@@ -82,7 +92,7 @@ export function ReactInsights({posts,view,selected="",preview=false}:ReactInsigh
  if(view==="article"&&active)return <ReactInsightArticle post={active} posts={posts} base={base}/>;
  return <div className={"hr-insights-page"+(view==="index"?" hr-insights-index-page":"")}>
   <section className={"hr-insights-hero"+(view==="index"?" hr-insights-index-hero":"")}>
-   {view==="index"?<img className="hr-insights-watermark" src="/brand/insights-hero-mark.svg" alt="" aria-hidden="true"/>:null}
+   <img className="hr-insights-watermark" src="/brand/insights-hero-mark.svg" alt="" aria-hidden="true"/>
    <div className="hr-insights-hero-inner">
     {view==="index"?<>
      <span className="hr-insights-source-chip">Guides · Opinion · Downloads · News</span>
@@ -93,10 +103,18 @@ export function ReactInsights({posts,view,selected="",preview=false}:ReactInsigh
       </label>
      </div>
     </>:<>
-     <p className="hr-insights-kicker">{view==="article"?"HUMMIN / ARTICLE":view==="author"?"HUMMIN / AUTHORS":"HUMMIN / TOPICS"}</p>
-     {view==="article"&&active?<><h1>{active.title}</h1><p>{active.excerpt}</p></>:
-      view==="author"&&author?<><h1>{author.name}</h1><p>{author.bio}</p></>:
-      view==="topic"&&topic?<><h1>{topic}.</h1><p>Practical notes and guidance on {topic.toLowerCase()} for owner-led businesses.</p></>:null}
+     <Link className="hr-insights-source-back" to={base}>← All Insights</Link>
+     {view==="topic"&&topic?<>
+      <span className="hr-insights-source-eyebrow">Topic</span>
+      <h1 className="hr-insights-source-list-title">{topic}</h1>
+      <p className="hr-insights-source-list-lead">{insightTopicLeads[topic]}</p>
+     </>:view==="author"&&author?<>
+      <div className="hr-insights-source-author-heading">
+       <div className="hr-insights-source-author-avatar">{selected==="muiruri"?<img src="/brand/about-founder.webp" alt="Portrait of Muiruri Beautah"/>:<img src="/brand/insights-team-avatar.svg" alt=""/>}</div>
+       <div><span className="hr-insights-source-eyebrow">Author</span><h1 className="hr-insights-source-list-title">{author.name}</h1><span className="hr-insights-source-author-role">{author.role}</span></div>
+      </div>
+      <p className="hr-insights-source-list-lead">{author.bio}</p>
+     </>:null}
     </>}
    </div>
   </section>
@@ -109,7 +127,7 @@ export function ReactInsights({posts,view,selected="",preview=false}:ReactInsigh
    </article>
    <aside className="hr-insights-sidebar"><h2>More from HUMMIN</h2>{posts.filter(p=>p.slug!==active.slug).slice(0,3).map(p=><Link key={p.slug} to={base+"/"+p.slug}>{p.title}<span aria-hidden="true">↗</span></Link>)}<Link to={base}>All Insights →</Link></aside>
   </div>:<>
-   {view!=="index"?<nav className="hr-insights-breadcrumb" aria-label="Insights breadcrumb"><Link to={base}>All Insights</Link>{view==="author"&&author?<span>/ {author.name}</span>:view==="topic"&&topic?<span>/ {topic}</span>:null}</nav>:null}
+
    {view==="index"?<div className="hr-insights-source-filters">
      <div className="hr-insights-types" role="group" aria-label="Filter articles by type">
       {([
@@ -122,8 +140,14 @@ export function ReactInsights({posts,view,selected="",preview=false}:ReactInsigh
      </div>
      <div className="hr-insights-source-topics"><span>Topics</span><div>{insightTopics.map(t=><Link key={t} to={base+"/topic/"+insightTopicSlug(t)}>{t} <span>{posts.filter(p=>p.topics.includes(t)).length}</span></Link>)}</div></div>
    </div>:null}
-   {view==="index"&&type==="all"&&!q.trim()?<SourceInsightsLanding posts={posts} base={base}/>:<div className="hr-insights-grid">{filtered.map(p=><InsightCard key={p.slug} p={p} base={base}/>)}</div>}
-   {filtered.length===0?<p role="status" className="hr-insights-empty">No articles match this selection.</p>:null}
+   {view==="index"?(type==="all"&&!q.trim()?<SourceInsightsLanding posts={posts} base={base}/>:<div className="hr-insights-grid">{filtered.map(p=><InsightCard key={p.slug} p={p} base={base}/>)}</div>):
+     <section className="hr-insights-source-list">
+      <span className="hr-insights-source-result" role="status">{filtered.length} {filtered.length===1?"article":"articles"}</span>
+      {filtered.length?<div className="hr-insights-source-list-cards">{filtered.map(p=><SourceListCard key={p.slug} p={p} base={base}/>)}</div>:
+       <div className="hr-insights-source-no-results"><h2>Nothing here yet.</h2><p>We publish when we have something useful to say. Subscribe below to hear when we do.</p></div>}
+      {view==="topic"&&topic?<Link className="hr-insights-source-to-core" to="/applied-expertise">How we help with {topic}</Link>:null}
+     </section>}
+   {view==="index"&&filtered.length===0?<p role="status" className="hr-insights-empty">No articles match this selection.</p>:null}
    
   </>}
   </div>
