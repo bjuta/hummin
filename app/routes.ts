@@ -29,5 +29,6 @@ export default [
  route("email/mark-light.png","routes/email.logo.ts",{id:"email-mark-light"}),
  route("email/mark-dark.png","routes/email.logo.ts",{id:"email-mark-dark"}),
  route("email/motif.svg","routes/email.logo.ts",{id:"email-motif"}),
- route("privacy","routes/privacy.tsx")
+ route("privacy","routes/privacy.tsx"),
+ route("terms","routes/terms.tsx")
 ] satisfies RouteConfig;
