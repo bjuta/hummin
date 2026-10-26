@@ -50,3 +50,24 @@ The preview D1 was constructed using direct SQL and does **not** currently have 
 3. In [Stage production infrastructure](https://github.com/bjuta/hummin/actions/workflows/stage-production.yml), choose **Run workflow**, select `main`, and enter the exact full 40-character **verified** development commit SHA for `release_sha`.
 4. The job checks out the development branch and fails if its HEAD has moved; approval must be repeated for a different SHA.
 5. Confirm production migration history and isolated Worker URL in the job logs before considering any public-domain cutover. The job must never configure zone routes.
+
+## Verified pre-cutover snapshot — 26 October 2026
+
+Live Cloudflare read-only verification:
+- `hummin.org` zone active; apex proxied A record is `68.65.120.91`, record ID `3a7ab5c82ee5901b07d3db934ba894ef`.
+- `www.hummin.org` proxied CNAME targets `hummin.org`, record ID `14d34872240f539ee03e357cf806afa6`.
+- **No** custom HUMMIN Worker zone routes exist. Google Workspace MX records were present; do not alter MX, SPF, DKIM or DMARC during site cutover.
+- Isolated staging Worker `hummin-web-production` was serving version `99d57a0e-f515-4139-b7ed-5c6bb4884d06` at the start of this audit.
+- Isolated staging D1 `acd04e85-a433-463b-865f-a01f8aac3e27` returned an available time-travel bookmark. A bookmark is a recovery capability, **not** a completed restore rehearsal.
+- Complete assessment-to-calendar booking, external Google invitation and HUMMIN-branded confirmation receipt, and internal `sales@hummin.org` notification have been accepted against Production Staging. Do not repeat bookings to verify previously proven integrations.
+
+### Operator rollback checklist (public cutover only, requires separate approval)
+
+1. Record the exact pre-cutover DNS records above, current zone Worker routes, Worker version ID, and a fresh D1 bookmark immediately before any route change.
+2. Attach the reviewed, SHA-pinned production Worker to the public host only after the legal, browser/accessibility, consent, monitoring and owner gates all pass. **Do not change MX/SPF/DKIM/DMARC**.
+3. Verify `/`, `/privacy`, `/assessment`, `/contact`, `/admin/login`, `/insights`, `/robots.txt`, `/sitemap.xml` and booking slot security on the public domain. Check that the public host is indexed only after approval and staging hosts remain noindex.
+4. If significant regressions occur, remove the newly attached HUMMIN Worker zone route or custom hostname mapping to restore traffic to the original apex origin `68.65.120.91`. Confirm the original website and Google Workspace mail still work.
+5. If a deployment version alone is defective, use the Cloudflare Worker deployment versions API to redeploy a previously verified version. Do **not** time-travel D1 while legitimate bookings or submissions might be lost; database restoration requires a separately authorised data reconciliation plan.
+6. Reverify public HTTPS, `www`, primary calls to action, contact and email, admin login, calendar read/booking, and error rates after rollback.
+
+**Execution status:** read-only recovery prerequisites verified, but no route switch or destructive rollback rehearsal conducted. The source release remains a draft PR, and the actual public cutover still requires owner approval.
