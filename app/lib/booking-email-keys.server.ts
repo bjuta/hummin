@@ -12,7 +12,7 @@ export function bookingEmailIdentity(kind:BookingEmailKind,id:string):{eventId:s
  const split=rest.lastIndexOf(":");
  if(split<0)return rest?{eventId:rest,startMs:null}:null; // Historic rows have no version.
  const suffix=rest.slice(split+1);
- if(!/^\\d{13}$/.test(suffix))return null;
+ if(!/^\d{13}$/.test(suffix))return null;
  const eventId=rest.slice(0,split);
  return eventId?{eventId,startMs:Number(suffix)}:null;
 }
