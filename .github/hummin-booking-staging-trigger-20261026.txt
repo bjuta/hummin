@@ -3,3 +3,5 @@ source_commit=e05098b9196b9c2edd6b77a1da9595815c3892e9
 isolated_workers_dev_only=true
 
 Binding-complete repeat deployment after green but disabled availability check; attempt 2.
+
+Deploy and verify HUMMIN internal booking email alert and backfill for confirmed booking 2026-10-28T07:00Z.
