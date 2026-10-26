@@ -2,7 +2,7 @@ import { DatabaseSync } from "node:sqlite";
 import { readdirSync,readFileSync } from "node:fs";
 import assert from "node:assert/strict";
 const migrations=readdirSync("migrations").filter(f=>/^\d+_.+\.sql$/.test(f)).sort();
-assert.equal(migrations.length,11,"Expected all eleven migrations");
+assert.equal(migrations.length,12,"Expected all twelve migrations");
 const db=new DatabaseSync(":memory:");
 db.exec("PRAGMA foreign_keys=ON");
 for(const migration of migrations){
@@ -18,5 +18,5 @@ for(const table of ["enquiries","booking_slots","assessment_deliveries","email_o
 assert.deepEqual(db.prepare("PRAGMA foreign_key_check").all(),[],"Foreign-key violations");
 assert.equal(db.prepare("SELECT count(*) AS total FROM admin_users").get().total,0,"Do not seed privileged accounts");
 assert.equal(db.prepare("SELECT count(*) AS total FROM enquiries").get().total,0,"Do not seed visitor enquiries");
-for(const name of ["booking_rate_limits","booking_discrepancies","booking_change_audit"])assert.ok(names.has(name),"Missing booking protection/reconciliation table "+name);
-console.log("PASS: eleven migrations apply on empty SQLite with all required tables, valid FKs and no fabricated records");
+for(const name of ["booking_rate_limits","booking_discrepancies","booking_change_audit","booking_change_history"])assert.ok(names.has(name),"Missing booking protection/reconciliation table "+name);
+console.log("PASS: twelve migrations apply on empty SQLite with all required tables, valid FKs and no fabricated records");
