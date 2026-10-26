@@ -47,7 +47,7 @@ function ProblemModal({index,onClose}:{index:number;onClose:()=>void}){
 }
 function TierModal({index,onClose}:{index:number;onClose:()=>void}){
  const tier=TIERS[index];
- return <SourceDialog id="hr-tier-dialog" tone={index===0?"mist":index===1?"slate":"ink"}
+ return <SourceDialog id="hr-tier-dialog" glow tone={index===0?"mist":index===1?"slate":"ink"}
   title={tier.name} eyebrow={tier.tag} lead={tier.what}
   rows={[{label:"Best when",text:tier.best},{label:"You get",text:tier.get},{label:"Fees",text:tier.fees}]}
   primary={{label:"Discuss a "+tier.name,to:"/contact?"+new URLSearchParams({engagement:tier.name}).toString()}}
