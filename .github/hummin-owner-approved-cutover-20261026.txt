@@ -3,3 +3,5 @@ Approved source 7cb28152dabdc3cc8aec0aad394a7314f5c6ee1a.
 Deploy public-origin Worker, with routes attached separately only after verification.
 
 26 October 2026: Deploy narrow hero touch-scroll correction (home and inner hero typography/badges pointer events) to approved live site after successful preview swipe and full CI; no DNS, D1 migrations, booking or secrets changes. Source a2b15b2450fd6c9cb493c1ee16a33759f817424a.
+
+26 October 2026 React-first design parity release: use the exact official HUMMIN mark, React source-designed header/footer on Privacy & Terms with native mobile scroll; verified CI and browser parity run 40337147353. Preserve all routes, bookings, D1 and Worker bindings; do NOT change DNS or hosting. This does not claim completion of all original design pages' React migration.
