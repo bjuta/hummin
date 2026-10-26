@@ -1,0 +1,18 @@
+/* Faithful owner-designed site-wide assessment invitations */
+.hr-assessment-float{position:sticky;bottom:16px;z-index:15;display:flex;justify-content:center;padding:0 16px;pointer-events:none;margin-top:-72px;height:72px;align-items:end;font-family:Figtree,Arial,sans-serif}
+.hr-assessment-float-content{pointer-events:auto;animation:hmRise 480ms cubic-bezier(.2,0,0,1);display:flex;align-items:center;gap:14px;padding:8px 8px 8px 20px;border-radius:999px;background:rgba(30,39,42,.92);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);color:#F4F5F1;box-shadow:0 12px 32px rgba(30,39,42,.25);max-width:100%}
+.hr-assessment-float-content>span{font-size:14px;line-height:1.3;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.hr-assessment-float-content>span em{color:#BAC4BE;font-style:normal}
+.hr-assessment-float-content>a{flex-shrink:0;display:inline-flex;align-items:center;min-height:40px;padding:0 16px;border-radius:999px;background:#B5532C;color:white;text-decoration:none;font-weight:600;font-size:14px}
+.hr-assessment-float-content>a:hover{background:#9A4524}
+.hr-assessment-float-content>button{flex-shrink:0;width:36px;height:36px;border-radius:999px;border:0;background:rgba(244,245,241,.1);color:#F4F5F1;font-size:19px;display:grid;place-items:center;cursor:pointer}
+.hr-assessment-band{background:#B5532C;color:white;padding:clamp(56px,7vw,96px) clamp(20px,5vw,64px);display:flex;flex-wrap:wrap;align-items:end;justify-content:space-between;gap:28px 64px;font-family:Figtree,Arial,sans-serif}
+.hr-assessment-band>div:first-child{flex:1 1 420px;display:grid;gap:16px}
+.hr-assessment-band h2{font-family:Newsreader,Georgia,serif;font-size:clamp(32px,4vw,56px);font-weight:400;line-height:1.04;letter-spacing:-.015em;max-width:18ch;margin:0}
+.hr-assessment-band p{font-size:17px;line-height:1.55;max-width:46ch;margin:0}
+.hr-assessment-band-action{display:grid;gap:10px;justify-items:start}
+.hr-assessment-band-action a{display:inline-flex;align-items:center;justify-content:center;min-height:52px;padding:0 22px;border-radius:999px;background:#1E272A;color:#F4F5F1;text-decoration:none;font-weight:600;font-size:15px}
+.hr-assessment-band-action a:hover{background:#2A3538}
+.hr-assessment-band-action span{font-size:14px}
+@media(max-width:600px){.hr-assessment-float-content{gap:8px;padding-left:12px}.hr-assessment-float-content>span{font-size:11px}.hr-assessment-float-content>a{padding:0 12px}.hr-assessment-float{padding:0 10px}}
+@media(prefers-reduced-motion:reduce){.hr-assessment-float-content{animation:none!important}}
