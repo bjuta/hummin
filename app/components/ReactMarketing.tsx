@@ -12,13 +12,13 @@ type Page="home"|"how"|"core"|"eng"|"who"|"about";
 function HButton({to,children,light=false,outline=false}:{to:string;children:React.ReactNode;light?:boolean;outline?:boolean}){
  return <Link to={to} className={"hr-link-btn"+(light?" hr-light":outline?" hr-outline":"")}>{children}</Link>;
 }
-function Hero({page}:{page:Page}){
+export function Hero({page}:{page:Page|"contact"}){
  const h=HEADS[page as keyof typeof HEADS];
  const art=page==="home"?"/brand/home-hero.webp":photos[page];
  const imageAlt=page==="home"?"Established business owners and teams working together":h?.label||"HUMMIN working with clients";
  return <section className={"hr-hero"+(page==="home"?" hr-home-hero":"")} data-hero="1"
    style={{background:page==="home"?"radial-gradient(circle at 72% 28%,#5E6967 0%,#2A3538 38%,#1E272A 70%)":HERO_STYLE[page as keyof typeof HERO_STYLE]?.bg}}>
-   <img className="hr-hero-photo" src={art} alt={imageAlt} loading={page==="home"?"eager":"lazy"}/>
+   {art?<img className="hr-hero-photo" src={art} alt={imageAlt} loading={page==="home"?"eager":"lazy"}/>:null}
    <div className="hr-hero-gradient" aria-hidden="true"/>
    <img className="hr-hero-motif" src="/brand/hummin-symbol.svg" alt="" aria-hidden="true"/>
    <div className="hr-hero-chips">
