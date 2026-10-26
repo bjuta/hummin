@@ -1,11 +1,10 @@
 import {ReactInsightsRoute} from "../components/ReactInsights";
-import {insightsPosts,insightsAuthors,insightTopics,insightTopicSlug} from "../lib/insights.server";
+import {insightsAuthors,insightTopics,insightTopicSlug} from "../lib/insights.server";
 import {publishedInsights} from "../lib/insights-public.server";
 import {isHumminPublicHost} from "../lib/seo.server";
 import originalPosts from "../lib/react-original-insights.json";
 import type {AppLoadContext} from "react-router";
 import type {ReactPost} from "../components/ReactInsights";
-const paths=new Set(insightsPosts.map(p=>p.slug));
 export async function loader({request,context}:{request:Request;context:AppLoadContext}){
  if(isHumminPublicHost(new URL(request.url).hostname))throw new Response("Not found",{status:404});
  const suffix=new URL(request.url).pathname.slice("/__react/insights".length);
@@ -20,7 +19,7 @@ export async function loader({request,context}:{request:Request;context:AppLoadC
  }
  // Preserve source article bodies while allowing the published Admin CMS to
  // replace a prior revision by its sourceSlug, exactly like existing Insights.
- const base=(originalPosts as ReactPost[]).map(p=>({...p,blocks:p.blocks.map(b=>({...b}))}));
+ const base=(originalPosts as unknown as ReactPost[]).map(p=>({...p,blocks:p.blocks.map(b=>({...b}))}));
  const latest=await publishedInsights(context.cloudflare.env);
  for(const post of latest){
   const idx=base.findIndex(p=>p.slug===(post.sourceSlug||post.slug));
