@@ -2,6 +2,7 @@ import assert from "node:assert/strict";
 import fs from "node:fs";
 import {chromium} from "playwright";
 import AxeBuilder from "@axe-core/playwright";
+// Re-verify all six rendered pages after source-colour corrections and TypeScript parity.
 const base="https://hummin-web-preview.grimpossible.workers.dev";
 const slugs=["home","how","core","eng","who","about"];
 const browser=await chromium.launch({headless:true,args:["--no-sandbox"]});
