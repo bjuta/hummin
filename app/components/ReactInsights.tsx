@@ -4,6 +4,7 @@ import {insightsAuthors,insightTopics,insightTopicSlug,insightTopicLeads} from "
 import "./react-insights.css";
 import "./react-insights-source-index.css";
 import {ReactAssessmentPromotion} from "./ReactAssessmentPromotion";
+import {SourceEditorialCard} from "./SourceEditorialCard";
 import {ReactInsightArticle,ReactInsightsNewsletter} from "./ReactInsightArticle";
 type Block={t:"p"|"h"|"ul"|"ol"|"dl"|"assess";text?:string;items?:string[];id?:string};
 export type ReactPost={slug:string;title:string;excerpt:string;type:"guide"|"opinion"|"news";author:"team"|"muiruri";date:string;topics:string[];blocks:Block[];featured?:boolean;steps?:string;figure?:string};
@@ -26,25 +27,6 @@ function BlockView({block}:{block:Block}){
 }
 function InsightCard({p,base}:{p:ReactPost;base:string}){
  return <Link className="hr-insights-card" to={base+"/"+p.slug}><div className="hr-insights-card-meta"><span>{typeLabel(p.type)}</span><span>{fmtDate(p.date)}</span></div><div><h3>{p.title}</h3><p>{p.excerpt}</p></div><span className="hr-insights-card-end">Read article <span aria-hidden="true">↗</span></span></Link>;
-}
-function SourceLandingCard({p,base}:{p:ReactPost;base:string}){
- const minutes=p.slug==="enquiries-30-day-fix"?2:p.slug==="five-monday-figures"?2:p.type==="news"?1:2;
- return <Link to={base+"/"+p.slug} className={"hr-insights-landing-card hr-insights-landing-"+p.type}>
-   <div className="hr-insights-landing-card-top"><span>{p.type==="guide"?"Guide":p.type==="opinion"?"Opinion":"News"}</span><span>{minutes} min read</span></div>
-   <div className="hr-insights-landing-card-copy">{p.slug==="five-monday-figures"?<span className="hr-insights-guide-caption">FIVE FIGURES, TEN MINUTES</span>:p.type==="news"?<span className="hr-insights-guide-date">{fmtDate(p.date)}</span>:p.type==="opinion"?<span className="hr-insights-opinion-quote" aria-hidden="true">“</span>:null}
-     <h3>{p.title}</h3><p>{p.excerpt}</p></div>
-   <div className="hr-insights-landing-card-author"><span className="hr-insights-landing-avatar"><img src="/brand/hummin-symbol.svg" alt=""/></span><strong>{insightsAuthors[p.author].name}</strong><time dateTime={p.date}>{new Date(p.date+"T12:00:00Z").toLocaleDateString("en-KE",{day:"numeric",month:"short",timeZone:"UTC"})}</time></div>
- </Link>;
-}
-/** The original Insights topic/author list card has a compact author/date footer,
- * rather than the generic teaser buttons formerly substituted in React. */
-function SourceListCard({p,base}:{p:ReactPost;base:string}){
- const read=p.slug==="enquiries-30-day-fix"?"2 min read":p.slug==="five-monday-figures"?"2 min read":p.type==="news"?"1 min read":"3 min read";
- return <Link className={"hr-insights-source-list-card hr-insights-landing-"+p.type} to={base+"/"+p.slug}>
-  <span className="hr-insights-source-list-card-top"><span>{p.type==="guide"?"Guide":p.type==="opinion"?"Opinion":"News"}</span><span>{read}</span></span>
-  <span className="hr-insights-source-list-card-middle"><strong>{p.title}</strong><span>{p.excerpt}</span></span>
-  <span className="hr-insights-source-list-card-foot"><strong>{insightsAuthors[p.author].name}</strong><time dateTime={p.date}>{new Date(p.date+"T12:00:00Z").toLocaleDateString("en-KE",{day:"numeric",month:"short",timeZone:"UTC"})}</time></span>
- </Link>;
 }
 function SourceDownloads(){
  const downloads=[
@@ -72,7 +54,7 @@ function SourceInsightsLanding({posts,base}:{posts:ReactPost[];base:string}){
     <div className="hr-insights-featured-author"><span>{insightsAuthors[featured.author].name}</span><time dateTime={featured.date}>{fmtDate(featured.date)}</time><span>2 min read</span></div>
    </div>
   </Link>
-  <section className="hr-insights-latest"><h2>Latest</h2><div>{latest.map(p=><SourceLandingCard key={p.slug} p={p} base={base}/>)}</div></section>
+  <section className="hr-insights-latest"><h2>Latest</h2><div>{latest.map(p=><SourceEditorialCard key={p.slug} post={p} base={base} variant="latest"/>)}</div></section>
   <SourceDownloads/>
  </div>;
 }
@@ -143,7 +125,7 @@ export function ReactInsights({posts,view,selected="",preview=false}:ReactInsigh
    {view==="index"?(type==="all"&&!q.trim()?<SourceInsightsLanding posts={posts} base={base}/>:<div className="hr-insights-grid">{filtered.map(p=><InsightCard key={p.slug} p={p} base={base}/>)}</div>):
      <section className="hr-insights-source-list">
       <span className="hr-insights-source-result" role="status">{filtered.length} {filtered.length===1?"article":"articles"}</span>
-      {filtered.length?<div className="hr-insights-source-list-cards">{filtered.map(p=><SourceListCard key={p.slug} p={p} base={base}/>)}</div>:
+      {filtered.length?<div className="hr-insights-source-list-cards">{filtered.map(p=><SourceEditorialCard key={p.slug} post={p} base={base} variant="archive"/>)}</div>:
        <div className="hr-insights-source-no-results"><h2>Nothing here yet.</h2><p>We publish when we have something useful to say. Subscribe below to hear when we do.</p></div>}
       {view==="topic"&&topic?<Link className="hr-insights-source-to-core" to="/applied-expertise">How we help with {topic}</Link>:null}
      </section>}

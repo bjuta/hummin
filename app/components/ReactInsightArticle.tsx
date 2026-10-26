@@ -1,6 +1,7 @@
 import {useEffect,useState} from "react";
 import {Link} from "react-router";
 import {ReactTurnstile} from "./ReactTurnstile";
+import {SourceEditorialCard} from "./SourceEditorialCard";
 import type {ReactPost} from "./ReactInsights";
 import "./react-article.css";
 
@@ -24,9 +25,6 @@ function SourceBlock({b}:{b:ReactPost["blocks"][number]}){
   </aside>;
  }
  return null;
-}
-function EditorialCard({post,base}:{post:ReactPost;base:string}){
- return <Link to={base+"/"+post.slug} className={"ra-source-related-card ra-source-related-"+post.type}><span className="ra-related-top"><span>{post.type==="guide"?"Guide":post.type==="opinion"?"Opinion":"News"}</span><span>{minutes(post)} min read</span></span><strong>{post.title}</strong></Link>;
 }
 export function ReactInsightsNewsletter(){
  const [email,setEmail]=useState(""),[token,setToken]=useState(""),[key,setKey]=useState(""),[busy,setBusy]=useState(false),[challenge,setChallenge]=useState(false),[status,setStatus]=useState(""),[done,setDone]=useState(false);
@@ -78,7 +76,7 @@ export function ReactInsightArticle({post,posts,base}:Props){
      <div className="ra-source-help"><h2>Want help with this?</h2><p>Tell us what you are working on. You don't need to know which discipline it falls under.</p><Link to="/contact">Discuss a Business Challenge</Link></div>
     </aside>
    </div>
-   {readNext.length?<section className="ra-source-read-next"><h2>Read next.</h2><div>{readNext.map(p=><EditorialCard key={p.slug} post={p} base={base}/>)}</div></section>:null}
+   {readNext.length?<section className="ra-source-read-next"><h2>Read next.</h2><div>{readNext.map(p=><SourceEditorialCard key={p.slug} post={p} base={base} variant="related"/>)}</div></section>:null}
    <ReactInsightsNewsletter/>
   </div>
  </div>;
