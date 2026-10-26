@@ -29,3 +29,21 @@ for(const [name,id] of Object.entries(images)){
  fs.writeFileSync('public/brand/'+name+'.webp',buffer);
  console.log('Extracted source HUMMIN art',name,buffer.length);
 }
+
+/* The source package contains the exact production font binaries.
+ * Keep the same Latin subsets in React instead of relying on a different
+ * remote Google Fonts CSS response and potentially different font metrics.
+ * The assets are internal web build dependencies, not redistributed files.
+ */
+const originalFonts={
+ 'hummin-figtree-latin.woff2':'fec407bc-9813-4d61-af33-2d026611719d',
+ 'hummin-newsreader-regular-latin.woff2':'7f8e5077-c800-430e-8592-4ae3b8289516',
+ 'hummin-newsreader-italic-latin.woff2':'d05e75c2-a357-4d57-bf17-f7c5be2b902c'
+};
+fs.mkdirSync('public/brand/fonts',{recursive:true});
+for(const [name,id] of Object.entries(originalFonts)){
+ const item=manifest[id];if(!item||item.mime!=='font/woff2'||!item.data)throw Error('Original HUMMIN font missing: '+name);
+ let bytes=Buffer.from(item.data,'base64');if(item.compressed)bytes=zlib.gunzipSync(bytes);
+ if(bytes.toString('ascii',0,4)!=='wOF2')throw Error('Invalid WOFF2 source: '+name);
+ fs.writeFileSync(path.join('public/brand/fonts',name),bytes);
+}
