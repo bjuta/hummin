@@ -16,7 +16,8 @@ const raw=zlib.gunzipSync(Buffer.from(art.data,"base64")).toString("utf8");
 // Keep the exact original editorial illustrations, not redraws or lookalikes.
 const sourceArt=[
  ["insights-article-figure.svg",'<sc-if value="{{ post.hasFigure }}"'],
- ["insights-assessment-mark.svg",'<sc-if value="{{ b.isAssess }}"']
+ ["insights-assessment-mark.svg",'<sc-if value="{{ b.isAssess }}"'],
+ ["insights-hero-mark.svg",'<section style="position:relative;overflow:hidden;background:radial-gradient(circle at 74% 22%']
 ];
 fs.mkdirSync("public/brand",{recursive:true});
 for(const [file,anchor] of sourceArt){
