@@ -1,5 +1,5 @@
 /** Read-only canonical React Preview website acceptance.
- * Never posts to /api or submits forms. Public hostname remains legacy.\n * Recheck corrected Privacy/Terms contrast against refreshed canonical Preview.
+ * Never posts to /api or submits forms. Public hostname remains legacy.\n * Recheck refreshed source-faithful React design, assessment prompts and legal text contrast.
  */
 import assert from "node:assert/strict";
 import {chromium} from "playwright";
