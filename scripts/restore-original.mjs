@@ -7,7 +7,11 @@ const need=(s,old,replace)=>{if(!s.includes(old))throw Error('Original design an
 function patch(html, fn, override){
  const re=/(<script\s+type="__bundler\/template"[^>]*>\s*)([\s\S]*?)(\s*<\/script>)/;
  const m=html.match(re);if(!m)throw Error('Embedded design template missing');
- const tpl=fn(override===undefined?JSON.parse(m[2].trim()):override);
+ let tpl=fn(override===undefined?JSON.parse(m[2].trim()):override);
+ // The design runtime swaps the documentElement: preserve language inside the template.
+ tpl=tpl.replace(/<html(?![^>]*\blang\s*=)([^>]*)>/i,'<html lang="en-KE"$1>');
+ const contrastCss=fn===assessment?"\n<style id=\"hummin-assessment-accessibility\">\ndiv[data-dc-tpl=\"22\"]:nth-child(4) span[data-dc-tpl=\"23\"],\ndiv[data-dc-tpl=\"22\"]:nth-child(4) span[data-dc-tpl=\"23\"] .sc-interp,\ndiv[data-dc-tpl=\"22\"]:nth-child(4) div[data-dc-tpl=\"24\"] span[data-dc-tpl=\"26\"],\ndiv[data-dc-tpl=\"22\"]:nth-child(4) div[data-dc-tpl=\"24\"] span[data-dc-tpl=\"26\"] .sc-interp{\n color:#FFFFFF!important;opacity:1!important\n}\n</style>":fn===insightTemplate?"\n<style id=\"hummin-insights-accessibility\">\nspan[data-dc-tpl=\"104\"],span[data-dc-tpl=\"104\"] .sc-interp{color:#9A4524!important;opacity:1!important}\ndiv[data-dc-tpl=\"124\"]:nth-child(1) > div[data-dc-tpl=\"125\"]{background-color:#B5532C!important}\ndiv[data-dc-tpl=\"124\"]:nth-child(1) div[data-dc-tpl=\"128\"] span[data-dc-tpl=\"130\"],\ndiv[data-dc-tpl=\"124\"]:nth-child(1) div[data-dc-tpl=\"128\"] span[data-dc-tpl=\"130\"] .sc-interp,\ndiv[data-dc-tpl=\"124\"]:nth-child(1) div[data-dc-tpl=\"128\"] span[data-dc-tpl=\"131\"],\ndiv[data-dc-tpl=\"124\"]:nth-child(1) div[data-dc-tpl=\"128\"] span[data-dc-tpl=\"131\"] .sc-interp{\n color:#FFFFFF!important;opacity:1!important\n}\n</style>":'';
+ if(contrastCss){if(!tpl.includes('</head>'))throw Error('Design template head missing');tpl=tpl.replace('</head>',contrastCss+'</head>');}
  return html.replace(re,(_whole,start,_body,end)=>start+JSON.stringify(tpl).replaceAll('</','<\\/')+end);
 }
 function site(t){
