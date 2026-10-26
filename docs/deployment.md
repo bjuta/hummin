@@ -1,30 +1,24 @@
 # HUMMIN deployment runbook — preview first
 
-## Current implementation state
+## Verified current state (26 October 2026)
 
-- GitHub source: `bjuta/hummin`, draft pull request #1.
-- Cloudflare account and active `hummin.org` zone verified.
-- **Preview D1 exists and its enquiry schema has been applied**. See [cloudflare-preview.md](cloudflare-preview.md) for exact identifiers and next steps.
-- **No Worker deployed**, and **Cloudflare's GitHub App has not yet been authorised** for `bjuta/hummin`. The attempted API repository connection returned HTTP 404 (8000008).
-- Existing `hummin.org` website hosting and Google Workspace MX remain unchanged.
+- Repository/branch: `bjuta/hummin` / `feat/fullstack-workers-foundation`.
+- **Isolated React Preview successfully deployed**, run [40390575461](https://github.com/bjuta/hummin/actions/runs/40390575461), with archived HTML physically hidden during the entire build and typecheck.
+- Preview Worker: `hummin-web-preview` at `https://hummin-web-preview.grimpossible.workers.dev`, using its dedicated preview D1 and no public domain routes.
+- The public `hummin.org` pages still select the existing legacy HTML loader on the public host; the React migration is **not approved for production cutover**. Do not delete `design/sources` until [legacy-html-retirement.md](legacy-html-retirement.md) passes.
+- No public route, production database, or mail/booking binding changes were made by the Preview workflow.
 
-## Build
+## Source-free Preview build and release
 
 ```bash
 npm install
+npm run verify:design-source
+npm run verify:seo
 npm run typecheck
 npm run build
 ```
 
-After Cloudflare GitHub App authorization, use the **dedicated preview Worker** with:
-
-- Worker name: `hummin-web-preview`
-- Source branch: `feat/fullstack-workers-foundation`
-- Build: `npm run build`
-- Deploy: `npm run deploy:preview` (reads `wrangler.preview.jsonc`)
-- Database: `hummin-web-preview` bound as `DB`
-
-Do not deploy the default `wrangler.jsonc` worker `hummin-web` or attach the custom domain before launch approval. Do not change production email DNS records.
+The dedicated Preview GitHub workflow additionally hides `design/sources` and checks the generated Worker has the correct isolated database binding and no `hummin.org` route before deployment. **Do not substitute a default `wrangler deploy` command or deploy the production worker.** The Preview workflow is deliberately triggered only by an explicit marker-file change to conserve Actions minutes.
 
 ## Completing the contact flow
 

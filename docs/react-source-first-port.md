@@ -50,7 +50,7 @@ The marketing, Contact, Insights, article, assessment, promotion and legal style
 
 ## Status
 
-Source foundations and first-wave shared primitives have been committed to the development branch and statically inspected. **They have not been built or deployed yet; no GitHub Actions were started for this refactor.** Earlier canonical pass results cannot certify the new commit, and visual parity is not yet approved.
+The shared source primitives and versioned assets were **built and deployed successfully** to isolated React Preview in GitHub Actions run [40390575461](https://github.com/bjuta/hummin/actions/runs/40390575461). In that run, the entire `design/sources` directory was removed from the build checkout before design/asset/SEO tests, TypeScript checking and the build; Preview deployment and route smoke checks passed. **The public React cutover and full-site visual fidelity are still not approved**, and `design/sources` remains archived because public routes retain a legacy fallback. See [legacy-html-retirement.md](legacy-html-retirement.md).
 
 The goal of this architecture is to eliminate repeated visual patching, not to relax HUMMIN's requirement for full fidelity.
 

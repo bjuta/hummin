@@ -32,8 +32,8 @@ Original Insights article vs prior Preview:
 ## Implementation response
 - Original template `design/sources/site-v4.template.json` used to recover homepage exact colour mapping, card wording, gradient settings, spacing and editorial teasers.
 - `design/sources/insights-v4.html.gz.b64` inflated and inspected as the article layout reference.
-- Source Figtree and Newsreader web fonts extracted by build scripts; do not use substitute Google Fonts variants.
-- Source article and assessment SVG figures extracted by build scripts, not redrawn approximations.
+- Original Figtree and Newsreader web fonts are now committed as independent files under `public/brand/fonts` and no longer extracted from HTML during builds.
+- Original SVG figures and motifs are committed as independent static assets under `public/brand`, not redrawn or extracted at build time.
 - New source-derived React article component, original publication data and secured existing newsletter, PDF, booking and email routes are retained.
 - Original HTML is never injected with `dangerouslySetInnerHTML`, executed as a runtime, or embedded as an iframe in React pages.
 
