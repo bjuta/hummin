@@ -90,5 +90,9 @@ The earlier portions of this file document historical development states and mus
 - [x] No horizontal overflow or uncaught page JavaScript exceptions in these tested outer documents.
 - [x] The 8-section Privacy and 12-section Terms documents have exactly one H1, correct section navigation, responsive layouts, and **no axe-core WCAG 2.0/2.1 A/AA violations** at any of the three widths (six scanned page instances).
 - [x] Screenshot evidence saved for both legal documents in all three viewport sizes.
-- [ ] The Assessment and Insights experiences render inside nested design iframes: an outer-shell pass **is not** an inner-document accessibility and rendering pass. A follow-up browser audit is being run for the embedded documents; record its result separately.
+- [x] **Embedded Assessment and Insights verified independently** in Chromium at all three widths, including successful design-runtime mount, body content, language metadata, iframe horizontal overflow and axe-core WCAG 2.0/2.1 A/AA audit. Fixed six source-design text contrast issues (Assessment 2; Insights 4) and missing document language before passing.
 - [ ] Visual sign-off by the HUMMIN owner and legal sign-off of wording are still required; automated tests are not a substitute for owner review or an independent legal review.
+
+### Final browser release-audit evidence (26 October 2026)
+
+[Final HUMMIN Staging Browser Audit #40302765186](https://github.com/bjuta/hummin/actions/runs/40302765186) passed: **18 route/viewport checks, zero browser audit failures and zero warnings**. Six routes tested at mobile 390px, tablet 768px and desktop 1440px. Accessibility scans covered both legal documents and both embedded design experiences at all widths. Keyboard activation of legal table-of-contents links was verified. CI screenshots and the JSON summary are stored in the run's `hummin-staging-browser-evidence` artifact. These are automated tests, not an independent manual usability or legal acceptance. No public-domain DNS or routes changed.
