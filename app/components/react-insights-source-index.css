@@ -1,0 +1,71 @@
+/* HUMMIN Insights index: direct React component port of the owner-approved
+ * design/sources/insights-v4 source. Do not substitute a generic card grid. */
+.hr-insights-index-page .hr-insights-index-hero{position:relative;overflow:hidden;background:radial-gradient(circle at 74% 22%,#5E6967 0%,#2A3538 40%,#1E272A 72%);color:#F4F5F1;padding:clamp(88px,9cqw,128px) clamp(20px,5cqw,64px) clamp(40px,5cqw,64px)}
+.hr-insights-index-hero .hr-insights-watermark{position:absolute;width:max(560px,60cqw);height:auto;right:-16cqw;top:-14%;opacity:1;filter:none;pointer-events:none}
+.hr-insights-index-hero .hr-insights-hero-inner{position:relative;max-width:none;display:grid;justify-items:stretch;gap:22px}
+.hr-insights-index-page .hr-insights-source-chip{justify-self:start;min-height:32px;padding:0 14px;border:1px solid rgba(244,245,241,.16);background:rgba(244,245,241,.08);border-radius:999px;font-size:12px;font-weight:600;color:#F4F5F1}
+.hr-insights-index-page .hr-insights-index-hero h1{font-family:Newsreader,Georgia,serif;font-weight:400;font-size:clamp(56px,9cqw,132px);line-height:.9;letter-spacing:-.03em;margin:0}
+.hr-insights-index-intro{display:flex;flex-wrap:wrap;gap:20px 48px;align-items:end;justify-content:space-between}
+.hr-insights-index-hero .hr-insights-index-intro>p{margin:0;flex:1 1 360px;font-size:clamp(17px,1.6cqw,20px);line-height:1.55;color:#E7EBE6;max-width:50ch}
+.hr-insights-index-page .hr-insights-hero-search{flex:0 1 380px;width:auto;display:flex;align-items:center;gap:10px;min-height:52px;padding:0 8px 0 20px;border-radius:999px;background:rgba(244,245,241,.08);border:1px solid rgba(244,245,241,.2);margin:0}
+.hr-insights-index-page .hr-insights-hero-search input{height:48px;font:400 16px Figtree,Arial,sans-serif}
+.hr-insights-index-page .hr-insights-main{max-width:none;margin:0;padding:clamp(36px,4.5cqw,56px) clamp(20px,5cqw,64px) clamp(48px,6cqw,80px)}
+.hr-insights-index-page .hr-insights-source-filters{margin-bottom:clamp(32px,4cqw,56px)}
+.hr-insights-original-index{display:grid;gap:clamp(48px,6cqw,80px)}
+.hr-insights-featured{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);min-height:430px;background:#1E272A;color:#F4F5F1;border-radius:20px;overflow:hidden;text-decoration:none}
+.hr-insights-featured-figure{position:relative;background:#E7EBE6;overflow:hidden;display:grid;align-items:end;min-height:300px}
+.hr-insights-featured-figure img{position:absolute;width:84%;height:auto;right:-16%;bottom:-26%;pointer-events:none}
+.hr-insights-featured-figure>span{font-size:12px;color:#5E6967;position:relative;align-self:end;padding:0 20px 20px}
+.hr-insights-featured-story{position:relative;display:grid;align-content:space-between;gap:18px;padding:clamp(24px,4cqw,56px)}
+.hr-insights-featured-label{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.hr-insights-featured-label>span{display:inline-flex;align-items:center;min-height:28px;padding:0 12px;border-radius:999px;font-size:12px;font-weight:700}
+.hr-insights-featured-label>span:first-child{background:#B5532C;color:#fff}
+.hr-insights-featured-label>span:last-child{background:rgba(244,245,241,.08);border:1px solid rgba(244,245,241,.2)}
+.hr-insights-featured-story h2{font:400 clamp(32px,4cqw,56px)/1 Newsreader,Georgia,serif;letter-spacing:-.025em;margin:0}
+.hr-insights-featured-story>p{font-size:16px;line-height:1.55;color:#D0D8D2;margin:0}
+.hr-insights-featured-author{display:flex;flex-wrap:wrap;gap:12px;align-items:center;font-size:13px;font-weight:600}
+.hr-insights-featured-author time{margin-left:auto;opacity:.75}
+.hr-insights-featured-author>span:last-child{opacity:.75}
+.hr-insights-latest{display:grid;gap:18px}
+.hr-insights-latest>h2{font:600 14px Figtree,Arial,sans-serif;margin:0}
+.hr-insights-latest>div{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,300px),300px));gap:14px}
+.hr-insights-landing-card{display:grid;align-content:space-between;gap:22px;min-height:390px;padding:24px;border-radius:20px;text-decoration:none;background:#E7EBE6;color:#1E272A;border:1px solid #E7EBE6;transition:transform 240ms,box-shadow 240ms}
+.hr-insights-landing-card:hover,.hr-insights-featured:hover{box-shadow:0 18px 36px rgba(30,39,42,.16)}
+.hr-insights-landing-card:hover{transform:translateY(-6px)}
+.hr-insights-landing-opinion{background:#1E272A;color:#F4F5F1;border-color:#1E272A}
+.hr-insights-landing-news{background:#fff;color:#1E272A;border-color:#D0D8D2}
+.hr-insights-landing-card-top{display:flex;justify-content:space-between;align-items:center;gap:8px;font-size:12px}
+.hr-insights-landing-card-top>span:first-child{display:inline-flex;align-items:center;border:1px solid #BAC4BE;border-radius:999px;padding:6px 12px;font-weight:700;background:rgba(30,39,42,.06)}
+.hr-insights-landing-opinion .hr-insights-landing-card-top>span:first-child{border-color:rgba(244,245,241,.18);background:rgba(244,245,241,.08)}
+.hr-insights-landing-card-top>span:last-child{font-weight:600;opacity:.7}
+.hr-insights-landing-card-copy{display:grid;gap:10px}
+.hr-insights-guide-caption{color:#B5532C;font-weight:700;font-size:11px;letter-spacing:.07em}
+.hr-insights-guide-date{color:#B5532C;font-weight:600;font-size:13px}
+.hr-insights-opinion-quote{color:#B5532C;font:700 44px Newsreader,serif;height:34px}
+.hr-insights-landing-card-copy h3{font:400 30px/1.06 Newsreader,Georgia,serif;margin:0}
+.hr-insights-landing-card-copy p{font-size:15px;line-height:1.55;opacity:.82;margin:0}
+.hr-insights-landing-card-author{border-top:1px solid rgba(94,105,103,.26);padding-top:14px;display:flex;align-items:center;gap:10px;font-size:12px}
+.hr-insights-landing-card-author strong{font-weight:600}
+.hr-insights-landing-card-author time{margin-left:auto;opacity:.7}
+.hr-insights-landing-avatar{display:grid;place-items:center;width:28px;height:28px;background:#1E272A;border-radius:50%}
+.hr-insights-landing-opinion .hr-insights-landing-avatar{background:#F4F5F1}
+.hr-insights-landing-avatar img{width:20px;height:20px;object-fit:contain;filter:brightness(0) invert(1)}
+.hr-insights-landing-opinion .hr-insights-landing-avatar img{filter:none}
+.hr-insights-downloads{display:grid;gap:18px}
+.hr-insights-source-section-title{display:grid;gap:10px}
+.hr-insights-source-section-title>span{font-size:12px;letter-spacing:.08em;text-transform:uppercase;font-weight:600;color:#B5532C}
+.hr-insights-source-section-title h2{font:400 clamp(32px,4cqw,54px)/1.04 Newsreader,Georgia,serif;letter-spacing:-.015em;margin:0}
+.hr-insights-download-cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,320px),1fr));gap:14px}
+.hr-insights-download-card{border-radius:20px;background:#B5532C;color:#fff;padding:24px;display:grid;gap:18px;align-content:space-between;min-height:300px}
+.hr-insights-download-card.hr-insights-download-1{background:#434F4F}
+.hr-insights-download-card-head{display:flex;justify-content:space-between;align-items:center;gap:10px}
+.hr-insights-download-card-head>span{font-size:12px;font-weight:600}
+.hr-insights-download-card-head>span:first-child{display:inline-flex;align-items:center;min-height:28px;padding:0 12px;border-radius:999px;background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.24);font-weight:700}
+.hr-insights-download-card>div:nth-child(2){display:grid;gap:10px}
+.hr-insights-download-card h3{font:400 30px/1.05 Newsreader,Georgia,serif;margin:0}
+.hr-insights-download-card p{font-size:15px;line-height:1.55;opacity:.96;margin:0}
+.hr-insights-download-card>div:nth-child(2)>span{font-size:13px;font-weight:600}
+.hr-insights-download-card>a{justify-self:start;display:inline-flex;align-items:center;min-height:48px;padding:0 20px;border-radius:999px;background:#F4F5F1;color:#1E272A;font-size:14px;font-weight:700;text-decoration:none}
+.hr-insights-source-newsletter-wrap{padding:0 clamp(20px,5cqw,64px) clamp(64px,8cqw,112px)}
+@media(max-width:700px){.hr-insights-featured{grid-template-columns:1fr}.hr-insights-featured-figure{aspect-ratio:16/9;min-height:0}.hr-insights-index-page .hr-insights-hero-search{flex:1 1 300px}.hr-insights-index-page .hr-insights-source-filters{margin-bottom:32px}}
+@media(prefers-reduced-motion:reduce){.hr-insights-landing-card{transition:none}}
