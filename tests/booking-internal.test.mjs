@@ -64,7 +64,7 @@ test("Missing sales notification is recovered once for an already confirmed book
   const content=JSON.parse(mail.payload);
   assert.equal(content.replyTo,"grimpossible@gmail.com");
   assert.match(content.subject,/New booking:/);
-  assert.match(content.text,/Wednesday 28 October 2026/);
+  assert.match(content.text,/Wednesday, 28 October 2026/);
   assert.match(content.text,/0712345678/);
   assert.match(content.text,/10:00/);
   assert.deepEqual(await deliverDue(f.env),{sent:1,failed:0});
