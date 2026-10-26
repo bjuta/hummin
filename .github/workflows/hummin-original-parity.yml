@@ -1,0 +1,28 @@
+name: HUMMIN original design screenshot references
+on:
+  push:
+    branches: [feat/fullstack-workers-foundation]
+    paths:
+      - scripts/capture-original-parity.mjs
+      - .github/workflows/hummin-original-parity.yml
+permissions:
+  contents: read
+jobs:
+  reference:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with: { persist-credentials: false }
+      - uses: actions/setup-node@v4
+        with: { node-version: '22' }
+      - run: npm install --no-save --ignore-scripts --no-audit --no-fund playwright@1.56.1
+      - run: npx playwright install chromium --only-shell
+      - run: node scripts/capture-original-parity.mjs
+      - name: Save approved original screenshots
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: hummin-approved-design-reference
+          path: artifacts/original-parity
+          retention-days: 14
