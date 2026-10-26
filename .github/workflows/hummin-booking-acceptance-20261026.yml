@@ -32,6 +32,12 @@ jobs:
             c.vars.SITE_URL='https://hummin-web-production.grimpossible.workers.dev';
             c.vars.BOOKING_ENABLED='true';
             c.vars.BOOKING_AVAILABILITY_ENABLED='true';
+            c.vars.EMAIL_FROM='HUMMIN <hello@hummin.org>';
+            c.vars.EMAIL_FROM_NEWSLETTER='Notes from HUMMIN <notes@letters.hummin.org>';
+            c.vars.EMAIL_FROM_PEOPLE='HUMMIN <hello@hummin.org>';
+            c.vars.EMAIL_FROM_SYSTEM='HUMMIN Security <security@notify.hummin.org>';
+            c.vars.GOOGLE_CALENDAR_ID='c_3fd57cf154990d87e2c6d51ee1b30ea35bd7eb6b74ac5be112040a534a3d5e48@group.calendar.google.com';
+            c.vars.TURNSTILE_SITE_KEY='0x4AAAAAAFk826tr9GZGfmXb';
             fs.writeFileSync(f,JSON.stringify(c,null,2));
           "
       - name: Build and deploy isolated staging only
@@ -51,7 +57,7 @@ jobs:
             const r=await fetch(base+'/api/booking/slots',{signal:AbortSignal.timeout(25000)});
             const v=await r.json();
             assert.equal(r.status,200,'Staging slots HTTP');
-            assert.equal(v.enabled,true,'Staging calendar enabled');
+            assert.equal(v.enabled,true,'Staging calendar enabled: '+JSON.stringify(v).slice(0,300));
             assert.ok(Array.isArray(v.days)&&v.days.length>0,'Google FreeBusy produced days');
             assert.ok(typeof v.siteKey==='string'&&v.siteKey.length>5,'Turnstile challenge available');
             console.log('PASS isolated staging: live Google slots, Turnstile key, dual booking flags');
