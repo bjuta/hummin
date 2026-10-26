@@ -29,7 +29,17 @@ test("Original visual design preserved: hero, legal tabs, sticky TOC, notes and 
  const css=source("app/legal.css");
  for(const part of ["hummin-legal-hero","hummin-legal-tabs","hummin-legal-toc","hummin-legal-questions","hummin-legal-list","hummin-legal-actions","hummin-legal-watermark"])
   assert.ok(layout.includes(part)&&css.includes(part),"Missing source design part: "+part);
- for(const color of ["#1E272A","#B5532C","#F4F5F1","#E7EBE6","#434F4F"])assert.ok(css.includes(color));
+ // Colours are source-authored, versioned design tokens rather than hardcoded
+ // in each page. Verify both the use and the exact owner-approved values.
+ const foundation=source("app/components/source-foundation.css");
+ const tokens=[
+  ["ink","#1E272A"],["rust","#B5532C"],["paper","#F4F5F1"],
+  ["mist","#E7EBE6"],["slate","#434F4F"]
+ ];
+ for(const [name,color] of tokens){
+  assert.ok(foundation.includes("--hummin-"+name+": "+color+";"),"Changed source palette: "+name);
+  assert.ok(css.includes("var(--hummin-"+name+")"),"Legal page does not use shared "+name+" token");
+ }
  assert.ok(source("public/assets/hummin-legal-mark-tone.svg").includes("viewBox"));
  const restore=source("scripts/restore-original.mjs");
  assert.match(restore,/href="\/privacy"/);
