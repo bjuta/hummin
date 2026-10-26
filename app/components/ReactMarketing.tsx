@@ -105,7 +105,22 @@ function How(){
 }
 function Expertise(){
  const [active,setActive]=useState(0),domain=DOMAINS[active];
- return <div className="hr-page"><Hero page="core"/><section className="hr-section"><div className="hr-expertise-grid"><div className="hr-expertise-menu" aria-label="Areas of applied expertise">{DOMAINS.map((d,i)=><button className={active===i?"active":""} type="button" key={d.name} onClick={()=>setActive(i)} aria-current={active===i?"true":undefined}><span>{String(i+1).padStart(2,"0")}</span>{d.name}<span aria-hidden="true">↗</span></button>)}</div><article className="hr-expertise-detail" aria-live="polite"><span className="hr-eyebrow">{domain.name}</span><h2>{domain.lead}</h2><p>{domain.jobs}</p><HButton to="/contact">Discuss this area →</HButton></article></div><p className="hr-expertise-note">Specialist partners are external professionals hired for a defined piece of work. We tell you who they are, what they are responsible for, and how they are paid. We do not take on work that needs qualifications or licences we do not hold.</p></section></div>;
+ return <div className="hr-page"><Hero page="core"/>
+  <section className="hr-section hr-core-section">
+   <Shelf title="Seven areas. Pick one.">{DOMAINS.map((d,i)=><button
+    type="button" key={d.name} className={"hr-core-card hr-core-tone-"+(active===i?"active":i%3)}
+    aria-pressed={active===i} aria-controls="core-detail" onClick={()=>setActive(i)}>
+     <span className="hr-core-card-icon" aria-hidden="true"/>
+     <span className="hr-core-card-label"><strong>{d.name}</strong>{d.ext?<small>External partners</small>:null}</span>
+    </button>)}</Shelf>
+  </section>
+  <section id="core-detail" className="hr-core-source-detail" aria-live="polite">
+   <div key={domain.name} className="hr-core-detail-content"><div><span className="hr-core-detail-icon" aria-hidden="true"/><h2>{domain.name}</h2></div>
+    <div><h3>{domain.lead}</h3><p>{domain.jobs}</p></div>
+   </div>
+  </section>
+  <p className="hr-expertise-note hr-core-note">Specialist partners are external professionals hired for a defined piece of work. We tell you who they are, what they are responsible for, and how they are paid. We do not take on work that needs qualifications or licences we do not hold.</p>
+ </div>;
 }
 function Engagements(){
  const [active,setActive]=useState(0);
