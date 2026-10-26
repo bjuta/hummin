@@ -95,3 +95,7 @@
 
 @keyframes inIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
 @media(prefers-reduced-motion:reduce){.ra-source-hero-inner{animation:none}}
+
+/* Source article navigation/help sidebar is a restrained 280px column;
+   it must not stretch to fill the entire remaining editorial row. */
+@media(min-width:751px){.ra-source-sidebar{flex:0 1 280px;min-width:260px}}
