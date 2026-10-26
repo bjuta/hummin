@@ -50,7 +50,7 @@ export function ReactAssessment(){
  const root=useRef<HTMLDivElement>(null);
  const qRef=useRef<HTMLHeadingElement>(null);
  const results=useMemo(()=>scoreAssessment(answers,numbers,unknown),[answers,numbers,unknown]);
- useEffect(()=>{fetch("/api/email/config",{cache:"no-store"}).then(r=>r.json()).then((d:{ready?:boolean;siteKey?:string})=>{if(d.ready&&typeof d.siteKey==="string")setSiteKey(d.siteKey)}).catch(()=>{});},[]);
+ useEffect(()=>{fetch("/api/email/config",{cache:"no-store"}).then(r=>r.json()).then(raw=>{const d=raw as {ready?:boolean;siteKey?:string};if(d.ready&&typeof d.siteKey==="string")setSiteKey(d.siteKey)}).catch(()=>{});},[]);
  useEffect(()=>()=>{if(pending.current)clearTimeout(pending.current)},[]);
  const top=()=>window.scrollTo({top:0,behavior:"instant"});
  const goto=(target:number)=>{
