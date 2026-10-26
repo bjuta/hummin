@@ -1,6 +1,6 @@
 import { isConfigured, reserve } from "../lib/calendar.server";
 import type { AppLoadContext } from "react-router";
-import {bookingConfirmationEmail,bookingReminderEmail} from "../lib/email-templates.server.ts";
+import {bookingConfirmationEmail,bookingReminderEmail,bookingInternalEmail} from "../lib/email-templates.server.ts";
 import {queueEmail,deliverDue} from "../lib/mail-outbox.server.ts";
 import {bookingLimit,verifyBookingTurnstile} from "../lib/booking-abuse.server.ts";
 import {bookingEmailKey} from "../lib/booking-email-keys.server.ts";
@@ -29,6 +29,7 @@ export async function action({request,context}:{request:Request;context:AppLoadC
   const appointment={recipient:email,name,start:new Date(start),end:new Date(Date.parse(start)+1800000),host:"HUMMIN",meetUrl:event.meetUrl,calendarUrl:event.calendarUrl,assetOrigin:env.SITE_URL||new URL(request.url).origin};
   try{
    await queueEmail(env,bookingEmailKey("booking-confirmation",event.eventId,start),bookingConfirmationEmail(appointment));
+   await queueEmail(env,bookingEmailKey("booking-internal",event.eventId,start),bookingInternalEmail({...appointment,phone}));
    const reminderTime=new Date(Date.parse(start)-86400000);
    if(reminderTime.getTime()>Date.now()+300000)await queueEmail(env,bookingEmailKey("booking-reminder",event.eventId,start),bookingReminderEmail(appointment),reminderTime);
    emailQueued=true;
