@@ -25,6 +25,8 @@ jobs:
         run: npx playwright install chromium --only-shell
       - name: Test HTML-reference versus native React nav and scroll
         run: node scripts/verify-react-legal-header.mjs
+      - name: Verify same React navigation and native scroll on public HUMMIN
+        run: HUMMIN_URL=https://hummin.org node scripts/verify-react-legal-header.mjs
       - name: Save comparison screenshots
         if: always()
         uses: actions/upload-artifact@v4
