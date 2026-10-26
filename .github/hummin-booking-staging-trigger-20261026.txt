@@ -15,3 +15,5 @@ Legal design fidelity release: original user-uploaded HUMMIN Privacy + Terms her
 Validate both HUMMIN user-designed legal pages in live staging via scripts/check-production-staging.mjs, after CI and Wrangler deployment.
 
 Release enhancement: add en-KE document language to generated assessment and insights assets; preserve all source visuals and 19 staging bindings.
+
+Production Staging accessibility correction: dynamic design template lang=en-KE, exact Assessment/Insights contrast overrides. Verified CI 23cae5940b9797c60f34cec471d1d1f9f3e4f61e.
