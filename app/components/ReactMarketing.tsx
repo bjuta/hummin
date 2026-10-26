@@ -42,7 +42,7 @@ function SectionTitle({eyebrow,children}:{eyebrow?:string;children:React.ReactNo
 function Shelf({title,children}:{title:string;children:React.ReactNode}){
  const shelf=useRef<HTMLDivElement>(null);
  const go=(dir:number)=>shelf.current?.scrollBy({left:dir*Math.min(360,shelf.current.clientWidth*.8),behavior:"smooth"});
- return <div className="hr-shelf"><div className="hr-shelf-title"><h2>{title}</h2><div className="hr-shelf-actions"><button type="button" onClick={()=>go(-1)} aria-label={"Scroll "+title+" backward"}>←</button><button type="button" onClick={()=>go(1)} aria-label={"Scroll "+title+" forward"}>→</button></div></div><div className="hr-shelf-track" ref={shelf} tabIndex={0} role="region" aria-label={title}>{children}</div></div>;
+ return <div className="hr-shelf"><div className="hr-shelf-title"><h2>{title}</h2><div className="hr-shelf-actions"><button type="button" onClick={()=>go(-1)} aria-label={"Scroll "+title+" backward"}><img src="/brand/icons/arrow-left.svg" alt="" aria-hidden="true"/></button><button type="button" onClick={()=>go(1)} aria-label={"Scroll "+title+" forward"}><img src="/brand/icons/arrow-right-light.svg" alt="" aria-hidden="true"/></button></div></div><div className="hr-shelf-track" ref={shelf} tabIndex={0} role="region" aria-label={title}>{children}</div></div>;
 }
 function ProblemModal({index,onClose}:{index:number;onClose:()=>void}){
  const p=TOPICS[index];
@@ -101,7 +101,7 @@ function Home(){
 function How(){
  return <div className="hr-page"><Hero page="how"/><section className="hr-section">
   <Shelf title="Four steps, in order.">{STAGES.map((s,i)=><article className={"hr-stage-card hr-stage-source-"+i} key={s.name}><span className="hr-card-chip">Step {i+1} of 4</span><div><h3>{s.name}</h3><p>{s.what}</p><p className="hr-stage-out">You receive: {s.out}</p></div></article>)}</Shelf>
- </section><section className="hr-dark-section"><div className="hr-section-headline"><SectionTitle eyebrow="What we need from you">Four things we ask of every client.</SectionTitle><p>We agree these with you at the start of every engagement.</p></div><div className="hr-four-grid">{NEEDS.map(n=><div className="hr-need" key={n.v}><img className="hr-need-icon" src={"/brand/icons/"+n.icon+"-light.svg"} alt="" aria-hidden="true"/><h3>{n.v}</h3><p>{n.k}</p></div>)}</div></section></div>;
+ </section><section className="hr-dark-section"><div className="hr-section-headline"><SectionTitle eyebrow="What we need from you">Four things we ask of every client.</SectionTitle><p>We agree these with you at the start of every engagement.</p></div><div className="hr-four-grid">{NEEDS.map(n=><div className="hr-need" key={n.v}><span className="hr-need-icon" aria-hidden="true"><img src={"/brand/icons/"+n.icon+"-light.svg"} alt=""/></span><h3>{n.v}</h3><p>{n.k}</p></div>)}</div></section></div>;
 }
 function Expertise(){
  const [active,setActive]=useState(0),domain=DOMAINS[active];
