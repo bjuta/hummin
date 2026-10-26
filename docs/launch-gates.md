@@ -25,7 +25,7 @@
 - [x] Preview D1 schema for `0010_booking_abuse.sql` applied directly and all three objects verified on 26 October 2026. Preview has no Wrangler migration ledger; do not present this as a tracked migration.
 - [x] Preview D1 schema `0011_booking_reconciliation.sql` applied directly and all three objects verified (no Wrangler ledger in preview).
 - [x] Google cancellation and movement reconciliation unit tests passed in CI on commit `5b822cc6`; reminders and queued confirmations recheck Google event state before dispatch.
-- [ ] Apply tracked `0010_booking_abuse.sql` and `0011_booking_reconciliation.sql` via approved Wrangler production-staging workflow; check `d1_migrations` and quotas before activation.
+- [ ] Apply tracked `0010_booking_abuse.sql`, `0011_booking_reconciliation.sql` and `0012_booking_change_history.sql` via approved Wrangler production-staging workflow; check `d1_migrations` and quotas before activation.
 - [ ] Run controlled Turnstile browser acceptance on an authorised preview hostname; verify success, replay rejection, wrong action, missing token, and rate limiting.
 - [ ] Verify one genuine Google Calendar reservation (FreeBusy, invitation receipt, Meet link, Google event and D1 record), conflicting simultaneous requests and moved/cancelled appointment reconciliation.
 - [ ] Verify Google event insert timeout and database confirmation failures recover without creating ghost bookings; verify booking confirmation and reminder messages arrive in intended inboxes.
@@ -53,3 +53,13 @@ Remaining acceptance ownership: privacy and consent copy, browser accessibility 
 ### Additional release evidence (26 October 2026)
 
 GitHub CI and Cloudflare Preview Build passed at commit `5b822cc6`. Preview has both security and reconciliation schemas. The Google cancellation/movement recovery tests are deterministic mocked-behavior tests, **not live Google Calendar delivery or attendee tests**. The production-staging `d1_migrations` ledger remains at nine records until approved Wrangler migration; do not execute raw production SQL or manually forge migration history. The connected Google Calendar account is not the HUMMIN booking account, and recipient-side delivery cannot be certified from that connection. Public DNS and live booking remain unchanged.
+
+### Rescheduled appointment integrity — 26 October 2026
+
+- [x] Source retains Google event ID and booking row when an appointment moves; validated with mocked Google responses and D1 transactional tests.
+- [x] Repeated moves each receive an independent append-only `booking_change_history` record; cancellation preserves an audit and releases the old slot only after repeated observations.
+- [x] Booking confirmation and reminder idempotency keys include the appointment time, allowing fresh email after a move; the mail worker still verifies the current Google event before dispatch.
+- [x] New `0012_booking_change_history.sql` table/index applied and inspected on Preview D1 (direct schema, not tracked Wrangler migration).
+- [x] GitHub CI and Cloudflare Preview build passed at `14febc632e5c1ee664e0f7dee09ef6680aba4457`.
+- [ ] Apply migrations 0010, 0011, and 0012 to the isolated Production Staging D1 through the approved Wrangler workflow and confirm ledger entries; no manual SQL substitutions.
+- [ ] Verify receipt of both a new booking invitation and a moved-appointment invitation with consenting attendee; verify delivery outcomes beyond provider acceptance.
