@@ -63,7 +63,7 @@
 .hr-insights-download-card-head>span:first-child{display:inline-flex;align-items:center;min-height:28px;padding:0 12px;border-radius:999px;background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.24);font-weight:700}
 .hr-insights-download-card>div:nth-child(2){display:grid;gap:10px}
 .hr-insights-download-card h3{font:400 30px/1.05 Newsreader,Georgia,serif;margin:0}
-.hr-insights-download-card p{font-size:15px;line-height:1.55;opacity:.96;margin:0}
+.hr-insights-download-card p{font-size:15px;line-height:1.55;opacity:1;margin:0}
 .hr-insights-download-card>div:nth-child(2)>span{font-size:13px;font-weight:600}
 .hr-insights-download-card>a{justify-self:start;display:inline-flex;align-items:center;min-height:48px;padding:0 20px;border-radius:999px;background:#F4F5F1;color:#1E272A;font-size:14px;font-weight:700;text-decoration:none}
 .hr-insights-source-newsletter-wrap{padding:0 clamp(20px,5cqw,64px) clamp(64px,8cqw,112px)}
