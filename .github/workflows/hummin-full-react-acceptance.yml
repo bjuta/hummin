@@ -1,10 +1,6 @@
 name: HUMMIN full React Preview acceptance
 on:
-  push:
-    branches: [feat/fullstack-workers-foundation]
-    paths:
-      - scripts/verify-full-react-acceptance.mjs
-      - .github/workflows/hummin-full-react-acceptance.yml
+  workflow_dispatch: # Run only after a consolidated React Preview release candidate is deployed
 permissions:
   contents: read
 jobs:
