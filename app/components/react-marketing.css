@@ -319,3 +319,8 @@
 
 /* The original commitments block is a dark, four-column section. */
 .hr-dark-section{display:grid;background:#1E272A;color:#F4F5F1}
+
+/* On the original Who We Work With page the assessment CTA is charcoal,
+   unlike the terracotta global assessment band further down the page. */
+.hr-who-body .hr-link-btn{background:#1E272A;color:#F4F5F1}
+.hr-who-body .hr-link-btn:hover{background:#434F4F}
