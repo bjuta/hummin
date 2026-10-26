@@ -6,7 +6,12 @@
 .hm-source-peek-mist .hm-source-peek-hero{background:var(--hummin-mist);color:var(--hummin-ink)}
 .hm-source-peek-ink .hm-source-peek-hero{background:var(--hummin-ink);color:var(--hummin-paper)}
 .hm-source-peek-slate .hm-source-peek-hero{background:var(--hummin-slate);color:var(--hummin-paper)}
-.hm-source-peek-top{display:flex;align-items:flex-start;justify-content:space-between;gap:16px}
+/* The original engagement posters add an atmospheric tint behind their titles. */
+.hm-source-peek-glow .hm-source-peek-hero::before{content:"";position:absolute;inset:0;pointer-events:none}
+.hm-source-peek-glow.hm-source-peek-mist .hm-source-peek-hero::before{background:radial-gradient(circle at 80% 10%,rgba(255,255,255,.7),transparent 50%)}
+.hm-source-peek-glow.hm-source-peek-slate .hm-source-peek-hero::before{background:radial-gradient(circle at 80% 10%,rgba(186,196,190,.35),transparent 55%)}
+.hm-source-peek-glow.hm-source-peek-ink .hm-source-peek-hero::before{background:radial-gradient(circle at 85% 0%,rgba(181,83,44,.45),transparent 55%)}
+.hm-source-peek-top{position:relative;display:flex;align-items:flex-start;justify-content:space-between;gap:16px}
 .hm-source-peek-chip{display:inline-flex;align-items:center;min-height:30px;padding:0 12px;border-radius:999px;font-size:12px;line-height:1.2;font-weight:600;background:rgba(30,39,42,.06);border:1px solid rgba(30,39,42,.12)}
 .hm-source-peek-ink .hm-source-peek-chip,.hm-source-peek-slate .hm-source-peek-chip{background:rgba(244,245,241,.08);border-color:rgba(244,245,241,.16)}
 .hr-dialog-close.hm-source-peek-close{position:static;flex-shrink:0;width:40px;height:40px;border-radius:999px;display:grid;place-items:center;padding:0;font:inherit;font-size:18px;line-height:1;cursor:pointer;color:inherit;border:1px solid rgba(30,39,42,.12);background:rgba(30,39,42,.06);transition:transform 160ms cubic-bezier(.2,0,0,1)}
