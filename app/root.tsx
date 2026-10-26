@@ -68,7 +68,14 @@ function Header(){
   </header>;
 }
 
-function Footer(){return <footer className="site-footer"><div className="footer-inner"><Link to="/" className="footer-brand">HUMMIN</Link><span>Embedded advisory and execution · Nairobi, Kenya</span><a href="mailto:sales@hummin.org">sales@hummin.org</a><span>© {new Date().getFullYear()} HUMMIN</span><Link to="/privacy">Privacy</Link><Link to="/terms">Terms of Use</Link></div></footer>;}
+function Footer(){return <footer className="hm-site-footer"><div className="hm-site-footer-inner">
+  <Link to="/" className="hm-site-footer-brand" aria-label="HUMMIN home"><img src="/brand/hummin-symbol.svg" width="44" height="44" alt=""/><span>HUMMIN</span></Link>
+  <span>Embedded advisory and execution · Nairobi, Kenya</span>
+  <a href="mailto:sales@hummin.org">sales@hummin.org</a>
+  <Link to="/privacy">Privacy</Link><Link to="/terms">Terms of Use</Link>
+  <span>© {new Date().getFullYear()} HUMMIN</span>
+</div></footer>;}
+
 export default function App(){
  const {pathname}=useLocation();
  useEffect(()=>{
