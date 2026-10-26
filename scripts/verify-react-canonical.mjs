@@ -71,7 +71,7 @@ for(const width of [390,768,1440]){
    }
    if(kind==="home"){
     assert.ok(await page.getByText("Keep us close with a",{exact:false}).count(),"Original Residency language");
-    assert.equal(await page.locator(".hr-problem-card").count(),5,"Source problem shelf");
+    assert.equal(await page.locator(".hr-problem-card").count(),6,"All six source problem cards");
     assert.equal(await page.locator(".hr-engagement-card").count(),3,"Source engagements");
     assert.equal(await page.locator(".hr-home-insight-card").count(),3,"Source homepage editorial teasers");
     assert.equal(await page.locator(".hr-bottom-cta").count(),0,"No invented dark homepage CTA");
