@@ -39,3 +39,23 @@ test("Staging route cannot accidentally expose incomplete React migration on pub
  for(const route of ["marketing","assessment","contact","insights"]){const gate=read("app/routes/react."+route+".gated.tsx");assert.match(gate,/isHumminPublicHost/);assert.match(gate,/originalLoader/);}
  assert.match(read("app/routes/fidelity.ts"),/\/design\/site\/index.html/,"Live public host legacy responses remain until acceptance");
 });
+
+
+test("Assessment and Insights retain owner-authored first-fold design and site-wide assessment invitations",()=>{
+ const assessment=read("app/components/ReactAssessment.tsx");
+ const insight=read("app/components/ReactInsights.tsx");
+ const promos=read("app/components/ReactAssessmentPromotion.tsx");
+ assert.match(assessment,/See what is holding the business back/);
+ assert.match(assessment,/And what it costs/);
+ assert.match(assessment,/Business Assessment · About 8 minutes · No cost/);
+ assert.match(assessment,/23 short questions about how the business runs today/);
+ assert.match(assessment,/Have your monthly enquiries and average sale value to hand/);
+ assert.match(insight,/Guides · Opinion · Downloads · News/);
+ assert.match(insight,/Practical guides, opinion, and news for owners of established businesses/);
+ assert.match(insight,/Search guides, opinion, and news/);
+ assert.match(insight,/hr-insights-source-topics/);
+ assert.match(promos,/What is holding the business back/);
+ assert.match(promos,/Find out what is holding your business back/);
+ assert.doesNotMatch(assessment,/<iframe|dangerouslySetInnerHTML/);
+ assert.doesNotMatch(insight,/<iframe|dangerouslySetInnerHTML/);
+});
