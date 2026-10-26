@@ -28,7 +28,7 @@
 .hummin-legal-article{flex:1 1 560px;max-width:740px;min-width:0;display:grid;gap:clamp(36px,4cqw,52px)}
 .hummin-legal-section{display:grid;gap:16px;padding-top:24px;border-top:2px solid #1E272A;scroll-margin-top:96px}
 .hummin-legal-heading{display:flex;gap:16px;align-items:baseline}
-.hummin-legal-heading>span{font-weight:600;font-size:12px;color:#B5532C;font-variant-numeric:tabular-nums}
+.hummin-legal-heading>span{font-weight:600;font-size:12px;color:#87371B;font-variant-numeric:tabular-nums}
 .hummin-legal-heading h2{margin:0;font-family:'Newsreader',serif;font-weight:400;font-size:clamp(28px,3cqw,38px);line-height:1.08;letter-spacing:-.01em}
 .hummin-legal-paragraph{margin:0;font-size:17px;line-height:1.72;color:#2A3538;text-wrap:pretty}
 .hummin-legal-list{margin:0;display:grid;gap:0;border-radius:16px;overflow:hidden;border:1px solid #D0D8D2;background:#fff}
