@@ -75,7 +75,8 @@ GitHub CI and Cloudflare Preview Build passed at commit `5b822cc6`. Preview has 
 - [x] New internal-booking notification tests and staging deployment succeeded (GitHub Actions run 40287665241).
 - [ ] **Launch blocker**: `/privacy` currently says 'Privacy notice under review' and is not a publishable privacy statement. Approve accurate purpose, processor, retention, deletion, cookies, security and contact disclosures and replace this page before routing `hummin.org`.
 - [ ] **Launch blocker**: Owner acceptance of supplied website across desktop/mobile and keyboard accessibility, plus licensed assets and contact consent.
-- [ ] **Launch blocker**: Verify branded visitor confirmation inbox delivery and reminder after scheduled time; acceptance of Resend API response alone is not proof of arrival.
+- [x] HUMMIN-branded visitor confirmation **received** at `grimpossible@gmail.com` on 26 October 2026 at 10:13 EAT. Recipient-provided Gmail PDF confirms sender `HUMMIN <hello@hummin.org>`, reply-to `sales@hummin.org`, Wednesday 28 October 2026 at 10:00–10:30 EAT, Meet/Calendar actions and HUMMIN styling. Resend provider ID `01a1770e-b31a-77a7-ac13-d840150f8b2b` matched staging outbox acceptance.
+- [ ] Scheduled 24-hour booking reminder is queued for 27 October 2026 at 10:00 EAT; recipient-side delivery cannot be certified before it is sent.
 - [ ] Controlled parallel-booking and Google move/cancel/timeout testing on isolated staging remain unverified live; mock unit tests passed.
 - [ ] Confirm backup/rollback rehearsal, monitoring, operational ownership and owner-approved public-domain cutover. No `hummin.org` routes changed.
 
