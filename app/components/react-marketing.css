@@ -284,3 +284,11 @@
 .hr-who-body>div>p:not(.hr-big){font:400 17px/1.65 Figtree,Arial,sans-serif;color:#434F4F;max-width:52ch;margin:0}
 .hr-who-body .hr-big{letter-spacing:-.01em}
 .hr-who-body>div{gap:28px}
+
+/* Use the exact source-v4 coloured HUMMIN motif variants. */
+.hr-hero-motif{content:url('/brand/hummin-mark-mist.svg');filter:none;mix-blend-mode:screen}
+.hr-problem-card .hr-problem-mark{background:url('/brand/hummin-mark-mist.svg') right -40% bottom -30%/130% auto no-repeat;opacity:1;filter:none}
+.hr-problem-card.hr-source-tone-1 .hr-problem-mark,
+.hr-problem-card.hr-source-tone-2 .hr-problem-mark{background-image:url('/brand/hummin-mark-tone.svg');opacity:1;filter:none}
+.hr-shelf-track{scrollbar-width:none}
+.hr-shelf-track::-webkit-scrollbar{display:none}
