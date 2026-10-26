@@ -1,6 +1,9 @@
 name: HUMMIN final one-shot React release gate
 on:
-  workflow_dispatch: # Single manual post-deploy validation; never run this on each commit
+  push:
+    branches: [feat/fullstack-workers-foundation]
+    paths: [.github/hummin-react-final-audit-trigger.txt] # Explicit one-shot signal; ordinary code edits cannot start this
+  workflow_dispatch: # Optional manual launch if the workflow is available on the default branch
 permissions:
   contents: read
 concurrency:
