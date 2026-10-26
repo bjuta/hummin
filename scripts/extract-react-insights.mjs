@@ -27,6 +27,7 @@ for(let i=start;i<raw.length;i++){
 }
 if(end<0)throw Error("Unterminated original Insights data array");
 const literal=raw.slice(start,end);
+console.log("INSIGHTS POSTS STRUCTURE",literal.slice(0,2450));
 const posts=vm.runInNewContext("("+literal+")",Object.create(null),{timeout:500});
 if(!Array.isArray(posts)||posts.length<4)throw Error("Original Insights posts not parsed");
 const data=posts.map(p=>{
