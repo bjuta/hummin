@@ -18,6 +18,8 @@ const original = [
   ['Navigation follows browser back', site.includes("addEventListener('popstate'")],
   ['Original layout embeds the assessment', site.includes('/design/assessment/index.html')],
   ['Unresolved popup and navigation overlays default to hidden', site.includes('visibility:hidden;visibility:{{ peekVis }}') && site.includes('visibility:hidden;visibility:{{ drawerVis }}') && site.includes('opacity:0;opacity:{{ scrimOpacity }}')],
+  ['Hero typography receives pointer/touch gestures on home and inner page heroes', ['28px','24px'].every(gap=>site.includes('position:relative;pointer-events:auto;width:100%;margin:0 auto;padding:0 clamp(20px,5cqw,64px) clamp(32px,5cqw,64px);display:grid;gap:'+gap))],
+  ['Hero badges receive pointer/touch gestures', site.split('position:absolute;pointer-events:auto;top:clamp(20px,3cqw,32px)').length===3],
   ['Original typography retained', site.includes('Newsreader') && site.includes('Figtree')],
   ['Original slate/rust palette retained', site.includes('#1E272A') && site.includes('#B5532C')],
   ['Contact form follows server-side readiness', site.includes('window.HUMMIN_CONTACT_READY === true') && site.includes('v.contactInactive = !v.contactReady')],
