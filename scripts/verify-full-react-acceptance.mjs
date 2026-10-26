@@ -5,6 +5,7 @@ import assert from "node:assert/strict";
 import fs from "node:fs";
 import {chromium} from "playwright";
 import AxeBuilder from "@axe-core/playwright";
+// Verify the newly deployed isolated native React Preview; no external side effects.
 const base="https://hummin-web-preview.grimpossible.workers.dev";
 const browser=await chromium.launch({headless:true,args:["--no-sandbox"]});
 const failures=[],passed=[];
