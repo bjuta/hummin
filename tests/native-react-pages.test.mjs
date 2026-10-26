@@ -39,6 +39,17 @@ test("Staging route cannot accidentally expose incomplete React migration on pub
  assert.match(config,/route\("__react\/:page","routes\/react.preview.tsx"\)/);
  assert.match(config,/index\("routes\/react.marketing.gated.tsx"\)/,"Canonical paths are routed through the reversible hostname gate");
  for(const route of ["marketing","assessment","contact","insights"]){const gate=read("app/routes/react."+route+".gated.tsx");assert.match(gate,/isHumminPublicHost/);assert.match(gate,/originalLoader/);}
+ const release=read("app/lib/react-cutover.server.ts");
+ assert.match(release,/PUBLIC_REACT_CUTOVER_APPROVED = false/,"Public cutover must remain disabled without owner approval");
+ for(const route of ["marketing","assessment","contact","insights"]){
+  const gate=read("app/routes/react."+route+".gated.tsx");
+  assert.match(gate,/!PUBLIC_REACT_CUTOVER_APPROVED/,"Explicit reviewed rollback on "+route);
+  assert.match(gate,/canonical/,"Native public metadata must be configured for "+route);
+ }
+ const insights=read("app/routes/react.insights.preview.tsx");
+ assert.match(insights,/loadReactInsights/,"Insights uses one native CMS loader on Preview and canonical routes");
+ assert.match(insights,/preview:!canonical/);
+
  assert.match(read("app/routes/fidelity.ts"),/\/design\/site\/index.html/,"Live public host legacy responses remain until acceptance");
 });
 

@@ -38,10 +38,7 @@ Do not confuse a Preview deploy with public release approval.
    version and commit SHA and preserve the design archive in Git history
    (prefer an immutable release tag). Record the existing public route
    and D1 bindings before changing anything.
-3. **Cut over public routes as a separate, reviewable commit:** change all
-   `react.*.gated.tsx` loaders so `hummin.org` uses native React and
-   retains correct server actions, CMS data, SEO headers and errors. Never
-   allow accidental promotion via a Preview configuration or DNS changes.
+3. **Cut over public routes as a separate, reviewable commit:** only after explicit owner approval, switch the reviewed literal `PUBLIC_REACT_CUTOVER_APPROVED` in `app/lib/react-cutover.server.ts` from `false` to `true`. The four canonical route gates are prepared for that change, including native Insights CMS data and canonical metadata. This is deliberately **not a runtime flag** or a Cloudflare dashboard variable. Retain the correct form actions, SEO headers and rollback path. Do not change DNS, traffic routing, database bindings or email secrets as part of this preparation.
 4. **Run one consolidated production-staging gate:** test with a truly
    source-free checkout, including native routes, images, responsive
    behavior, backend integration, data migration state and secure API

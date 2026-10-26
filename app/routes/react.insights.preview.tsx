@@ -5,9 +5,12 @@ import {isHumminPublicHost} from "../lib/seo.server";
 import originalPosts from "../lib/react-original-insights.json";
 import type {AppLoadContext} from "react-router";
 import type {ReactPost} from "../components/ReactInsights";
-export async function loader({request,context}:{request:Request;context:AppLoadContext}){
- if(isHumminPublicHost(new URL(request.url).hostname))throw new Response("Not found",{status:404});
- const suffix=new URL(request.url).pathname.slice("/__react/insights".length);
+export async function loadReactInsights({request,context}:{request:Request;context:AppLoadContext},canonical=false){
+ const url=new URL(request.url);
+ if(!canonical&&isHumminPublicHost(url.hostname))throw new Response("Not found",{status:404});
+ const prefix=canonical?"/insights":"/__react/insights";
+ if(url.pathname!==prefix&&!url.pathname.startsWith(prefix+"/"))throw new Response("Not found",{status:404});
+ const suffix=url.pathname.slice(prefix.length);
  const components=suffix.split("/").filter(Boolean);
  const valid=(s:string)=>/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(s)&&s.length<121;
  let view:"index"|"article"|"topic"|"author"="index",selected="";
@@ -28,7 +31,8 @@ export async function loader({request,context}:{request:Request;context:AppLoadC
  }
  base.sort((a,b)=>b.date.localeCompare(a.date));
  if(view==="article"&&!base.some(p=>p.slug===selected))throw new Response("Insight not found",{status:404});
- return {posts:base,view,selected,preview:true};
+ return {posts:base,view,selected,preview:!canonical};
 }
+export async function loader(args:{request:Request;context:AppLoadContext}){return loadReactInsights(args,false)}
 export const meta=()=>[{title:"HUMMIN Insights React acceptance"},{name:"robots",content:"noindex,nofollow"}];
 export default ReactInsightsRoute;
