@@ -17,3 +17,5 @@ Validate both HUMMIN user-designed legal pages in live staging via scripts/check
 Release enhancement: add en-KE document language to generated assessment and insights assets; preserve all source visuals and 19 staging bindings.
 
 Production Staging accessibility correction: dynamic design template lang=en-KE, exact Assessment/Insights contrast overrides. Verified CI 23cae5940b9797c60f34cec471d1d1f9f3e4f61e.
+
+Final source-fidelity badge contrast fix for Insights checklist, passing full CI commit 65d1e1c2ebd06ba34ae37b4f67f9ea5b7da0fb7e.
