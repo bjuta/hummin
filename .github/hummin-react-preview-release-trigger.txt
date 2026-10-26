@@ -29,3 +29,5 @@ React legal CTA accessibility follow-up: deploy bcde3a1035cb394146fd12c723a45482
 26 October 2026 one-shot build retry after repairing source Insights asset-array syntax. Same consolidated candidate; no public routing, mail or booking changes; no parallel CI/audits.
 
 2026-10-26 consolidated fidelity finishing candidate: nested-frame source reference capture safety, complete 23-step read-only Assessment verification, source Contact field errors/typography/icons, corrected page rhythm, original source art and navigation. Deploy Preview only, do not alter public hummin.org or production integrations. Run one final release gate only after successful build.
+
+2026-10-26 single consolidated HTML-independent React Preview proof: 67 committed art/font files, 4 committed Insights articles, compiled source CSS, source-based shared primitives. Hide design/sources during CI, run React asset and type checks, build and deploy only isolated preview. No public cutover. Do not run separate visual workflows for this proof.
