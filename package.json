@@ -30,7 +30,8 @@
     "verify:production:wrangler-migrations": "wrangler d1 migrations apply hummin-web-production --config wrangler.production.jsonc --local --persist-to .wrangler/production-schema-check",
     "verify:boot": "node --test tests/boot-gate.test.mjs",
     "verify:design-source": "node --test tests/source-primitives-contract.test.mjs tests/source-editorial-contract.test.mjs tests/react-standalone-assets.test.mjs",
-    "verify:static-assets": "node --test tests/react-standalone-assets.test.mjs"
+    "verify:static-assets": "node --test tests/react-standalone-assets.test.mjs",
+    "verify:html-removal-ready": "node scripts/check-legacy-html-detach.mjs"
   },
   "dependencies": {
     "isbot": "5.1.32",

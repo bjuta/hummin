@@ -2,14 +2,14 @@
 
 ## Why we changed the method
 
-The prior approach iteratively approximated every page from screenshots. It produced repeated CSS overrides and passed functional checks while failing visual comparisons. From now on, the **approved original HTML design bundle is the source**, and React is only the implementation.
+The prior approach iteratively approximated every page from screenshots. It produced repeated CSS overrides and passed functional checks while failing visual comparisons. The original HTML is an archival design reference, not the runtime or build source. React components, versioned presentation files, and JSON content are the implementation and deployment source.
 
 ## Source assets
 
 - Marketing HTML and style rules: `design/sources/site-v4.template.json` (JSON-encoded authoritative HTML).
 - Insights HTML: `design/sources/insights-v4.html.gz.b64`.
 - Original static resources: manifest shards under `design/sources`.
-- Original Figtree and Newsreader fonts, SVG icon variants, hero artwork and photography are extracted by the existing prebuild scripts.
+- Original Figtree and Newsreader fonts, SVG icon variants, hero artwork and photography have been permanently committed under `public/brand`.
 
 A newly uploaded owner HTML file should be compared to the repository source first; replace the authoritative source if it supersedes these versions. **Do not hand-transcribe the site again.**
 
@@ -28,7 +28,7 @@ A newly uploaded owner HTML file should be compared to the repository source fir
 
 ## Style foundation
 
-`scripts/sync-source-foundation.mjs` reads the owner HTML and deterministically regenerates `app/components/source-foundation.generated.css` during `npm run prebuild`. The original base stylesheet remains intact inside a low-priority CSS layer; its palette is exported as semantic `--hummin-*` variables.
+`app/components/source-foundation.css` is a committed snapshot of the approved foundation, independent of HTML. Its palette is exposed as semantic `--hummin-*` variables. The old extraction script is retained only in repository history/legacy tooling, never invoked by the React build.
 
 The marketing, Contact, Insights, article, assessment, promotion and legal styles now reference these shared variables (448 existing colour literals consolidated mechanically, without changing their computed values).
 
