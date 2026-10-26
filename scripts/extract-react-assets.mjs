@@ -93,7 +93,7 @@ for(const [filename,id] of Object.entries(sourceMarks)){
  let body=Buffer.from(item.data,'base64');
  if(item.compressed)body=zlib.gunzipSync(body);
  const svg=body.toString('utf8');
- if(!svg.includes('<svg')||/<script\\b/i.test(svg))throw Error('Invalid source HUMMIN motif: '+filename);
+ if(!svg.includes('<svg')||/<script\b/i.test(svg))throw Error('Invalid source HUMMIN motif: '+filename);
  fs.writeFileSync(path.join('public/brand',filename),body);
 }
 console.log('Recovered original HUMMIN static Lucide icons',extractedIcons.size);
