@@ -61,6 +61,7 @@
 .hr-insights-download-card-head{display:flex;justify-content:space-between;align-items:center;gap:10px}
 .hr-insights-download-card-head>span{font-size:12px;font-weight:600}
 .hr-insights-download-card-head>span:first-child{display:inline-flex;align-items:center;min-height:28px;padding:0 12px;border-radius:999px;background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.24);font-weight:700}
+.hr-insights-download-0 .hr-insights-download-card-head>span:first-child{background:rgba(30,39,42,.4);border-color:rgba(30,39,42,.42)}
 .hr-insights-download-card>div:nth-child(2){display:grid;gap:10px}
 .hr-insights-download-card h3{font:400 30px/1.05 Newsreader,Georgia,serif;margin:0}
 .hr-insights-download-card p{font-size:15px;line-height:1.55;opacity:1;margin:0}
