@@ -38,7 +38,7 @@ export function ReactInsights({posts,view,selected="",preview=false}:ReactInsigh
  const active=posts.find(p=>p.slug===selected);
  const author=view==="author"?insightsAuthors[selected as keyof typeof insightsAuthors]:null;
  const topic=view==="topic"?topicName(selected):null;
- return <div className="hr-insights-page">
+ return <div className={"hr-insights-page"+(view==="index"?" hr-insights-index-page":"")}>
   <section className={"hr-insights-hero"+(view==="index"?" hr-insights-index-hero":"")}>
    {view==="index"?<img className="hr-insights-watermark" src="/assets/hummin-legal-mark-tone.svg" alt="" aria-hidden="true"/>:null}
    <div className="hr-insights-hero-inner">
