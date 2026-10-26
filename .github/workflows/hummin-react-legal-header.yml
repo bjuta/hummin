@@ -1,10 +1,6 @@
 name: HUMMIN React legal header parity
 on:
-  push:
-    branches: [feat/fullstack-workers-foundation]
-    paths:
-      - scripts/verify-react-legal-header.mjs
-      - .github/workflows/hummin-react-legal-header.yml
+  workflow_dispatch: # Run only after a consolidated React Preview release candidate is deployed
 permissions:
   contents: read
 jobs:
