@@ -131,10 +131,18 @@ export function ReactAssessment(){
   }finally{setBookingBusy(false)}
  };
  return <div className="ra-root" ref={root}>
-  <header className="ra-hero"><p className="ra-eyebrow">HUMMIN / BUSINESS ASSESSMENT</p>
-   <h1>{stage==="intro"?"See your business more clearly.":stage==="flow"?"Understand what is holding you back.":"Your business, in clearer focus."}</h1>
-   <p>{stage==="intro"?"Answer practical questions about how your business works. See five areas scored against your goal, and a plan to act on what you find.":stage==="flow"?"Be as candid as you can. Your responses stay on this device until you choose to email your plan.":"Five areas scored against your goal, with three priorities and practical next steps."}</p>
-  </header>
+  {stage==="intro"?<section className="ra-source-intro" aria-labelledby="ra-intro-title">
+   <img className="ra-source-intro-motif" src="/assets/hummin-legal-mark-tone.svg" alt="" aria-hidden="true"/>
+   <span className="ra-intro-badge">Business Assessment · About 8 minutes · No cost</span>
+   <h1 id="ra-intro-title">See what is holding the business back.<em>And what it costs.</em></h1>
+   <p>23 short questions about how the business runs today. You get a score for five areas, an estimate of what the gaps cost you each month, and a 30-day plan you can start on your own.</p>
+   <div className="ra-source-intro-actions"><button type="button" onClick={()=>goto(0)}>Start the Assessment <span aria-hidden="true">→</span></button>
+    <span>Have your monthly enquiries and average sale value to hand.</span>
+   </div>
+  </section>:<header className="ra-hero"><p className="ra-eyebrow">HUMMIN / BUSINESS ASSESSMENT</p>
+   <h1>{stage==="flow"?"Understand what is holding you back.":"Your business, in clearer focus."}</h1>
+   <p>{stage==="flow"?"Be as candid as you can. Your responses stay on this device until you choose to email your plan.":"Five areas scored against your goal, with three priorities and practical next steps."}</p>
+  </header>}
   {stage==="intro"?<main className="ra-main ra-intro">
    <div className="ra-intro-grid">
     {[
@@ -143,7 +151,7 @@ export function ReactAssessment(){
      ["03","What the gaps cost.","Using your own numbers, in your own currency, with the working shown."],
      ["04","A plan you can start alone.","Three priorities, each with something you can do in the next 30 days."]
     ].map(([num,title,body],i)=><article className={"ra-intro-card ra-tone-"+i} key={num}><span>{num} / 04</span><h2>{title}</h2><p>{body}</p></article>)}
-   </div><div className="ra-intro-bottom"><div><h2>A practical starting point.</h2><p>About 10 minutes. No jargon. You can choose “I don’t know” for financial figures.</p></div><button className="ra-primary" type="button" onClick={()=>goto(0)}>Start the Assessment <span aria-hidden="true">→</span></button></div>
+   </div>
   </main>:null}
   {stage==="flow"?<main className="ra-main ra-question">
    <div className="ra-progress-title"><span>{section}</span><span>Question {step+1} of {questions.length}</span></div>
