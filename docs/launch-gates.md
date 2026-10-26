@@ -81,3 +81,14 @@ GitHub CI and Cloudflare Preview Build passed at commit `5b822cc6`. Preview has 
 - [ ] Confirm backup/rollback rehearsal, monitoring, operational ownership and owner-approved public-domain cutover. No `hummin.org` routes changed.
 
 The earlier portions of this file document historical development states and must not be interpreted as the current staging status. Continue testing on **Production Staging**, not Preview.
+
+## Automated browser acceptance — 26 October 2026
+
+**Evidence:** GitHub Actions [HUMMIN Staging Browser Audit #40299021317](https://github.com/bjuta/hummin/actions/runs/40299021317), artifact `hummin-staging-browser-evidence` (desktop, tablet, mobile Privacy/Terms screenshots and JSON results). Read-only run against the isolated `workers.dev` Worker; no forms submitted.
+
+- [x] Chromium navigation at mobile 390×844, tablet 768×1024 and desktop 1440×900: 18 route/viewport combinations, homepage, Privacy, Terms, contact, assessment shell and Insights shell, all HTTP 200.
+- [x] No horizontal overflow or uncaught page JavaScript exceptions in these tested outer documents.
+- [x] The 8-section Privacy and 12-section Terms documents have exactly one H1, correct section navigation, responsive layouts, and **no axe-core WCAG 2.0/2.1 A/AA violations** at any of the three widths (six scanned page instances).
+- [x] Screenshot evidence saved for both legal documents in all three viewport sizes.
+- [ ] The Assessment and Insights experiences render inside nested design iframes: an outer-shell pass **is not** an inner-document accessibility and rendering pass. A follow-up browser audit is being run for the embedded documents; record its result separately.
+- [ ] Visual sign-off by the HUMMIN owner and legal sign-off of wording are still required; automated tests are not a substitute for owner review or an independent legal review.
