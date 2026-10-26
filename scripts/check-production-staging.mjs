@@ -19,6 +19,10 @@ assert.equal(slots.response.status,200,"Staging must return a safe disabled book
 const slotData=JSON.parse(slots.body);
 assert.equal(slotData.enabled,false,"Public booking must remain disabled until Google Calendar acceptance");
 assert.deepEqual(slotData.days,[],"No bookable slots may be published during staging");
+// Staging is not ready for public routing while legal disclosure is a placeholder.
+const privacy=await read("/privacy");
+assert.equal(privacy.response.status,200,"Privacy route must load");
+assert.match(privacy.body,/Privacy notice under review|Publication required before launch/i,"Track unresolved privacy approval");
 const login=await read("/admin/login");
 assert.equal(login.response.status,200);
 assert.match(login.body,/Send sign-in code/i,"Activated Owner login must load");
