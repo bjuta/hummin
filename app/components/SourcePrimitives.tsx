@@ -27,6 +27,19 @@ export function SourceChip({children,className=""}:{children:ReactNode;className
 export function SourceIcon({name,light=false,className}:{name:string;light?:boolean;className?:string}){
  return <img className={className} src={"/brand/icons/"+name+(light?"-light":"")+".svg"} alt="" aria-hidden="true"/>;
 }
+/** The original Insights index, topic/author and article pages share one
+ * authored radial hero, artwork and spacing system. Variants only customise
+ * their text and editorial composition, never replicate the shell CSS.
+ */
+export function SourceEditorialHero({as="section",className="",markClassName="",innerClassName="",children}:{
+ as?:"section"|"header";className?:string;markClassName?:string;innerClassName?:string;children:ReactNode
+}){
+ const Tag=as;
+ return <Tag className={"hm-source-editorial-hero"+(className?" "+className:"")}>
+  <img className={"hm-source-editorial-mark"+(markClassName?" "+markClassName:"")} src="/brand/insights-hero-mark.svg" alt="" aria-hidden="true"/>
+  <div className={"hm-source-editorial-inner"+(innerClassName?" "+innerClassName:"")}>{children}</div>
+ </Tag>;
+}
 export function SourceDialog({id,title,eyebrow,onClose,children,closeLabel="Close details"}:{
  id:string;title:string;eyebrow?:string;onClose:()=>void;children:ReactNode;closeLabel?:string
 }){

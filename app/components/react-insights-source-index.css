@@ -1,8 +1,6 @@
 /* HUMMIN Insights index: direct React component port of the owner-approved
  * design/sources/insights-v4 source. Do not substitute a generic card grid. */
-.hr-insights-index-page .hr-insights-index-hero{position:relative;overflow:hidden;background:radial-gradient(circle at 74% 22%,var(--hummin-stone) 0%,var(--hummin-body) 40%,var(--hummin-ink) 72%);color:var(--hummin-paper);padding:clamp(88px,9cqw,128px) clamp(20px,5cqw,64px) clamp(40px,5cqw,64px)}
-.hr-insights-index-hero .hr-insights-watermark{position:absolute;width:max(560px,60cqw);height:auto;right:-16cqw;top:-14%;opacity:1;filter:none;pointer-events:none}
-.hr-insights-index-hero .hr-insights-hero-inner{position:relative;max-width:none;display:grid;justify-items:stretch;gap:22px}
+.hr-insights-index-hero .hr-insights-hero-inner{max-width:none;justify-items:stretch}
 .hr-insights-index-page .hr-insights-source-chip{justify-self:start;min-height:32px;padding:0 14px;border:1px solid rgba(244,245,241,.16);background:rgba(244,245,241,.08);border-radius:999px;font-size:12px;font-weight:600;color:var(--hummin-paper)}
 .hr-insights-index-page .hr-insights-index-hero h1{font-family:Newsreader,Georgia,serif;font-weight:400;font-size:clamp(56px,9cqw,132px);line-height:.9;letter-spacing:-.03em;margin:0}
 .hr-insights-index-intro{display:flex;flex-wrap:wrap;gap:20px 48px;align-items:end;justify-content:space-between}
@@ -72,16 +70,7 @@
 @media(prefers-reduced-motion:reduce){.hr-insights-landing-card{transition:none}}
 
 /* Original source-v4 topic and author views (distinct from the index cards). */
-.hr-insights-page:not(.hr-insights-index-page) .hr-insights-hero{
- position:relative;overflow:hidden;background:radial-gradient(circle at 74% 22%,var(--hummin-stone) 0%,var(--hummin-body) 40%,var(--hummin-ink) 72%);
- padding:clamp(88px,9cqw,128px) clamp(20px,5cqw,64px) clamp(40px,5cqw,64px);color:var(--hummin-paper)
-}
-.hr-insights-page:not(.hr-insights-index-page) .hr-insights-watermark{
- position:absolute;right:-16cqw;top:-14%;width:max(560px,60cqw);height:auto;pointer-events:none
-}
-.hr-insights-page:not(.hr-insights-index-page) .hr-insights-hero-inner{
- position:relative;max-width:none;display:grid;justify-items:start;gap:22px
-}
+.hr-insights-page:not(.hr-insights-index-page) .hr-insights-hero-inner{max-width:none;justify-items:start}
 .hr-insights-source-back{
  display:inline-flex;align-items:center;gap:8px;min-height:40px;padding:0 16px;
  border-radius:999px;border:1px solid rgba(244,245,241,.25);background:transparent;

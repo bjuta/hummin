@@ -4,6 +4,8 @@ import {insightsAuthors,insightTopics,insightTopicSlug,insightTopicLeads} from "
 import "./react-insights.css";
 import "./react-insights-source-index.css";
 import {ReactAssessmentPromotion} from "./ReactAssessmentPromotion";
+import {SourceEditorialHero} from "./SourcePrimitives";
+import "./source-editorial-hero.css";
 import {SourceEditorialCard} from "./SourceEditorialCard";
 import {ReactInsightArticle,ReactInsightsNewsletter} from "./ReactInsightArticle";
 type Block={t:"p"|"h"|"ul"|"ol"|"dl"|"assess";text?:string;items?:string[];id?:string};
@@ -73,9 +75,7 @@ export function ReactInsights({posts,view,selected="",preview=false}:ReactInsigh
  const topic=view==="topic"?topicName(selected):null;
  if(view==="article"&&active)return <ReactInsightArticle post={active} posts={posts} base={base}/>;
  return <div className={"hr-insights-page"+(view==="index"?" hr-insights-index-page":"")}>
-  <section className={"hr-insights-hero"+(view==="index"?" hr-insights-index-hero":"")}>
-   <img className="hr-insights-watermark" src="/brand/insights-hero-mark.svg" alt="" aria-hidden="true"/>
-   <div className="hr-insights-hero-inner">
+  <SourceEditorialHero className={"hr-insights-hero"+(view==="index"?" hr-insights-index-hero":"")} markClassName="hr-insights-watermark" innerClassName="hr-insights-hero-inner">
     {view==="index"?<>
      <span className="hr-insights-source-chip">Guides · Opinion · Downloads · News</span>
      <h1>Insights.</h1>
@@ -98,8 +98,7 @@ export function ReactInsights({posts,view,selected="",preview=false}:ReactInsigh
       <p className="hr-insights-source-list-lead">{author.bio}</p>
      </>:null}
     </>}
-   </div>
-  </section>
+  </SourceEditorialHero>
   <div className="hr-insights-main">
   {view==="article"&&active?<div className="hr-insights-article-layout">
    <article className="hr-insights-article">

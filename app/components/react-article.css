@@ -3,9 +3,7 @@
    design/sources/insights-v4.html.gz.b64 (no source HTML runtime). */
 .ra-source-page{container-type:inline-size;background:var(--hummin-paper);color:var(--hummin-ink);font-family:Figtree,Arial,sans-serif}
 .ra-source-page *{box-sizing:border-box}
-.ra-source-hero{position:relative;overflow:hidden;background:radial-gradient(circle at 74% 22%,var(--hummin-stone) 0%,var(--hummin-body) 40%,var(--hummin-ink) 72%);color:var(--hummin-paper);padding:clamp(88px,9cqw,128px) clamp(20px,5cqw,64px) clamp(40px,5cqw,64px)}
-.ra-source-hero-mark{position:absolute;right:-16cqw;top:-14%;width:max(560px,60cqw);height:auto;pointer-events:none}
-.ra-source-hero-inner{position:relative;z-index:1;display:grid;justify-items:start;gap:22px;animation:inIn 360ms cubic-bezier(.2,0,0,1)}
+.ra-source-hero-inner{justify-items:start;animation:inIn 360ms cubic-bezier(.2,0,0,1)}
 .ra-source-back{display:inline-flex;align-items:center;gap:8px;min-height:40px;padding:0 16px;border-radius:999px;border:1px solid rgba(244,245,241,.25);font-weight:600;font-size:13px;color:var(--hummin-paper);text-decoration:none}
 .ra-source-pills{display:flex;flex-wrap:wrap;gap:8px}
 .ra-source-pills>*{display:inline-flex;align-items:center;padding:0 14px;min-height:32px;border-radius:999px;border:1px solid rgba(244,245,241,.18);background:rgba(244,245,241,.08);color:var(--hummin-paper);text-decoration:none;font-weight:600;font-size:12px}
