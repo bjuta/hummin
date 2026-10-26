@@ -45,11 +45,11 @@ export function SourceEditorialHero({as="section",className="",markClassName="",
 /** HUMMIN's original source "peek" dialog, shared by challenge and
  * engagement cards. Header, details and paired actions are a single primitive.
  */
-export function SourceDialog({id,title,eyebrow,lead,rows,primary,secondary,tone="mist",onClose,closeLabel="Close"}:{
+export function SourceDialog({id,title,eyebrow,lead,rows,primary,secondary,tone="mist",glow=false,onClose,closeLabel="Close"}:{
  id:string;title:string;eyebrow:string;lead:string;
  rows:ReadonlyArray<{label:string;text:string}>;
  primary:{label:string;to:string};secondary:{label:string;to:string};
- tone?:"mist"|"ink"|"slate";onClose:()=>void;closeLabel?:string
+ tone?:"mist"|"ink"|"slate";glow?:boolean;onClose:()=>void;closeLabel?:string
 }){
  const button=useRef<HTMLButtonElement>(null);
  const dialog=useRef<HTMLDivElement>(null);
@@ -73,7 +73,7 @@ export function SourceDialog({id,title,eyebrow,lead,rows,primary,secondary,tone=
  },[onClose]);
  return typeof document!=="undefined"?createPortal(<div className="hr-dialog-backdrop hm-source-peek-backdrop" role="presentation">
   <button type="button" className="hm-source-peek-scrim" onClick={onClose} tabIndex={-1} aria-label="Close details"/>
-  <div ref={dialog} role="dialog" aria-modal="true" aria-labelledby={id} aria-describedby={id+"-lead"} className={"hr-dialog hm-source-peek hm-source-peek-"+tone}>
+  <div ref={dialog} role="dialog" aria-modal="true" aria-labelledby={id} aria-describedby={id+"-lead"} className={"hr-dialog hm-source-peek hm-source-peek-"+tone+(glow?" hm-source-peek-glow":"")}>
    <div className="hm-source-peek-hero">
     <div className="hm-source-peek-top">
      <span className="hm-source-peek-chip">{eyebrow}</span>
