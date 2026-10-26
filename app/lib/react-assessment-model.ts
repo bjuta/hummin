@@ -1,4 +1,4 @@
-import {AREAS,GOALS,STEPS,GAP,PLAN} from "./react-assessment-content";
+import {AREAS,GOALS,STEPS,GAP,PLAN} from "./react-assessment-content.ts";
 export type AssessmentAnswers=Record<string,string>;
 export type AssessmentNumbers={sale:string;enq:string;conv:string;hours:string};
 export type AssessmentUnknown=Partial<Record<keyof AssessmentNumbers,boolean>>;
