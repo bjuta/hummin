@@ -1,0 +1,48 @@
+/* Port of the user-provided HUMMIN Legal artwork and layout.
+   Retains exact palette, typography, section geometry and responsive proportions. */
+.hummin-legal{container-type:inline-size;background:#F4F5F1;color:#1E272A;font-family:'Figtree',system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+.hummin-legal :focus-visible{outline:2px solid #B5532C;outline-offset:3px}
+@keyframes humminLegalIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+.hummin-legal-hero{position:relative;overflow:hidden;background:radial-gradient(circle at 74% 22%,#5E6967 0%,#2A3538 40%,#1E272A 72%);color:#F4F5F1;padding:clamp(88px,9cqw,128px) clamp(20px,5cqw,64px) clamp(40px,5cqw,64px)}
+.hummin-legal-watermark{position:absolute;width:max(560px,60cqw);right:-16cqw;top:-14%;pointer-events:none}
+.hummin-legal-hero-inner{position:relative;display:grid;gap:22px;animation:humminLegalIn 360ms cubic-bezier(.2,0,0,1)}
+.hummin-legal-tabs{justify-self:start;display:flex;gap:4px;padding:4px;border-radius:999px;background:rgba(244,245,241,.08);border:1px solid rgba(244,245,241,.16)}
+.hummin-legal-tabs a{display:inline-flex;align-items:center;justify-content:center;min-height:40px;padding:0 18px;border-radius:999px;border:0;background:transparent;color:#F4F5F1;font-weight:600;font-size:14px;transition:background 160ms cubic-bezier(.2,0,0,1)}
+.hummin-legal-tabs a.active{background:#F4F5F1;color:#1E272A}
+.hummin-legal-tabs a:hover:not(.active){background:rgba(244,245,241,.12)}
+.hummin-legal-hero h1{margin:0;font-family:'Newsreader',serif;font-weight:400;font-size:clamp(52px,8cqw,116px);line-height:.92;letter-spacing:-.03em}
+.hummin-legal-lead{margin:0;font-size:clamp(17px,1.6cqw,20px);line-height:1.55;color:#E7EBE6;max-width:52ch}
+.hummin-legal-meta{margin:0;font-size:14px;color:#BAC4BE}
+.hummin-legal-body{padding:clamp(40px,5cqw,72px) clamp(20px,5cqw,64px) clamp(64px,8cqw,112px);display:flex;flex-wrap:wrap;gap:40px clamp(40px,6cqw,96px);align-items:flex-start;animation:humminLegalIn 420ms cubic-bezier(.2,0,0,1)}
+.hummin-legal-sidebar{flex:0 1 280px;min-width:220px;position:sticky;top:96px;display:grid;gap:18px}
+.hummin-legal-toc{display:grid;gap:2px;padding-left:16px;border-left:2px solid #D0D8D2}
+.hummin-legal-toc strong{font-weight:600;font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:#5E6967;padding-bottom:8px}
+.hummin-legal-toc a{display:flex;gap:10px;align-items:baseline;font-size:14px;line-height:1.4;text-align:left;color:#1E272A;padding:6px 0;transition:color 120ms}
+.hummin-legal-toc a:hover{color:#B5532C}
+.hummin-legal-toc a span{font-size:11px;font-weight:700;color:#B5532C;font-variant-numeric:tabular-nums;width:18px;flex-shrink:0}
+.hummin-legal-questions{border-radius:20px;background:#E7EBE6;padding:20px;display:grid;gap:10px}
+.hummin-legal-questions strong{font-family:'Newsreader',serif;font-size:22px;line-height:1.15;font-weight:400}
+.hummin-legal-questions p{margin:0;font-size:14px;line-height:1.55;color:#434F4F}
+.hummin-legal-questions>a{justify-self:start;display:inline-flex;align-items:center;min-height:44px;padding:0 18px;border-radius:999px;background:#1E272A;color:#F4F5F1;font-weight:600;font-size:14px}
+.hummin-legal-questions>a:hover{background:#434F4F}
+.hummin-legal-article{flex:1 1 560px;max-width:740px;min-width:0;display:grid;gap:clamp(36px,4cqw,52px)}
+.hummin-legal-section{display:grid;gap:16px;padding-top:24px;border-top:2px solid #1E272A;scroll-margin-top:96px}
+.hummin-legal-heading{display:flex;gap:16px;align-items:baseline}
+.hummin-legal-heading>span{font-weight:600;font-size:12px;color:#B5532C;font-variant-numeric:tabular-nums}
+.hummin-legal-heading h2{margin:0;font-family:'Newsreader',serif;font-weight:400;font-size:clamp(28px,3cqw,38px);line-height:1.08;letter-spacing:-.01em}
+.hummin-legal-paragraph{margin:0;font-size:17px;line-height:1.72;color:#2A3538;text-wrap:pretty}
+.hummin-legal-list{margin:0;display:grid;gap:0;border-radius:16px;overflow:hidden;border:1px solid #D0D8D2;background:#fff}
+.hummin-legal-list-row{display:flex;flex-wrap:wrap;gap:6px 24px;padding:16px 18px;border-bottom:1px solid #E7EBE6}
+.hummin-legal-list-row:last-child{border-bottom:0}
+.hummin-legal-list dt{flex:0 0 200px;font-weight:700;font-size:15px;line-height:1.5}
+.hummin-legal-list dd{flex:1 1 280px;margin:0;font-size:15px;line-height:1.65;color:#2A3538}
+.hummin-legal-note{margin:0;padding:16px 18px;border-radius:16px;background:#1E272A;color:#F4F5F1;font-size:15px;line-height:1.65}
+.hummin-legal-actions{display:flex;flex-wrap:wrap;gap:10px;padding-top:24px;border-top:1px solid #D0D8D2}
+.hummin-legal-btn{display:inline-flex;align-items:center;justify-content:center;min-height:48px;padding:0 20px;border-radius:999px;font-weight:600;font-size:14px;transition:background 120ms}
+.hummin-legal-primary{border:0;background:#B5532C;color:#fff}
+.hummin-legal-primary:hover{background:#9A4524;color:#fff}
+.hummin-legal-secondary{border:1px solid #1E272A;background:transparent;color:#1E272A}
+.hummin-legal-secondary:hover{background:#E7EBE6}
+.hummin-legal-muted{border-color:#BAC4BE}
+@media(max-width:800px){.hummin-legal-sidebar{position:static;flex:1 1 100%;min-width:0;grid-template-columns:repeat(auto-fit,minmax(min(100%,260px),1fr));gap:20px}.hummin-legal-article{flex-basis:100%;max-width:100%}.hummin-legal-watermark{right:-250px}}
+@media(prefers-reduced-motion:reduce){.hummin-legal *{transition:none!important;animation:none!important}.hummin-legal{scroll-behavior:auto}}
