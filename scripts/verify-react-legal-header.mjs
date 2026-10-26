@@ -43,7 +43,7 @@ for(const width of [390,1440]){
   const menu=page.locator(".hm-site-menu-toggle");
   await menu.click();
   assert.equal(await menu.getAttribute("aria-expanded"),"true");
-  assert.equal(await page.locator(".hm-site-drawer").isVisible(),true);
+  await page.locator(".hm-site-drawer").waitFor({state:"visible",timeout:3000});
   await page.keyboard.press("Escape");
   assert.equal(await menu.getAttribute("aria-expanded"),"false");
   await page.screenshot({path:"artifacts/react-header/"+width+"-"+path.slice(1)+".png",animations:"disabled"});
