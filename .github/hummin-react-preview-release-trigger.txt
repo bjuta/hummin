@@ -19,3 +19,5 @@ React legal CTA accessibility follow-up: deploy bcde3a1035cb394146fd12c723a45482
 26 October 2026 source-fidelity remediation: deploy the original-source homepage structures, Insights article component, exact source SVGs and fonts to isolated preview for read-only production comparison. Keep hummin.org, production D1, Google Calendar, Resend and mail untouched. This is NOT visual release approval.
 
 26 October 2026 parity iteration: deploy exact source Insights article hero art, dimensions and typography, corrected contrast/accessible attribution, and read-only all-route visual audit. Isolated Preview only; no production cutover or real form/booking/email submissions. Publication of Preview is not a claim of source parity.
+
+26 October 2026 source-fidelity parity iteration: publish React Insights original featured/latest/downloads/newsletter, How We Work source card experience, Applied Expertise carousel and full-width detail, plus strengthened read-only acceptance to the isolated React Preview. Do not switch hummin.org or change real transaction endpoints. Post-deploy 42-route-viewport visual comparison remains a hard release gate.
