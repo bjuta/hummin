@@ -15,3 +15,5 @@ Source-faithful visual corrections React Preview: restore original persistent as
 React legal CTA accessibility follow-up: deploy bcde3a1035cb394146fd12c723a45482ce9073c1 to isolated Preview, then rerun read-only browser acceptance. This trigger is Preview-only; production routing, D1, Calendar, and mail remain untouched.
 
 26 October 2026: Promote the latest source-faithful React Assessment introduction refinements (through adb49c675ff5) to the isolated Preview following 42/42 successful read-only canonical acceptance. Keep the existing approved production site and operational bindings unchanged; re-verify Preview after deployment.
+
+26 October 2026 source-fidelity remediation: deploy the original-source homepage structures, Insights article component, exact source SVGs and fonts to isolated preview for read-only production comparison. Keep hummin.org, production D1, Google Calendar, Resend and mail untouched. This is NOT visual release approval.
