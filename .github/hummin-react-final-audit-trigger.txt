@@ -1,1 +1,3 @@
 Owner-source final gate: verify isolated React Preview deployed from 6fa0c1d36771 against approved hummin.org pages. Run 42 read-only canonical and pixel comparisons once; never submit actual enquiries, booking or email. No production cutover authorised. 2026-10-26.
+
+2026-10-26 one consolidated finishing audit for isolated Preview ace8dba58ad7: source assets, Contacts validation, read-only 23-step Assessment navigation, article structures, original reveal-aware screenshot comparison at 390/768/1440. Preserve original production, no submissions, no concurrent workflows. Visual failure blocks cutover.
