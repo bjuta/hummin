@@ -23,7 +23,9 @@
 - [ ] Confirm invitation receipt, cancellation/reconciliation behaviour, and an end-to-end appointment through the published assessment UI.
 - [x] Source implementation: D1-backed anonymous rate limits, booking Turnstile verification and dual booking feature gates (commit `b59832d6`, pending end-to-end acceptance).
 - [x] Preview D1 schema for `0010_booking_abuse.sql` applied directly and all three objects verified on 26 October 2026. Preview has no Wrangler migration ledger; do not present this as a tracked migration.
-- [ ] Apply `0010_booking_abuse.sql` through the approved Wrangler workflow to isolated Production Staging. Confirm D1 migration ledger and quota behavior before activation.
+- [x] Preview D1 schema `0011_booking_reconciliation.sql` applied directly and all three objects verified (no Wrangler ledger in preview).
+- [x] Google cancellation and movement reconciliation unit tests passed in CI on commit `5b822cc6`; reminders and queued confirmations recheck Google event state before dispatch.
+- [ ] Apply tracked `0010_booking_abuse.sql` and `0011_booking_reconciliation.sql` via approved Wrangler production-staging workflow; check `d1_migrations` and quotas before activation.
 - [ ] Run controlled Turnstile browser acceptance on an authorised preview hostname; verify success, replay rejection, wrong action, missing token, and rate limiting.
 - [ ] Verify one genuine Google Calendar reservation (FreeBusy, invitation receipt, Meet link, Google event and D1 record), conflicting simultaneous requests and moved/cancelled appointment reconciliation.
 - [ ] Verify Google event insert timeout and database confirmation failures recover without creating ghost bookings; verify booking confirmation and reminder messages arrive in intended inboxes.
@@ -47,3 +49,7 @@ Evidence is not a launch substitute. GitHub PR #1 remains draft, production cust
 Fail-closed policy: turn on **both** `BOOKING_ENABLED` and `BOOKING_AVAILABILITY_ENABLED` only after Turnstile, Resend, Calendar, migration, and genuine end-to-end acceptance. A deployed Worker or a passing CI suite is not the same as live permission to release.
 
 Remaining acceptance ownership: privacy and consent copy, browser accessibility and visual parity, exact staging service settings and anti-drift, real attendee confirmation, backup/rollback rehearsal, and an explicitly approved launch window. Never make a production domain cutover as a side effect of this security slice.
+
+### Additional release evidence (26 October 2026)
+
+GitHub CI and Cloudflare Preview Build passed at commit `5b822cc6`. Preview has both security and reconciliation schemas. The Google cancellation/movement recovery tests are deterministic mocked-behavior tests, **not live Google Calendar delivery or attendee tests**. The production-staging `d1_migrations` ledger remains at nine records until approved Wrangler migration; do not execute raw production SQL or manually forge migration history. The connected Google Calendar account is not the HUMMIN booking account, and recipient-side delivery cannot be certified from that connection. Public DNS and live booking remain unchanged.
