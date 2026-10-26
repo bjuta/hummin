@@ -54,5 +54,5 @@ test("Public domain responses remain unmodified, including publishable privacy",
  assert.equal(protectNonPublicResponse("hummin.org",response),response);
  assert.equal(protectNonPublicResponse("www.hummin.org",response),response);
  assert.equal(response.headers.get("X-Robots-Tag"),null);
- assert.match(read("workers/app.ts"),/protectNonPublicResponse\\(new URL\\(request.url\\).hostname,response\\)/);
+ assert.ok(read("workers/app.ts").includes("protectNonPublicResponse(new URL(request.url).hostname,response)"));
 });
