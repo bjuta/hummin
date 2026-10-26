@@ -20,7 +20,12 @@ jobs:
       - uses: actions/setup-node@v4
         with: { node-version: '22' }
       - run: npm install --no-audit --no-fund
-      - run: npm run verify:seo && npm run typecheck
+      - name: Hide archived HTML source in ephemeral runner before build
+        run: |
+          if [ -d design/sources ]; then mv design/sources /tmp/hummin-archived-source; fi
+          test ! -e design/sources
+      - name: Verify standalone React assets and source-free typechecking
+        run: npm run verify:design-source && npm run verify:seo && npm run typecheck
       - name: Build isolated preview (never production target)
         run: npm run build
       - name: Verify preview config is fail-closed and isolated
