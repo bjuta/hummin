@@ -33,3 +33,7 @@
 .hr-contact-location .hr-contact-icon{width:18px;height:18px;opacity:.7}
 .hr-contact-aside{gap:14px}
 .hr-contact-email a{font:400 clamp(22px,2.6cqw,28px)/1.2 Newsreader,Georgia,serif;color:#1E272A}
+
+.hr-contact-field-error{display:block!important;font-size:14px!important;line-height:1.45;color:#B5532C!important;font-weight:400!important}
+.hr-contact-form [aria-invalid="true"]{border-bottom-color:#B5532C;box-shadow:0 1px 0 #B5532C}
+.hr-contact-form :focus-visible{outline:2px solid #1E272A;outline-offset:3px}
