@@ -10,6 +10,7 @@ const navigation = [
   { to:"/who-we-work-with",label:"Who We Work With" },
   { to:"/assessment",label:"Assessment" },
   { to:"/about",label:"About" },
+  { to:"/insights",label:"Insights" },
   { to:"/contact",label:"Contact" },
 ];
 export const links = () => [
@@ -22,20 +23,51 @@ export function Layout({ children }: {children:React.ReactNode}) {
 }
 function Header(){
   const [menu,setMenu]=useState(false);
-  return <header className="site-header">
+  const [scrolled,setScrolled]=useState(false);
+  const {pathname}=useLocation();
+  useEffect(()=>setMenu(false),[pathname]);
+  useEffect(()=>{
+    const update=()=>setScrolled(window.scrollY>12);
+    update();window.addEventListener("scroll",update,{passive:true});
+    return ()=>window.removeEventListener("scroll",update);
+  },[]);
+  useEffect(()=>{
+    if(!menu)return;
+    const close=(e:KeyboardEvent)=>{if(e.key==="Escape")setMenu(false);};
+    document.addEventListener("keydown",close);
+    return ()=>document.removeEventListener("keydown",close);
+  },[menu]);
+  return <header className={"hm-site-header"+(scrolled?" hm-site-header-scrolled":"")}>
     <a className="skip" href="#main">Skip to content</a>
-    <div className="nav-shell">
-      <button className="menu-toggle" type="button" onClick={()=>setMenu(!menu)} aria-expanded={menu} aria-controls="site-navigation" aria-label={menu?"Close navigation":"Open navigation"}>{menu?"×":"☰"}</button>
-      <Link to="/" className="wordmark" onClick={()=>setMenu(false)} aria-label="HUMMIN home"><span className="mark">H</span><span>HUMMIN</span></Link>
-      <Link to="/contact" className="button button-dark nav-contact" onClick={()=>setMenu(false)}>Get in Touch</Link>
+    <div className="hm-site-nav-bar">
+      <div className="hm-site-nav-left">
+        <button className="hm-site-menu-toggle" type="button" aria-label={menu?"Close menu":"Open menu"} aria-expanded={menu} aria-controls="site-nav" onClick={()=>setMenu(open=>!open)}>
+          {menu?<svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><path d="M18 6 6 18M6 6l12 12"/></svg>:
+          <svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg>}
+        </button>
+        <Link to="/" className="hm-site-brand" onClick={()=>setMenu(false)} aria-label="HUMMIN, go to home page">
+          <img src="/email/mark-dark.png" width="42" height="42" alt=""/>
+          <span>HUMMIN</span>
+        </Link>
+      </div>
+      <Link to="/contact" className="hm-site-cta" onClick={()=>setMenu(false)}>Get in Touch</Link>
     </div>
-    {menu&&<button type="button" aria-label="Close navigation overlay" className="menu-scrim" onClick={()=>setMenu(false)}/>}
-    <nav id="site-navigation" aria-label="Main navigation" className={menu?"drawer open":"drawer"}>
-      {navigation.map(n=><NavLink key={n.to} to={n.to} end={n.end} onClick={()=>setMenu(false)} className={({isActive})=>isActive?"nav-link active":"nav-link"}>{n.label}</NavLink>)}
-      <div className="nav-meta"><a href="mailto:sales@hummin.org">sales@hummin.org</a><span>Nairobi, Kenya</span></div>
+    {menu?<button className="hm-site-menu-backdrop" type="button" tabIndex={-1} aria-label="Close menu" onClick={()=>setMenu(false)}/>:null}
+    <nav id="site-nav" aria-label="Main" className={"hm-site-drawer"+(menu?" hm-site-drawer-open":"")} inert={!menu}>
+      <div className="hm-site-drawer-links">
+        {navigation.map((n,i)=><NavLink key={n.to} end={n.end} to={n.to} onClick={()=>setMenu(false)} className={({isActive})=>"hm-site-drawer-link"+(isActive?" hm-site-drawer-active":"")}>
+          <span className="hm-site-nav-index" aria-hidden="true">{String(i+1).padStart(2,"0")}</span>
+          <span>{n.label}</span>
+        </NavLink>)}
+      </div>
+      <div className="hm-site-drawer-meta">
+        <a href="mailto:sales@hummin.org">sales@hummin.org</a>
+        <span>Nairobi, Kenya</span>
+      </div>
     </nav>
   </header>;
 }
+
 function Footer(){return <footer className="site-footer"><div className="footer-inner"><Link to="/" className="footer-brand">HUMMIN</Link><span>Embedded advisory and execution · Nairobi, Kenya</span><a href="mailto:sales@hummin.org">sales@hummin.org</a><span>© {new Date().getFullYear()} HUMMIN</span><Link to="/privacy">Privacy</Link><Link to="/terms">Terms of Use</Link></div></footer>;}
 export default function App(){
  const {pathname}=useLocation();
