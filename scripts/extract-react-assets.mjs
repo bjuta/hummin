@@ -81,4 +81,19 @@ if(!darkArrow||darkArrow.mime!=='image/svg+xml')throw Error('Original dark carou
 const darkArrowBytes=zlib.gunzipSync(Buffer.from(darkArrow.data,'base64'));
 if(!darkArrowBytes.toString('utf8').includes('<svg'))throw Error('Invalid original dark arrow');
 fs.writeFileSync(path.join(iconDirectory,'arrow-right-light.svg'),darkArrowBytes);
+// Recover the two approved hummingbird motif colours used by the original
+// hero and challenge cards; the canonical navigation symbol is separate.
+const sourceMarks={
+ 'hummin-mark-mist.svg':'08f1bf1c-2007-4b2a-88c7-a228a21caea3',
+ 'hummin-mark-tone.svg':'9381c5d9-b1fa-4f32-ab5d-4815b4e79974'
+};
+for(const [filename,id] of Object.entries(sourceMarks)){
+ const item=manifest[id];
+ if(!item||item.mime!=='image/svg+xml')throw Error('Original mark resource missing: '+filename);
+ let body=Buffer.from(item.data,'base64');
+ if(item.compressed)body=zlib.gunzipSync(body);
+ const svg=body.toString('utf8');
+ if(!svg.includes('<svg')||/<script\\b/i.test(svg))throw Error('Invalid source HUMMIN motif: '+filename);
+ fs.writeFileSync(path.join('public/brand',filename),body);
+}
 console.log('Recovered original HUMMIN static Lucide icons',extractedIcons.size);
