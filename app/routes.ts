@@ -1,6 +1,7 @@
 import { type RouteConfig, index, route } from "@react-router/dev/routes";
 export default [
  index("routes/fidelity.ts"),
+ route("__react/:page","routes/react.preview.tsx"),
  route("admin/login","routes/admin.login.tsx"),
  route("admin/verify","routes/admin.verify.tsx"),
  route("admin/logout","routes/admin.logout.ts"),
