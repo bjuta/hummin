@@ -1,0 +1,256 @@
+[
+  {
+    "slug": "enquiries-30-day-fix",
+    "type": "guide",
+    "featured": true,
+    "steps": "A 30-day routine",
+    "title": "Why enquiries go unanswered, and a 30-day fix",
+    "excerpt": "Most owners get more enquiries than they think. The problem is what happens next. Here is a simple routine to find where enquiries are lost.",
+    "topics": [
+      "Marketing",
+      "Operations"
+    ],
+    "author": "team",
+    "date": "2026-10-20",
+    "figure": "Image: an enquiry book on a shop counter.",
+    "blocks": [
+      {
+        "t": "p",
+        "text": "When sales slow down, the first thought is usually to spend more on advertising. In many of the businesses we see, the enquiries are already there. They arrive by phone, WhatsApp, email, and walk-ins. Some get a quick reply. Some wait days. Some are never answered at all."
+      },
+      {
+        "t": "h",
+        "text": "Why it happens"
+      },
+      {
+        "t": "ul",
+        "items": [
+          "Nobody owns the reply. Everyone assumes someone else has it.",
+          "Enquiries arrive in too many places: personal phones, shared inboxes, and social media messages.",
+          "Nothing is recorded, so nobody can see what was missed.",
+          "Busy days push enquiries to the bottom of the list, and they are forgotten."
+        ]
+      },
+      {
+        "t": "p",
+        "text": "None of these need new software to fix. They need an owner and a record."
+      },
+      {
+        "t": "h",
+        "text": "The 30-day routine"
+      },
+      {
+        "t": "p",
+        "text": "For the next 30 days, do four things."
+      },
+      {
+        "t": "ol",
+        "items": [
+          "Name one person who owns every enquiry. They do not have to answer each one, but they make sure someone does.",
+          "Record every enquiry in one place. A notebook or a shared spreadsheet is enough. Write the date, how it arrived, what the person wanted, how long the reply took, and what happened.",
+          "Agree a reply time. Same day is a good start. Within an hour is better.",
+          "Review the record every Friday for 15 minutes. Look for enquiries with no outcome."
+        ]
+      },
+      {
+        "t": "dl",
+        "id": "enquiry-log"
+      },
+      {
+        "t": "h",
+        "text": "What to look for at the end"
+      },
+      {
+        "t": "ul",
+        "items": [
+          "How many enquiries came in. Most owners are surprised.",
+          "How long replies took, on average and at worst.",
+          "Which channel brought the most enquiries, and which brought customers.",
+          "How many enquiries had no outcome. These are the sales you are losing."
+        ]
+      },
+      {
+        "t": "p",
+        "text": "Multiply the enquiries with no outcome by your average sale, and by how many in ten usually become customers. That gives a rough monthly cost of the gap. It is often enough to justify fixing it properly."
+      },
+      {
+        "t": "assess"
+      },
+      {
+        "t": "p",
+        "text": "If the record shows a problem you cannot fix alone, a Review is usually the right first step. We look at how enquiries move through the business and give you a plan with costs."
+      }
+    ]
+  },
+  {
+    "slug": "five-monday-figures",
+    "type": "guide",
+    "steps": "Five figures, ten minutes",
+    "title": "Five figures every owner should see on Monday",
+    "excerpt": "Monthly accounts arrive too late to act on. A short set of weekly figures shows problems while you can still do something about them.",
+    "topics": [
+      "Data",
+      "Strategy"
+    ],
+    "author": "team",
+    "date": "2026-10-13",
+    "figure": "Image: a printed weekly sheet on a desk, pen beside it.",
+    "blocks": [
+      {
+        "t": "p",
+        "text": "Many owners see their figures once a month, weeks after the month has closed. By then a slow week has become a slow month, and the cash is already gone. A few figures, checked every week, give you time to act."
+      },
+      {
+        "t": "h",
+        "text": "The five figures"
+      },
+      {
+        "t": "ol",
+        "items": [
+          "Sales this week, compared with the same week last month.",
+          "New enquiries, from the record you keep for every enquiry.",
+          "Cash in the bank, as of Monday morning.",
+          "Money owed to you, and how much of it is more than 30 days late.",
+          "One figure for your biggest bottleneck. For a workshop, it might be jobs waiting. For a shop, stock that has not moved in 60 days."
+        ]
+      },
+      {
+        "t": "h",
+        "text": "How to set it up"
+      },
+      {
+        "t": "p",
+        "text": "Ask one person to collect the five figures every Monday by 10:00 and put them in the same place each week. A single sheet is enough. Keep the last 12 weeks visible so you can see the direction, not just the number."
+      },
+      {
+        "t": "p",
+        "text": "Spend ten minutes on it with your senior team. Ask two questions: what changed, and what are we doing about it?"
+      },
+      {
+        "t": "dl",
+        "id": "monday-template"
+      },
+      {
+        "t": "h",
+        "text": "What not to do"
+      },
+      {
+        "t": "ul",
+        "items": [
+          "Do not add more figures until these five are routine.",
+          "Do not wait for perfect data. Rough numbers on time beat exact numbers late.",
+          "Do not review figures without agreeing an action."
+        ]
+      },
+      {
+        "t": "assess"
+      },
+      {
+        "t": "p",
+        "text": "If the figures are hard to collect, that is useful to know. It usually means records sit in too many places. A Project can connect them into a simple monthly dashboard."
+      }
+    ]
+  },
+  {
+    "slug": "runs-through-the-owner",
+    "type": "opinion",
+    "title": "When the business still runs through the owner",
+    "excerpt": "Owners often become the bottleneck in the business they built. It is a sign the business has grown, and it needs to change.",
+    "topics": [
+      "Strategy",
+      "Talent"
+    ],
+    "author": "muiruri",
+    "date": "2026-10-06",
+    "blocks": [
+      {
+        "t": "p",
+        "text": "Most of the owners I meet built their business by doing everything themselves. They answered the phone, priced the jobs, chased the payments, and fixed what went wrong. That is how the business survived its early years."
+      },
+      {
+        "t": "p",
+        "text": "The habit stays long after the business has outgrown it. Approvals wait for the owner. Staff ask before they act. The owner works longer hours each year, and the business grows more slowly than it could."
+      },
+      {
+        "t": "h",
+        "text": "It is rarely a people problem"
+      },
+      {
+        "t": "p",
+        "text": "Owners often tell me they cannot find staff they trust to decide. In my experience, the staff are usually capable. What is missing is clarity: which decisions they can make, within what limits, and how they will be judged."
+      },
+      {
+        "t": "h",
+        "text": "Where to start"
+      },
+      {
+        "t": "ol",
+        "items": [
+          "Write down every decision you made last week. Most owners are surprised by the length of the list.",
+          "Mark the ones someone else could make if they had clear limits, such as a spending ceiling or a discount range.",
+          "Hand over three of them this month. Agree the limits in writing, and review how it went after four weeks."
+        ]
+      },
+      {
+        "t": "p",
+        "text": "You will not get it right the first time. Some decisions will come back to you. That is fine. The aim is not to remove yourself from the business, but to spend your time on the decisions only you can make."
+      },
+      {
+        "t": "p",
+        "text": "The businesses that grow past their founder are the ones where the founder chooses to make this change. It is rarely comfortable, and it is almost always worth it."
+      },
+      {
+        "t": "assess"
+      }
+    ]
+  },
+  {
+    "slug": "introducing-hummin",
+    "type": "news",
+    "title": "Introducing HUMMIN",
+    "excerpt": "HUMMIN works with established, owner-led businesses to understand what is holding them back and put practical changes to work.",
+    "topics": [
+      "Strategy"
+    ],
+    "author": "team",
+    "date": "2026-10-01",
+    "blocks": [
+      {
+        "t": "p",
+        "text": "HUMMIN is an advisory and execution firm based in Nairobi, founded by Muiruri Beautah. We work with established, owner-led businesses that want to grow but are short of time or skills."
+      },
+      {
+        "t": "h",
+        "text": "What we do"
+      },
+      {
+        "t": "p",
+        "text": "We find the cause of a problem, bring in the people needed to fix it, and stay involved until the work is done. Our work covers strategy, technology, marketing, operations, talent, and data, with specialist partners when a job needs them."
+      },
+      {
+        "t": "p",
+        "text": "There are three ways to work with us:"
+      },
+      {
+        "t": "ul",
+        "items": [
+          "A Review investigates a problem and ends with a plan, with costs and measures.",
+          "A Project designs and delivers a defined piece of work.",
+          "A Residency places a HUMMIN professional inside your team for ongoing support."
+        ]
+      },
+      {
+        "t": "h",
+        "text": "Where to start"
+      },
+      {
+        "t": "p",
+        "text": "The Business Assessment takes about eight minutes. It scores five areas of the business, estimates what the gaps may be costing, and gives you a 30-day plan you can start on your own."
+      },
+      {
+        "t": "p",
+        "text": "To discuss a challenge directly, write to sales@hummin.org."
+      }
+    ]
+  }
+]
