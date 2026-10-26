@@ -68,7 +68,7 @@ export function assessmentResultsEmail(a:AssessmentInput){
  },a.assetOrigin);
 }
 
-type Appointment = {recipient:string;name:string;start:Date;end:Date;host:string;meetUrl?:string;assetOrigin:string;calendarUrl?:string};
+type Appointment = {recipient:string;name:string;start:Date;end:Date;host:string;meetUrl?:string;assetOrigin:string;calendarUrl?:string;phone?:string};
 /** Brand Book 17.4: Booking confirmation, with actual appointment details. */
 export function bookingConfirmationEmail(a:Appointment){
  return render({
@@ -84,6 +84,26 @@ export function bookingConfirmationEmail(a:Appointment){
   footer:"You received this because you booked a call on hummin.org."
  },a.assetOrigin);
 }
+
+/** Internal booking alert: HUMMIN receives each confirmed appointment. */
+export function bookingInternalEmail(a:Appointment){
+ const meeting=a.meetUrl||a.calendarUrl;
+ return render({
+  type:"booking-internal",sender:"people",recipient:"sales@hummin.org",replyTo:a.recipient,
+  subject:"New booking: "+first(a.name)+", "+dayAndTime(a.start),
+  preheader:a.name+" booked a 30-minute results review.",
+  kicker:"New booking",title:"A results review is booked.",
+  paragraphs:["A visitor has booked a 30-minute assessment results review through HUMMIN."],
+  rows:[{label:"Name",value:a.name},{label:"Email",value:a.recipient},
+   ...(a.phone?[{label:"Phone",value:a.phone}]:[]),
+   {label:"When",value:dayAndTime(a.start)+" to "+clock(a.end)},
+   {label:"Where",value:a.meetUrl?"Google Meet":"Google Calendar"}],
+  ...(meeting?{primary:{label:"Open the booking",url:meeting}}:{}),
+  note:"Reply to this email to contact the attendee. Google Calendar manages the invitation and RSVP.",
+  footer:"Internal booking notification · sales@hummin.org"
+ },a.assetOrigin);
+}
+
 /** Brand Book 17.5: Reminder, intended to be scheduled 24 hours before the call. */
 export function bookingReminderEmail(a:Appointment){
  return render({
