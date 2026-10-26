@@ -71,7 +71,7 @@ for(const width of [390,768,1440]){
    }
    if(kind==="assessment")assert.ok(await page.getByRole("button",{name:/Start the Assessment/}).count());
    if(kind==="contact")assert.ok(await page.locator(".hr-contact-form").count()||await page.getByText("temporarily unavailable").count());
-   if(kind==="insights")assert.ok(await page.locator(".hr-insights-card").count()>=4);
+   if(kind==="insights"){assert.equal(await page.locator(".hr-insights-featured").count(),1,"Original featured Insights hero");assert.ok(await page.locator(".hr-insights-landing-card").count()>=3,"Original latest editorial cards");assert.equal(await page.locator(".hr-insights-download-card").count(),2,"Original downloadable tools");assert.equal(await page.locator(".ra-source-newsletter").count(),1,"Original inline newsletter");}
    if(kind==="article")assert.ok(await page.locator(".ra-source-article").innerText().then(x=>x.includes("When sales slow down")));
    if(kind==="article"){for(const selector of [".ra-source-hero",".ra-source-figure",".ra-source-ol",".ra-source-download",".ra-source-assessment",".ra-source-sidebar",".ra-source-share",".ra-source-author",".ra-source-read-next",".ra-source-newsletter"])assert.equal(await page.locator(selector).count(),1,path+" missing original editorial feature: "+selector);}
    if(kind==="terms")assert.equal(await page.locator(".hummin-legal-section").count(),12);
