@@ -40,3 +40,44 @@ These post-audit CSS fixes are committed **after** tested Preview `6fa0c1d36771`
 5. Obtain owner's explicit sign-off before public cutover; do not change `hummin.org`, production routing, D1 or messaging meanwhile.
 
 **Release status: BLOCKED (visual source fidelity not certified).**
+
+---
+
+## Final consolidated validation update — 26 October 2026, Preview `ace8dba58ad7`
+
+**Verified GitHub evidence:** Actions run [40380172531](https://github.com/bjuta/hummin/actions/runs/40380172531).
+
+The explicitly triggered sequential gate completed:
+
+- **Canonical React feature, accessibility, layout, full 23-question Assessment flow: 42/42 PASS.**
+- **Production-versus-Preview source capture comparisons: 3/42 PASS, 39 FAIL.**
+- Passing: Applied Expertise at 768px, Privacy at 1440px, Terms at 1440px.
+- Reference capture now warms nested legacy frames and traverses source `data-rise` sections; it marks references with unresolved hidden reveal nodes as incomplete. Who We Work With at desktop was marked `referenceIncomplete=true`. Some source captures (particularly Assessment and author views) remain semantically incomplete despite `referenceIncomplete=false`, so **do not count missing production content as an acceptable React deletion.**
+
+### Most useful measured residuals
+
+| Route | Desktop pixel mismatch | Desktop height difference | Interpretation |
+|---|---:|---:|---|
+| Home | 6.13% | 33px | Already within pixel cap; height/section rhythm remains |
+| About | 2.64% | 20px | Very close visually; height still outside strict 12px gate |
+| Contact | 5.33% | 26px | Substantially improved since prior 13.7% mismatch; detail/height check remains |
+| How We Work | 8.24% | 47px | Small pixel overage, more material section-height difference |
+| Applied Expertise | 7.32% | 16px | Near threshold, already passes tablet |
+| Engagements | 17.08% | 111px | Larger true layout difference; table and Residency section need precision review |
+| Insights index | 16.67% | 82px | Featured/latest/download/newsletter metrics and section rhythm differ |
+| Insights article | 9.73% | 131px | Editorial typography, sidebar and accumulated vertical spacing |
+| Topic: Marketing | 23.70% | 163px | Source hero and list layout still far apart |
+| Author: HUMMIN Team | 29.78% | 164px | Partly unreliable legacy reference, still unresolved |
+| Assessment intro | 16.14% | 254px | Source headless capture visibly truncates content; cannot remove React cards |
+| Who We Work With | 11.69% | 51px | Original reference marked incomplete |
+| Privacy / Terms | 3.48% / 2.97% | 0 / 0px | Both desktop comparisons PASS |
+
+**Mobile:** Home 6.88% mismatch but 39px height difference; How We Work 7.40% but 15px; Contact 10.44% and 27px; Assessment 40.32% with an obviously truncated source screenshot.
+
+### Release decision
+
+**NOT SOURCE-FIDELITY CERTIFIED. NO PUBLIC CUTOVER.**
+
+Stop running further GitHub Actions on speculative layout changes. Treat this gate as the stable evidence set. The remaining work requires side-by-side source/candidate inspection with complete production rendering and specific measured fixes. No evidence supports saying the entire site is finished; in particular visual acceptance and authenticated Admin/source-state comparisons remain open.
+
+Source-faithful React now **passes canonical function and interaction checks**, but its visual release gate still fails. The user explicitly required genuine production fidelity, not merely a passing React build.
