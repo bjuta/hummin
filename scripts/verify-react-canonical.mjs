@@ -75,6 +75,13 @@ for(const width of [390,768,1440]){
    if(kind==="article")assert.ok(await page.locator(".hr-insights-article").innerText().then(x=>x.includes("When sales slow down")));
    if(kind==="terms")assert.equal(await page.locator(".hummin-legal-section").count(),12);
    if(kind==="privacy")assert.equal(await page.locator(".hummin-legal-section").count(),8);
+   // The legal article enters with a short opacity/translation animation.
+   // Axe must inspect its final text contrast, not an intermediate translucent frame.
+   if(kind==="privacy"||kind==="terms"){
+    await page.locator(".hummin-legal-body").evaluate(async el=>{
+      await Promise.all(el.getAnimations({subtree:true}).map(a=>a.finished.catch(()=>{})));
+    });
+   }
    const axe=await new AxeBuilder({page}).withTags(["wcag2a","wcag2aa","wcag21a","wcag21aa"]).analyze();
    const blocking=axe.violations.filter(v=>v.impact==="serious"||v.impact==="critical");
    assert.equal(blocking.length,0,path+" accessibility "+JSON.stringify(blocking.map(v=>({id:v.id,targets:v.nodes.slice(0,2).map(n=>n.target)}))));
