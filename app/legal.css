@@ -39,7 +39,7 @@
 .hummin-legal-note{margin:0;padding:16px 18px;border-radius:16px;background:#1E272A;color:#F4F5F1;font-size:15px;line-height:1.65}
 .hummin-legal-actions{display:flex;flex-wrap:wrap;gap:10px;padding-top:24px;border-top:1px solid #D0D8D2}
 .hummin-legal-btn{display:inline-flex;align-items:center;justify-content:center;min-height:48px;padding:0 20px;border-radius:999px;font-weight:600;font-size:14px;transition:background 120ms}
-.hummin-legal-primary{border:0;background:#B5532C;color:#fff}
+.hummin-legal-primary{border:0;background:#87371B;color:#fff}
 .hummin-legal-primary:hover{background:#9A4524;color:#fff}
 .hummin-legal-secondary{border:1px solid #1E272A;background:transparent;color:#1E272A}
 .hummin-legal-secondary:hover{background:#E7EBE6}
