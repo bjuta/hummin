@@ -88,7 +88,9 @@ for(const variant of variants){
        // Analyse the complete outer document including same-origin child frames.
        const axe=await new AxeBuilder({page}).withTags(["wcag2a","wcag2aa","wcag21a","wcag21aa"]).analyze();
        const serious=axe.violations.filter(v=>["serious","critical"].includes(v.impact));
-       item.axeSerious=serious.map(v=>({id:v.id,impact:v.impact,nodes:v.nodes.length,help:v.help,selector:v.nodes[0]?.target}));
+       item.axeSerious=serious.map(v=>({id:v.id,impact:v.impact,nodes:v.nodes.length,help:v.help,
+         evidence:v.nodes.slice(0,5).map(n=>({target:n.target,html:n.html?.slice(0,300),contrast:n.any?.map(c=>({id:c.id,data:c.data})),summary:n.failureSummary?.slice(0,400)}))
+       }));
        if(serious.length)result.failures.push(id+" embedded experience WCAG serious/critical "+JSON.stringify(item.axeSerious));
        item.axeOther=axe.violations.filter(v=>!["serious","critical"].includes(v.impact)).map(v=>({id:v.id,impact:v.impact,nodes:v.nodes.length}));
        if(item.axeOther.length)result.warnings.push(id+" other WCAG issues "+JSON.stringify(item.axeOther));
