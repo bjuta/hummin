@@ -1,4 +1,5 @@
-import {useRef,useState} from "react";
+import {useState} from "react";
+import {SourceButton as HButton,SourceSectionTitle as SectionTitle,SourceShelf as Shelf,SourceDialog} from "./SourcePrimitives";
 import {Link} from "react-router";
 import {HEADS,HERO_STYLE,STAGES,DOMAINS,ENGS,TOPICS,VALUES,NEEDS,TIERS,TIER_ROWS} from "../lib/react-site-content";
 import "./react-marketing.css";
@@ -10,9 +11,6 @@ const photos:Record<string,string>={
 };
 type Page="home"|"how"|"core"|"eng"|"who"|"about";
 
-function HButton({to,children,light=false,outline=false}:{to:string;children:React.ReactNode;light?:boolean;outline?:boolean}){
- return <Link to={to} className={"hr-link-btn"+(light?" hr-light":outline?" hr-outline":"")}>{children}</Link>;
-}
 export function Hero({page}:{page:Page|"contact"}){
  const h=HEADS[page as keyof typeof HEADS];
  const art=page==="home"?"/brand/home-hero.webp":photos[page];
@@ -36,30 +34,19 @@ export function Hero({page}:{page:Page|"contact"}){
    </div>
  </section>;
 }
-function SectionTitle({eyebrow,children}:{eyebrow?:string;children:React.ReactNode}){
- return <div className="hr-section-heading">{eyebrow?<span className="hr-eyebrow">{eyebrow}</span>:null}<h2>{children}</h2></div>;
-}
-function Shelf({title,children}:{title:string;children:React.ReactNode}){
- const shelf=useRef<HTMLDivElement>(null);
- const go=(dir:number)=>shelf.current?.scrollBy({left:dir*Math.min(360,shelf.current.clientWidth*.8),behavior:"smooth"});
- return <div className="hr-shelf"><div className="hr-shelf-title"><h2>{title}</h2><div className="hr-shelf-actions"><button type="button" onClick={()=>go(-1)} aria-label={"Scroll "+title+" backward"}><img src="/brand/icons/arrow-left.svg" alt="" aria-hidden="true"/></button><button type="button" onClick={()=>go(1)} aria-label={"Scroll "+title+" forward"}><img src="/brand/icons/arrow-right-light.svg" alt="" aria-hidden="true"/></button></div></div><div className="hr-shelf-track" ref={shelf} tabIndex={0} role="region" aria-label={title}>{children}</div></div>;
-}
 function ProblemModal({index,onClose}:{index:number;onClose:()=>void}){
  const p=TOPICS[index];
- return <div className="hr-dialog-backdrop" onClick={onClose} role="presentation"><div role="dialog" aria-modal="true" aria-labelledby="hr-problem-dialog" className="hr-dialog" onClick={e=>e.stopPropagation()}>
-   <button className="hr-dialog-close" type="button" onClick={onClose} aria-label="Close details">×</button>
-   <span className="hr-eyebrow">{p.area}</span><h2 id="hr-problem-dialog">{p.title}</h2>
-   <p>{p.lead}</p><h3>What we look at</h3><p>{p.look}</p><h3>Where we'd start</h3><p>{p.start}</p><HButton to="/contact">Discuss this challenge →</HButton>
- </div></div>;
+ return <SourceDialog id="hr-problem-dialog" title={p.title} eyebrow={p.area} onClose={onClose}>
+  <p>{p.lead}</p><h3>What we look at</h3><p>{p.look}</p><h3>Where we'd start</h3><p>{p.start}</p>
+  <HButton to="/contact">Discuss this challenge →</HButton>
+ </SourceDialog>;
 }
 function TierModal({index,onClose}:{index:number;onClose:()=>void}){
  const e=ENGS[index];
- return <div className="hr-dialog-backdrop" onClick={onClose} role="presentation"><div role="dialog" aria-modal="true" aria-labelledby="hr-tier-dialog" className="hr-dialog" onClick={ev=>ev.stopPropagation()}>
-  <button type="button" className="hr-dialog-close" onClick={onClose} aria-label="Close engagement details">×</button>
-  <span className="hr-eyebrow">{e.tag}</span><h2 id="hr-tier-dialog">{e.name}</h2>
+ return <SourceDialog id="hr-tier-dialog" title={e.name} eyebrow={e.tag} onClose={onClose} closeLabel="Close engagement details">
   <p>{e.body}</p><h3>What the work includes</h3><p>{e.itemsText}</p><h3>Commercial arrangement</h3><p>{e.comm}</p>
   <HButton to="/contact">Discuss a {e.name} →</HButton>
- </div></div>;
+ </SourceDialog>;
 }
 const homeTeasers=[
  {slug:"enquiries-30-day-fix",type:"Guide",read:"4 min read",by:"HUMMIN Team · 20 Oct",title:"Why enquiries go unanswered, and a 30-day fix",excerpt:"Most owners get more enquiries than they think. The problem is what happens next."},

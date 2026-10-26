@@ -1,3 +1,4 @@
+@import "./components/source-foundation.generated.css";
 /* Exact self-hosted production HUMMIN font files extracted from the owner's design package. */
 @font-face{font-family:'Figtree';font-style:normal;font-weight:400 700;font-display:swap;src:url('/brand/fonts/hummin-figtree-latin.woff2') format('woff2')}
 @font-face{font-family:'Newsreader';font-style:normal;font-weight:400 500;font-display:swap;src:url('/brand/fonts/hummin-newsreader-regular-latin.woff2') format('woff2')}
