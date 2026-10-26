@@ -46,3 +46,9 @@
 .hummin-legal-muted{border-color:#BAC4BE}
 @media(max-width:800px){.hummin-legal-sidebar{position:static;flex:1 1 100%;min-width:0;grid-template-columns:repeat(auto-fit,minmax(min(100%,260px),1fr));gap:20px}.hummin-legal-article{flex-basis:100%;max-width:100%}.hummin-legal-watermark{right:-250px}}
 @media(prefers-reduced-motion:reduce){.hummin-legal *{transition:none!important;animation:none!important}.hummin-legal{scroll-behavior:auto}}
+
+/* Final WCAG contrast treatment for small legal-page labels.
+ * Same HUMMIN palette, with darker variants for 11-15px text. */
+.hummin-legal-toc strong{color:#2A3538}
+.hummin-legal-toc a span,.hummin-legal-heading>span{color:#87371B}
+.hummin-legal-questions p{color:#2A3538}
