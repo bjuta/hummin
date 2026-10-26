@@ -3,15 +3,15 @@ import { Link, NavLink, Outlet, Links, Meta, Scripts, ScrollRestoration, isRoute
 import "./site.css";
 
 const navigation = [
-  { to:"/",label:"Home",end:true },
-  { to:"/how-we-work",label:"How We Work" },
-  { to:"/applied-expertise",label:"Applied Expertise" },
-  { to:"/engagements",label:"Engagements" },
-  { to:"/who-we-work-with",label:"Who We Work With" },
-  { to:"/assessment",label:"Assessment" },
-  { to:"/about",label:"About" },
-  { to:"/insights",label:"Insights" },
-  { to:"/contact",label:"Contact" },
+ {to:"/",label:"Home",icon:"house",end:true},
+ {to:"/how-we-work",label:"How We Work",icon:"route"},
+ {to:"/applied-expertise",label:"Applied Expertise",icon:"layers"},
+ {to:"/engagements",label:"Engagements",icon:"handshake"},
+ {to:"/who-we-work-with",label:"Who We Work With",icon:"users"},
+ {to:"/assessment",label:"Assessment",icon:"clipboard-check"},
+ {to:"/about",label:"About",icon:"building-2"},
+ {to:"/insights",label:"Insights",icon:"newspaper"},
+ {to:"/contact",label:"Contact",icon:"mail"}
 ];
 export const links = () => [];
 export function Layout({ children }: {children:React.ReactNode}) {
@@ -46,8 +46,10 @@ function Header(){
     <div className="hm-site-nav-bar">
       <div className="hm-site-nav-left">
         <button className="hm-site-menu-toggle" type="button" aria-label={menu?"Close menu":"Open menu"} aria-expanded={menu} aria-controls="site-nav" onClick={()=>setMenu(open=>!open)}>
-          {menu?<svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><path d="M18 6 6 18M6 6l12 12"/></svg>:
-          <svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg>}
+          <span className="hm-site-toggle-icon" aria-hidden="true">
+           <img src="/brand/icons/menu.svg" alt="" className={menu?"hm-menu-icon-hidden":""}/>
+           <img src="/brand/icons/x.svg" alt="" className={!menu?"hm-menu-icon-hidden":""}/>
+          </span>
         </button>
         <Link to="/" className="hm-site-brand" onClick={()=>setMenu(false)} aria-label="HUMMIN, go to home page">
           <img src="/brand/hummin-symbol.svg" width="42" height="42" alt=""/>
@@ -60,13 +62,13 @@ function Header(){
     <nav id="site-nav" aria-label="Main" className={"hm-site-drawer"+(menu?" hm-site-drawer-open":"")} inert={!menu}>
       <div className="hm-site-drawer-links">
         {navigation.map((n,i)=><NavLink key={n.to} end={n.end} to={n.to} onClick={()=>setMenu(false)} className={({isActive})=>"hm-site-drawer-link"+(isActive?" hm-site-drawer-active":"")}>
-          <span className="hm-site-nav-index" aria-hidden="true">{String(i+1).padStart(2,"0")}</span>
+          <img className="hm-site-nav-icon" src={"/brand/icons/"+n.icon+".svg"} alt="" aria-hidden="true"/>
           <span>{n.label}</span>
         </NavLink>)}
       </div>
       <div className="hm-site-drawer-meta">
-        <a href="mailto:sales@hummin.org">sales@hummin.org</a>
-        <span>Nairobi, Kenya</span>
+        <a href="mailto:sales@hummin.org"><img src="/brand/icons/mail.svg" alt="" aria-hidden="true"/>sales@hummin.org</a>
+        <span><img src="/brand/icons/map-pin.svg" alt="" aria-hidden="true"/>Nairobi, Kenya</span>
       </div>
     </nav>
   </header>;

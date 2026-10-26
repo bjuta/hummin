@@ -1,5 +1,6 @@
 import {useEffect,useRef,type ReactNode} from "react";
 import {Link} from "react-router";
+import "./source-dialog.css";
 
 /** Primitives copied from HUMMIN's owner-authored design structure.
  * CSS class hooks intentionally match the original page implementation.
@@ -40,33 +41,53 @@ export function SourceEditorialHero({as="section",className="",markClassName="",
   <div className={"hm-source-editorial-inner"+(innerClassName?" "+innerClassName:"")}>{children}</div>
  </Tag>;
 }
-export function SourceDialog({id,title,eyebrow,onClose,children,closeLabel="Close details"}:{
- id:string;title:string;eyebrow?:string;onClose:()=>void;children:ReactNode;closeLabel?:string
+/** HUMMIN's original source "peek" dialog, shared by challenge and
+ * engagement cards. Header, details and paired actions are a single primitive.
+ */
+export function SourceDialog({id,title,eyebrow,lead,rows,primary,secondary,tone="mist",onClose,closeLabel="Close"}:{
+ id:string;title:string;eyebrow:string;lead:string;
+ rows:ReadonlyArray<{label:string;text:string}>;
+ primary:{label:string;to:string};secondary:{label:string;to:string};
+ tone?:"mist"|"ink"|"slate";onClose:()=>void;closeLabel?:string
 }){
  const button=useRef<HTMLButtonElement>(null);
  const dialog=useRef<HTMLDivElement>(null);
  useEffect(()=>{
-  const previous=document.activeElement instanceof HTMLElement?document.activeElement:null;
+  const prior=document.activeElement instanceof HTMLElement?document.activeElement:null;
+  const oldOverflow=document.body.style.overflow;
+  document.body.style.overflow="hidden";
   button.current?.focus();
   const onKey=(event:KeyboardEvent)=>{
    if(event.key==="Escape"){event.preventDefault();onClose();return;}
    if(event.key!=="Tab")return;
    const controls=Array.from(dialog.current?.querySelectorAll<HTMLElement>(
-    'a[href],button:not([disabled]),input:not([disabled]),select:not([disabled]),textarea:not([disabled]),[tabindex]:not([tabindex="-1"])'
-   )||[]).filter(el=>!el.hasAttribute("hidden")&&el.getClientRects().length>0);
+    'a[href],button:not([disabled]),input:not([disabled]),[tabindex]:not([tabindex="-1"])'
+   )||[]).filter(el=>el.getClientRects().length>0);
    if(!controls.length){event.preventDefault();button.current?.focus();return;}
-   const first=controls[0],last=controls[controls.length-1];
-   if(event.shiftKey&&document.activeElement===first){event.preventDefault();last.focus();}
-   else if(!event.shiftKey&&document.activeElement===last){event.preventDefault();first.focus();}
+   if(event.shiftKey&&document.activeElement===controls[0]){event.preventDefault();controls[controls.length-1].focus();}
+   else if(!event.shiftKey&&document.activeElement===controls[controls.length-1]){event.preventDefault();controls[0].focus();}
   };
   document.addEventListener("keydown",onKey);
-  return ()=>{document.removeEventListener("keydown",onKey);previous?.focus()};
+  return ()=>{document.body.style.overflow=oldOverflow;document.removeEventListener("keydown",onKey);prior?.focus()};
  },[onClose]);
- return <div className="hr-dialog-backdrop" onClick={onClose} role="presentation">
-  <div ref={dialog} role="dialog" aria-modal="true" aria-labelledby={id} className="hr-dialog" onClick={event=>event.stopPropagation()}>
-   <button ref={button} className="hr-dialog-close" type="button" onClick={onClose} aria-label={closeLabel}>×</button>
-   {eyebrow?<span className="hr-eyebrow">{eyebrow}</span>:null}<h2 id={id}>{title}</h2>
-   {children}
+ return <div className="hr-dialog-backdrop hm-source-peek-backdrop" role="presentation">
+  <button type="button" className="hm-source-peek-scrim" onClick={onClose} tabIndex={-1} aria-label="Close details"/>
+  <div ref={dialog} role="dialog" aria-modal="true" aria-labelledby={id} aria-describedby={id+"-lead"} className={"hr-dialog hm-source-peek hm-source-peek-"+tone}>
+   <div className="hm-source-peek-hero">
+    <div className="hm-source-peek-top">
+     <span className="hm-source-peek-chip">{eyebrow}</span>
+     <button ref={button} className="hr-dialog-close hm-source-peek-close" type="button" onClick={onClose} aria-label={closeLabel}><span aria-hidden="true">×</span></button>
+    </div>
+    <h2 id={id}>{title}</h2>
+    <p id={id+"-lead"}>{lead}</p>
+   </div>
+   <dl className="hm-source-peek-rows">{rows.map((row,i)=><div key={i}>
+    <dt>{row.label}</dt><dd>{row.text}</dd>
+   </div>)}</dl>
+   <div className="hm-source-peek-actions">
+    <Link className="hm-source-peek-primary" to={primary.to} onClick={onClose}>{primary.label} <span aria-hidden="true">→</span></Link>
+    <Link className="hm-source-peek-secondary" to={secondary.to} onClick={onClose}>{secondary.label}</Link>
+   </div>
   </div>
  </div>;
 }

@@ -1,6 +1,6 @@
 import {useState} from "react";
 import {SourceButton as HButton,SourceSectionTitle as SectionTitle,SourceShelf as Shelf,SourceDialog,SourceIcon,SourceChip} from "./SourcePrimitives";
-import {Link} from "react-router";
+import {Link,useSearchParams} from "react-router";
 import {HEADS,HERO_STYLE,STAGES,DOMAINS,ENGS,TOPICS,VALUES,NEEDS,TIERS,TIER_ROWS} from "../lib/react-site-content";
 import "./react-marketing.css";
 import {ReactAssessmentPromotion} from "./ReactAssessmentPromotion";
@@ -34,19 +34,25 @@ export function Hero({page}:{page:Page|"contact"}){
    </div>
  </section>;
 }
+const sourceDomain=(area:string)=>area.split(" · ")[0];
 function ProblemModal({index,onClose}:{index:number;onClose:()=>void}){
- const p=TOPICS[index];
- return <SourceDialog id="hr-problem-dialog" title={p.title} eyebrow={p.area} onClose={onClose}>
-  <p>{p.lead}</p><h3>What we look at</h3><p>{p.look}</p><h3>Where we'd start</h3><p>{p.start}</p>
-  <HButton to="/contact">Discuss this challenge →</HButton>
- </SourceDialog>;
+ const topic=TOPICS[index],domain=sourceDomain(topic.area);
+ const target=new URLSearchParams({challenge:topic.title}).toString();
+ const chosen=new URLSearchParams({area:domain}).toString();
+ return <SourceDialog id="hr-problem-dialog" tone={index%3===0?"mist":index%3===1?"ink":"slate"}
+  title={topic.title} eyebrow={topic.area} lead={topic.lead}
+  rows={[{label:"What we look at",text:topic.look},{label:"Where most clients start",text:topic.start}]}
+  primary={{label:"Discuss This Challenge",to:"/contact?"+target}}
+  secondary={{label:"See "+domain,to:"/applied-expertise?"+chosen}} onClose={onClose}/>;
 }
 function TierModal({index,onClose}:{index:number;onClose:()=>void}){
- const e=ENGS[index];
- return <SourceDialog id="hr-tier-dialog" title={e.name} eyebrow={e.tag} onClose={onClose} closeLabel="Close engagement details">
-  <p>{e.body}</p><h3>What the work includes</h3><p>{e.itemsText}</p><h3>Commercial arrangement</h3><p>{e.comm}</p>
-  <HButton to="/contact">Discuss a {e.name} →</HButton>
- </SourceDialog>;
+ const tier=TIERS[index];
+ return <SourceDialog id="hr-tier-dialog" tone={index===0?"mist":index===1?"slate":"ink"}
+  title={tier.name} eyebrow={tier.tag} lead={tier.what}
+  rows={[{label:"Best when",text:tier.best},{label:"You get",text:tier.get},{label:"Fees",text:tier.fees}]}
+  primary={{label:"Discuss a "+tier.name,to:"/contact?"+new URLSearchParams({engagement:tier.name}).toString()}}
+  secondary={{label:"Compare All Three",to:"/engagements?"+new URLSearchParams({tier:tier.name}).toString()}}
+  onClose={onClose}/>;
 }
 const homeTeasers=[
  {slug:"enquiries-30-day-fix",type:"Guide",read:"4 min read",by:"HUMMIN Team · 20 Oct",title:"Why enquiries go unanswered, and a 30-day fix",excerpt:"Most owners get more enquiries than they think. The problem is what happens next."},
@@ -91,7 +97,9 @@ function How(){
  </section><section className="hr-dark-section"><div className="hr-section-headline"><SectionTitle eyebrow="What we need from you">Four things we ask of every client.</SectionTitle><p>We agree these with you at the start of every engagement.</p></div><div className="hr-four-grid">{NEEDS.map(n=><div className="hr-need" key={n.v}><span className="hr-need-icon" aria-hidden="true"><SourceIcon name={n.icon} light/></span><h3>{n.v}</h3><p>{n.k}</p></div>)}</div></section></div>;
 }
 function Expertise(){
- const [active,setActive]=useState(0),domain=DOMAINS[active];
+ const [search]=useSearchParams();
+ const initial=Math.max(0,DOMAINS.findIndex(d=>d.name.toLowerCase()===search.get("area")?.toLowerCase()));
+ const [active,setActive]=useState(initial),domain=DOMAINS[active];
  return <div className="hr-page"><Hero page="core"/>
   <section className="hr-section hr-core-section">
    <Shelf title="Seven areas. Pick one.">{DOMAINS.map((d,i)=><button
@@ -110,7 +118,9 @@ function Expertise(){
  </div>;
 }
 function Engagements(){
- const [active,setActive]=useState(0);
+ const [search]=useSearchParams();
+ const initial=Math.max(0,TIERS.findIndex(t=>t.name.toLowerCase()===search.get("tier")?.toLowerCase()));
+ const [active,setActive]=useState(initial);
  const keys=["best","what","get","ends","role","fees"] as const;
  return <div className="hr-page"><Hero page="eng"/><section className="hr-section">
   <div className="hr-section-headline"><SectionTitle>Compare the three.</SectionTitle><div className="hr-pill-tabs" role="tablist" aria-label="Choose an engagement">{TIERS.map((t,i)=><button key={t.name} role="tab" aria-selected={active===i} id={"hr-tier-tab-"+i} aria-controls="hr-tier-panel" onClick={()=>setActive(i)} className={active===i?"active":""}>{t.name}</button>)}</div></div>
