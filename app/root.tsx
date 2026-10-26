@@ -13,11 +13,7 @@ const navigation = [
   { to:"/insights",label:"Insights" },
   { to:"/contact",label:"Contact" },
 ];
-export const links = () => [
-  { rel:"preconnect",href:"https://fonts.googleapis.com" },
-  { rel:"preconnect",href:"https://fonts.gstatic.com",crossOrigin:"anonymous" as const },
-  { rel:"stylesheet",href:"https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&family=Figtree:wght@400;500;600;700&display=swap" }
-];
+export const links = () => [];
 export function Layout({ children }: {children:React.ReactNode}) {
   return <html lang="en-KE"><head><meta charSet="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/><Meta/><Links/></head><body>{children}<ScrollRestoration/><Scripts/></body></html>;
 }
