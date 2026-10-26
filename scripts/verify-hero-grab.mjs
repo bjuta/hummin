@@ -20,7 +20,7 @@ for(const route of routes){
    const x=Math.min(innerWidth-16,Math.max(16,rect.left+Math.min(rect.width/2,145)));
    const y=Math.max(95,Math.min(innerHeight-100,rect.top+rect.height/2));
    const hit=document.elementFromPoint(x,y);
-   const mainCopy=headline.closest('div[style*="pointer-events:auto"]');
+   const mainCopy=headline.parentElement;
    return {hit:hit?.tagName,hitText:hit?.textContent?.trim().slice(0,50),hitHeadline:hit===headline||headline.contains(hit),hitPath:hit?.outerHTML.slice(0,170),headlinePE:getComputedStyle(headline).pointerEvents,wrapperPE:mainCopy&&getComputedStyle(mainCopy).pointerEvents,x,y,originalTop,scrollHeight:document.scrollingElement.scrollHeight,viewport:innerHeight,ctaPE:getComputedStyle(hero.querySelector('button')).pointerEvents};
   });
   console.log("HERO TARGET",route,JSON.stringify(result));
