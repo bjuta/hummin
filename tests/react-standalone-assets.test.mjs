@@ -44,3 +44,12 @@ test("Normal build and typecheck do not read the legacy HTML source",()=>{
  const imports=fs.readFileSync("app/site.css","utf8");
  assert.ok(!imports.includes("generated.css")&&!imports.includes("design/sources"));
 });
+
+test("Retirement gate cannot authorise deletion while public React approval is off",()=>{
+ const policy=fs.readFileSync("app/lib/react-cutover.server.ts","utf8");
+ assert.match(policy,/PUBLIC_REACT_CUTOVER_APPROVED\s*=\s*false/);
+ const guard=fs.readFileSync("scripts/check-legacy-html-detach.mjs","utf8");
+ assert.match(guard,/PUBLIC_REACT_CUTOVER_APPROVED/);
+ assert.match(guard,/originalLoader/);
+ assert.match(guard,/--assert-removed/);
+});
