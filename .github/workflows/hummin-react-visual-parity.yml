@@ -1,10 +1,5 @@
 name: HUMMIN visual source fidelity (production vs React)
 on:
-  push:
-    branches: [feat/fullstack-workers-foundation]
-    paths:
-      - scripts/audit-react-visual-parity.mjs
-      - .github/workflows/hummin-react-visual-parity.yml
   workflow_dispatch:
 permissions:
   contents: read
