@@ -12,3 +12,19 @@ test("All HUMMIN editorial views share one source-faithful card primitive",()=>{
  assert.ok(!insights.includes("function SourceListCard("));
  assert.ok(!article.includes("function EditorialCard("));
 });
+
+test("Native Insights loaders have a dedicated server boundary",()=>{
+ const server=fs.readFileSync("app/lib/react-insights-loader.server.ts","utf8");
+ const preview=fs.readFileSync("app/routes/react.insights.preview.tsx","utf8");
+ const canonical=fs.readFileSync("app/routes/react.insights.gated.tsx","utf8");
+ assert.match(server,/export async function loadReactInsights/);
+ assert.match(server,/publishedInsights/);
+ assert.match(server,/preview:!canonical/);
+ for(const route of [preview,canonical]){
+  assert.match(route,/react-insights-loader\.server/);
+  assert.doesNotMatch(route,/from "\.\.\/lib\/insights\.server"/);
+  assert.doesNotMatch(route,/export async function loadReactInsights/);
+ }
+ assert.match(canonical,/react-insights-meta/);
+ assert.match(canonical,/PUBLIC_REACT_CUTOVER_APPROVED/);
+});
