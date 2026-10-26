@@ -1,5 +1,5 @@
 import {useState} from "react";
-import {SourceButton as HButton,SourceSectionTitle as SectionTitle,SourceShelf as Shelf,SourceDialog} from "./SourcePrimitives";
+import {SourceButton as HButton,SourceSectionTitle as SectionTitle,SourceShelf as Shelf,SourceDialog,SourceIcon,SourceChip} from "./SourcePrimitives";
 import {Link} from "react-router";
 import {HEADS,HERO_STYLE,STAGES,DOMAINS,ENGS,TOPICS,VALUES,NEEDS,TIERS,TIER_ROWS} from "../lib/react-site-content";
 import "./react-marketing.css";
@@ -21,7 +21,7 @@ export function Hero({page}:{page:Page|"contact"}){
    <div className="hr-hero-gradient" aria-hidden="true"/>
    <img className="hr-hero-motif" src="/brand/hummin-mark-mist.svg" alt="" aria-hidden="true"/>
    <div className="hr-hero-chips">
-    <span>{page!=="home"?<img className="hr-hero-chip-icon" src={"/brand/icons/"+h.iconPaper+"-light.svg"} alt="" aria-hidden="true"/>:null}{page==="home"?"Embedded advisory and execution":h.label}</span>
+    <span>{page!=="home"?<SourceIcon className="hr-hero-chip-icon" name={h.iconPaper} light/>:null}{page==="home"?"Embedded advisory and execution":h.label}</span>
     <span>{page==="home"?"Nairobi, Kenya":HERO_STYLE[page as keyof typeof HERO_STYLE]?.chip}</span>
    </div>
    <div className="hr-hero-copy">
@@ -61,20 +61,20 @@ function Home(){
   <div className="hr-home-sections"><section className="hr-section hr-intro"><p className="hr-big">Good businesses encounter problems that do not fit neatly into departments.</p><div><p>A slow month of enquiries can look like a marketing problem. The cause may sit in how enquiries are answered, the tools the team uses, or who owns the follow-up.</p><p>We find the cause, bring in the people needed to fix it, and stay involved until the work is done.</p></div></section>
   <section className="hr-section"><span className="hr-eyebrow">Where we often start</span>
    <Shelf title="Problems owners bring to us.">{TOPICS.map((p,i)=><button type="button" key={p.title} className={"hr-problem-card hr-source-tone-"+i%3} onClick={()=>setProblem(i)} aria-haspopup="dialog" aria-label={p.title+" Read more"}>
-      <span className="hr-problem-mark" aria-hidden="true"/><span className="hr-card-chip">{p.area}</span><span className="hr-problem-bottom"><span className="hr-card-title">{p.title}</span><span className="hr-card-more">Read more <span aria-hidden="true">+</span></span></span>
+      <span className="hr-problem-mark" aria-hidden="true"/><SourceChip>{p.area}</SourceChip><span className="hr-problem-bottom"><span className="hr-card-title">{p.title}</span><span className="hr-card-more">Read more <span aria-hidden="true">+</span></span></span>
     </button>)}</Shelf>
   </section>
   <section className="hr-section"><span className="hr-eyebrow">Ways to work with us</span>
     <p className="hr-statement">Start with a <button type="button" onClick={()=>setTier(0)} aria-haspopup="dialog">Review</button>. Fix it with a <button type="button" onClick={()=>setTier(1)} aria-haspopup="dialog">Project</button>. Keep us close with a <button type="button" onClick={()=>setTier(2)} aria-haspopup="dialog">Residency</button>.</p>
     <div className="hr-three-grid">{ENGS.map((p,i)=><button type="button" onClick={()=>setTier(i)} aria-haspopup="dialog" className={"hr-engagement-card hr-eng-source-"+i} key={p.name}>
-      <span className="hr-card-chip">{p.tag}</span><span className="hr-engagement-copy"><strong>{p.name}</strong><p>{["Find the problem and get a clear plan.","Design and deliver a defined piece of work.","A HUMMIN professional inside your team."][i]}</p><span className="hr-card-more">Read more <span aria-hidden="true">+</span></span></span>
+      <SourceChip>{p.tag}</SourceChip><span className="hr-engagement-copy"><strong>{p.name}</strong><p>{["Find the problem and get a clear plan.","Design and deliver a defined piece of work.","A HUMMIN professional inside your team."][i]}</p><span className="hr-card-more">Read more <span aria-hidden="true">+</span></span></span>
      </button>)}</div>
   </section>
   <section className="hr-section"><div className="hr-section-headline"><SectionTitle>How a piece of work runs.</SectionTitle><Link to="/how-we-work" className="hr-text-link">See How We Work</Link></div><div className="hr-four-grid">{STAGES.map(s=><div className="hr-step-min" key={s.name}><strong>{s.name}</strong><p>{s.short}</p></div>)}</div></section>
   <section className="hr-section hr-home-insights"><div className="hr-section-headline"><SectionTitle eyebrow="Insights">Practical notes for owners.</SectionTitle><Link className="hr-text-link" to="/insights">All Insights</Link></div>
    <div className="hr-three-grid hr-home-editorial">{homeTeasers.map((entry,i)=>{
      return <Link key={entry.slug} to={"/insights/"+entry.slug} className={"hr-home-insight-card hr-home-insight-"+i}>
-      <span className="hr-insight-card-top"><span className="hr-card-chip">{entry.type}</span><span>{entry.read}</span></span>
+      <span className="hr-insight-card-top"><SourceChip>{entry.type}</SourceChip><span>{entry.read}</span></span>
       <span className="hr-home-insight-copy"><strong>{entry.title}</strong><span>{entry.excerpt}</span></span>
       <span className="hr-home-insight-by">{entry.by}</span>
      </Link>;
@@ -87,8 +87,8 @@ function Home(){
 }
 function How(){
  return <div className="hr-page"><Hero page="how"/><section className="hr-section">
-  <Shelf title="Four steps, in order.">{STAGES.map((s,i)=><article className={"hr-stage-card hr-stage-source-"+i} key={s.name}><span className="hr-card-chip">Step {i+1} of 4</span><div><h3>{s.name}</h3><p>{s.what}</p><p className="hr-stage-out">You receive: {s.out}</p></div></article>)}</Shelf>
- </section><section className="hr-dark-section"><div className="hr-section-headline"><SectionTitle eyebrow="What we need from you">Four things we ask of every client.</SectionTitle><p>We agree these with you at the start of every engagement.</p></div><div className="hr-four-grid">{NEEDS.map(n=><div className="hr-need" key={n.v}><span className="hr-need-icon" aria-hidden="true"><img src={"/brand/icons/"+n.icon+"-light.svg"} alt=""/></span><h3>{n.v}</h3><p>{n.k}</p></div>)}</div></section></div>;
+  <Shelf title="Four steps, in order.">{STAGES.map((s,i)=><article className={"hr-stage-card hr-stage-source-"+i} key={s.name}><SourceChip>Step {i+1} of 4</SourceChip><div><h3>{s.name}</h3><p>{s.what}</p><p className="hr-stage-out">You receive: {s.out}</p></div></article>)}</Shelf>
+ </section><section className="hr-dark-section"><div className="hr-section-headline"><SectionTitle eyebrow="What we need from you">Four things we ask of every client.</SectionTitle><p>We agree these with you at the start of every engagement.</p></div><div className="hr-four-grid">{NEEDS.map(n=><div className="hr-need" key={n.v}><span className="hr-need-icon" aria-hidden="true"><SourceIcon name={n.icon} light/></span><h3>{n.v}</h3><p>{n.k}</p></div>)}</div></section></div>;
 }
 function Expertise(){
  const [active,setActive]=useState(0),domain=DOMAINS[active];
@@ -97,12 +97,12 @@ function Expertise(){
    <Shelf title="Seven areas. Pick one.">{DOMAINS.map((d,i)=><button
     type="button" key={d.name} className={"hr-core-card hr-core-tone-"+(active===i?"active":i%3)}
     aria-pressed={active===i} aria-controls="core-detail" onClick={()=>setActive(i)}>
-     <img className="hr-core-card-icon" src={"/brand/icons/"+d.icon+((active===i||i%3!==0)?"-light":"")+".svg"} alt="" aria-hidden="true"/>
+     <SourceIcon className="hr-core-card-icon" name={d.icon} light={active===i||i%3!==0}/>
      <span className="hr-core-card-label"><strong>{d.name}</strong>{d.ext?<small>External partners</small>:null}</span>
     </button>)}</Shelf>
   </section>
   <section id="core-detail" className="hr-core-source-detail" aria-live="polite">
-   <div key={domain.name} className="hr-core-detail-content"><div><img className="hr-core-detail-icon" src={"/brand/icons/"+domain.icon+"-light.svg"} alt="" aria-hidden="true"/><h2>{domain.name}</h2></div>
+   <div key={domain.name} className="hr-core-detail-content"><div><SourceIcon className="hr-core-detail-icon" name={domain.icon} light/><h2>{domain.name}</h2></div>
     <div><h3>{domain.lead}</h3><p>{domain.jobs}</p></div>
    </div>
   </section>

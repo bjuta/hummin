@@ -21,6 +21,9 @@ export function SourceShelf({title,children}:{title:string;children:ReactNode}){
   <div className="hr-shelf-track" ref={shelf} tabIndex={0} role="region" aria-label={title}>{children}</div>
  </div>;
 }
+export function SourceChip({children,className=""}:{children:ReactNode;className?:string}){
+ return <span className={"hr-card-chip"+(className?" "+className:"")}>{children}</span>;
+}
 export function SourceIcon({name,light=false,className}:{name:string;light?:boolean;className?:string}){
  return <img className={className} src={"/brand/icons/"+name+(light?"-light":"")+".svg"} alt="" aria-hidden="true"/>;
 }
