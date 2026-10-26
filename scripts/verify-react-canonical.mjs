@@ -69,6 +69,23 @@ for(const width of [390,768,1440]){
     const height=await page.locator(".hr-hero").evaluate(x=>x.getBoundingClientRect().height);
     assert.ok(Math.abs(height-(kind==="home"?620:480))<=3,path+" source mobile hero height mismatch "+height);
    }
+   if(kind==="home"&&width===1440){
+    // Owner-authored UI anatomy, read-only: no form, emails or booking.
+    await page.getByRole("button",{name:"Open menu"}).click();
+    assert.equal(await page.locator(".hm-site-nav-icon").count(),9,"Nine original icon-led drawer entries");
+    assert.equal(await page.locator(".hm-site-nav-index").count(),0,"No invented numbered navigation");
+    assert.equal(await page.locator(".hm-site-drawer-meta img").count(),2,"Original mail/location iconography");
+    await page.getByRole("button",{name:"Close menu"}).first().click();
+    await page.locator(".hr-problem-card").nth(2).click();
+    const dialog=page.getByRole("dialog",{name:"Systems the team does not use."});
+    await dialog.waitFor({state:"visible"});
+    assert.equal(await dialog.locator(".hm-source-peek-hero").count(),1,"Source-coloured dialog heading");
+    assert.equal(await dialog.locator(".hm-source-peek-rows>div").count(),2,"Exact labelled detail rows");
+    assert.equal(await dialog.locator(".hm-source-peek-actions a").count(),2,"Source primary and secondary CTAs");
+    assert.ok(await dialog.getByRole("link",{name:/See Technology/}).count(),"Original expertise follow-through");
+    await dialog.getByRole("button",{name:"Close"}).click();
+    assert.equal(await page.getByRole("dialog").count(),0,"Dialog closes cleanly");
+   }
    if(kind==="home"){
     assert.ok(await page.getByText("Keep us close with a",{exact:false}).count(),"Original Residency language");
     assert.equal(await page.locator(".hr-problem-card").count(),6,"All six source problem cards");
