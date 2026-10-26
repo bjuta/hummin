@@ -20,10 +20,12 @@ const slotData=JSON.parse(slots.body);
 assert.equal(slotData.enabled,true,"Staging should serve verified live bookings while isolated from public domain");
 assert.ok(Array.isArray(slotData.days)&&slotData.days.length>0,"Google-backed availability should contain days");
 assert.ok(typeof slotData.siteKey==="string"&&slotData.siteKey.length>5,"Turnstile public key must be supplied");
-// Staging is not ready for public routing while legal disclosure is a placeholder.
 const privacy=await read("/privacy");
 assert.equal(privacy.response.status,200,"Privacy route must load");
-assert.match(privacy.body,/Privacy notice under review|Publication required before launch/i,"Track unresolved privacy approval");
+assert.match(privacy.body,/Privacy notice/i,"Privacy notice must be published on staging");
+for(const heading of ["Information we receive","Providers and international processing","How long information is kept","Your choices and rights"])
+ assert.ok(privacy.body.includes(heading),"Missing privacy section: "+heading);
+assert.doesNotMatch(privacy.body,/Privacy notice under review|Publication required before launch|This placeholder is not a completed privacy policy/i,"Privacy placeholder must not ship");
 const login=await read("/admin/login");
 assert.equal(login.response.status,200);
 assert.match(login.body,/Send sign-in code/i,"Activated Owner login must load");
@@ -32,4 +34,4 @@ const contact=await read("/contact");
 assert.equal(contact.response.status,200,"Contact page must load");
 assert.match(contact.body,/Send Enquiry/i,"Contact form must be active");
 assert.doesNotMatch(contact.body,/The online form is not activated yet/i,"Contact must not have silently reverted to disabled");
-console.log("PASS staging smoke: crawler policy, live Admin and contact, live calendar-backed booking; privacy publication remains blocked");
+console.log("PASS staging smoke: crawler policy, live Admin and contact, live calendar-backed booking; privacy page complete but owner approval pending");
