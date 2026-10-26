@@ -4,7 +4,7 @@
 .ra-source-page{container-type:inline-size;background:#F4F5F1;color:#1E272A;font-family:Figtree,Arial,sans-serif}
 .ra-source-page *{box-sizing:border-box}
 .ra-source-hero{position:relative;overflow:hidden;background:radial-gradient(circle at 76% 20%,#53615E 0%,#2A3538 42%,#1E272A 85%);color:#F4F5F1}
-.ra-source-hero::after{content:"";position:absolute;right:-9%;top:-26%;width:70%;height:120%;background:url('/brand/hummin-symbol.svg') center/contain no-repeat;opacity:.12;filter:brightness(0) invert(1);pointer-events:none;transform:rotate(-9deg)}
+.ra-source-hero::after{content:"";position:absolute;right:-9%;top:-26%;width:70%;height:120%;background:url('/brand/insights-assessment-mark.svg') center/contain no-repeat;opacity:.12;filter:brightness(0) invert(1);pointer-events:none;transform:rotate(-9deg)}
 .ra-source-hero-inner{position:relative;z-index:1;padding:clamp(56px,7cqw,104px) clamp(20px,5cqw,64px) clamp(40px,5cqw,64px);max-width:1400px;margin:auto;display:grid;justify-items:start;gap:18px}
 .ra-source-back{display:inline-flex;align-items:center;min-height:40px;padding:0 14px;border-radius:999px;border:1px solid rgba(244,245,241,.18);font-weight:600;font-size:13px;color:#F4F5F1;text-decoration:none}
 .ra-source-pills{display:flex;flex-wrap:wrap;gap:6px}
@@ -21,7 +21,7 @@
 .ra-source-article{flex:1 1 560px;max-width:720px;min-width:0;display:grid;gap:22px}
 .ra-source-figure{margin:0 0 10px;display:grid;gap:10px}
 .ra-source-figure>div{position:relative;overflow:hidden;border-radius:20px;background:#E7EBE6;aspect-ratio:16/9}
-.ra-source-figure img{position:absolute;width:84%;height:100%;object-fit:contain;right:-16%;bottom:-26%;opacity:.085}
+.ra-source-figure img{position:absolute;width:84%;height:auto;right:-16%;bottom:-26%}
 .ra-source-figure figcaption{font-size:13px;color:#5E6967}
 .ra-source-h{font:400 clamp(28px,3cqw,38px)/1.1 Newsreader,Georgia,serif;letter-spacing:-.01em;margin:22px 0 0;scroll-margin-top:96px}
 .ra-source-p{font-size:18px;line-height:1.72;color:#2A3538;text-wrap:pretty;margin:0}
