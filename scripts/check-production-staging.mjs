@@ -28,6 +28,16 @@ assert.match(privacy.body,/Privacy notice/i,"Privacy notice must be published on
 for(const heading of ["Information we receive","Providers and international processing","How long information is kept","Your choices and rights"])
  assert.ok(privacy.body.includes(heading),"Missing privacy section: "+heading);
 assert.doesNotMatch(privacy.body,/Privacy notice under review|Publication required before launch|This placeholder is not a completed privacy policy/i,"Privacy placeholder must not ship");
+assert.match(privacy.body,/hummin-legal-hero/,"Privacy must use supplied HUMMIN Legal design");
+assert.match(privacy.body,/Read the Terms of Use/,"Privacy page must link to Terms");
+const terms=await read("/terms");
+assert.equal(terms.response.status,200,"Terms route must load");
+assert.match(terms.response.headers.get("x-robots-tag")||"",/noindex/i,"Staging Terms page must not be indexed");
+assert.match(terms.body,/Terms of use\./i,"Terms heading must be present");
+assert.match(terms.body,/hummin-legal-hero/,"Terms must use supplied HUMMIN Legal design");
+for(const heading of ["About these terms","The Business Assessment","Booking a call","Law and disputes"])
+ assert.ok(terms.body.includes(heading),"Missing Terms section: "+heading);
+
 const login=await read("/admin/login");
 assert.equal(login.response.status,200);
 assert.match(login.response.headers.get("x-robots-tag")||"",/noindex/i,"Staging Admin login must not be indexed");
