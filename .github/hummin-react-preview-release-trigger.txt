@@ -7,3 +7,5 @@ Re-publish isolated Preview with verified React assessment contrast correction a
 Canonical React routing rehearsal: all marketing, contact, assessment and Insights paths render React only on isolated preview host, while hummin.org retains original responses. Full React mocked acceptance 40350693804 green; CI 69eeb304ad143236733cc5e10b25f99fbeab74be green.
 
 Second canonical Preview release: corrected legal TOC contrast, staging routes and React native design revalidation; source head a13e148d03194a08c522926ff4b744d7ad968c38. Public domain deliberately remains unchanged.
+
+26 October 2026 React migration continuation: re-publish the development head including original assessment prompts and the stronger small-print legal contrast. Verify normal CI/build before isolated Preview publication. Never change hummin.org routing, production D1, or mail/calendar bindings; do not send test submissions.
