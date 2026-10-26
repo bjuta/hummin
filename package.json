@@ -27,7 +27,7 @@
     "deploy:production:staging": "HUMMIN_DEPLOY_TARGET=production npm run build && wrangler deploy --config build/server/wrangler.json",
     "check:production:config": "node scripts/check-production-config.mjs",
     "verify:production:migrations": "node --experimental-sqlite scripts/verify-production-migrations.mjs",
-    "verify:seo": "node --experimental-strip-types --test tests/seo-release.test.mjs",
+    "verify:seo": "node --experimental-strip-types --test tests/seo-release.test.mjs tests/privacy-release.test.mjs",
     "verify:production:wrangler-migrations": "wrangler d1 migrations apply hummin-web-production --config wrangler.production.jsonc --local --persist-to .wrangler/production-schema-check",
     "verify:boot": "node --test tests/boot-gate.test.mjs"
   },
