@@ -39,3 +39,7 @@
 .hm-site-footer-brand img{width:44px;height:44px;object-fit:contain}
 .hm-site-footer a:not(.hm-site-footer-brand){color:#F4F5F1;text-decoration:underline;text-underline-offset:3px}
 .hm-site-footer a:hover{color:#BAC4BE}
+
+/* Shared source-design coordinate system for all marketing and editorial pages.
+   cqw-based geometry must resolve against the page, not vary by DOM nesting. */
+:where(.hr-page,.hr-insights-page,.ra-source-page){container-type:inline-size}

@@ -41,7 +41,7 @@
 .hr-insights-sidebar{flex:1 1 230px;border-top:2px solid var(--hummin-ink);display:grid;gap:18px;padding-top:18px}
 .hr-insights-sidebar h2{font:400 30px Newsreader,serif}
 .hr-insights-sidebar a{font-size:15px;line-height:1.5;border-bottom:1px solid var(--hummin-muted);display:flex;justify-content:space-between;gap:16px;padding-bottom:16px}
-@media(max-width:680px){.hr-insights-hero{padding-top:75px}.hr-insights-article>p,.hr-insights-article li{font-size:17px}}
+@media(max-width:680px){.hr-insights-article>p,.hr-insights-article li{font-size:17px}}
 @media(prefers-reduced-motion:reduce){.hr-insights-card{transition:none}}
 
 
