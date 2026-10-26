@@ -34,9 +34,9 @@
 .ra-source-download{border-radius:20px;background:#434F4F;color:#fff;padding:22px;display:flex;flex-wrap:wrap;gap:16px 24px;align-items:center}
 .ra-source-download.ra-source-pdf{background:#B5532C}
 .ra-source-download>div{flex:1 1 260px;display:grid;gap:6px}
-.ra-source-download>div>span{font-weight:600;font-size:11px;letter-spacing:.08em;text-transform:uppercase;opacity:.85}
+.ra-source-download>div>span{font-weight:600;font-size:11px;letter-spacing:.08em;text-transform:uppercase;opacity:1}
 .ra-source-download h3{font:400 26px/1.1 Newsreader,serif;margin:0}
-.ra-source-download p{font-size:14px;line-height:1.5;opacity:.9;margin:0}
+.ra-source-download p{font-size:14px;line-height:1.5;opacity:1;margin:0}
 .ra-source-download>a{flex-shrink:0;display:inline-flex;align-items:center;min-height:48px;padding:0 20px;border-radius:999px;background:#F4F5F1;color:#1E272A;text-decoration:none;font-size:14px;font-weight:700}
 .ra-source-assessment{position:relative;overflow:hidden;border-radius:20px;background:#1E272A;color:#F4F5F1;padding:24px;display:flex;flex-wrap:wrap;gap:16px 24px;align-items:center}
 .ra-source-assessment::before{content:"";position:absolute;width:280px;height:280px;right:-80px;top:-40px;background:url('/brand/hummin-symbol.svg') center/contain no-repeat;opacity:.12}
