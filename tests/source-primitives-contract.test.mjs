@@ -15,3 +15,25 @@ test("shared React primitives replace page-local controls",()=>{
  for(const old of ["function HButton(","function SectionTitle(","function Shelf("])assert.ok(!marketing.includes(old),old);
  for(const hook of ["<SourceDialog","<SourceIcon","<SourceChip","<Shelf","<HButton","<SectionTitle"])assert.ok(marketing.includes(hook),hook);
 });
+
+test("Source-dialog renders the original two-tone, paired-CTA structure without a legacy HTML dependency",()=>{
+ const code=fs.readFileSync("app/components/SourcePrimitives.tsx","utf8");
+ const css=fs.readFileSync("app/components/source-dialog.css","utf8");
+ const root=fs.readFileSync("app/root.tsx","utf8");
+ const marketing=fs.readFileSync("app/components/ReactMarketing.tsx","utf8");
+ assert.match(code,/hm-source-peek-hero/);
+ assert.match(code,/hm-source-peek-rows/);
+ assert.match(code,/hm-source-peek-primary/);
+ assert.match(code,/hm-source-peek-secondary/);
+ assert.match(code,/createPortal\(/);
+ assert.match(css,/width:min\(560px,100%\)/);
+ assert.match(css,/blur\(4px\)/);
+ assert.match(root,/hm-site-nav-icon/);
+ assert.match(root,/\/brand\/icons\/map-pin.svg/);
+ assert.match(marketing,/Where most clients start/);
+ assert.match(marketing,/Discuss This Challenge/);
+ assert.match(marketing,/Compare All Three/);
+ assert.match(marketing,/useSearchParams/);
+ const contact=fs.readFileSync("app/components/ReactContact.tsx","utf8");
+ assert.match(contact,/defaultValue=\{startingMessage\}/);
+});

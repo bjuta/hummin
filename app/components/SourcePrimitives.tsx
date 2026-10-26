@@ -1,5 +1,6 @@
 import {useEffect,useRef,type ReactNode} from "react";
 import {Link} from "react-router";
+import {createPortal} from "react-dom";
 import "./source-dialog.css";
 
 /** Primitives copied from HUMMIN's owner-authored design structure.
@@ -13,7 +14,7 @@ export function SourceSectionTitle({eyebrow,children}:{eyebrow?:string;children:
 }
 export function SourceShelf({title,children}:{title:string;children:ReactNode}){
  const shelf=useRef<HTMLDivElement>(null);
- const go=(direction:number)=>shelf.current?.scrollBy({left:direction*Math.min(360,shelf.current.clientWidth*.8),behavior:"smooth"});
+ const go=(direction:number)=>shelf.current?.scrollBy({left:direction*Math.min(320,shelf.current.clientWidth*.8),behavior:"smooth"});
  return <div className="hr-shelf">
   <div className="hr-shelf-title"><h2>{title}</h2><div className="hr-shelf-actions">
    <button type="button" onClick={()=>go(-1)} aria-label={"Scroll "+title+" backward"}><img src="/brand/icons/arrow-left.svg" alt="" aria-hidden="true"/></button>
@@ -70,7 +71,7 @@ export function SourceDialog({id,title,eyebrow,lead,rows,primary,secondary,tone=
   document.addEventListener("keydown",onKey);
   return ()=>{document.body.style.overflow=oldOverflow;document.removeEventListener("keydown",onKey);prior?.focus()};
  },[onClose]);
- return <div className="hr-dialog-backdrop hm-source-peek-backdrop" role="presentation">
+ return typeof document!=="undefined"?createPortal(<div className="hr-dialog-backdrop hm-source-peek-backdrop" role="presentation">
   <button type="button" className="hm-source-peek-scrim" onClick={onClose} tabIndex={-1} aria-label="Close details"/>
   <div ref={dialog} role="dialog" aria-modal="true" aria-labelledby={id} aria-describedby={id+"-lead"} className={"hr-dialog hm-source-peek hm-source-peek-"+tone}>
    <div className="hm-source-peek-hero">
@@ -89,5 +90,5 @@ export function SourceDialog({id,title,eyebrow,lead,rows,primary,secondary,tone=
     <Link className="hm-source-peek-secondary" to={secondary.to} onClick={onClose}>{secondary.label}</Link>
    </div>
   </div>
- </div>;
+ </div>,document.body):null;
 }
