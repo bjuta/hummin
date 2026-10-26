@@ -1,8 +1,11 @@
 name: Verify
 on:
-  pull_request:
+  workflow_dispatch: # Manual validation of the React migration, once per consolidated release candidate
   push:
-    branches: [main]
+    branches: [main] # Keep the existing production-branch safety checks
+concurrency:
+  group: hummin-verify-${{ github.ref }}
+  cancel-in-progress: true
 permissions:
   contents: read
 jobs:
