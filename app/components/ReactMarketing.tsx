@@ -100,8 +100,8 @@ function Home(){
 }
 function How(){
  return <div className="hr-page"><Hero page="how"/><section className="hr-section">
-  <Shelf title="Four steps, in order.">{STAGES.map((s,i)=><article className={"hr-stage-card hr-tone-"+i%3} key={s.name}><span className="hr-card-chip">{String(i+1).padStart(2,"0")} / 04</span><div><h3>{s.name}</h3><p>{s.what}</p><p className="hr-stage-out">You receive: {s.out}</p></div></article>)}</Shelf>
- </section><section className="hr-dark-section"><div className="hr-section-headline"><SectionTitle eyebrow="What we need from you">Four things we ask of every client.</SectionTitle><p>We agree these with you at the start of every engagement.</p></div><div className="hr-four-grid">{NEEDS.map(n=><div className="hr-need" key={n.v}><span className="hr-need-icon" aria-hidden="true">◎</span><h3>{n.v}</h3><p>{n.k}</p></div>)}</div></section><section className="hr-section"><SectionTitle>Ready to make progress?</SectionTitle><HButton to="/contact">Discuss a Business Challenge →</HButton></section></div>;
+  <Shelf title="Four steps, in order.">{STAGES.map((s,i)=><article className={"hr-stage-card hr-stage-source-"+i} key={s.name}><span className="hr-card-chip">Step {i+1} of 4</span><div><h3>{s.name}</h3><p>{s.what}</p><p className="hr-stage-out">You receive: {s.out}</p></div></article>)}</Shelf>
+ </section><section className="hr-dark-section"><div className="hr-section-headline"><SectionTitle eyebrow="What we need from you">Four things we ask of every client.</SectionTitle><p>We agree these with you at the start of every engagement.</p></div><div className="hr-four-grid">{NEEDS.map(n=><div className="hr-need" key={n.v}><span className="hr-need-icon" aria-hidden="true">◎</span><h3>{n.v}</h3><p>{n.k}</p></div>)}</div></section></div>;
 }
 function Expertise(){
  const [active,setActive]=useState(0),domain=DOMAINS[active];
