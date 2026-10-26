@@ -1,0 +1,41 @@
+import assert from "node:assert/strict";
+import test from "node:test";
+import fs from "node:fs";
+const read=path=>fs.readFileSync(path,"utf8");
+test("Legal pages use the same native React navigation and canonical hummingbird design asset",()=>{
+ const root=read("app/root.tsx");
+ const legal=read("app/components/LegalDocument.tsx");
+ const css=read("app/site.css");
+ const build=read("scripts/restore-original.mjs");
+ assert.match(root,/function Header\(\)/);
+ assert.match(root,/className=\{"hm-site-header"/);
+ assert.match(root,/src="\/brand\/hummin-symbol.svg"/);
+ assert.match(root,/className="hm-site-menu-toggle"/);
+ assert.match(root,/className="hm-site-brand"/);
+ assert.match(root,/className="hm-site-cta"/);
+ assert.match(root,/className=\{"hm-site-drawer"/);
+ assert.match(root,/id="site-nav"/);
+ assert.match(root,/<Header\/><main id="main"/);
+ assert.match(legal,/hummin-legal-hero/);
+ assert.doesNotMatch(legal,/site-v4|design\/site\/index.html|__bundler\/template/);
+ assert.match(css,/\.hm-site-header\{/);
+ assert.match(css,/\.hm-site-drawer\{/);
+ assert.match(css,/height:calc\(100dvh - 69px\)/);
+ assert.match(build,/public\/brand\/hummin-symbol\.svg/);
+});
+test("Native page scrolling remains available to mobile browser chrome",()=>{
+ const root=read("app/root.tsx");
+ const css=read("app/site.css");
+ assert.match(root,/name="viewport" content="width=device-width,initial-scale=1"/);
+ assert.doesNotMatch(root,/document\.body\.style\.overflow|document\.documentElement\.style\.overflow/);
+ const newCss=css.slice(css.indexOf("/* Public HUMMIN navigation faithfully rebuilt"));
+ assert.ok(newCss.length>200);
+ assert.doesNotMatch(newCss,/touch-action:\s*none|overflow:\s*hidden/);
+ assert.match(newCss,/position:sticky;top:0/);
+});
+test("React-first migration is tracked honestly instead of claiming HTML runtime is gone",()=>{
+ const plan=read("docs/react-design-architecture.md");
+ assert.match(plan,/React owns all production UI and behaviour/);
+ assert.match(plan,/migration not finished/i);
+ assert.match(plan,/remove.*restore-original\.mjs/i);
+});
