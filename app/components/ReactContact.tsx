@@ -25,13 +25,12 @@ export function ReactContact(){
       <ReactTurnstile siteKey={siteKey} onToken={setToken}/>
       <input type="hidden" name="cf-turnstile-response" value={token} readOnly/>
       <div className="hr-contact-submit"><button type="submit" disabled={submitting||!token}>{submitting?"Sending…":"Send Enquiry"} <span aria-hidden="true">→</span></button><span>All fields are required.</span></div>
-      <p className="hr-contact-privacy">We process your details to respond to your enquiry, as explained in our <Link to="/privacy">Privacy Notice</Link>.</p>
     </Form>:null}
    </>}
   </div>
   <aside className="hr-contact-aside">
-   <div className="hr-contact-email"><a href="mailto:sales@hummin.org">sales@hummin.org</a><button type="button" onClick={()=>navigator.clipboard?.writeText("sales@hummin.org")} aria-label="Copy HUMMIN email">Copy</button></div>
-   <p>Nairobi, Kenya</p><p>We review your note. If we can help, we’ll suggest a first conversation.</p>
+   <div className="hr-contact-email"><img className="hr-contact-icon" src="/brand/icons/mail.svg" alt="" aria-hidden="true"/><a href="mailto:sales@hummin.org">sales@hummin.org</a><button type="button" onClick={()=>navigator.clipboard?.writeText("sales@hummin.org")} aria-label="Copy HUMMIN email">Copy</button></div>
+   <p className="hr-contact-location"><img className="hr-contact-icon" src="/brand/icons/map-pin.svg" alt="" aria-hidden="true"/>Nairobi, Kenya</p><p>We review your note. If we can help, we’ll suggest a first conversation.</p>
   </aside>
  </section></div>;
 }
