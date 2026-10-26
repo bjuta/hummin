@@ -3,8 +3,9 @@ import {useMemo,useState} from "react";
 import {insightsAuthors,insightTopics,insightTopicSlug} from "../lib/react-insights-meta";
 import "./react-insights.css";
 import {ReactAssessmentPromotion} from "./ReactAssessmentPromotion";
+import {ReactInsightArticle} from "./ReactInsightArticle";
 type Block={t:"p"|"h"|"ul"|"ol"|"dl"|"assess";text?:string;items?:string[];id?:string};
-export type ReactPost={slug:string;title:string;excerpt:string;type:"guide"|"opinion"|"news";author:"team"|"muiruri";date:string;topics:string[];blocks:Block[];featured?:boolean;steps?:string};
+export type ReactPost={slug:string;title:string;excerpt:string;type:"guide"|"opinion"|"news";author:"team"|"muiruri";date:string;topics:string[];blocks:Block[];featured?:boolean;steps?:string;figure?:string};
 export type ReactInsightsProps={posts:ReactPost[];view:"index"|"article"|"author"|"topic";selected?:string;preview?:boolean};
 const topicName=(slug:string)=>insightTopics.find(t=>insightTopicSlug(t)===slug);
 const fmtDate=(date:string)=>new Date(date+"T12:00:00Z").toLocaleDateString("en-KE",{day:"numeric",month:"long",year:"numeric",timeZone:"UTC"});
@@ -38,6 +39,7 @@ export function ReactInsights({posts,view,selected="",preview=false}:ReactInsigh
  const active=posts.find(p=>p.slug===selected);
  const author=view==="author"?insightsAuthors[selected as keyof typeof insightsAuthors]:null;
  const topic=view==="topic"?topicName(selected):null;
+ if(view==="article"&&active)return <ReactInsightArticle post={active} posts={posts} base={base}/>;
  return <div className={"hr-insights-page"+(view==="index"?" hr-insights-index-page":"")}>
   <section className={"hr-insights-hero"+(view==="index"?" hr-insights-index-hero":"")}>
    {view==="index"?<img className="hr-insights-watermark" src="/assets/hummin-legal-mark-tone.svg" alt="" aria-hidden="true"/>:null}
