@@ -3,7 +3,6 @@ import {Link} from "react-router";
 import {HEADS,HERO_STYLE,STAGES,DOMAINS,ENGS,TOPICS,VALUES,NEEDS,TIERS,TIER_ROWS} from "../lib/react-site-content";
 import "./react-marketing.css";
 import {ReactAssessmentPromotion} from "./ReactAssessmentPromotion";
-import {insightsPosts} from "../lib/insights.server";
 
 const photos:Record<string,string>={
  home:"/brand/home-hero.webp",how:"/brand/how-hero.webp",core:"/brand/expertise-hero.webp",
@@ -63,9 +62,9 @@ function TierModal({index,onClose}:{index:number;onClose:()=>void}){
  </div></div>;
 }
 const homeTeasers=[
- {slug:"enquiries-30-day-fix",read:"4 min read",by:"HUMMIN Team · 20 Oct"},
- {slug:"five-monday-figures",read:"3 min read",by:"HUMMIN Team · 13 Oct"},
- {slug:"runs-through-the-owner",read:"3 min read",by:"Muiruri Beautah · 6 Oct"}
+ {slug:"enquiries-30-day-fix",type:"Guide",read:"4 min read",by:"HUMMIN Team · 20 Oct",title:"Why enquiries go unanswered, and a 30-day fix",excerpt:"Most owners get more enquiries than they think. The problem is what happens next."},
+ {slug:"five-monday-figures",type:"Guide",read:"3 min read",by:"HUMMIN Team · 13 Oct",title:"Five figures every owner should see on Monday",excerpt:"A short set of weekly figures shows problems while you can still act."},
+ {slug:"runs-through-the-owner",type:"Opinion",read:"3 min read",by:"Muiruri Beautah · 6 Oct",title:"When the business still runs through the owner",excerpt:"Owners often become the bottleneck in the business they built."}
 ] as const;
 function Home(){
  const [problem,setProblem]=useState<number|null>(null);
@@ -87,10 +86,9 @@ function Home(){
   <section className="hr-section"><div className="hr-section-headline"><SectionTitle>How a piece of work runs.</SectionTitle><Link to="/how-we-work" className="hr-text-link">See How We Work</Link></div><div className="hr-four-grid">{STAGES.map(s=><div className="hr-step-min" key={s.name}><strong>{s.name}</strong><p>{s.short}</p></div>)}</div></section>
   <section className="hr-section hr-home-insights"><div className="hr-section-headline"><SectionTitle eyebrow="Insights">Practical notes for owners.</SectionTitle><Link className="hr-text-link" to="/insights">All Insights</Link></div>
    <div className="hr-three-grid hr-home-editorial">{homeTeasers.map((entry,i)=>{
-     const p=insightsPosts.find(v=>v.slug===entry.slug)!;
      return <Link key={entry.slug} to={"/insights/"+entry.slug} className={"hr-home-insight-card hr-home-insight-"+i}>
-      <span className="hr-insight-card-top"><span className="hr-card-chip">{p.type==="guide"?"Guide":p.type==="opinion"?"Opinion":"News"}</span><span>{entry.read}</span></span>
-      <span className="hr-home-insight-copy"><strong>{p.title}</strong><span>{i===0?"Most owners get more enquiries than they think. The problem is what happens next.":i===1?"A short set of weekly figures shows problems while you can still act.":"Owners often become the bottleneck in the business they built."}</span></span>
+      <span className="hr-insight-card-top"><span className="hr-card-chip">{entry.type}</span><span>{entry.read}</span></span>
+      <span className="hr-home-insight-copy"><strong>{entry.title}</strong><span>{entry.excerpt}</span></span>
       <span className="hr-home-insight-by">{entry.by}</span>
      </Link>;
    })}</div>
