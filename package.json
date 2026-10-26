@@ -29,7 +29,7 @@
     "verify:seo": "node --experimental-strip-types --test tests/seo-release.test.mjs tests/privacy-release.test.mjs tests/react-navigation.test.mjs tests/native-react-pages.test.mjs tests/react-assessment-model.test.mjs",
     "verify:production:wrangler-migrations": "wrangler d1 migrations apply hummin-web-production --config wrangler.production.jsonc --local --persist-to .wrangler/production-schema-check",
     "verify:boot": "node --test tests/boot-gate.test.mjs",
-    "verify:design-source": "node --test tests/source-primitives-contract.test.mjs tests/source-editorial-contract.test.mjs tests/react-standalone-assets.test.mjs",
+    "verify:design-source": "node --test tests/source-primitives-contract.test.mjs tests/source-editorial-contract.test.mjs tests/react-standalone-assets.test.mjs tests/source-editorial-hero.test.mjs tests/source-layout-coordinate.test.mjs",
     "verify:static-assets": "node --test tests/react-standalone-assets.test.mjs",
     "verify:html-removal-ready": "node scripts/check-legacy-html-detach.mjs"
   },
