@@ -104,3 +104,24 @@
 
 /* Keep high-contrast white type on HUMMIN terracotta intro card. */
 .ra-intro-card.ra-tone-3>span,.ra-intro-card.ra-tone-3 p{opacity:1;color:#FFFFFF}
+
+
+/* Owner-authored HUMMIN Assessment introduction, rebuilt as React.
+   Original artwork, copy and editorial geometry; native browser scrolling. */
+.ra-root{container-type:inline-size}
+.ra-source-intro{position:relative;overflow:hidden;background:radial-gradient(circle at 72% 28%,#5E6967 0%,#2A3538 38%,#1E272A 70%);color:#F4F5F1;padding:clamp(96px,10cqw,140px) clamp(20px,5cqw,64px) clamp(48px,6cqw,80px);display:grid;gap:28px}
+.ra-source-intro-motif{position:absolute;width:max(620px,66cqw);right:-16cqw;top:-10%;pointer-events:none;opacity:.5;filter:brightness(.8)}
+.ra-intro-badge{position:relative;justify-self:start;display:inline-flex;align-items:center;min-height:32px;padding:0 14px;border-radius:999px;font-size:12px;font-weight:600;background:rgba(244,245,241,.08);border:1px solid rgba(244,245,241,.16)}
+.ra-source-intro h1{position:relative;margin:0;font-family:Newsreader,Georgia,serif;font-weight:400;font-size:clamp(48px,7.6cqw,116px);line-height:.92;letter-spacing:-.03em;max-width:14ch}
+.ra-source-intro h1 em{color:#BAC4BE;display:block;font-style:italic}
+.ra-source-intro>p{position:relative;margin:0;font-size:clamp(17px,1.6cqw,20px);line-height:1.55;color:#E7EBE6;max-width:52ch}
+.ra-source-intro-actions{position:relative;display:flex;flex-wrap:wrap;gap:12px 20px;align-items:center}
+.ra-source-intro-actions button{display:inline-flex;align-items:center;gap:10px;min-height:52px;padding:0 24px;border-radius:999px;border:0;background:#F4F5F1;color:#1E272A;font:inherit;font-weight:700;font-size:15px;cursor:pointer;transition:transform 240ms cubic-bezier(.2,0,0,1)}
+.ra-source-intro-actions button:hover{transform:translateY(-2px)}
+.ra-source-intro-actions>span{font-size:14px;color:#BAC4BE}
+.ra-main.ra-intro{max-width:none;padding:clamp(56px,7cqw,96px) clamp(20px,5cqw,64px)}
+.ra-intro-grid{grid-template-columns:repeat(auto-fit,minmax(min(100%,240px),1fr))}
+.ra-intro-card{min-height:220px;padding:24px}
+.ra-intro-card h2{font-size:28px;line-height:1.05}
+.ra-intro-card p{font-size:15px;line-height:1.55}
+@media(prefers-reduced-motion:reduce){.ra-source-intro-actions button{transition:none}}
