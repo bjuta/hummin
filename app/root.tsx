@@ -22,6 +22,32 @@ function Header(){
   const [scrolled,setScrolled]=useState(false);
   const {pathname}=useLocation();
   const lastPath=useRef(pathname);
+  const hoverClose=useRef<ReturnType<typeof setTimeout>|null>(null);
+  const hoverGuard=useRef<ReturnType<typeof setTimeout>|null>(null);
+  const openedByHover=useRef(false);
+  const cancelHoverClose=()=>{if(hoverClose.current!==null){clearTimeout(hoverClose.current);hoverClose.current=null}};
+  const hoverOpen=()=>{
+    if(!window.matchMedia("(hover: hover) and (pointer: fine)").matches)return;
+    cancelHoverClose();
+    if(!menu){
+      openedByHover.current=true;
+      setMenu(true);
+      if(hoverGuard.current!==null)clearTimeout(hoverGuard.current);
+      hoverGuard.current=setTimeout(()=>{openedByHover.current=false;hoverGuard.current=null},400);
+    }
+  };
+  const hoverLeave=()=>{
+    if(!window.matchMedia("(hover: hover) and (pointer: fine)").matches)return;
+    cancelHoverClose();
+    hoverClose.current=setTimeout(()=>{setMenu(false);hoverClose.current=null;openedByHover.current=false},280);
+  };
+  const toggleMenu=()=>{
+    cancelHoverClose();
+    if(openedByHover.current&&menu){openedByHover.current=false;return}
+    openedByHover.current=false;setMenu(open=>!open);
+  };
+  useEffect(()=>()=>{if(hoverClose.current!==null)clearTimeout(hoverClose.current);if(hoverGuard.current!==null)clearTimeout(hoverGuard.current)},[]);
+
   useEffect(()=>{
     // Close on actual navigation, not on initial hydration. A late first
     // effect must never close a drawer the visitor just opened.
@@ -45,7 +71,7 @@ function Header(){
     <a className="skip" href="#main">Skip to content</a>
     <div className="hm-site-nav-bar">
       <div className="hm-site-nav-left">
-        <button className="hm-site-menu-toggle" type="button" aria-label={menu?"Close menu":"Open menu"} aria-expanded={menu} aria-controls="site-nav" onClick={()=>setMenu(open=>!open)}>
+        <button className="hm-site-menu-toggle" type="button" aria-label={menu?"Close menu":"Open menu"} aria-expanded={menu} aria-controls="site-nav" onClick={toggleMenu} onMouseEnter={hoverOpen} onMouseLeave={hoverLeave}>
           <span className="hm-site-toggle-icon" aria-hidden="true">
            <img src="/brand/icons/menu.svg" alt="" className={menu?"hm-menu-icon-hidden":""}/>
            <img src="/brand/icons/x.svg" alt="" className={!menu?"hm-menu-icon-hidden":""}/>
@@ -59,7 +85,7 @@ function Header(){
       <Link to="/contact" className="hm-site-cta" onClick={()=>setMenu(false)}>Get in Touch</Link>
     </div>
     {menu?<button className="hm-site-menu-backdrop" type="button" tabIndex={-1} aria-label="Close menu" onClick={()=>setMenu(false)}/>:null}
-    <nav id="site-nav" aria-label="Main" className={"hm-site-drawer"+(menu?" hm-site-drawer-open":"")} inert={!menu}>
+    <nav id="site-nav" aria-label="Main" onMouseEnter={cancelHoverClose} onMouseLeave={hoverLeave} className={"hm-site-drawer"+(menu?" hm-site-drawer-open":"")} inert={!menu}>
       <div className="hm-site-drawer-links">
         {navigation.map((n,i)=><NavLink key={n.to} end={n.end} to={n.to} onClick={()=>setMenu(false)} className={({isActive})=>"hm-site-drawer-link"+(isActive?" hm-site-drawer-active":"")}>
           <img className="hm-site-nav-icon" src={"/brand/icons/"+n.icon+".svg"} alt="" aria-hidden="true"/>
