@@ -1,0 +1,3 @@
+Explicit HUMMIN owner-approved public launch on 26 October 2026.
+Approved source 7cb28152dabdc3cc8aec0aad394a7314f5c6ee1a.
+Deploy public-origin Worker, with routes attached separately only after verification.
