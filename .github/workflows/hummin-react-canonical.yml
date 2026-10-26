@@ -1,8 +1,11 @@
-name: HUMMIN canonical React Preview acceptance
+name: HUMMIN final one-shot React release gate
 on:
-  workflow_dispatch: # Run only after a consolidated React Preview release candidate is deployed
+  workflow_dispatch: # Single manual post-deploy validation; never run this on each commit
 permissions:
   contents: read
+concurrency:
+  group: hummin-react-final-audit
+  cancel-in-progress: true
 jobs:
   canonical:
     runs-on: ubuntu-latest
@@ -12,13 +15,18 @@ jobs:
         with: { persist-credentials: false }
       - uses: actions/setup-node@v4
         with: { node-version: '22' }
-      - run: npm install --no-save --ignore-scripts --no-audit --no-fund playwright@1.56.1 @axe-core/playwright@4.10.2
+      - run: npm install --no-save --ignore-scripts --no-audit --no-fund playwright@1.56.1 @axe-core/playwright@4.10.2 pngjs@7.0.0 pixelmatch@7.1.0
       - run: npx playwright install chromium --only-shell
-      - run: node scripts/verify-react-canonical.mjs
+      - name: Validate React source features and accessibility first (fail fast)
+        run: node scripts/verify-react-canonical.mjs
+      - name: Compare 42 production versus Preview screenshots only after canonical success
+        run: node scripts/audit-react-visual-parity.mjs
       - name: Preserve design screenshots and read-only audit
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: hummin-native-react-canonical-design
-          path: artifacts/react-canonical
+          path: |
+            artifacts/react-canonical
+            artifacts/react-visual-parity
           retention-days: 14
