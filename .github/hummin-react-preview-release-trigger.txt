@@ -27,3 +27,5 @@ React legal CTA accessibility follow-up: deploy bcde3a1035cb394146fd12c723a45482
 26 October 2026 consolidated owner-source React Preview candidate: exact manifest icon and hummingbird variants, original How We Work commitments, Who and About geometry, original Insights topic and author layouts. One isolated Preview build after batched source-only edits. Do not modify hummin.org routing, D1 production, calendar or email and do not send submissions. Final audit requires separate explicit trigger.
 
 26 October 2026 one-shot build retry after repairing source Insights asset-array syntax. Same consolidated candidate; no public routing, mail or booking changes; no parallel CI/audits.
+
+2026-10-26 consolidated fidelity finishing candidate: nested-frame source reference capture safety, complete 23-step read-only Assessment verification, source Contact field errors/typography/icons, corrected page rhythm, original source art and navigation. Deploy Preview only, do not alter public hummin.org or production integrations. Run one final release gate only after successful build.
