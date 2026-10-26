@@ -17,7 +17,7 @@ const raw=zlib.gunzipSync(Buffer.from(art.data,"base64")).toString("utf8");
 const sourceArt=[
  ["insights-article-figure.svg",'<sc-if value="{{ post.hasFigure }}"'],
  ["insights-assessment-mark.svg",'<sc-if value="{{ b.isAssess }}"'],
- ["insights-hero-mark.svg",'<section style="position:relative;overflow:hidden;background:radial-gradient(circle at 74% 22%',
+ ["insights-hero-mark.svg",'<section style="position:relative;overflow:hidden;background:radial-gradient(circle at 74% 22%'],
  ["insights-team-avatar.svg",'<sc-if value="{{ author.isTeam }}"']
 ];
 fs.mkdirSync("public/brand",{recursive:true});
