@@ -5,3 +5,5 @@ isolated_workers_dev_only=true
 Binding-complete repeat deployment after green but disabled availability check; attempt 2.
 
 Deploy and verify HUMMIN internal booking email alert and backfill for confirmed booking 2026-10-28T07:00Z.
+
+Apply CI-verified privacy notice, footer link and staging privacy gate; retain isolated hostname and Google email bindings. Base 920939a9bd7d43d0cb6dd9668f6e5f1720e75d87.
