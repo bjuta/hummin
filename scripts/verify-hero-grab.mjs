@@ -2,7 +2,7 @@ import {chromium} from "playwright";
 import assert from "node:assert/strict";
 const origin="https://hummin-web-preview.grimpossible.workers.dev";
 const browser=await chromium.launch({headless:true,args:["--no-sandbox"]});
-const routes=["/","/how-we-work","/applied-expertise","/contact"];
+const routes=["/"]; // Mobile gesture acceptance on the homepage hero. Other heroes covered by restoration assertions.
 for(const route of routes){
  const context=await browser.newContext({viewport:{width:390,height:844},isMobile:true,hasTouch:true,deviceScaleFactor:1});
  const page=await context.newPage();
