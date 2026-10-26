@@ -54,6 +54,46 @@ for(const variant of variants){
      if(item.axeSerious.length)result.failures.push(id+" serious/critical axe findings "+JSON.stringify(item.axeSerious));
      if(item.axeOther.length)result.warnings.push(id+" minor/moderate axe findings "+JSON.stringify(item.axeOther));
    }
+   if(path==="/assessment"||path==="/insights"){
+     const wanted=path==="/assessment"?"hummin-assessment-frame":"hummin-insights-frame";
+     const frameElement=page.locator("#"+wanted);
+     await frameElement.waitFor({state:"attached",timeout:12000});
+     const src=await frameElement.getAttribute("src");
+     const frame=page.frames().find(f=>f.url().includes(path==="/assessment"?"/design/assessment/index.html":"/design/insights/index.html"));
+     if(!frame){result.failures.push(id+" expected source-faithful iframe missing (src "+src+")");}
+     else{
+       await frame.waitForLoadState("domcontentloaded",{timeout:15000});
+       const frameStats=await frame.evaluate(()=>({
+         viewport:document.documentElement.clientWidth,
+         scroll:document.documentElement.scrollWidth,
+         bodyScroll:document.body.scrollWidth,
+         visibleText:document.body.innerText.trim().length,
+         h1:document.querySelectorAll("h1").length,
+         visibleSections:document.querySelectorAll("section").length,
+         documentTitle:document.title,
+         designMounted:window.__HUMMIN_DESIGN_MOUNTED__===true
+       }));
+       item.iframe=frameStats;
+       const over=Math.max(frameStats.scroll,frameStats.bodyScroll)-frameStats.viewport;
+       if(over>4)result.failures.push(id+" embedded "+path+" document horizontal overflow "+over+"px");
+       if(frameStats.visibleText<150)result.failures.push(id+" embedded document appears blank; visible text "+frameStats.visibleText);
+       if(!frameStats.designMounted)result.failures.push(id+" embedded design runtime did not mount");
+       // Analyse the complete outer document including same-origin child frames.
+       const axe=await new AxeBuilder({page}).withTags(["wcag2a","wcag2aa","wcag21a","wcag21aa"]).analyze();
+       const serious=axe.violations.filter(v=>["serious","critical"].includes(v.impact));
+       item.axeSerious=serious.map(v=>({id:v.id,impact:v.impact,nodes:v.nodes.length,help:v.help,selector:v.nodes[0]?.target}));
+       if(serious.length)result.failures.push(id+" embedded experience WCAG serious/critical "+JSON.stringify(item.axeSerious));
+       item.axeOther=axe.violations.filter(v=>!["serious","critical"].includes(v.impact)).map(v=>({id:v.id,impact:v.impact,nodes:v.nodes.length}));
+       if(item.axeOther.length)result.warnings.push(id+" other WCAG issues "+JSON.stringify(item.axeOther));
+     }
+   }
+   if(["/privacy","/terms"].includes(path)){
+     const firstTOC=page.locator(".hummin-legal-toc a").first();
+     await firstTOC.focus();
+     await page.keyboard.press("Enter");
+     const hash=await page.evaluate(()=>location.hash);
+     if(!hash)result.failures.push(id+" keyboard activation did not navigate within legal document");
+   }
    if(item.consoleErrors.length)result.warnings.push(id+" JS errors "+JSON.stringify(item.consoleErrors.slice(0,3)));
    console.log("AUDIT",JSON.stringify(item));
   }catch(e){result.failures.push(id+" "+String(e?.message||e).slice(0,230));console.log("AUDIT ERROR",id,String(e).slice(0,400));}
