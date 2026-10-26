@@ -33,10 +33,10 @@ async function capture(context,origin,path){
  try{
   const response=await page.goto(origin+path,{waitUntil:"domcontentloaded",timeout:45000});
   assert.equal(response?.status(),200,origin+path+" HTTP status");
-  await page.locator("h1").first().waitFor({state:"visible",timeout:20000});
+  await page.locator("h1:visible").first().waitFor({state:"visible",timeout:25000});
   await page.evaluate(async()=>{await document.fonts.ready;await Promise.all(Array.from(document.images).map(i=>i.decode().catch(()=>{})))});
   await page.waitForTimeout(650);
-  const meta=await page.evaluate(()=>({h1:document.querySelector("h1")?.innerText?.trim()||"",height:document.documentElement.scrollHeight,fonts:document.fonts.status,scrollOverflow:document.documentElement.scrollWidth-document.documentElement.clientWidth}));
+  const meta=await page.evaluate(()=>({h1:Array.from(document.querySelectorAll("h1")).find(h=>h.getClientRects().length>0)?.innerText?.trim()||"",height:document.documentElement.scrollHeight,fonts:document.fonts.status,scrollOverflow:document.documentElement.scrollWidth-document.documentElement.clientWidth}));
   const png=PNG.sync.read(await page.screenshot({fullPage:true,animations:"disabled",type:"png"}));
   return {png,meta};
  }finally{await page.close();}
