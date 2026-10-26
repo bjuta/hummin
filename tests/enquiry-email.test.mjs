@@ -26,7 +26,7 @@ const mails=[
  monthlyNewsletterEmail({recipient:contact.email,month:'November 2026',title:'Why enquiries go unanswered.',preheader:'Why enquiries go unanswered, and a 30-day fix.',paragraphs:['Most owners we meet get more enquiries than they think.'],articleUrl:'https://hummin.org/notes',unsubscribeUrl:'https://hummin.org/unsubscribe?token=sample',assetOrigin:origin})
 ];
 test('All nine brand-book email types are present, unique, and complete',()=>{
- assert.equal(emailTypes.length,11);
+ assert.equal(emailTypes.length,12);
  assert.deepEqual(mails.map(x=>x.type),emailTypes.slice(0,9));
  assert.equal(newsletterOptInEmail({recipient:contact.email,confirmUrl:origin+'/newsletter/confirm?token=sample',assetOrigin:origin}).type,'newsletter-opt-in');
  for(const x of mails){
