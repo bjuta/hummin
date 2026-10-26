@@ -1,0 +1,29 @@
+name: HUMMIN full React Preview acceptance
+on:
+  push:
+    branches: [feat/fullstack-workers-foundation]
+    paths:
+      - scripts/verify-full-react-acceptance.mjs
+      - .github/workflows/hummin-full-react-acceptance.yml
+permissions:
+  contents: read
+jobs:
+  acceptance:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with: { persist-credentials: false }
+      - uses: actions/setup-node@v4
+        with: { node-version: '22' }
+      - run: npm install --no-save --ignore-scripts --no-audit --no-fund playwright@1.56.1 @axe-core/playwright@4.10.2
+      - run: npx playwright install chromium --only-shell
+      - name: Test full React Preview without real emails or bookings
+        run: node scripts/verify-full-react-acceptance.mjs
+      - name: Save acceptance results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: hummin-react-full-preview
+          path: artifacts/full-react-acceptance
+          retention-days: 14
