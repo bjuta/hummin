@@ -11,3 +11,5 @@ Second canonical Preview release: corrected legal TOC contrast, staging routes a
 26 October 2026 React migration continuation: re-publish the development head including original assessment prompts and the stronger small-print legal contrast. Verify normal CI/build before isolated Preview publication. Never change hummin.org routing, production D1, or mail/calendar bindings; do not send test submissions.
 
 Source-faithful visual corrections React Preview: restore original persistent assessment prompt and orange assessment section, adjust mobile hero geometry to 620/480px, improve legal contrast; release fb39513f48137b27d4bc9a35aa57b24f88e9104c. No public domain attachment.
+
+React legal CTA accessibility follow-up: deploy bcde3a1035cb394146fd12c723a45482ce9073c1 to isolated Preview, then rerun read-only browser acceptance. This trigger is Preview-only; production routing, D1, Calendar, and mail remain untouched.
