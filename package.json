@@ -29,7 +29,8 @@
     "verify:production:migrations": "node --experimental-sqlite scripts/verify-production-migrations.mjs",
     "verify:seo": "node --experimental-strip-types --test tests/seo-release.test.mjs tests/privacy-release.test.mjs tests/react-navigation.test.mjs tests/native-react-pages.test.mjs tests/react-assessment-model.test.mjs",
     "verify:production:wrangler-migrations": "wrangler d1 migrations apply hummin-web-production --config wrangler.production.jsonc --local --persist-to .wrangler/production-schema-check",
-    "verify:boot": "node --test tests/boot-gate.test.mjs"
+    "verify:boot": "node --test tests/boot-gate.test.mjs",
+    "pretypecheck": "node scripts/extract-react-insights.mjs"
   },
   "dependencies": {
     "isbot": "5.1.32",
