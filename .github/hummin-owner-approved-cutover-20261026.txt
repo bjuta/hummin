@@ -1,3 +1,5 @@
 Explicit HUMMIN owner-approved public launch on 26 October 2026.
 Approved source 7cb28152dabdc3cc8aec0aad394a7314f5c6ee1a.
 Deploy public-origin Worker, with routes attached separately only after verification.
+
+26 October 2026: Deploy narrow hero touch-scroll correction (home and inner hero typography/badges pointer events) to approved live site after successful preview swipe and full CI; no DNS, D1 migrations, booking or secrets changes. Source a2b15b2450fd6c9cb493c1ee16a33759f817424a.
