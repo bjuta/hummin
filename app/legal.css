@@ -16,10 +16,10 @@
 .hummin-legal-body{padding:clamp(40px,5cqw,72px) clamp(20px,5cqw,64px) clamp(64px,8cqw,112px);display:flex;flex-wrap:wrap;gap:40px clamp(40px,6cqw,96px);align-items:flex-start;animation:humminLegalIn 420ms cubic-bezier(.2,0,0,1)}
 .hummin-legal-sidebar{flex:0 1 280px;min-width:220px;position:sticky;top:96px;display:grid;gap:18px}
 .hummin-legal-toc{display:grid;gap:2px;padding-left:16px;border-left:2px solid #D0D8D2}
-.hummin-legal-toc strong{font-weight:600;font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:#5E6967;padding-bottom:8px}
+.hummin-legal-toc strong{font-weight:600;font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:#434F4F;padding-bottom:8px}
 .hummin-legal-toc a{display:flex;gap:10px;align-items:baseline;font-size:14px;line-height:1.4;text-align:left;color:#1E272A;padding:6px 0;transition:color 120ms}
 .hummin-legal-toc a:hover{color:#B5532C}
-.hummin-legal-toc a span{font-size:11px;font-weight:700;color:#B5532C;font-variant-numeric:tabular-nums;width:18px;flex-shrink:0}
+.hummin-legal-toc a span{font-size:11px;font-weight:700;color:#87371B;font-variant-numeric:tabular-nums;width:18px;flex-shrink:0}
 .hummin-legal-questions{border-radius:20px;background:#E7EBE6;padding:20px;display:grid;gap:10px}
 .hummin-legal-questions strong{font-family:'Newsreader',serif;font-size:22px;line-height:1.15;font-weight:400}
 .hummin-legal-questions p{margin:0;font-size:14px;line-height:1.55;color:#434F4F}
