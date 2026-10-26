@@ -17,3 +17,7 @@
 .hr-contact-success{display:grid;gap:16px;max-width:520px}.hr-contact-success>span{display:grid;place-items:center;width:52px;height:52px;border-radius:50%;background:#DCEBE5;color:#2E6B5C;font-size:24px}
 .hr-contact-success h2{font-family:Newsreader,serif;font-size:clamp(32px,3.6cqw,48px);line-height:1.05}
 .hr-contact-error{color:#963B25;font-weight:600}
+
+/* Original Contact source sits inside the site's padded body, not flush
+   against the hero. Preserve the same fluid 64–112px vertical rhythm. */
+.hr-contact-content{padding-top:clamp(64px,8cqw,112px)}
