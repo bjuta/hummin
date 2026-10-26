@@ -6,7 +6,7 @@ test("Legal pages use the same native React navigation and canonical hummingbird
  const root=read("app/root.tsx");
  const legal=read("app/components/LegalDocument.tsx");
  const css=read("app/site.css");
- const build=read("scripts/restore-original.mjs");
+ const mark=fs.readFileSync("public/brand/hummin-symbol.svg","utf8");
  assert.match(root,/function Header\(\)/);
  assert.match(root,/className=\{"hm-site-header"/);
  assert.match(root,/src="\/brand\/hummin-symbol.svg"/);
@@ -21,7 +21,7 @@ test("Legal pages use the same native React navigation and canonical hummingbird
  assert.match(css,/\.hm-site-header\{/);
  assert.match(css,/\.hm-site-drawer\{/);
  assert.match(css,/height:calc\(100dvh - 69px\)/);
- assert.match(build,/public\/brand\/hummin-symbol\.svg/);
+ assert.ok(mark.includes("<svg"),"Canonical hummingbird is a self-contained project asset");
 });
 test("Native page scrolling remains available to mobile browser chrome",()=>{
  const root=read("app/root.tsx");

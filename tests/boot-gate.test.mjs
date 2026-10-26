@@ -1,51 +1,28 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 import fs from "node:fs";
-const restore=fs.readFileSync("scripts/restore-original.mjs","utf8");
-test("Every restored interactive screen has one shared branded bootstrap gate",()=>{
- assert.match(restore,/function brandedBoot\(html,kind\)/);
- assert.match(restore,/brandedBoot\(html,name\)/);
- assert.match(restore,/brandedBoot\(patch\(insightSource,insightTemplate,fullInsight\)/);
- assert.match(restore,/id="hummin-boot"/);
- assert.match(restore,/src="\/brand\/hummin-symbol.svg"/);
- assert.match(restore,/officialSymbol\.mime!==['"]image\/svg\+xml['"]/);
- assert.match(restore,/document\.fonts\.ready/);
- assert.match(restore,/humminDesignReady:true/);
- assert.match(restore,/prefers-reduced-motion:reduce/);
+const root=fs.readFileSync("app/root.tsx","utf8");
+const css=fs.readFileSync("app/site.css","utf8");
+const compiled=fs.readFileSync("app/components/source-foundation.css","utf8");
+test("Native React root boot has no iframe or legacy HTML bootstrap",()=>{
+ assert.match(root,/function Layout\(/);
+ assert.match(root,/<Meta\/><Links\/>/);
+ assert.match(root,/<ScrollRestoration\/><Scripts\/>/);
+ assert.match(root,/<Header\/><main id="main"/);
+ assert.doesNotMatch(root,/<iframe|__bundler\/template|hummin-boot/);
 });
-test("Loader cannot permanently trap users and avoids early unstyled disclosure",()=>{
- assert.match(restore,/document\.readyState==='loading'/);
- assert.match(restore,/obs\.disconnect\(\)/);
- assert.match(restore,/document\.documentElement\.classList\.remove\('hm-booting'\)/);
- assert.match(restore,/setTimeout\(function\(\)\{if\(ended\)return;ended=true/);
- assert.match(restore,/html\.hm-booting body>x-dc\{visibility:hidden!important\}/);
+test("First paint uses vendored brand fonts and independent design rules",()=>{
+ for(const family of ["hummin-figtree-latin.woff2","hummin-newsreader-regular-latin.woff2","hummin-newsreader-italic-latin.woff2"]){
+  assert.ok(css.includes(family),"Missing local font "+family);
+  assert.equal(fs.readFileSync("public/brand/fonts/"+family).toString("ascii",0,4),"wOF2");
+ }
+ assert.ok(compiled.includes("--hummin-ink: #1E272A"));
+ assert.ok(compiled.includes("--hummin-rust: #B5532C"));
+ assert.ok(fs.readFileSync("public/brand/hummin-symbol.svg","utf8").includes("<svg"));
 });
-test("Insights deep links select the requested page on the first paint",()=>{
- assert.match(restore,/Resolve deep links before the first React render/);
- assert.match(restore,/view:'post',slug:path\[1\]/);
- assert.match(restore,/view:'author',author:path\[2\]/);
- assert.match(restore,/view:'topic',topic:topic\.name/);
-});
-
-test("Global splash waits for mounted component and active nested route before fade",()=>{
- assert.match(restore,/window\.__HUMMIN_DESIGN_MOUNTED__===?true|window\.__HUMMIN_DESIGN_MOUNTED__!==true/);
- assert.match(restore,/window\.dispatchEvent\(new Event\('hummin-design-mounted'\)\)/);
- assert.match(restore,/hummin-assessment-frame/);
- assert.match(restore,/hummin-insights-frame/);
- assert.match(restore,/document\.fonts\.ready/);
-});
-
-test("A lost iframe ready message cannot leave Insights or Assessment permanently hidden",()=>{
- assert.match(restore,/function recoverFrame\(\)/);
- assert.match(restore,/child\.__HUMMIN_DESIGN_MOUNTED__!==true/);
- assert.match(restore,/doc\.getElementById\('hummin-boot'\)/);
- assert.match(restore,/f\.style\.visibility='visible'/);
- assert.match(restore,/setInterval\(function\(\)/);
-});
-
-test("Insights height is reconciled after child layout changes without viewport feedback",()=>{
- assert.match(restore,/function correctInsightsHeight\(\)/);
- assert.match(restore,/getBoundingClientRect\(\)\.bottom\+w\.scrollY/);
- assert.match(restore,/position!=='fixed'/);
- assert.match(restore,/Math\.abs\(f\.getBoundingClientRect\(\)\.height-target\)>2/);
+test("Native Insights and Assessment are actual React components",()=>{
+ for(const path of ["app/components/ReactInsights.tsx","app/components/ReactAssessment.tsx"]){
+  const source=fs.readFileSync(path,"utf8");
+  assert.doesNotMatch(source,/<iframe|__bundler\/template|dc-import/);
+ }
 });

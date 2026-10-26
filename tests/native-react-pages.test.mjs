@@ -22,11 +22,13 @@ test("Six marketing routes are genuine React components preserving HUMMIN source
  assert.match(comp,/src="\/brand\/hummin-symbol.svg"/);
  assert.doesNotMatch(comp,/<iframe|dangerouslySetInnerHTML|design\/site\/index\.html|dc-import|__bundler\/template/);
 });
-test("Native React source photography is real build-time extracted brand media",()=>{
- const assets=read("scripts/extract-react-assets.mjs");
- for(const art of ["home-hero","how-hero","expertise-hero","engagements-hero","who-hero","who-owner","about-hero","about-founder","residency"])assert.ok(assets.includes("'"+art+"'"));
- assert.match(assets,/item\.mime!=='image\/webp'/);
- assert.match(read("package.json"),/extract-react-assets\.mjs/);
+test("Native React photography and icons are independently versioned assets",()=>{
+ for(const art of ["home-hero","how-hero","expertise-hero","engagements-hero","who-hero","who-owner","about-hero","about-founder","residency"]){
+  const file=fs.readFileSync("public/brand/"+art+".webp");
+  assert.equal(file.toString("ascii",8,12),"WEBP",art);
+ }
+ assert.ok(fs.existsSync("public/brand/hummin-symbol.svg"));
+ assert.doesNotMatch(read("package.json"),/restore-original[.]mjs|extract-react-assets[.]mjs|sync-source-foundation[.]mjs/);
 });
 test("Staging route cannot accidentally expose incomplete React migration on public hostname",()=>{
  const stage=read("app/routes/react.preview.tsx");

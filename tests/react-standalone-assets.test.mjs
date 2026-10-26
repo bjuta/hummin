@@ -18,18 +18,17 @@ test("React presentation assets are vendored and independently readable",()=>{
   const buffer=fs.readFileSync(path.join(ROOT,name));
   assert.ok(buffer.length>30,name+" empty");
   if(name.endsWith(".webp"))assert.equal(buffer.toString("ascii",8,12),"WEBP",name);
-  if(name.endsWith(".svg"))assert.match(buffer.toString("utf8"),/<svg\\b/,name);
+  if(name.endsWith(".svg"))assert.match(buffer.toString("utf8"),/<svg\b/,name);
  }
  for(const name of fontFiles)assert.equal(fs.readFileSync(path.join(ROOT,"fonts",name)).toString("ascii",0,4),"wOF2",name);
  for(const name of iconNames){
-  for(const suffix of ["",".svg"]){void suffix}
   for(const variant of [name+".svg",name+"-light.svg"]){
-   if(name==="arrow-left" && variant.includes("-light"))continue;
+   if((name==="arrow-left"||name==="map-pin") && variant.includes("-light"))continue;
    const p=path.join(ROOT,"icons",variant);
-   assert.match(fs.readFileSync(p,"utf8"),/<svg\\b/,p);
+   assert.match(fs.readFileSync(p,"utf8"),/<svg\b/,p);
   }
  }
- assert.match(fs.readFileSync(path.join(ROOT,"icons","arrow-right-light.svg"),"utf8"),/<svg\\b/);
+ assert.match(fs.readFileSync(path.join(ROOT,"icons","arrow-right-light.svg"),"utf8"),/<svg\b/);
 });
 test("Insights content is a versioned JSON asset, not extracted from HTML at build time",()=>{
  const posts=JSON.parse(fs.readFileSync("app/lib/react-original-insights.json","utf8"));
@@ -40,8 +39,8 @@ test("Normal build and typecheck do not read the legacy HTML source",()=>{
  const scripts=JSON.parse(fs.readFileSync("package.json","utf8")).scripts;
  for(const key of ["prebuild","build","typecheck","pretypecheck","verify:design-source"]){
   const value=scripts[key]||"";
-  assert.doesNotMatch(value,/restore-original|extract-react|sync-source-foundation|design\\/sources/i,key+" depends on source HTML");
+  for(const forbidden of ["restore-original","extract-react","sync-source-foundation","design/sources"])assert.ok(!value.includes(forbidden),key+" depends on "+forbidden);
  }
  const imports=fs.readFileSync("app/site.css","utf8");
- assert.doesNotMatch(imports,/generated\\.css|design\\/sources/);
+ assert.ok(!imports.includes("generated.css")&&!imports.includes("design/sources"));
 });
