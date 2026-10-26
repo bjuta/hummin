@@ -135,6 +135,8 @@ for(const width of [390,768,1440]){
    if(width===1440&&kind==="insights"){
     await page.getByRole("button",{name:/Opinion/}).first().click();
     assert.equal(await page.locator(".hr-insights-featured").count(),0,"Filtered results replace the featured index");
+    await page.getByRole("button",{name:"All",exact:true}).click();
+    await page.locator(".hr-insights-featured").waitFor({state:"visible",timeout:4000});
    }
    if(kind==="insights"){assert.equal(await page.locator(".hr-insights-featured").count(),1,"Original featured Insights hero");assert.ok(await page.locator(".hr-insights-landing-card").count()>=3,"Original latest editorial cards");assert.equal(await page.locator(".hr-insights-download-card").count(),2,"Original downloadable tools");assert.equal(await page.locator(".ra-source-newsletter").count(),1,"Original inline newsletter");}
    if(kind==="article")assert.ok(await page.locator(".ra-source-article").innerText().then(x=>x.includes("When sales slow down")));
@@ -147,6 +149,11 @@ for(const width of [390,768,1440]){
     await page.locator(".hummin-legal-body").evaluate(async el=>{
       await Promise.all(el.getAnimations({subtree:true}).map(a=>a.finished.catch(()=>{})));
     });
+   }
+   // Active engagement/core selections animate their colours for ~400 ms.
+   // Inspect the final settled contrast, never an in-between colour blend.
+   if(width===1440&&(kind==="core"||kind==="eng")){
+    await page.waitForTimeout(550);
    }
    const axe=await new AxeBuilder({page}).withTags(["wcag2a","wcag2aa","wcag21a","wcag21aa"]).analyze();
    const blocking=axe.violations.filter(v=>v.impact==="serious"||v.impact==="critical");
