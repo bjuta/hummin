@@ -163,9 +163,9 @@ export async function reconcileConfirmedBookingChanges(e:HumminEnv){
    if(!await stableBookingDiscrepancy(e,row.id,row.google_event_id,reason,observedStart)){deferred++;continue;}
    const audit=e.DB.prepare("INSERT INTO booking_change_history(id,booking_id,google_event_id,previous_start,observed_start,reason) VALUES(?,?,?,?,?,?)")
     .bind(crypto.randomUUID(),row.id,row.google_event_id,row.start_utc,observedStart,reason);
-   const clearOldEmails=e.DB.prepare("DELETE FROM email_outbox WHERE status IN ('pending','failed') AND (id=? OR id=? OR id LIKE ? OR id LIKE ?)")
-    .bind("booking-confirmation:"+row.google_event_id,"booking-reminder:"+row.google_event_id,
-      "booking-confirmation:"+row.google_event_id+":%","booking-reminder:"+row.google_event_id+":%");
+   const clearOldEmails=e.DB.prepare("DELETE FROM email_outbox WHERE status IN ('pending','failed') AND (id IN (?,?,?) OR id LIKE ? OR id LIKE ? OR id LIKE ?)")
+    .bind("booking-confirmation:"+row.google_event_id,"booking-reminder:"+row.google_event_id,"booking-internal:"+row.google_event_id,
+      "booking-confirmation:"+row.google_event_id+":%","booking-reminder:"+row.google_event_id+":%","booking-internal:"+row.google_event_id+":%");
    if(reason==="moved"){
     const endTime=remote.end?Date.parse(remote.end):NaN;
     const startTime=Date.parse(observedStart);
