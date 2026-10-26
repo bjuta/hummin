@@ -57,6 +57,7 @@ export function ReactInsightArticle({post,posts,base}:Props){
  const share=[{label:"LinkedIn",url:"https://www.linkedin.com/sharing/share-offsite/?url="+safeShare(url)},{label:"WhatsApp",url:"https://wa.me/?text="+safeShare(post.title+" "+url)},{label:"X",url:"https://twitter.com/intent/tweet?url="+safeShare(url)+"&text="+safeShare(post.title)},{label:"Email",url:"mailto:?subject="+safeShare(post.title)+"&body="+safeShare(url)}];
  return <div className="ra-source-page">
   <header className="ra-source-hero">
+   <img className="ra-source-hero-mark" src="/brand/insights-hero-mark.svg" alt="" aria-hidden="true"/>
    <div className="ra-source-hero-inner">
     <Link to={base} className="ra-source-back">← All Insights</Link>
     <div className="ra-source-pills"><span>{post.type==="guide"?"Guide":post.type==="opinion"?"Opinion":"News"}</span>{post.topics.map(t=><Link key={t} to={base+"/topic/"+articleId(t)}>{t}</Link>)}</div>
