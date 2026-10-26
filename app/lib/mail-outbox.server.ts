@@ -28,7 +28,7 @@ export async function deliverDue(env:HumminEnv,limit=12):Promise<{sent:number;fa
      continue;
     }
    }
-   if(row.kind==="booking-reminder"||row.kind==="booking-confirmation"){
+   if(row.kind==="booking-reminder"||row.kind==="booking-confirmation"||row.kind==="booking-internal"){
     const identity=bookingEmailIdentity(row.kind,row.id);
     if(!identity)throw Error("Invalid booking outbox identity");
     const id=identity.eventId;
