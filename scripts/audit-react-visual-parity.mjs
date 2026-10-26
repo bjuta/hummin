@@ -36,8 +36,26 @@ async function capture(context,origin,path){
   // Production Insights may render in an internal design iframe. Compare the
   // composed page pixels, not only top-document heading selectors.
   if(path==="/")await page.locator("h1:visible").first().waitFor({state:"visible",timeout:20000});
-  await page.evaluate(async()=>{await document.fonts.ready;await Promise.all(Array.from(document.images).map(i=>i.decode().catch(()=>{})))});
-  await page.waitForTimeout(path==="/"?650:2000);
+  // The legacy site has intersection-observer reveal animations. A full-page
+  // screenshot of an unscrolled document hides whole sections and would falsely
+  // penalize React for rendering the correct content. Walk through both pages
+  // before capturing, then reset to the same scroll position.
+  await page.evaluate(async()=>{
+    const original=document.documentElement.style.scrollBehavior;
+    document.documentElement.style.scrollBehavior="auto";
+    const step=Math.max(500,Math.floor(window.innerHeight*0.8));
+    for(let y=0;y<document.documentElement.scrollHeight;y+=step){
+      window.scrollTo(0,y);
+      await new Promise(resolve=>setTimeout(resolve,65));
+    }
+    window.scrollTo(0,document.documentElement.scrollHeight);
+    await new Promise(resolve=>setTimeout(resolve,650));
+    window.scrollTo(0,0);
+    document.documentElement.style.scrollBehavior=original;
+    await document.fonts.ready;
+    await Promise.all(Array.from(document.images).map(i=>i.decode().catch(()=>{})));
+  });
+  await page.waitForTimeout(500);
   const meta=await page.evaluate(()=>({h1:Array.from(document.querySelectorAll("h1")).find(h=>h.getClientRects().length>0)?.innerText?.trim()||"",height:document.documentElement.scrollHeight,fonts:document.fonts.status,scrollOverflow:document.documentElement.scrollWidth-document.documentElement.clientWidth}));
   const png=PNG.sync.read(await page.screenshot({fullPage:true,animations:"disabled",type:"png"}));
   return {png,meta};
