@@ -11,7 +11,12 @@ import {PNG} from "pngjs";
 
 const production="https://hummin.org";
 const react="https://hummin-web-preview.grimpossible.workers.dev";
-const paths=["/","/insights/enquiries-30-day-fix"];
+const paths=[
+ "/", "/how-we-work", "/applied-expertise", "/engagements",
+ "/who-we-work-with", "/about", "/contact", "/assessment", "/insights",
+ "/insights/enquiries-30-day-fix", "/insights/topic/marketing",
+ "/insights/author/team", "/privacy", "/terms"
+];
 const widths=[390,768,1440];
 const maxMismatch=.08; // Includes shared art, colour, type, spacing and page height.
 const maxHeightDifference=12;
@@ -65,7 +70,7 @@ try{
  for(const width of widths){
   const context=await browser.newContext({viewport:{width,height:900},deviceScaleFactor:1,locale:"en-KE",timezoneId:"Africa/Nairobi"});
   for(const path of paths){
-   const id=(path==="/ "?"home":path.replaceAll("/","-")||"home")+"-"+width;
+   const id=(path==="/"?"home":path.replaceAll("/","-")||"home")+"-"+width;
    try{
     const p=await capture(context,production,path),r=await capture(context,react,path);
     fs.writeFileSync(dir+"/"+id+"-production.png",PNG.sync.write(p.png));
