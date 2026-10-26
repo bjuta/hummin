@@ -13,6 +13,21 @@ const bundle=JSON.parse(files.map(p=>fs.readFileSync(path.join(dir,p),"utf8")).j
 const art=bundle["cc88240e-e27d-4718-b37a-5fab22025705"];
 if(!art?.data)throw Error("Original HUMMIN Insights reference missing");
 const raw=zlib.gunzipSync(Buffer.from(art.data,"base64")).toString("utf8");
+// Keep the exact original editorial illustrations, not redraws or lookalikes.
+const sourceArt=[
+ ["insights-article-figure.svg",'<sc-if value="{{ post.hasFigure }}"'],
+ ["insights-assessment-mark.svg",'<sc-if value="{{ b.isAssess }}"']
+];
+fs.mkdirSync("public/brand",{recursive:true});
+for(const [file,anchor] of sourceArt){
+ const start=raw.indexOf(anchor);
+ if(start<0)throw Error("Original Insights illustration anchor missing: "+anchor);
+ const data=raw.slice(start).match(/<img src="data:image\\/svg\\+xml;base64,([A-Za-z0-9+/=]+)"/);
+ if(!data)throw Error("Original Insights SVG missing at "+anchor);
+ const svg=Buffer.from(data[1],"base64");
+ if(!svg.toString("utf8",0,256).includes("<svg"))throw Error("Expected SVG source for "+file);
+ fs.writeFileSync(path.join("public/brand",file),svg);
+}
 const marker="const POSTS = [";
 const pos=raw.indexOf(marker);
 if(pos<0)throw Error("Original HUMMIN Insight POSTS array not found");
