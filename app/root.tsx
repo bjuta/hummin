@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Link, NavLink, Outlet, Links, Meta, Scripts, ScrollRestoration, isRouteErrorResponse, useLocation } from "react-router";
 import "./site.css";
 
@@ -25,7 +25,15 @@ function Header(){
   const [menu,setMenu]=useState(false);
   const [scrolled,setScrolled]=useState(false);
   const {pathname}=useLocation();
-  useEffect(()=>setMenu(false),[pathname]);
+  const lastPath=useRef(pathname);
+  useEffect(()=>{
+    // Close on actual navigation, not on initial hydration. A late first
+    // effect must never close a drawer the visitor just opened.
+    if(lastPath.current!==pathname){
+      lastPath.current=pathname;
+      setMenu(false);
+    }
+  },[pathname]);
   useEffect(()=>{
     const update=()=>setScrolled(window.scrollY>12);
     update();window.addEventListener("scroll",update,{passive:true});
