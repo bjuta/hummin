@@ -1,5 +1,5 @@
 /** Versioned keys prevent rescheduled appointments from reusing an outdated reminder. */
-export type BookingEmailKind="booking-confirmation"|"booking-reminder";
+export type BookingEmailKind="booking-confirmation"|"booking-reminder"|"booking-internal";
 export function bookingEmailKey(kind:BookingEmailKind,eventId:string,start:string):string{
  const ms=Date.parse(start);
  if(!eventId||!Number.isFinite(ms))throw Error("Invalid booking email identity");
