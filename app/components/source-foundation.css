@@ -1,6 +1,4 @@
-/* GENERATED FROM design/sources/site-v4.template.json.
- * Keep the owner's original base stylesheet intact; do not edit by hand.
- */
+/* Snapshot of HUMMIN's approved design foundation. Self-contained: no HTML bundle required for builds. */
 :root {
   --hummin-ink: #1E272A;
   --hummin-body: #2A3538;

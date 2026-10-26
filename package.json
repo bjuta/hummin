@@ -13,8 +13,7 @@
     "db:remote": "wrangler d1 migrations apply hummin-web --remote",
     "deploy:preview": "wrangler deploy",
     "db:preview": "wrangler d1 migrations apply hummin-web-preview --config wrangler.preview.jsonc --remote",
-    "prebuild": "node scripts/restore-original.mjs && node scripts/sync-source-foundation.mjs && node scripts/extract-react-assets.mjs && node scripts/extract-react-insights.mjs && node scripts/build-insights-downloads.mjs",
-    "verify:restoration": "node scripts/verify-restored.mjs",
+    "prebuild": "node scripts/build-insights-downloads.mjs",
     "verify:email": "node --experimental-strip-types --test tests/enquiry-email.test.mjs tests/email-workflows.test.mjs tests/booking-reconciliation.test.mjs tests/booking-internal.test.mjs",
     "verify:insights": "node scripts/verify-insights.mjs",
     "verify:admin": "node --experimental-strip-types --test tests/admin-auth.test.mjs",
@@ -30,8 +29,8 @@
     "verify:seo": "node --experimental-strip-types --test tests/seo-release.test.mjs tests/privacy-release.test.mjs tests/react-navigation.test.mjs tests/native-react-pages.test.mjs tests/react-assessment-model.test.mjs",
     "verify:production:wrangler-migrations": "wrangler d1 migrations apply hummin-web-production --config wrangler.production.jsonc --local --persist-to .wrangler/production-schema-check",
     "verify:boot": "node --test tests/boot-gate.test.mjs",
-    "pretypecheck": "node scripts/extract-react-insights.mjs",
-    "verify:design-source": "node --test tests/source-primitives-contract.test.mjs"
+    "verify:design-source": "node --test tests/source-primitives-contract.test.mjs tests/source-editorial-contract.test.mjs tests/react-standalone-assets.test.mjs",
+    "verify:static-assets": "node --test tests/react-standalone-assets.test.mjs"
   },
   "dependencies": {
     "isbot": "5.1.32",
