@@ -11,3 +11,5 @@ Apply CI-verified privacy notice, footer link and staging privacy gate; retain i
 Release-hardening staging deployment: enforce noindex for all nonpublic Worker routes, including Admin and API, after verified CI c869be0a26fb5b63456e1706b543c22c5a4d3af2.
 
 Legal design fidelity release: original user-uploaded HUMMIN Privacy + Terms hero/tabs/TOC/layout, exact section structure and shared responsive CSS; verifies /privacy and /terms, build & staging booking remains isolated. CI success on 2a805a2c81f6a161dcce101375b15bf79ec7556e.
+
+Validate both HUMMIN user-designed legal pages in live staging via scripts/check-production-staging.mjs, after CI and Wrangler deployment.
