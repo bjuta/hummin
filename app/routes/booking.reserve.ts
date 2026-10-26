@@ -3,6 +3,7 @@ import type { AppLoadContext } from "react-router";
 import {bookingConfirmationEmail,bookingReminderEmail} from "../lib/email-templates.server.ts";
 import {queueEmail,deliverDue} from "../lib/mail-outbox.server.ts";
 import {bookingLimit,verifyBookingTurnstile} from "../lib/booking-abuse.server.ts";
+import {bookingEmailKey} from "../lib/booking-email-keys.server.ts";
 export async function action({request,context}:{request:Request;context:AppLoadContext}){
  const env=context.cloudflare.env;
  const err=(msg:string,status:number)=>Response.json({ok:false,message:msg},{status,headers:{"Cache-Control":"no-store"}});
@@ -27,9 +28,9 @@ export async function action({request,context}:{request:Request;context:AppLoadC
  if(env.DB&&(event.meetUrl||event.calendarUrl)&&env.RESEND_API_KEY&&env.EMAIL_FROM){
   const appointment={recipient:email,name,start:new Date(start),end:new Date(Date.parse(start)+1800000),host:"HUMMIN",meetUrl:event.meetUrl,calendarUrl:event.calendarUrl,assetOrigin:env.SITE_URL||new URL(request.url).origin};
   try{
-   await queueEmail(env,"booking-confirmation:"+event.eventId,bookingConfirmationEmail(appointment));
+   await queueEmail(env,bookingEmailKey("booking-confirmation",event.eventId,start),bookingConfirmationEmail(appointment));
    const reminderTime=new Date(Date.parse(start)-86400000);
-   if(reminderTime.getTime()>Date.now()+300000)await queueEmail(env,"booking-reminder:"+event.eventId,bookingReminderEmail(appointment),reminderTime);
+   if(reminderTime.getTime()>Date.now()+300000)await queueEmail(env,bookingEmailKey("booking-reminder",event.eventId,start),bookingReminderEmail(appointment),reminderTime);
    emailQueued=true;
    context.cloudflare.ctx.waitUntil(deliverDue(env,3).catch(()=>({sent:0,failed:0})));
   }catch(e){console.error("Booking confirmed but email enqueue failed",event.eventId);}
