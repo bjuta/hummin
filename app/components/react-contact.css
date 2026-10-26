@@ -21,3 +21,15 @@
 /* Original Contact source sits inside the site's padded body, not flush
    against the hero. Preserve the same fluid 64–112px vertical rhythm. */
 .hr-contact-content{padding-top:clamp(64px,8cqw,112px)}
+
+/* Approved Contact source uses the 28px form rhythm, a 52px native input
+   baseline and no extra visible privacy paragraph after the action. */
+.hr-contact-form input:not([type=hidden]){min-height:52px;padding:0}
+.hr-contact-form textarea{min-height:128px}
+.hr-contact-submit{margin-top:clamp(20px,3cqw,44px)}
+.hr-contact-email{display:flex;align-items:center;gap:12px}
+.hr-contact-icon{display:block;width:20px;height:20px;flex:none;object-fit:contain}
+.hr-contact-location{display:flex;gap:12px;align-items:center}
+.hr-contact-location .hr-contact-icon{width:18px;height:18px;opacity:.7}
+.hr-contact-aside{gap:14px}
+.hr-contact-email a{font:400 clamp(22px,2.6cqw,28px)/1.2 Newsreader,Georgia,serif;color:#1E272A}
