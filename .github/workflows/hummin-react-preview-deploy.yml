@@ -1,0 +1,57 @@
+name: HUMMIN native React Preview deployment
+on:
+  push:
+    branches: [feat/fullstack-workers-foundation]
+    paths: [.github/hummin-react-preview-release-trigger.txt]
+permissions:
+  contents: read
+concurrency:
+  group: hummin-react-preview
+  cancel-in-progress: false
+jobs:
+  preview:
+    if: github.repository == 'bjuta/hummin'
+    runs-on: ubuntu-latest
+    timeout-minutes: 14
+    environment: CF
+    steps:
+      - uses: actions/checkout@v4
+        with: { persist-credentials: false }
+      - uses: actions/setup-node@v4
+        with: { node-version: '22' }
+      - run: npm install --no-audit --no-fund
+      - run: npm run verify:seo && npm run typecheck
+      - name: Build isolated preview (never production target)
+        run: npm run build
+      - name: Verify preview config is fail-closed and isolated
+        run: |
+          node --input-type=module -e "
+            import fs from 'node:fs';
+            const x=JSON.parse(fs.readFileSync('build/server/wrangler.json','utf8'));
+            const text=JSON.stringify(x);
+            if(x.name!=='hummin-web-preview'||x.keep_vars!==true||x.workers_dev!==true)throw Error('Not isolated preview');
+            if(!text.includes('a6fb62df-824e-4231-8630-34ce1e6c27f4')||text.includes('acd04e85-a433-463b-865f-a01f8aac3e27'))throw Error('Database isolation violation');
+            if(x.routes||x.route||x.custom_domain||text.includes('hummin.org/*'))throw Error('Public routing forbidden');
+            console.log('PASS isolated React preview cannot touch public domain or production database');
+          "
+      - name: Deploy preview React components only
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+        run: |
+          test -n "$CLOUDFLARE_API_TOKEN" && test -n "$CLOUDFLARE_ACCOUNT_ID"
+          npx wrangler deploy --config build/server/wrangler.json
+      - name: Verify six native React route responses
+        run: |
+          node --input-type=module -e "
+            import assert from 'node:assert/strict';
+            const b='https://hummin-web-preview.grimpossible.workers.dev';
+            for(const path of ['home','how','core','eng','who','about']){
+              const r=await fetch(b+'/__react/'+path,{signal:AbortSignal.timeout(20000)});
+              const s=await r.text();
+              assert.equal(r.status,200,path);
+              assert.ok(s.includes('hr-hero'),path+' React hero missing');
+              assert.match(r.headers.get('x-robots-tag')||'',/noindex/);
+              console.log('PASS isolated React route',path,s.length);
+            }
+          "
