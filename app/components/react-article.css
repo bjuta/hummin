@@ -4,7 +4,7 @@
 .ra-source-page{container-type:inline-size;background:#F4F5F1;color:#1E272A;font-family:Figtree,Arial,sans-serif}
 .ra-source-page *{box-sizing:border-box}
 .ra-source-hero{position:relative;overflow:hidden;background:radial-gradient(circle at 74% 22%,#5E6967 0%,#2A3538 40%,#1E272A 72%);color:#F4F5F1;padding:clamp(88px,9cqw,128px) clamp(20px,5cqw,64px) clamp(40px,5cqw,64px)}
-.ra-source-hero::after{content:"";position:absolute;right:-16cqw;top:-14%;width:max(560px,60cqw);aspect-ratio:1.62;background:url('/brand/insights-hero-mark.svg') center/contain no-repeat;pointer-events:none}
+.ra-source-hero-mark{position:absolute;right:-16cqw;top:-14%;width:max(560px,60cqw);height:auto;pointer-events:none}
 .ra-source-hero-inner{position:relative;z-index:1;display:grid;justify-items:start;gap:22px;animation:inIn 360ms cubic-bezier(.2,0,0,1)}
 .ra-source-back{display:inline-flex;align-items:center;gap:8px;min-height:40px;padding:0 16px;border-radius:999px;border:1px solid rgba(244,245,241,.25);font-weight:600;font-size:13px;color:#F4F5F1;text-decoration:none}
 .ra-source-pills{display:flex;flex-wrap:wrap;gap:8px}
