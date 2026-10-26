@@ -1,0 +1,3 @@
+One-time HUMMIN staging booking acceptance trigger
+source_commit=e05098b9196b9c2edd6b77a1da9595815c3892e9
+isolated_workers_dev_only=true
