@@ -244,3 +244,23 @@
 .hr-core-detail-content p{font:400 17px/1.65 Figtree,Arial,sans-serif;color:#D0D8D2;margin:0}
 .hr-core-note{margin:0;padding:clamp(64px,8cqw,112px) clamp(20px,5cqw,64px);font:400 15px/1.6 Figtree,Arial,sans-serif;max-width:none!important}
 @media(prefers-reduced-motion:reduce){.hr-core-detail-content{animation:none}.hr-core-card{transition:none}}
+
+/* The source Engagements comparison uses distinct selected palettes per tier.
+   The previous generic "active = dark" was visibly wrong for Review. */
+.hr-comparison-head{position:relative;overflow:hidden;background:#F4F5F1;color:#5E6967;transition:background 400ms cubic-bezier(.2,0,0,1),color 400ms cubic-bezier(.2,0,0,1)}
+.hr-comparison-head.active.hr-tier-0{background:#E7EBE6;color:#1E272A}
+.hr-comparison-head.active.hr-tier-1{background:#434F4F;color:#F4F5F1}
+.hr-comparison-head.active.hr-tier-2{background:#1E272A;color:#F4F5F1}
+.hr-comparison-head.active::before{content:"";position:absolute;inset:0;pointer-events:none}
+.hr-comparison-head.active.hr-tier-0::before{background:radial-gradient(circle at 80% 10%,rgba(255,255,255,.7),transparent 50%)}
+.hr-comparison-head.active.hr-tier-1::before{background:radial-gradient(circle at 80% 10%,rgba(186,196,190,.35),transparent 55%)}
+.hr-comparison-head.active.hr-tier-2::before{background:radial-gradient(circle at 85% 0%,rgba(181,83,44,.5),transparent 55%)}
+.hr-comparison-head>span{position:relative;justify-self:start;min-height:28px;display:inline-flex;align-items:center;padding:0 12px;border-radius:999px;border:1px solid rgba(30,39,42,.12);background:rgba(30,39,42,.04)}
+.hr-comparison-head.active.hr-tier-0>span{background:rgba(30,39,42,.06);border-color:rgba(30,39,42,.14)}
+.hr-comparison-head.active.hr-tier-1>span,.hr-comparison-head.active.hr-tier-2>span{background:rgba(244,245,241,.1);border-color:rgba(244,245,241,.22)}
+.hr-comparison-head>strong{position:relative;line-height:.9;letter-spacing:-.03em}
+.hr-comparison-row>div{background:transparent;color:#434F4F;transition:background 400ms,color 400ms}
+.hr-comparison-row>div.active.hr-tier-0{background:#E7EBE6;color:#1E272A;border-top-color:rgba(127,140,136,.35)}
+.hr-comparison-row>div.active.hr-tier-1{background:#434F4F;color:#F4F5F1;border-top-color:rgba(127,140,136,.35)}
+.hr-comparison-row>div.active.hr-tier-2{background:#1E272A;color:#F4F5F1;border-top-color:rgba(127,140,136,.35)}
+.hr-comparison-row:last-child>div.active{border-radius:0 0 20px 20px}
