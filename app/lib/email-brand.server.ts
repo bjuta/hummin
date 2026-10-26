@@ -45,8 +45,8 @@ export type EmailSpec = {
 
 export const emailTypes: readonly MailType[] = [
  "contact-internal","contact-received","assessment-results",
- "booking-confirmation","booking-reminder","booking-internal",
- "account-sign-in","account-welcome","account-password-reset","newsletter-monthly","newsletter-opt-in","insights-download"
+ "booking-confirmation","booking-reminder",
+ "account-sign-in","account-welcome","account-password-reset","newsletter-monthly","newsletter-opt-in","insights-download","booking-internal"
 ] as const;
 
 const e = (s:string):string => s.replace(/[&<>"']/g, x =>
