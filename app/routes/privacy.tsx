@@ -11,7 +11,7 @@ const pStyle={fontSize:16,lineHeight:1.75,color:"#434F4F",margin:"10px 0"} as co
 const listStyle={paddingLeft:24,lineHeight:1.75,color:"#434F4F",fontSize:16} as const;
 
 export default function Privacy(){
- return <main className="section wrap" style={{maxWidth:880,paddingBottom:96}}>
+ return <article className="section wrap" style={{maxWidth:880,paddingBottom:96}}>
   <p className="eyebrow">Your information</p>
   <h1 className="h1">Privacy notice.</h1>
   <p className="lead">What HUMMIN collects, why we need it, and how to reach us about your information.</p>
@@ -45,7 +45,7 @@ export default function Privacy(){
   <section style={sectionStyle} aria-labelledby="sharing">
    <h2 id="sharing" style={h2Style}>Providers and international processing</h2>
    <p style={pStyle}>We use Cloudflare for website hosting, security and database services; Google Calendar and Meet for appointments; and Resend to send transaction and subscription emails. These providers receive only information needed for the relevant task. Appointment invitations share the details of the booking with the invited attendee through Google Calendar.</p>
-   <p style={pStyle}>Some providers may process or store information outside Kenya. We assess applicable safeguards and legal requirements for those transfers. We do not sell the personal information submitted through these forms.</p>
+   <p style={pStyle}>Some providers may process or store information outside Kenya. Cross-border processing is subject to applicable data protection requirements and safeguards. We do not sell the personal information submitted through these forms.</p>
   </section>
 
   <section style={sectionStyle} aria-labelledby="cookies">
@@ -71,5 +71,5 @@ export default function Privacy(){
    <p style={pStyle}>We may revise this notice when our services or data practices change. The date at the top shows the current version. Material changes will be reflected here.</p>
   </section>
   <p style={pStyle}><Link to="/contact">Contact HUMMIN</Link> · <Link to="/">Back to home</Link></p>
- </main>;
+ </article>;
 }
