@@ -57,6 +57,18 @@ for(const width of [390,768,1440]){
     const loaded=await page.locator(".hr-hero-photo").evaluate(async el=>{await el.decode();return el.naturalWidth>30});
     assert.ok(loaded,path+" original photograph decodes");
    }
+   // The original HUMMIN design includes a dismissible floating assessment
+   // invitation and a terracotta assessment band across content pages.
+   if(["home","how","core","eng","who","about","insights","article","topic","author"].includes(kind)){
+    assert.equal(await page.locator(".hr-assessment-band").count(),1,path+" original site-wide assessment band");
+    assert.equal(await page.locator(".hr-assessment-float-content").count(),1,path+" original sticky assessment invitation");
+    assert.ok(await page.locator('.hr-assessment-float-content a[href="/assessment"]').count());
+   }
+   if(["assessment","contact"].includes(kind))assert.equal(await page.locator(".hr-assessment-float").count(),0);
+   if(width===390&&["home","how","core","eng","who","about"].includes(kind)){
+    const height=await page.locator(".hr-hero").evaluate(x=>x.getBoundingClientRect().height);
+    assert.ok(Math.abs(height-(kind==="home"?620:480))<=3,path+" source mobile hero height mismatch "+height);
+   }
    if(kind==="assessment")assert.ok(await page.getByRole("button",{name:/Start the Assessment/}).count());
    if(kind==="contact")assert.ok(await page.locator(".hr-contact-form").count()||await page.getByText("temporarily unavailable").count());
    if(kind==="insights")assert.ok(await page.locator(".hr-insights-card").count()>=4);
