@@ -59,8 +59,15 @@ for(const variant of variants){
      const frameElement=page.locator("#"+wanted);
      await frameElement.waitFor({state:"attached",timeout:12000});
      const src=await frameElement.getAttribute("src");
-     const frame=page.frames().find(f=>f.url().includes(path==="/assessment"?"/design/assessment/index.html":"/design/insights/index.html"));
-     if(!frame){result.failures.push(id+" expected source-faithful iframe missing (src "+src+")");}
+     await page.waitForTimeout(5000);
+     const handle=await frameElement.elementHandle();
+     const frame=await handle?.contentFrame()||null;
+     item.iframeSrc=src;
+     item.frames=page.frames().map(f=>f.url().slice(0,200));
+     item.iframeUrl=frame?.url()||null;
+     const direct=await page.request.get(base+src,{timeout:15000}).catch(()=>null);
+     item.iframeDirectStatus=direct?.status()||null;
+     if(!frame){result.failures.push(id+" frame contentWindow missing (src "+src+", frames "+JSON.stringify(item.frames)+", assetHTTP "+item.iframeDirectStatus+")");}
      else{
        await frame.waitForLoadState("domcontentloaded",{timeout:15000});
        const frameStats=await frame.evaluate(()=>({
