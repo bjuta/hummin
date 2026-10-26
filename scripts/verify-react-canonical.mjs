@@ -86,8 +86,50 @@ for(const width of [390,768,1440]){
     assert.equal(await page.locator("#core-detail").count(),1,"Full-width expertise detail");
     assert.equal(await page.locator(".hr-expertise-menu").count(),0,"Do not replace original shelf with menu");
    }
-   if(kind==="assessment")assert.ok(await page.getByRole("button",{name:/Start the Assessment/}).count());
+   if(kind==="assessment"){
+    assert.ok(await page.getByRole("button",{name:/Start the Assessment/}).count());
+    // Exercise the *entire* 23-question flow without a real email,
+    // enquiry, appointment, booking or Turnstile submission.
+    if(width===1440){
+      await page.getByRole("button",{name:/Start the Assessment/}).click();
+      for(let i=1;i<=23;i++){
+        await page.waitForFunction(n=>document.querySelector(".ra-progress-title")?.textContent?.includes("Question "+n+" of 23"),i,{timeout:5000});
+        if(await page.locator(".ra-choices button").count()){
+          await page.locator(".ra-choices button").first().click();
+        }else{
+          if(await page.locator(".ra-numbers").count()){
+            for(const check of await page.locator(".ra-unknown input[type=checkbox]").all())await check.check();
+          }
+          await page.locator(".ra-nav .ra-primary").click();
+        }
+      }
+      await page.locator(".ra-results-hero").waitFor({state:"visible",timeout:8000});
+      assert.equal(await page.locator(".ra-bar").count(),5,"Five scored source business areas");
+      assert.equal(await page.locator(".ra-gate").count(),1,"Consent-led source results gate");
+      assert.equal(await page.locator(".ra-plans").count(),0,"No private recommendations before explicit email consent");
+      assert.equal(await page.locator(".ra-confirm").count(),0,"No real appointment made during read-only acceptance");
+      await page.getByRole("button",{name:/Start the Assessment/}).count();
+    }
+   }
    if(kind==="contact")assert.ok(await page.locator(".hr-contact-form").count()||await page.getByText("temporarily unavailable").count());
+   if(width===1440&&kind==="eng"){
+    await page.getByRole("tab",{name:"Residency"}).click();
+    assert.equal(await page.getByRole("tab",{name:"Residency"}).getAttribute("aria-selected"),"true","Residency comparison panel responds");
+    assert.ok((await page.locator(".hr-engagement-cta").innerText()).includes("Discuss a Residency"));
+   }
+   if(width===1440&&kind==="core"){
+    const cards=page.locator(".hr-core-card");
+    await cards.nth(3).click();
+    assert.equal(await cards.nth(3).getAttribute("aria-pressed"),"true","Source carousel selection responds");
+   }
+   if(width===1440&&kind==="about"){
+    await page.getByRole("tab",{name:"Action"}).click();
+    assert.equal(await page.getByRole("tab",{name:"Action"}).getAttribute("aria-selected"),"true","Source values navigation responds");
+   }
+   if(width===1440&&kind==="insights"){
+    await page.getByRole("button",{name:/Opinion/}).first().click();
+    assert.equal(await page.locator(".hr-insights-featured").count(),0,"Filtered results replace the featured index");
+   }
    if(kind==="insights"){assert.equal(await page.locator(".hr-insights-featured").count(),1,"Original featured Insights hero");assert.ok(await page.locator(".hr-insights-landing-card").count()>=3,"Original latest editorial cards");assert.equal(await page.locator(".hr-insights-download-card").count(),2,"Original downloadable tools");assert.equal(await page.locator(".ra-source-newsletter").count(),1,"Original inline newsletter");}
    if(kind==="article")assert.ok(await page.locator(".ra-source-article").innerText().then(x=>x.includes("When sales slow down")));
    if(kind==="article"){for(const selector of [".ra-source-hero",".ra-source-figure",".ra-source-ol",".ra-source-download",".ra-source-assessment",".ra-source-sidebar",".ra-source-share",".ra-source-author",".ra-source-read-next",".ra-source-newsletter"])assert.equal(await page.locator(selector).count(),1,path+" missing original editorial feature: "+selector);}
