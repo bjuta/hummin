@@ -41,27 +41,43 @@ async function capture(context,origin,path){
   // Production Insights may render in an internal design iframe. Compare the
   // composed page pixels, not only top-document heading selectors.
   if(path==="/")await page.locator("h1:visible").first().waitFor({state:"visible",timeout:20000});
-  // The legacy site has intersection-observer reveal animations. A full-page
-  // screenshot of an unscrolled document hides whole sections and would falsely
-  // penalize React for rendering the correct content. Walk through both pages
-  // before capturing, then reset to the same scroll position.
-  await page.evaluate(async()=>{
-    const original=document.documentElement.style.scrollBehavior;
-    document.documentElement.style.scrollBehavior="auto";
-    const step=Math.max(500,Math.floor(window.innerHeight*0.8));
-    for(let y=0;y<document.documentElement.scrollHeight;y+=step){
-      window.scrollTo(0,y);
-      await new Promise(resolve=>setTimeout(resolve,65));
-    }
-    window.scrollTo(0,document.documentElement.scrollHeight);
-    await new Promise(resolve=>setTimeout(resolve,650));
-    window.scrollTo(0,0);
-    document.documentElement.style.scrollBehavior=original;
-    await document.fonts.ready;
-    await Promise.all(Array.from(document.images).map(i=>i.decode().catch(()=>{})));
-  });
-  await page.waitForTimeout(500);
+  // Original HUMMIN pages can host the owner's design inside nested frames.
+  // Warm the *actual* scroll containers in all frames; top-window scrolling
+  // alone leaves source reveal sections blank and produces false pixel failures.
+  async function settleFrame(frame){
+    try{return await frame.evaluate(async()=>{
+      const sleep=(ms)=>new Promise(resolve=>setTimeout(resolve,ms));
+      const root=document.scrollingElement||document.documentElement;
+      const scrollY=window.scrollY;
+      const smooth=document.documentElement.style.scrollBehavior;
+      document.documentElement.style.scrollBehavior="auto";
+      let maxHeight=Math.max(root.scrollHeight,document.body?.scrollHeight||0);
+      const step=Math.max(400,Math.floor(window.innerHeight*.78));
+      // Two short traversals let IntersectionObserver and lazy images settle.
+      for(let pass=0;pass<2;pass++){
+        for(let y=0;y<maxHeight;y+=step){window.scrollTo(0,y);await sleep(55)}
+        window.scrollTo(0,maxHeight);await sleep(320);
+        maxHeight=Math.max(root.scrollHeight,document.body?.scrollHeight||0);
+      }
+      window.scrollTo(0,scrollY);
+      document.documentElement.style.scrollBehavior=smooth;
+      await document.fonts.ready;
+      await Promise.all(Array.from(document.images).map(img=>img.decode().catch(()=>{})));
+      const reveals=Array.from(document.querySelectorAll('[data-rise]'));
+      const hiddenReveals=reveals.filter(el=>{
+        const style=getComputedStyle(el);
+        return style.opacity==="0"||style.visibility==="hidden";
+      }).length;
+      return {frameUrl:location.pathname,reveals:reveals.length,hiddenReveals,scrollHeight:maxHeight};
+    })}catch(e){return {error:String(e).slice(0,250)}}
+  }
+  const frameReport=[];
+  for(const frame of page.frames()){
+    frameReport.push(await settleFrame(frame));
+  }
+  await page.waitForTimeout(700);
   const meta=await page.evaluate(()=>({h1:Array.from(document.querySelectorAll("h1")).find(h=>h.getClientRects().length>0)?.innerText?.trim()||"",height:document.documentElement.scrollHeight,fonts:document.fonts.status,scrollOverflow:document.documentElement.scrollWidth-document.documentElement.clientWidth}));
+  meta.frameReport=frameReport;
   const png=PNG.sync.read(await page.screenshot({fullPage:true,animations:"disabled",type:"png"}));
   return {png,meta};
  }finally{await page.close();}
@@ -80,8 +96,9 @@ try{
     const count=pixelmatch(prod.data,prev.data,diff.data,width,height,{threshold:.12,includeAA:false});
     fs.writeFileSync(dir+"/"+id+"-diff.png",PNG.sync.write(diff));
     const mismatch=count/(width*height),heightDelta=Math.abs(p.png.height-r.png.height);
-    const passed=mismatch<=maxMismatch&&heightDelta<=maxHeightDifference&&(path!=="/"||p.meta.h1===r.meta.h1)&&p.meta.scrollOverflow<=3&&r.meta.scrollOverflow<=3;
-    const item={path,width,passed,production:p.meta,react:r.meta,heightDelta,mismatchRate:Number(mismatch.toFixed(5)),allowedMismatchRate:maxMismatch,allowedHeightDelta:maxHeightDifference};
+    const incompleteReference=p.meta.frameReport.some(f=>f.hiddenReveals>0);
+    const passed=!incompleteReference&&mismatch<=maxMismatch&&heightDelta<=maxHeightDifference&&(path!=="/"||p.meta.h1===r.meta.h1)&&p.meta.scrollOverflow<=3&&r.meta.scrollOverflow<=3;
+    const item={path,width,passed,referenceIncomplete:incompleteReference,production:p.meta,react:r.meta,heightDelta,mismatchRate:Number(mismatch.toFixed(5)),allowedMismatchRate:maxMismatch,allowedHeightDelta:maxHeightDifference};
     report.push(item);console.log(passed?"SOURCE PARITY PASS":"SOURCE PARITY FAIL",JSON.stringify(item));
    }catch(error){const item={path,width,passed:false,error:String(error)};report.push(item);console.error("SOURCE PARITY ERROR",JSON.stringify(item));}
   }
