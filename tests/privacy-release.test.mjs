@@ -41,9 +41,11 @@ test("Original visual design preserved: hero, legal tabs, sticky TOC, notes and 
   assert.ok(css.includes("var(--hummin-"+name+")"),"Legal page does not use shared "+name+" token");
  }
  assert.ok(source("public/assets/hummin-legal-mark-tone.svg").includes("viewBox"));
- const restore=source("scripts/restore-original.mjs");
- assert.match(restore,/href="\/privacy"/);
- assert.match(restore,/href="\/terms"/);
+ // The legacy HTML restoration script must remain disposable after React
+ // cutover. Legal navigation belongs to the native React shell instead.
+ const routes=source("app/routes.ts");
+ assert.match(routes,/route\("privacy","routes\/privacy.tsx"\)/);
+ assert.match(routes,/route\("terms","routes\/terms.tsx"\)/);
  const root=source("app/root.tsx");
  assert.match(root,/<Link to="\/privacy">Privacy<\/Link>/);
  assert.match(root,/<Link to="\/terms">Terms of Use<\/Link>/);
