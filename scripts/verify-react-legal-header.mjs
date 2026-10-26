@@ -1,6 +1,7 @@
 import assert from "node:assert/strict";
 import fs from "node:fs";
 import {chromium} from "playwright";
+// React shared navigation, exact design geometry, and native scroll acceptance.
 const origin=(process.env.HUMMIN_URL||"https://hummin-web-preview.grimpossible.workers.dev").replace(/\/$/,"");
 if(!/^https:\/\/(hummin\.org|hummin-web-preview\.grimpossible\.workers\.dev)$/.test(origin))throw Error("Unexpected audit origin");
 fs.mkdirSync("artifacts/react-header",{recursive:true});
