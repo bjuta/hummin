@@ -474,13 +474,14 @@ class Component extends DCLogic {`);
 for(const [name,fn] of [['site',site],['assessment',assessment]]){
  let src=read(name);if(!src)throw Error('Source missing: '+name);
  if(name==='site')src=src.replace(/(<script\s+type="__bundler\/manifest"[^>]*>\s*)[\s\S]*?(\s*<\/script>)/,(_m,a,b)=>a+newManifest+b);
- let html=patch(src,fn,name==='site'?newSiteTemplate:undefined);html=html.replace('<head>','<head>\n<meta name="robots" content="noindex,nofollow">');html=brandedBoot(html,name);
+ const ensureDocumentLanguage=(html)=>html.replace(/<html(?![^>]*\\blang\\s*=)([^>]*)>/i,'<html lang="en-KE"$1>');
+ let html=patch(src,fn,name==='site'?newSiteTemplate:undefined);html=html.replace('<head>','<head>\n<meta name="robots" content="noindex,nofollow">');html=ensureDocumentLanguage(brandedBoot(html,name));
  if(name==='assessment')html=html.replace('</head>','<script>window.humminAssessmentTurnstile=function(){window.dispatchEvent(new Event("hummin-assessment-turnstile"));};</script><script src="https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit&onload=humminAssessmentTurnstile" async defer></script></head>');
  const dir=path.join('public','design',name);fs.mkdirSync(dir,{recursive:true});fs.writeFileSync(path.join(dir,'index.html'),html);
  console.log('Restored high-fidelity '+name+' ('+html.length+' characters)');
 }
 const insightSource=read('site').replace(/(<script\s+type="__bundler\/manifest"[^>]*>\s*)[\s\S]*?(\s*<\/script>)/,(_m,a,b)=>a+newManifest+b);
-const insightHtml=brandedBoot(patch(insightSource,insightTemplate,fullInsight).replace('<head>','<head>\\n<meta name="robots" content="noindex,nofollow">'),'insights');
+const insightHtml=brandedBoot(patch(insightSource,insightTemplate,fullInsight).replace('<head>','<head>\\n<meta name="robots" content="noindex,nofollow">'),'insights').replace(/<html(?![^>]*\\blang\\s*=)([^>]*)>/i,'<html lang="en-KE"$1>');
 fs.mkdirSync(path.join('public','design','insights'),{recursive:true});
 fs.writeFileSync(path.join('public','design','insights','index.html'),insightHtml);
 console.log('Restored original HUMMIN Insights index and articles ('+insightHtml.length+' characters)');
