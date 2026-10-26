@@ -1,4 +1,6 @@
-/** Read-only Production Staging browser acceptance. No form submission or deployment. */
+/** Read-only Production Staging browser acceptance. No form submission or deployment.
+ * Post language-label staging deployment: identify remaining text contrast issues.
+ */
 import assert from "node:assert/strict";
 import fs from "node:fs";
 import { chromium, devices } from "playwright";
