@@ -69,6 +69,23 @@ for(const width of [390,768,1440]){
     const height=await page.locator(".hr-hero").evaluate(x=>x.getBoundingClientRect().height);
     assert.ok(Math.abs(height-(kind==="home"?620:480))<=3,path+" source mobile hero height mismatch "+height);
    }
+   if(kind==="home"){
+    assert.ok(await page.getByText("Keep us close with a",{exact:false}).count(),"Original Residency language");
+    assert.equal(await page.locator(".hr-problem-card").count(),5,"Source problem shelf");
+    assert.equal(await page.locator(".hr-engagement-card").count(),3,"Source engagements");
+    assert.equal(await page.locator(".hr-home-insight-card").count(),3,"Source homepage editorial teasers");
+    assert.equal(await page.locator(".hr-bottom-cta").count(),0,"No invented dark homepage CTA");
+   }
+   if(kind==="how"){
+    assert.equal(await page.locator(".hr-stage-card").count(),4,"Four original stage posters");
+    assert.ok(await page.locator(".hr-stage-source-0").count(),"Original first mist-coloured poster");
+    assert.equal(await page.getByText("Ready to make progress?",{exact:true}).count(),0,"No invented engagement section");
+   }
+   if(kind==="core"){
+    assert.equal(await page.locator(".hr-core-card").count(),7,"Seven original expertise cards");
+    assert.equal(await page.locator("#core-detail").count(),1,"Full-width expertise detail");
+    assert.equal(await page.locator(".hr-expertise-menu").count(),0,"Do not replace original shelf with menu");
+   }
    if(kind==="assessment")assert.ok(await page.getByRole("button",{name:/Start the Assessment/}).count());
    if(kind==="contact")assert.ok(await page.locator(".hr-contact-form").count()||await page.getByText("temporarily unavailable").count());
    if(kind==="insights"){assert.equal(await page.locator(".hr-insights-featured").count(),1,"Original featured Insights hero");assert.ok(await page.locator(".hr-insights-landing-card").count()>=3,"Original latest editorial cards");assert.equal(await page.locator(".hr-insights-download-card").count(),2,"Original downloadable tools");assert.equal(await page.locator(".ra-source-newsletter").count(),1,"Original inline newsletter");}
