@@ -104,14 +104,14 @@ export async function reconcilePendingBookingHolds(e:HumminEnv){
   try{
    const event=await readBookingEvent(e,row.google_event_id);
    if(event.status==="cancelled"){
-    if(await stableBookingDiscrepancy(e,row.id,row.google_event_id,"cancelled","")){
+    if(await stableBookingDiscrepancy(e,row.id,row.google_event_id,"missing","")){
      const result=await e.DB.prepare("DELETE FROM booking_slots WHERE id=? AND status='held'").bind(row.id).run();
      if(result.meta?.changes===1)released++;
      await clearBookingDiscrepancy(e,row.id);
     }else deferred++;
    }else if(event.start&&Date.parse(event.start)===Date.parse(row.start_utc)&&event.attendees?.some(a=>a.toLowerCase()===row.email.toLowerCase())){
     const result=await e.DB.prepare("UPDATE booking_slots SET status='confirmed' WHERE id=? AND status='held'").bind(row.id).run();
-    if(result.meta?.changes===1)confirmed++;
+    if(result.meta?.changes===1){confirmed++;await clearBookingDiscrepancy(e,row.id);}
    }else{deferred++;console.error("Manual booking reconciliation required",row.id);}
   }catch{deferred++;console.error("Google booking reconciliation failed",row.id);}
  }
@@ -119,7 +119,7 @@ export async function reconcilePendingBookingHolds(e:HumminEnv){
 }
 
 
-type BookingMismatch="cancelled"|"moved";
+type BookingMismatch="cancelled"|"moved"|"missing";
 async function clearBookingDiscrepancy(e:HumminEnv,id:string){
  await e.DB!.prepare("DELETE FROM booking_discrepancies WHERE booking_id=?").bind(id).run();
 }
@@ -129,7 +129,9 @@ async function clearBookingDiscrepancy(e:HumminEnv,id:string){
  */
 async function stableBookingDiscrepancy(e:HumminEnv,id:string,eventId:string,state:BookingMismatch,start:string){
  const old=await e.DB!.prepare("SELECT observed_state,observed_start,first_seen_at FROM booking_discrepancies WHERE booking_id=?").bind(id).first<{observed_state:string;observed_start:string;first_seen_at:string}>();
- if(old?.observed_state===state&&old.observed_start===start&&Date.now()-Date.parse(old.first_seen_at+"Z")>=300000)return true;
+ const normalized=old?.first_seen_at?.replace(" ","T");
+ const firstSeen=normalized?Date.parse(normalized.endsWith("Z")?normalized:normalized+"Z"):NaN;
+ if(old?.observed_state===state&&old.observed_start===start&&Number.isFinite(firstSeen)&&Date.now()-firstSeen>=300000)return true;
  await e.DB!.prepare("INSERT INTO booking_discrepancies(booking_id,google_event_id,observed_state,observed_start) VALUES(?,?,?,?) ON CONFLICT(booking_id) DO UPDATE SET observed_state=excluded.observed_state,observed_start=excluded.observed_start,first_seen_at=CASE WHEN observed_state=excluded.observed_state AND observed_start=excluded.observed_start THEN booking_discrepancies.first_seen_at ELSE CURRENT_TIMESTAMP END,last_seen_at=CURRENT_TIMESTAMP")
  .bind(id,eventId,state,start).run();
  return false;
