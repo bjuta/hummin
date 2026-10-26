@@ -3,7 +3,7 @@ import {useMemo,useState} from "react";
 import {insightsAuthors,insightTopics,insightTopicSlug} from "../lib/react-insights-meta";
 import "./react-insights.css";
 import {ReactAssessmentPromotion} from "./ReactAssessmentPromotion";
-import {ReactInsightArticle} from "./ReactInsightArticle";
+import {ReactInsightArticle,ReactInsightsNewsletter} from "./ReactInsightArticle";
 type Block={t:"p"|"h"|"ul"|"ol"|"dl"|"assess";text?:string;items?:string[];id?:string};
 export type ReactPost={slug:string;title:string;excerpt:string;type:"guide"|"opinion"|"news";author:"team"|"muiruri";date:string;topics:string[];blocks:Block[];featured?:boolean;steps?:string;figure?:string};
 export type ReactInsightsProps={posts:ReactPost[];view:"index"|"article"|"author"|"topic";selected?:string;preview?:boolean};
@@ -26,6 +26,45 @@ function BlockView({block}:{block:Block}){
 function InsightCard({p,base}:{p:ReactPost;base:string}){
  return <Link className="hr-insights-card" to={base+"/"+p.slug}><div className="hr-insights-card-meta"><span>{typeLabel(p.type)}</span><span>{fmtDate(p.date)}</span></div><div><h3>{p.title}</h3><p>{p.excerpt}</p></div><span className="hr-insights-card-end">Read article <span aria-hidden="true">↗</span></span></Link>;
 }
+function SourceLandingCard({p,base}:{p:ReactPost;base:string}){
+ const minutes=p.slug==="enquiries-30-day-fix"?2:p.slug==="five-monday-figures"?2:p.type==="news"?1:2;
+ return <Link to={base+"/"+p.slug} className={"hr-insights-landing-card hr-insights-landing-"+p.type}>
+   <div className="hr-insights-landing-card-top"><span>{p.type==="guide"?"Guide":p.type==="opinion"?"Opinion":"News"}</span><span>{minutes} min read</span></div>
+   <div className="hr-insights-landing-card-copy">{p.slug==="five-monday-figures"?<span className="hr-insights-guide-caption">FIVE FIGURES, TEN MINUTES</span>:p.type==="news"?<span className="hr-insights-guide-date">{fmtDate(p.date)}</span>:p.type==="opinion"?<span className="hr-insights-opinion-quote" aria-hidden="true">“</span>:null}
+     <h3>{p.title}</h3><p>{p.excerpt}</p></div>
+   <div className="hr-insights-landing-card-author"><span className="hr-insights-landing-avatar"><img src="/brand/hummin-symbol.svg" alt=""/></span><strong>{insightsAuthors[p.author].name}</strong><time dateTime={p.date}>{new Date(p.date+"T12:00:00Z").toLocaleDateString("en-KE",{day:"numeric",month:"short",timeZone:"UTC"})}</time></div>
+ </Link>;
+}
+function SourceDownloads(){
+ const downloads=[
+  {kind:"Checklist",access:"Free download",title:"30-day enquiry log",desc:"A one-page sheet to record every enquiry for 30 days, with a Friday review checklist.",format:"PDF · 1 page",url:"/downloads/enquiry-log.pdf",label:"Download PDF ↓"},
+  {kind:"Template",access:"Free, sent by email",title:"Monday figures template",desc:"A ready-made sheet for the five weekly figures, with 12 weeks of history and a simple chart.",format:"Spreadsheet · Excel and Google Sheets",url:"/insights/download/monday-template",label:"Email Me the Template ↓"}
+ ];
+ return <section className="hr-insights-downloads" aria-labelledby="hr-insights-downloads-title">
+  <div className="hr-insights-source-section-title"><span>CHECKLISTS AND TEMPLATES</span><h2 id="hr-insights-downloads-title">Tools to use this week.</h2></div>
+  <div className="hr-insights-download-cards">{downloads.map((d,i)=><div className={"hr-insights-download-card hr-insights-download-"+i} key={d.title}>
+   <div className="hr-insights-download-card-head"><span>{d.kind}</span><span>{d.access}</span></div>
+   <div><h3>{d.title}</h3><p>{d.desc}</p><span>{d.format}</span></div>
+   <Link to={d.url} reloadDocument={i===0}>{d.label}</Link>
+  </div>)}</div>
+ </section>;
+}
+function SourceInsightsLanding({posts,base}:{posts:ReactPost[];base:string}){
+ const featured=posts.find(p=>p.featured)||posts.find(p=>p.slug==="enquiries-30-day-fix")||posts[0];
+ if(!featured)return null;
+ const latest=posts.filter(p=>p.slug!==featured.slug).slice(0,6);
+ return <div className="hr-insights-original-index">
+  <Link to={base+"/"+featured.slug} className="hr-insights-featured">
+   <div className="hr-insights-featured-figure"><img src="/brand/insights-article-figure.svg" alt="" aria-hidden="true"/><span>{featured.figure||"Image: an enquiry book on a shop counter."}</span></div>
+   <div className="hr-insights-featured-story"><div className="hr-insights-featured-label"><span>Featured</span><span>Guide</span></div>
+    <h2>{featured.title}</h2><p>{featured.excerpt}</p>
+    <div className="hr-insights-featured-author"><span>{insightsAuthors[featured.author].name}</span><time dateTime={featured.date}>{fmtDate(featured.date)}</time><span>2 min read</span></div>
+   </div>
+  </Link>
+  <section className="hr-insights-latest"><h2>Latest</h2><div>{latest.map(p=><SourceLandingCard key={p.slug} p={p} base={base}/>)}</div></section>
+  <SourceDownloads/>
+ </div>;
+}
 export function ReactInsights({posts,view,selected="",preview=false}:ReactInsightsProps){
  const [q,setQ]=useState(""),[type,setType]=useState("all");
  const base=preview?"/__react/insights":"/insights";
@@ -42,16 +81,16 @@ export function ReactInsights({posts,view,selected="",preview=false}:ReactInsigh
  if(view==="article"&&active)return <ReactInsightArticle post={active} posts={posts} base={base}/>;
  return <div className={"hr-insights-page"+(view==="index"?" hr-insights-index-page":"")}>
   <section className={"hr-insights-hero"+(view==="index"?" hr-insights-index-hero":"")}>
-   {view==="index"?<img className="hr-insights-watermark" src="/assets/hummin-legal-mark-tone.svg" alt="" aria-hidden="true"/>:null}
+   {view==="index"?<img className="hr-insights-watermark" src="/brand/insights-hero-mark.svg" alt="" aria-hidden="true"/>:null}
    <div className="hr-insights-hero-inner">
     {view==="index"?<>
      <span className="hr-insights-source-chip">Guides · Opinion · Downloads · News</span>
      <h1>Insights.</h1>
-     <p>Practical guides, opinion, and news for owners of established businesses. Written by the people who do the work.</p>
-     <label className="hr-insights-hero-search">
-      <svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8"><circle cx="10.8" cy="10.8" r="7.2"/><path d="m16 16 5 5"/></svg>
-      <input type="search" value={q} onChange={e=>setQ(e.target.value)} placeholder="Search guides, opinion, and news" aria-label="Search guides, opinion, and news"/>
-     </label>
+     <div className="hr-insights-index-intro"><p>Practical guides, opinion, and news for owners of established businesses. Written by the people who do the work.</p>
+      <label className="hr-insights-hero-search"><svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8"><circle cx="10.8" cy="10.8" r="7.2"/><path d="m16 16 5 5"/></svg>
+       <input type="search" value={q} onChange={e=>setQ(e.target.value)} placeholder="Search guides, opinion, and news" aria-label="Search guides, opinion, and news"/>
+      </label>
+     </div>
     </>:<>
      <p className="hr-insights-kicker">{view==="article"?"HUMMIN / ARTICLE":view==="author"?"HUMMIN / AUTHORS":"HUMMIN / TOPICS"}</p>
      {view==="article"&&active?<><h1>{active.title}</h1><p>{active.excerpt}</p></>:
@@ -82,11 +121,12 @@ export function ReactInsights({posts,view,selected="",preview=false}:ReactInsigh
      </div>
      <div className="hr-insights-source-topics"><span>Topics</span><div>{insightTopics.map(t=><Link key={t} to={base+"/topic/"+insightTopicSlug(t)}>{t} <span>{posts.filter(p=>p.topics.includes(t)).length}</span></Link>)}</div></div>
    </div>:null}
-   <div className="hr-insights-grid">{filtered.map(p=><InsightCard key={p.slug} p={p} base={base}/>)}</div>
+   {view==="index"&&type==="all"&&!q.trim()?<SourceInsightsLanding posts={posts} base={base}/>:<div className="hr-insights-grid">{filtered.map(p=><InsightCard key={p.slug} p={p} base={base}/>)}</div>}
    {filtered.length===0?<p role="status" className="hr-insights-empty">No articles match this selection.</p>:null}
    
   </>}
   </div>
+  <div className="hr-insights-source-newsletter-wrap"><ReactInsightsNewsletter/></div>
  </div>;
 }
 export function ReactInsightsRoute(){
