@@ -22,7 +22,7 @@ fs.mkdirSync("public/brand",{recursive:true});
 for(const [file,anchor] of sourceArt){
  const start=raw.indexOf(anchor);
  if(start<0)throw Error("Original Insights illustration anchor missing: "+anchor);
- const data=raw.slice(start).match(/<img src="data:image\\/svg\\+xml;base64,([A-Za-z0-9+/=]+)"/);
+ const data=raw.slice(start).match(/<img src="data:image\/svg\+xml;base64,([A-Za-z0-9+/=]+)"/);
  if(!data)throw Error("Original Insights SVG missing at "+anchor);
  const svg=Buffer.from(data[1],"base64");
  if(!svg.toString("utf8",0,256).includes("<svg"))throw Error("Expected SVG source for "+file);
