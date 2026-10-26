@@ -9,7 +9,7 @@
 .ra-source-back{display:inline-flex;align-items:center;gap:8px;min-height:40px;padding:0 16px;border-radius:999px;border:1px solid rgba(244,245,241,.25);font-weight:600;font-size:13px;color:#F4F5F1;text-decoration:none}
 .ra-source-pills{display:flex;flex-wrap:wrap;gap:8px}
 .ra-source-pills>*{display:inline-flex;align-items:center;padding:0 14px;min-height:32px;border-radius:999px;border:1px solid rgba(244,245,241,.18);background:rgba(244,245,241,.08);color:#F4F5F1;text-decoration:none;font-weight:600;font-size:12px}
-.ra-source-pills>span:first-child{background:#B5532C;border-color:#B5532C}
+.ra-source-pills>span:first-child{background:#9A4524;border-color:#9A4524;color:#FFFFFF;font-weight:700}
 .ra-source-hero h1{font:400 clamp(40px,6cqw,88px)/.98 Newsreader,Georgia,serif;letter-spacing:-.025em;max-width:18ch;margin:0}
 .ra-source-hero-inner>p{font-size:clamp(17px,1.6cqw,20px);line-height:1.55;color:#E7EBE6;max-width:56ch;margin:0}
 .ra-source-byline{display:flex;flex-wrap:wrap;align-items:center;gap:10px 20px;color:#D0D8D2;font-size:14px}
