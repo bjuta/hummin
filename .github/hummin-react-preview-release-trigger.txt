@@ -33,3 +33,5 @@ React legal CTA accessibility follow-up: deploy bcde3a1035cb394146fd12c723a45482
 2026-10-26 single consolidated HTML-independent React Preview proof: 67 committed art/font files, 4 committed Insights articles, compiled source CSS, source-based shared primitives. Hide design/sources during CI, run React asset and type checks, build and deploy only isolated preview. No public cutover. Do not run separate visual workflows for this proof.
 
 2026-10-26 source-independent finish verification: repair token-aware legal tests and fail-closed HTML retirement gate. One isolated Preview run hides design/sources, runs native assertions, SEO, typecheck and build, then deploys only hummin-web-preview. No public cutover.
+
+2026-10-26 consolidated source-layout pass: shared source editorial hero across index, topics, authors and articles, unified container-query coordinate system, verified design contracts, focus-managed dialogs and explicit code-disabled public cutover. Isolated React Preview only, hide HTML archive, check type and SEO, no public routing changes, no 42-screenshot workflow.
