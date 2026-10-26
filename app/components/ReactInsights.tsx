@@ -2,6 +2,7 @@ import {Link,useLoaderData} from "react-router";
 import {useMemo,useState} from "react";
 import {insightsAuthors,insightTopics,insightTopicSlug} from "../lib/react-insights-meta";
 import "./react-insights.css";
+import "./react-insights-source-index.css";
 import {ReactAssessmentPromotion} from "./ReactAssessmentPromotion";
 import {ReactInsightArticle,ReactInsightsNewsletter} from "./ReactInsightArticle";
 type Block={t:"p"|"h"|"ul"|"ol"|"dl"|"assess";text?:string;items?:string[];id?:string};
