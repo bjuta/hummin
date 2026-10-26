@@ -1,6 +1,6 @@
 import { createRequestHandler } from "react-router";
 import {runMailWorker} from "../app/lib/mail-cron.server.ts";
-import {isHumminPublicHost,robotsPolicy,sitemapXml} from "../app/lib/seo.server.ts";
+import {isHumminPublicHost,robotsPolicy,sitemapXml,protectNonPublicResponse} from "../app/lib/seo.server.ts";
 import type { D1Database, ExecutionContext, Fetcher } from "@cloudflare/workers-types";
 
 export interface HumminEnv {
@@ -51,7 +51,8 @@ export default {
         return new Response(await sitemapXml(env),{headers:{"Content-Type":"application/xml; charset=utf-8","Cache-Control":"public, max-age=300"}});
       }
     }
-    return requestHandler(request, { cloudflare: { env, ctx } });
+    const response=await requestHandler(request, { cloudflare: { env, ctx } });
+    return protectNonPublicResponse(new URL(request.url).hostname,response);
   },
   async scheduled(_controller:ScheduledController,env:HumminEnv,ctx:ExecutionContext){
     ctx.waitUntil(runMailWorker(env).then(()=>undefined).catch(e=>console.error("Scheduled email delivery failed",e instanceof Error?e.message:"unknown")));
