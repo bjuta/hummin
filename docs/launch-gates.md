@@ -63,3 +63,20 @@ GitHub CI and Cloudflare Preview Build passed at commit `5b822cc6`. Preview has 
 - [x] GitHub CI and Cloudflare Preview build passed at `14febc632e5c1ee664e0f7dee09ef6680aba4457`.
 - [ ] Apply migrations 0010, 0011, and 0012 to the isolated Production Staging D1 through the approved Wrangler workflow and confirm ledger entries; no manual SQL substitutions.
 - [ ] Verify receipt of both a new booking invitation and a moved-appointment invitation with consenting attendee; verify delivery outcomes beyond provider acceptance.
+
+## Verified production-staging acceptance — 26 October 2026 (supersedes earlier preview-only statements)
+
+- [x] Tracked D1 migrations 0010–0012 applied to isolated production-staging D1; confirmed in `d1_migrations`.
+- [x] Staging Worker has all 19 bindings; Google booking and Turnstile keys configured and both staging booking gates enabled.
+- [x] Real published assessment completed, slot chosen, Turnstile accepted by live booking flow, Google event created and attendee invited; D1 confirmed matching event for Wednesday 28 October 2026, 10:00–10:30 EAT.
+- [x] Recipient provided PDF of Google invitation showing attendee, exact appointment, RSVP options and Meet link.
+- [x] Resend accepted assessment-results and HUMMIN-branded customer confirmation messages. **External recipient inbox receipt for the separate branded confirmation is not independently evidenced.**
+- [x] Branded internal new-booking notification for this same event recovered by five-minute mail cron and independently found in `sales@hummin.org` Gmail on 26 October at 10:50 EAT.
+- [x] New internal-booking notification tests and staging deployment succeeded (GitHub Actions run 40287665241).
+- [ ] **Launch blocker**: `/privacy` currently says 'Privacy notice under review' and is not a publishable privacy statement. Approve accurate purpose, processor, retention, deletion, cookies, security and contact disclosures and replace this page before routing `hummin.org`.
+- [ ] **Launch blocker**: Owner acceptance of supplied website across desktop/mobile and keyboard accessibility, plus licensed assets and contact consent.
+- [ ] **Launch blocker**: Verify branded visitor confirmation inbox delivery and reminder after scheduled time; acceptance of Resend API response alone is not proof of arrival.
+- [ ] Controlled parallel-booking and Google move/cancel/timeout testing on isolated staging remain unverified live; mock unit tests passed.
+- [ ] Confirm backup/rollback rehearsal, monitoring, operational ownership and owner-approved public-domain cutover. No `hummin.org` routes changed.
+
+The earlier portions of this file document historical development states and must not be interpreted as the current staging status. Continue testing on **Production Staging**, not Preview.
