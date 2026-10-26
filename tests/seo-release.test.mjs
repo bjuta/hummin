@@ -1,7 +1,7 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 import fs from "node:fs";
-import {isHumminPublicHost,robotsPolicy,sitemapXml} from "../app/lib/seo.server.ts";
+import {isHumminPublicHost,robotsPolicy,sitemapXml,protectNonPublicResponse} from "../app/lib/seo.server.ts";
 const read=p=>fs.readFileSync(p,"utf8");
 test("Only public HUMMIN hostnames can be indexed",()=>{
  for(const host of ["hummin.org","www.hummin.org"])assert.equal(isHumminPublicHost(host),true);
@@ -34,4 +34,25 @@ test("Worker intercepts SEO routes before static robots, production pages remove
   assert.deepEqual(cfg.assets.run_worker_first,["/robots.txt","/sitemap.xml"]);
  }
  assert.match(read("public/robots.txt"),/Disallow: \//);
+});
+
+test("Staging includes noindex on privacy, Admin, booking and error responses",async()=>{
+ for(const status of [200,400,404,503]){
+  const response=new Response("test",{status,headers:{"Cache-Control":"no-store","Content-Type":"text/html"}});
+  const wrapped=protectNonPublicResponse("hummin-web-production.grimpossible.workers.dev",response);
+  assert.equal(wrapped.status,status);
+  assert.equal(wrapped.headers.get("X-Robots-Tag"),"noindex, nofollow");
+  assert.equal(wrapped.headers.get("Cache-Control"),"no-store");
+  assert.equal(await wrapped.text(),"test");
+ }
+ const noContent=protectNonPublicResponse("hummin-web-production.grimpossible.workers.dev",new Response(null,{status:204}));
+ assert.equal(noContent.status,204);
+ assert.equal(noContent.headers.get("X-Robots-Tag"),"noindex, nofollow");
+});
+test("Public domain responses remain unmodified, including publishable privacy",()=>{
+ const response=new Response("public",{headers:{"Content-Type":"text/html"}});
+ assert.equal(protectNonPublicResponse("hummin.org",response),response);
+ assert.equal(protectNonPublicResponse("www.hummin.org",response),response);
+ assert.equal(response.headers.get("X-Robots-Tag"),null);
+ assert.match(read("workers/app.ts"),/protectNonPublicResponse\\(new URL\\(request.url\\).hostname,response\\)/);
 });
