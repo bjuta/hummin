@@ -3,3 +3,5 @@ Publish only the native React migration to isolated Preview. Never attach hummin
 26 October 2026: Deploy verified native React Contact, Insights, and Assessment on Preview only, preserving original D1/Calendar/Resend APIs and no public route changes. Commit 45a21c2e914bf6bc7ab241e1215c81d669d5ce64. No test transactions.
 
 Re-publish isolated Preview with verified React assessment contrast correction at 5d0d7d291a3a28223a8a641a27622589afd637ec; no live domain changes.
+
+Canonical React routing rehearsal: all marketing, contact, assessment and Insights paths render React only on isolated preview host, while hummin.org retains original responses. Full React mocked acceptance 40350693804 green; CI 69eeb304ad143236733cc5e10b25f99fbeab74be green.
