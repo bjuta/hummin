@@ -23,7 +23,7 @@ export function Hero({page}:{page:Page|"contact"}){
    <div className="hr-hero-gradient" aria-hidden="true"/>
    <img className="hr-hero-motif" src="/brand/hummin-symbol.svg" alt="" aria-hidden="true"/>
    <div className="hr-hero-chips">
-    <span>{page==="home"?"Embedded advisory and execution":h.label}</span>
+    <span>{page!=="home"?<img className="hr-hero-chip-icon" src={"/brand/icons/"+h.iconPaper+"-light.svg"} alt="" aria-hidden="true"/>:null}{page==="home"?"Embedded advisory and execution":h.label}</span>
     <span>{page==="home"?"Nairobi, Kenya":HERO_STYLE[page as keyof typeof HERO_STYLE]?.chip}</span>
    </div>
    <div className="hr-hero-copy">
@@ -101,7 +101,7 @@ function Home(){
 function How(){
  return <div className="hr-page"><Hero page="how"/><section className="hr-section">
   <Shelf title="Four steps, in order.">{STAGES.map((s,i)=><article className={"hr-stage-card hr-stage-source-"+i} key={s.name}><span className="hr-card-chip">Step {i+1} of 4</span><div><h3>{s.name}</h3><p>{s.what}</p><p className="hr-stage-out">You receive: {s.out}</p></div></article>)}</Shelf>
- </section><section className="hr-dark-section"><div className="hr-section-headline"><SectionTitle eyebrow="What we need from you">Four things we ask of every client.</SectionTitle><p>We agree these with you at the start of every engagement.</p></div><div className="hr-four-grid">{NEEDS.map(n=><div className="hr-need" key={n.v}><span className="hr-need-icon" aria-hidden="true">◎</span><h3>{n.v}</h3><p>{n.k}</p></div>)}</div></section></div>;
+ </section><section className="hr-dark-section"><div className="hr-section-headline"><SectionTitle eyebrow="What we need from you">Four things we ask of every client.</SectionTitle><p>We agree these with you at the start of every engagement.</p></div><div className="hr-four-grid">{NEEDS.map(n=><div className="hr-need" key={n.v}><img className="hr-need-icon" src={"/brand/icons/"+n.icon+"-light.svg"} alt="" aria-hidden="true"/><h3>{n.v}</h3><p>{n.k}</p></div>)}</div></section></div>;
 }
 function Expertise(){
  const [active,setActive]=useState(0),domain=DOMAINS[active];
@@ -110,12 +110,12 @@ function Expertise(){
    <Shelf title="Seven areas. Pick one.">{DOMAINS.map((d,i)=><button
     type="button" key={d.name} className={"hr-core-card hr-core-tone-"+(active===i?"active":i%3)}
     aria-pressed={active===i} aria-controls="core-detail" onClick={()=>setActive(i)}>
-     <span className="hr-core-card-icon" aria-hidden="true"/>
+     <img className="hr-core-card-icon" src={"/brand/icons/"+d.icon+((active===i||i%3!==0)?"-light":"")+".svg"} alt="" aria-hidden="true"/>
      <span className="hr-core-card-label"><strong>{d.name}</strong>{d.ext?<small>External partners</small>:null}</span>
     </button>)}</Shelf>
   </section>
   <section id="core-detail" className="hr-core-source-detail" aria-live="polite">
-   <div key={domain.name} className="hr-core-detail-content"><div><span className="hr-core-detail-icon" aria-hidden="true"/><h2>{domain.name}</h2></div>
+   <div key={domain.name} className="hr-core-detail-content"><div><img className="hr-core-detail-icon" src={"/brand/icons/"+domain.icon+"-light.svg"} alt="" aria-hidden="true"/><h2>{domain.name}</h2></div>
     <div><h3>{domain.lead}</h3><p>{domain.jobs}</p></div>
    </div>
   </section>
