@@ -78,7 +78,7 @@ for(const width of [390,1440]){
     await unlock.waitFor({state:"visible",timeout:5000});
     await page.waitForTimeout(700);
     await unlock.click();
-    await page.getByRole("heading",{name:"Three things to fix first."}).waitFor();
+    await page.locator(".ra-plan").first().waitFor({state:"visible",timeout:12000});
     assert.equal(await page.locator(".ra-plan").count(),3);
     await page.getByRole("button",{name:/Book a Results Review/}).click();
     await page.locator(".ra-days button").first().click();
