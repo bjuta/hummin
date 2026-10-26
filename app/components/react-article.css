@@ -1,0 +1,94 @@
+/* Native React port of the original HUMMIN Insights article document.
+   Layout, hierarchy, source CTAs and backgrounds are transcribed from
+   design/sources/insights-v4.html.gz.b64 (no source HTML runtime). */
+.ra-source-page{container-type:inline-size;background:#F4F5F1;color:#1E272A;font-family:Figtree,Arial,sans-serif}
+.ra-source-page *{box-sizing:border-box}
+.ra-source-hero{position:relative;overflow:hidden;background:radial-gradient(circle at 76% 20%,#53615E 0%,#2A3538 42%,#1E272A 85%);color:#F4F5F1}
+.ra-source-hero::after{content:"";position:absolute;right:-9%;top:-26%;width:70%;height:120%;background:url('/brand/hummin-symbol.svg') center/contain no-repeat;opacity:.12;filter:brightness(0) invert(1);pointer-events:none;transform:rotate(-9deg)}
+.ra-source-hero-inner{position:relative;z-index:1;padding:clamp(56px,7cqw,104px) clamp(20px,5cqw,64px) clamp(40px,5cqw,64px);max-width:1400px;margin:auto;display:grid;justify-items:start;gap:18px}
+.ra-source-back{display:inline-flex;align-items:center;min-height:40px;padding:0 14px;border-radius:999px;border:1px solid rgba(244,245,241,.18);font-weight:600;font-size:13px;color:#F4F5F1;text-decoration:none}
+.ra-source-pills{display:flex;flex-wrap:wrap;gap:6px}
+.ra-source-pills>*{display:inline-flex;align-items:center;padding:0 12px;min-height:28px;border-radius:999px;border:1px solid rgba(244,245,241,.18);background:rgba(244,245,241,.08);color:#F4F5F1;text-decoration:none;font-weight:600;font-size:12px}
+.ra-source-pills>span:first-child{background:#B5532C;border-color:#B5532C}
+.ra-source-hero h1{font:400 clamp(48px,7cqw,96px)/.96 Newsreader,Georgia,serif;letter-spacing:-.03em;max-width:19ch;margin:0}
+.ra-source-hero-inner>p{font-size:clamp(16px,1.5cqw,19px);line-height:1.55;color:#E7EBE6;max-width:60ch;margin:0}
+.ra-source-byline{display:flex;align-items:center;gap:10px;color:#D0D8D2;font-size:13px}
+.ra-source-byline>a:not(.ra-source-avatar){color:#F4F5F1;text-decoration:none;font-weight:600}
+.ra-source-byline .ra-source-avatar{display:grid;place-items:center;width:34px;height:34px;border-radius:50%;background:#F4F5F1}
+.ra-source-avatar img{width:25px;height:25px;object-fit:contain}
+.ra-source-body{margin:auto;max-width:1400px;padding:clamp(40px,5cqw,64px) clamp(20px,5cqw,64px) clamp(70px,8cqw,112px);display:grid;gap:clamp(64px,8cqw,112px)}
+.ra-source-article-grid{display:flex;flex-wrap:wrap;gap:40px clamp(40px,6cqw,96px);align-items:flex-start}
+.ra-source-article{flex:1 1 560px;max-width:720px;min-width:0;display:grid;gap:22px}
+.ra-source-figure{margin:0 0 10px;display:grid;gap:10px}
+.ra-source-figure>div{position:relative;overflow:hidden;border-radius:20px;background:#E7EBE6;aspect-ratio:16/9}
+.ra-source-figure img{position:absolute;width:84%;height:100%;object-fit:contain;right:-16%;bottom:-26%;opacity:.085}
+.ra-source-figure figcaption{font-size:13px;color:#5E6967}
+.ra-source-h{font:400 clamp(28px,3cqw,38px)/1.1 Newsreader,Georgia,serif;letter-spacing:-.01em;margin:22px 0 0;scroll-margin-top:96px}
+.ra-source-p{font-size:18px;line-height:1.72;color:#2A3538;text-wrap:pretty;margin:0}
+.ra-source-ul{margin:0;padding-left:22px;display:grid;gap:10px;font-size:18px;line-height:1.65;color:#2A3538}
+.ra-source-ul li{padding-left:4px}
+.ra-source-ol{margin:0;padding:0;list-style:none;display:grid;gap:12px}
+.ra-source-ol li{display:grid;grid-template-columns:44px minmax(0,1fr);gap:14px;align-items:start;padding:16px;border-radius:16px;background:#E7EBE6}
+.ra-source-ol li>span{display:grid;place-items:center;width:44px;height:44px;border-radius:999px;background:#1E272A;color:#F4F5F1;font:400 22px Newsreader,Georgia,serif}
+.ra-source-ol li>p{font-size:17px;line-height:1.6;padding-top:8px;margin:0}
+.ra-source-download{border-radius:20px;background:#434F4F;color:#fff;padding:22px;display:flex;flex-wrap:wrap;gap:16px 24px;align-items:center}
+.ra-source-download.ra-source-pdf{background:#B5532C}
+.ra-source-download>div{flex:1 1 260px;display:grid;gap:6px}
+.ra-source-download>div>span{font-weight:600;font-size:11px;letter-spacing:.08em;text-transform:uppercase;opacity:.85}
+.ra-source-download h3{font:400 26px/1.1 Newsreader,serif;margin:0}
+.ra-source-download p{font-size:14px;line-height:1.5;opacity:.9;margin:0}
+.ra-source-download>a{flex-shrink:0;display:inline-flex;align-items:center;min-height:48px;padding:0 20px;border-radius:999px;background:#F4F5F1;color:#1E272A;text-decoration:none;font-size:14px;font-weight:700}
+.ra-source-assessment{position:relative;overflow:hidden;border-radius:20px;background:#1E272A;color:#F4F5F1;padding:24px;display:flex;flex-wrap:wrap;gap:16px 24px;align-items:center}
+.ra-source-assessment::before{content:"";position:absolute;width:280px;height:280px;right:-80px;top:-40px;background:url('/brand/hummin-symbol.svg') center/contain no-repeat;opacity:.12}
+.ra-source-assessment>div{position:relative;flex:1 1 280px;display:grid;gap:6px}
+.ra-source-assessment h3{font:400 26px/1.1 Newsreader,Georgia,serif;margin:0}
+.ra-source-assessment p{font-size:14px;line-height:1.55;color:#D0D8D2;margin:0}
+.ra-source-assessment>a{position:relative;display:inline-flex;align-items:center;min-height:48px;padding:0 20px;border-radius:999px;background:#B5532C;color:#fff;text-decoration:none;font-weight:600;font-size:14px}
+.ra-source-share{display:flex;flex-wrap:wrap;align-items:center;gap:8px;padding-top:22px;margin-top:10px;border-top:1px solid #D0D8D2}
+.ra-source-share>span{font-size:13px;font-weight:600;color:#5E6967;margin-right:6px}
+.ra-source-share a,.ra-source-share button{display:inline-flex;align-items:center;min-height:40px;padding:0 14px;border-radius:999px;border:1px solid #D0D8D2;background:transparent;color:#1E272A;font:600 13px Figtree,Arial,sans-serif;text-decoration:none;cursor:pointer}
+.ra-source-share a:hover,.ra-source-share button:hover{background:#E7EBE6}
+.ra-source-author{display:flex;flex-wrap:wrap;align-items:center;gap:16px 20px;padding:22px;border-radius:20px;background:#E7EBE6}
+.ra-source-author-avatar{width:72px;height:72px;flex-shrink:0;display:grid;place-items:center;border-radius:50%;background:#1E272A}
+.ra-source-author-avatar img{width:48px;filter:brightness(0) invert(1)}
+.ra-source-author>div:nth-child(2){display:grid;gap:6px}
+.ra-source-author strong{font-size:15px}
+.ra-source-author p{margin:0;font-size:13px;color:#434F4F}
+.ra-source-author>a{margin-left:auto;color:#9A4524;text-decoration:underline;font-size:13px;font-weight:600}
+.ra-source-sidebar{position:sticky;top:94px;flex:1 1 250px;min-width:220px;display:grid;gap:18px}
+.ra-source-sidebar nav{border-left:1px solid #D0D8D2;padding-left:16px;display:grid;gap:2px}
+.ra-source-sidebar nav>strong{font-size:11px;letter-spacing:.08em;color:#434F4F;font-weight:600;padding:0 0 10px}
+.ra-source-sidebar nav>a{text-decoration:none;font-size:14px;line-height:1.4;padding:6px 0}
+.ra-source-sidebar nav>a:hover{color:#B5532C}
+.ra-source-help{border-radius:20px;background:#B5532C;color:#fff;padding:22px;display:grid;gap:12px}
+.ra-source-help h2{font:400 24px/1.1 Newsreader,Georgia,serif;margin:0}
+.ra-source-help p{font-size:14px;line-height:1.55;margin:0}
+.ra-source-help>a{justify-self:start;display:inline-flex;align-items:center;min-height:44px;padding:0 18px;border-radius:999px;background:#1E272A;color:#F4F5F1;text-decoration:none;font-size:14px;font-weight:600}
+.ra-source-read-next{display:grid;gap:18px;padding-top:clamp(32px,4cqw,56px);border-top:1px solid #D0D8D2}
+.ra-source-read-next h2{font:400 clamp(30px,3.6cqw,48px)/1.05 Newsreader,serif;margin:0}
+.ra-source-read-next>div{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,300px),1fr));gap:14px}
+.ra-source-related-card{display:grid;align-content:space-between;gap:18px;min-height:260px;padding:22px;border-radius:20px;text-decoration:none;background:#E7EBE6;color:#1E272A;border:1px solid #E7EBE6}
+.ra-source-related-card.ra-source-related-opinion{background:#1E272A;color:#F4F5F1;border-color:#1E272A}
+.ra-source-related-card.ra-source-related-news{background:#fff;border-color:#D0D8D2}
+.ra-related-top{display:flex;justify-content:space-between;gap:12px;align-items:center;font-size:12px;font-weight:600}
+.ra-related-top>span:first-child{display:inline-flex;align-items:center;min-height:28px;padding:0 12px;border:1px solid currentColor;border-radius:999px}
+.ra-related-top>span:last-child{opacity:.7}
+.ra-source-related-card strong{font:400 26px/1.08 Newsreader,serif}
+.ra-source-newsletter{position:relative;overflow:hidden;border-radius:24px;background:#1E272A;color:#F4F5F1;padding:clamp(28px,4cqw,56px);display:flex;flex-wrap:wrap;gap:24px 56px;align-items:end}
+.ra-source-newsletter::before{content:"";position:absolute;width:520px;height:520px;right:-140px;bottom:-160px;background:url('/brand/hummin-symbol.svg') center/contain no-repeat;opacity:.06}
+.ra-source-newsletter-copy{position:relative;flex:1 1 360px;display:grid;gap:12px}
+.ra-source-newsletter-copy>span{font-size:12px;font-weight:600;letter-spacing:.08em;color:#E58A5F}
+.ra-source-newsletter h2{font:400 clamp(32px,4cqw,52px)/1.04 Newsreader,Georgia,serif;letter-spacing:-.015em;margin:0}
+.ra-source-newsletter-copy p{font-size:16px;line-height:1.55;color:#D0D8D2;max-width:46ch;margin:0}
+.ra-source-newsletter-entry{position:relative;flex:1 1 360px}
+.ra-source-newsletter-entry form{display:grid;gap:10px}
+.ra-source-newsletter-entry form>div:first-child{display:flex;flex-wrap:wrap;gap:8px}
+.ra-source-newsletter-entry label{flex:1 1 220px;display:flex}
+.ra-source-newsletter-entry input{flex:1;min-width:0;font:400 16px Figtree,Arial,sans-serif;min-height:52px;padding:0 20px;border-radius:999px;border:1px solid rgba(255,255,255,.3);background:rgba(244,245,241,.08);color:#F4F5F1}
+.ra-source-newsletter-entry button{min-height:52px;padding:0 22px;border-radius:999px;border:0;background:#B5532C;color:#fff;font:600 15px Figtree,Arial,sans-serif;cursor:pointer}
+.ra-source-newsletter-entry button:disabled{opacity:.7;cursor:not-allowed}
+.ra-source-newsletter-entry form>p{font-size:13px;color:#E58A5F;margin:0}
+.ra-source-newsletter-entry>a{color:#fff;text-underline-offset:3px}
+.ra-visually-hidden{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0)}
+@media(max-width:750px){.ra-source-sidebar{position:static;flex:1 1 100%;min-width:0}.ra-source-body{padding-bottom:70px}}
+@media(max-width:550px){.ra-source-hero h1{font-size:clamp(43px,9vw,62px)}.ra-source-p,.ra-source-ul{font-size:17px}}
