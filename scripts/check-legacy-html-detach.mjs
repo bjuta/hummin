@@ -39,6 +39,11 @@ for(const file of [
  "public/brand/fonts/hummin-newsreader-regular-latin.woff2",
  "public/brand/fonts/hummin-newsreader-italic-latin.woff2"
 ])if(!exists(file))errors.push("Standalone React asset missing: "+file);
+// Archive deletion is permitted only after a separately reviewed public
+// React cutover. A standalone build alone does not confer release approval.
+const releaseSwitch="app/lib/react-cutover.server.ts";
+if(!exists(releaseSwitch)||!/export const PUBLIC_REACT_CUTOVER_APPROVED\s*=\s*true\b/.test(read(releaseSwitch)))
+ errors.push("Public React cutover has not been expressly approved in source.");
 const assertRemoved=process.argv.includes("--assert-removed");
 if(assertRemoved){
  if(exists("design/sources"))errors.push("The archived HTML design sources still exist.");
