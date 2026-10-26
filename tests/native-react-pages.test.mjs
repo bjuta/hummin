@@ -35,5 +35,7 @@ test("Staging route cannot accidentally expose incomplete React migration on pub
  assert.match(stage,/noindex,nofollow/);
  const config=read("app/routes.ts");
  assert.match(config,/route\("__react\/:page","routes\/react.preview.tsx"\)/);
- assert.match(config,/index\("routes\/fidelity.ts"\)/,"Legacy public routes kept until parity approval");
+ assert.match(config,/index\("routes\/react.marketing.gated.tsx"\)/,"Canonical paths are routed through the reversible hostname gate");
+ for(const route of ["marketing","assessment","contact","insights"]){const gate=read("app/routes/react."+route+".gated.tsx");assert.match(gate,/isHumminPublicHost/);assert.match(gate,/originalLoader/);}
+ assert.match(read("app/routes/fidelity.ts"),/\/design\/site\/index.html/,"Live public host legacy responses remain until acceptance");
 });
