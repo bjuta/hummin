@@ -1,5 +1,5 @@
 /** Read-only Production Staging browser acceptance. No form submission or deployment.
- * Re-run complete cross-device WCAG tests against deployed language and contrast corrections.
+ * Final source-design WCAG verification after the Insights checklist badge correction.
  */
 import assert from "node:assert/strict";
 import fs from "node:fs";
