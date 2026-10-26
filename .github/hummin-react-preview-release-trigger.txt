@@ -1,1 +1,3 @@
 Publish only the native React migration to isolated Preview. Never attach hummin.org, alter production D1, or switch public routes.
+
+26 October 2026: Deploy verified native React Contact, Insights, and Assessment on Preview only, preserving original D1/Calendar/Resend APIs and no public route changes. Commit 45a21c2e914bf6bc7ab241e1215c81d669d5ce64. No test transactions.
