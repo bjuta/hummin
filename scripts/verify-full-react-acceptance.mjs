@@ -1,4 +1,4 @@
-/** Isolated React Preview acceptance. All transactional endpoints are mocked:
+/** Resume isolated React Preview acceptance after interrupted migration. All transactional endpoints are mocked:
  * this test MUST NOT send real enquiries, assessment emails, or reservations.
  */
 import assert from "node:assert/strict";
