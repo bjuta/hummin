@@ -2,6 +2,7 @@ import {useRef,useState} from "react";
 import {Link} from "react-router";
 import {HEADS,HERO_STYLE,STAGES,DOMAINS,ENGS,TOPICS,VALUES,NEEDS,TIERS,TIER_ROWS} from "../lib/react-site-content";
 import "./react-marketing.css";
+import {ReactAssessmentPromotion} from "./ReactAssessmentPromotion";
 
 const photos:Record<string,string>={
  home:"/brand/home-hero.webp",how:"/brand/how-hero.webp",core:"/brand/expertise-hero.webp",
@@ -103,5 +104,7 @@ function About(){
  </section><section className="hr-definition"><div><p className="hr-definition-word">hum·min</p><p>/ˈhʌm.ɪn/</p><p><b>1</b> <em>noun</em> An embedded advisory and execution partner for owner-led businesses.</p><p><b>2</b> <em>verb, informal</em> To work steadily and well in the background.</p></div><img src="/brand/hummin-symbol.svg" alt="" aria-hidden="true"/></section></div>;
 }
 export function ReactMarketing({page}:{page:Page}){
- switch(page){case "home":return <Home/>;case "how":return <How/>;case "core":return <Expertise/>;case "eng":return <Engagements/>;case "who":return <Who/>;case "about":return <About/>;}
+ const views={home:Home,how:How,core:Expertise,eng:Engagements,who:Who,about:About};
+ const Content=views[page];
+ return <><Content/><ReactAssessmentPromotion/></>;
 }
