@@ -217,3 +217,30 @@
 .hr-dark-section .hr-need{display:grid;gap:14px;align-content:start;padding:24px clamp(16px,2cqw,28px) 8px}
 .hr-dark-section .hr-need h3{font-family:Newsreader,Georgia,serif;font-weight:400;font-size:clamp(34px,3.6cqw,52px);line-height:.95;letter-spacing:-.02em;margin:0}
 .hr-dark-section .hr-need p{font-size:16px;line-height:1.55;color:#D0D8D2;margin:0}
+
+/* Exact structural port of the source Applied Expertise carousel and detail band. */
+.hr-core-section{padding-top:clamp(48px,7cqw,104px);padding-bottom:clamp(48px,6cqw,72px)}
+.hr-core-section .hr-shelf{gap:24px}
+.hr-core-section .hr-shelf-track{padding-top:8px;padding-bottom:16px;scrollbar-width:none}
+.hr-core-section .hr-shelf-track::-webkit-scrollbar{display:none}
+.hr-core-card{font:inherit;color:inherit;border:0;flex:0 0 min(240px,70%);scroll-snap-align:start;position:relative;overflow:hidden;border-radius:20px;aspect-ratio:3/4;padding:20px;display:grid;align-content:space-between;text-align:left;cursor:pointer;transition:transform 240ms cubic-bezier(.2,0,0,1),background 240ms,color 240ms}
+.hr-core-card:hover{transform:translateY(-6px)}
+.hr-core-tone-active{background:#B5532C;color:#FFF;box-shadow:inset 0 0 0 2px #B5532C}
+.hr-core-tone-0{background:#E7EBE6;color:#1E272A}
+.hr-core-tone-1{background:#434F4F;color:#F4F5F1}
+.hr-core-tone-2{background:#1E272A;color:#F4F5F1}
+.hr-core-card-icon{display:block;width:28px;height:28px}
+.hr-core-card-label{display:grid;gap:6px}
+.hr-core-card-label strong{font:400 clamp(28px,2.8cqw,34px)/1 Newsreader,Georgia,serif}
+.hr-core-card-label small{font-size:12px;font-weight:600;opacity:.7}
+.hr-core-source-detail{position:relative;overflow:hidden;background:#1E272A;color:#F4F5F1;padding:clamp(48px,6cqw,88px) clamp(20px,5cqw,64px)}
+.hr-core-source-detail::before{content:"";position:absolute;inset:0;background:radial-gradient(circle at 90% 0%,rgba(181,83,44,.3),transparent 50%);pointer-events:none}
+.hr-core-detail-content{position:relative;display:flex;flex-wrap:wrap;gap:28px clamp(40px,6cqw,96px);animation:hmFade 360ms cubic-bezier(.2,0,0,1)}
+.hr-core-detail-content>div:first-child{flex:1 1 280px;display:grid;gap:14px;align-content:start}
+.hr-core-detail-content>div:last-child{flex:2 1 400px;display:grid;gap:18px;align-content:end}
+.hr-core-detail-icon{display:block;width:32px;height:32px}
+.hr-core-detail-content h2{font:400 clamp(44px,5.4cqw,80px)/.92 Newsreader,Georgia,serif;letter-spacing:-.025em;margin:0}
+.hr-core-detail-content h3{font:400 clamp(24px,2.4cqw,32px)/1.25 Newsreader,Georgia,serif;margin:0}
+.hr-core-detail-content p{font:400 17px/1.65 Figtree,Arial,sans-serif;color:#D0D8D2;margin:0}
+.hr-core-note{margin:0;padding:clamp(64px,8cqw,112px) clamp(20px,5cqw,64px);font:400 15px/1.6 Figtree,Arial,sans-serif;max-width:none!important}
+@media(prefers-reduced-motion:reduce){.hr-core-detail-content{animation:none}.hr-core-card{transition:none}}
