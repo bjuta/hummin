@@ -28,7 +28,7 @@ function SourceBlock({b}:{b:ReactPost["blocks"][number]}){
 function EditorialCard({post,base}:{post:ReactPost;base:string}){
  return <Link to={base+"/"+post.slug} className={"ra-source-related-card ra-source-related-"+post.type}><span className="ra-related-top"><span>{post.type==="guide"?"Guide":post.type==="opinion"?"Opinion":"News"}</span><span>{minutes(post)} min read</span></span><strong>{post.title}</strong></Link>;
 }
-function Newsletter(){
+export function ReactInsightsNewsletter(){
  const [email,setEmail]=useState(""),[token,setToken]=useState(""),[key,setKey]=useState(""),[busy,setBusy]=useState(false),[challenge,setChallenge]=useState(false),[status,setStatus]=useState(""),[done,setDone]=useState(false);
  useEffect(()=>{fetch("/api/email/config",{cache:"no-store"}).then(r=>r.json()).then((raw:unknown)=>{const d=raw as {ready?:boolean;siteKey?:string};if(d.ready&&d.siteKey)setKey(d.siteKey)}).catch(()=>{});},[]);
  const subscribe=async(e:React.FormEvent)=>{
@@ -79,7 +79,7 @@ export function ReactInsightArticle({post,posts,base}:Props){
     </aside>
    </div>
    {readNext.length?<section className="ra-source-read-next"><h2>Read next.</h2><div>{readNext.map(p=><EditorialCard key={p.slug} post={p} base={base}/>)}</div></section>:null}
-   <Newsletter/>
+   <ReactInsightsNewsletter/>
   </div>
  </div>;
 }
