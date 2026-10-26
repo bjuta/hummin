@@ -3,6 +3,7 @@ import {Link} from "react-router";
 import {HEADS,HERO_STYLE,STAGES,DOMAINS,ENGS,TOPICS,VALUES,NEEDS,TIERS,TIER_ROWS} from "../lib/react-site-content";
 import "./react-marketing.css";
 import {ReactAssessmentPromotion} from "./ReactAssessmentPromotion";
+import {insightsPosts} from "../lib/insights.server";
 
 const photos:Record<string,string>={
  home:"/brand/home-hero.webp",how:"/brand/how-hero.webp",core:"/brand/expertise-hero.webp",
@@ -52,24 +53,51 @@ function ProblemModal({index,onClose}:{index:number;onClose:()=>void}){
    <p>{p.lead}</p><h3>What we look at</h3><p>{p.look}</p><h3>Where we'd start</h3><p>{p.start}</p><HButton to="/contact">Discuss this challenge →</HButton>
  </div></div>;
 }
+function TierModal({index,onClose}:{index:number;onClose:()=>void}){
+ const e=ENGS[index];
+ return <div className="hr-dialog-backdrop" onClick={onClose} role="presentation"><div role="dialog" aria-modal="true" aria-labelledby="hr-tier-dialog" className="hr-dialog" onClick={ev=>ev.stopPropagation()}>
+  <button type="button" className="hr-dialog-close" onClick={onClose} aria-label="Close engagement details">×</button>
+  <span className="hr-eyebrow">{e.tag}</span><h2 id="hr-tier-dialog">{e.name}</h2>
+  <p>{e.body}</p><h3>What the work includes</h3><p>{e.itemsText}</p><h3>Commercial arrangement</h3><p>{e.comm}</p>
+  <HButton to="/contact">Discuss a {e.name} →</HButton>
+ </div></div>;
+}
+const homeTeasers=[
+ {slug:"enquiries-30-day-fix",read:"4 min read",by:"HUMMIN Team · 20 Oct"},
+ {slug:"five-monday-figures",read:"3 min read",by:"HUMMIN Team · 13 Oct"},
+ {slug:"runs-through-the-owner",read:"3 min read",by:"Muiruri Beautah · 6 Oct"}
+] as const;
 function Home(){
  const [problem,setProblem]=useState<number|null>(null);
+ const [tier,setTier]=useState<number|null>(null);
  return <div className="hr-page">
   <Hero page="home"/>
-  <section className="hr-section hr-intro"><p className="hr-big">Good businesses encounter problems that do not fit neatly into departments.</p><div><p>A slow month of enquiries can look like a marketing problem. The cause may sit in how enquiries are answered, the tools the team uses, or who owns the follow-up.</p><p>We find the cause, bring in the people needed to fix it, and stay involved until the work is done.</p></div></section>
+  <div className="hr-home-sections"><section className="hr-section hr-intro"><p className="hr-big">Good businesses encounter problems that do not fit neatly into departments.</p><div><p>A slow month of enquiries can look like a marketing problem. The cause may sit in how enquiries are answered, the tools the team uses, or who owns the follow-up.</p><p>We find the cause, bring in the people needed to fix it, and stay involved until the work is done.</p></div></section>
   <section className="hr-section"><span className="hr-eyebrow">Where we often start</span>
-   <Shelf title="Problems owners bring to us.">{TOPICS.map((p,i)=><button type="button" key={p.title} className={"hr-problem-card hr-tone-"+i%3} onClick={()=>setProblem(i)} aria-haspopup="dialog">
-      <span className="hr-card-chip">{p.area}</span><span className="hr-card-title">{p.title}</span><span className="hr-card-more">Read more <span aria-hidden="true">＋</span></span>
+   <Shelf title="Problems owners bring to us.">{TOPICS.map((p,i)=><button type="button" key={p.title} className={"hr-problem-card hr-source-tone-"+i%3} onClick={()=>setProblem(i)} aria-haspopup="dialog" aria-label={p.title+" Read more"}>
+      <span className="hr-problem-mark" aria-hidden="true"/><span className="hr-card-chip">{p.area}</span><span className="hr-problem-bottom"><span className="hr-card-title">{p.title}</span><span className="hr-card-more">Read more <span aria-hidden="true">+</span></span></span>
     </button>)}</Shelf>
   </section>
   <section className="hr-section"><span className="hr-eyebrow">Ways to work with us</span>
-    <p className="hr-statement">Start with a <Link to="/engagements">Review</Link>. Fix it with a <Link to="/engagements">Project</Link>. Keep moving with a <Link to="/engagements">Residency</Link>.</p>
-    <div className="hr-three-grid">{ENGS.map((p,i)=><Link to="/engagements" className={"hr-engagement-card hr-tone-"+i} key={p.name}><span className="hr-card-chip">{p.tag}</span><strong>{p.name}</strong><p>{p.body}</p><span className="hr-card-more">Read more ＋</span></Link>)}</div>
+    <p className="hr-statement">Start with a <button type="button" onClick={()=>setTier(0)} aria-haspopup="dialog">Review</button>. Fix it with a <button type="button" onClick={()=>setTier(1)} aria-haspopup="dialog">Project</button>. Keep us close with a <button type="button" onClick={()=>setTier(2)} aria-haspopup="dialog">Residency</button>.</p>
+    <div className="hr-three-grid">{ENGS.map((p,i)=><button type="button" onClick={()=>setTier(i)} aria-haspopup="dialog" className={"hr-engagement-card hr-eng-source-"+i} key={p.name}>
+      <span className="hr-card-chip">{p.tag}</span><span className="hr-engagement-copy"><strong>{p.name}</strong><p>{["Find the problem and get a clear plan.","Design and deliver a defined piece of work.","A HUMMIN professional inside your team."][i]}</p><span className="hr-card-more">Read more <span aria-hidden="true">+</span></span></span>
+     </button>)}</div>
   </section>
   <section className="hr-section"><div className="hr-section-headline"><SectionTitle>How a piece of work runs.</SectionTitle><Link to="/how-we-work" className="hr-text-link">See How We Work</Link></div><div className="hr-four-grid">{STAGES.map(s=><div className="hr-step-min" key={s.name}><strong>{s.name}</strong><p>{s.short}</p></div>)}</div></section>
-  <section className="hr-section"><div className="hr-section-headline"><SectionTitle eyebrow="Insights">Practical notes for owners.</SectionTitle><Link className="hr-text-link" to="/insights">All Insights</Link></div><p className="hr-body-copy">Ideas, frameworks and practical guidance for the people who own and run businesses.</p><HButton to="/insights">Explore Insights →</HButton></section>
-  <section className="hr-bottom-cta"><SectionTitle>Tell us what's holding your business back.</SectionTitle><HButton to="/contact" light>Discuss a Business Challenge →</HButton><HButton to="/assessment" outline>Take the Assessment</HButton></section>
+  <section className="hr-section hr-home-insights"><div className="hr-section-headline"><SectionTitle eyebrow="Insights">Practical notes for owners.</SectionTitle><Link className="hr-text-link" to="/insights">All Insights</Link></div>
+   <div className="hr-three-grid hr-home-editorial">{homeTeasers.map((entry,i)=>{
+     const p=insightsPosts.find(v=>v.slug===entry.slug)!;
+     return <Link key={entry.slug} to={"/insights/"+entry.slug} className={"hr-home-insight-card hr-home-insight-"+i}>
+      <span className="hr-insight-card-top"><span className="hr-card-chip">{p.type==="guide"?"Guide":p.type==="opinion"?"Opinion":"News"}</span><span>{entry.read}</span></span>
+      <span className="hr-home-insight-copy"><strong>{p.title}</strong><span>{i===0?"Most owners get more enquiries than they think. The problem is what happens next.":i===1?"A short set of weekly figures shows problems while you can still act.":"Owners often become the bottleneck in the business they built."}</span></span>
+      <span className="hr-home-insight-by">{entry.by}</span>
+     </Link>;
+   })}</div>
+  </section>
+  </div>
   {problem!==null?<ProblemModal index={problem} onClose={()=>setProblem(null)}/>:null}
+  {tier!==null?<TierModal index={tier} onClose={()=>setTier(null)}/>:null}
  </div>;
 }
 function How(){
