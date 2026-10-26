@@ -37,3 +37,5 @@ React legal CTA accessibility follow-up: deploy bcde3a1035cb394146fd12c723a45482
 2026-10-26 consolidated source-layout pass: shared source editorial hero across index, topics, authors and articles, unified container-query coordinate system, verified design contracts, focus-managed dialogs and explicit code-disabled public cutover. Isolated React Preview only, hide HTML archive, check type and SEO, no public routing changes, no 42-screenshot workflow.
 
 2026-10-26 one isolated Preview build retry correcting React Router server/client import boundary for shared Insights CMS loader. Prior static tests and typecheck passed; verify production bundling and deploy preview only, never public routing.
+
+2026-10-26 final isolated preview verification of owner-source component consolidation, fixed server/client Insights boundary, and corrected route-contract test. No visual 42-check run, no public hostname routing, no production DB writes, no real booking/email.
