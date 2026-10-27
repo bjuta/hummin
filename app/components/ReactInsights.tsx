@@ -4,7 +4,7 @@ import {insightsAuthors,insightTopics,insightTopicSlug,insightTopicLeads} from "
 import "./react-insights.css";
 import "./react-insights-source-index.css";
 import {ReactAssessmentPromotion} from "./ReactAssessmentPromotion";
-import {SourceEditorialHero} from "./SourcePrimitives";
+import {SourceEditorialPage,SourceEditorialHeading,SourceEditorialBody,SourceEditorialNewsletter} from "./SourceEditorialLayout";
 import "./source-editorial-hero.css";
 import {SourceEditorialCard} from "./SourceEditorialCard";
 import {ReactInsightArticle,ReactInsightsNewsletter} from "./ReactInsightArticle";
@@ -74,8 +74,8 @@ export function ReactInsights({posts,view,selected="",preview=false}:ReactInsigh
  const author=view==="author"?insightsAuthors[selected as keyof typeof insightsAuthors]:null;
  const topic=view==="topic"?topicName(selected):null;
  if(view==="article"&&active)return <ReactInsightArticle post={active} posts={posts} base={base}/>;
- return <div className={"hr-insights-page"+(view==="index"?" hr-insights-index-page":"")}>
-  <SourceEditorialHero className={"hr-insights-hero"+(view==="index"?" hr-insights-index-hero":"")} markClassName="hr-insights-watermark" innerClassName="hr-insights-hero-inner">
+ return <SourceEditorialPage index={view==="index"}>
+  <SourceEditorialHeading index={view==="index"}>
     {view==="index"?<>
      <span className="hr-insights-source-chip">Guides · Opinion · Downloads · News</span>
      <h1>Insights.</h1>
@@ -98,8 +98,8 @@ export function ReactInsights({posts,view,selected="",preview=false}:ReactInsigh
       <p className="hr-insights-source-list-lead">{author.bio}</p>
      </>:null}
     </>}
-  </SourceEditorialHero>
-  <div className="hr-insights-main">
+  </SourceEditorialHeading>
+  <SourceEditorialBody>
   {view==="article"&&active?<div className="hr-insights-article-layout">
    <article className="hr-insights-article">
     <div className="hr-insights-byline"><span>{typeLabel(active.type)}</span><span>{fmtDate(active.date)}</span><Link to={base+"/author/"+active.author}>{insightsAuthors[active.author].name}</Link></div>
@@ -131,9 +131,9 @@ export function ReactInsights({posts,view,selected="",preview=false}:ReactInsigh
    {view==="index"&&filtered.length===0?<p role="status" className="hr-insights-empty">No articles match this selection.</p>:null}
    
   </>}
-  </div>
-  <div className="hr-insights-source-newsletter-wrap"><ReactInsightsNewsletter/></div>
- </div>;
+  </SourceEditorialBody>
+  <SourceEditorialNewsletter><ReactInsightsNewsletter/></SourceEditorialNewsletter>
+ </SourceEditorialPage>;
 }
 export function ReactInsightsRoute(){
  const data=useLoaderData() as ReactInsightsProps;

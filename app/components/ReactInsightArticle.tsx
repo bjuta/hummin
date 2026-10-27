@@ -2,7 +2,7 @@ import {useEffect,useState} from "react";
 import {Link} from "react-router";
 import {ReactTurnstile} from "./ReactTurnstile";
 import {SourceEditorialCard} from "./SourceEditorialCard";
-import {SourceEditorialHero} from "./SourcePrimitives";
+import {SourceEditorialPage,SourceEditorialHeading,SourceEditorialBody,SourceEditorialNewsletter} from "./SourceEditorialLayout";
 import "./source-editorial-hero.css";
 import type {ReactPost} from "./ReactInsights";
 import "./react-article.css";
@@ -55,14 +55,14 @@ export function ReactInsightArticle({post,posts,base}:Props){
  const readNext=posts.filter(p=>p.slug!==post.slug).slice(0,3);
  const url="https://hummin.org/insights/"+post.slug;
  const share=[{label:"LinkedIn",url:"https://www.linkedin.com/sharing/share-offsite/?url="+safeShare(url)},{label:"WhatsApp",url:"https://wa.me/?text="+safeShare(post.title+" "+url)},{label:"X",url:"https://twitter.com/intent/tweet?url="+safeShare(url)+"&text="+safeShare(post.title)},{label:"Email",url:"mailto:?subject="+safeShare(post.title)+"&body="+safeShare(url)}];
- return <div className="ra-source-page">
-  <SourceEditorialHero as="header" className="ra-source-hero" markClassName="ra-source-hero-mark" innerClassName="ra-source-hero-inner">
+ return <SourceEditorialPage article>
+  <SourceEditorialHeading article>
     <Link to={base} className="ra-source-back">← All Insights</Link>
     <div className="ra-source-pills"><span>{post.type==="guide"?"Guide":post.type==="opinion"?"Opinion":"News"}</span>{post.topics.map(t=><Link key={t} to={base+"/topic/"+articleId(t)}>{t}</Link>)}</div>
     <h1>{post.title}</h1><p>{post.excerpt}</p>
     <div className="ra-source-byline"><Link to={base+"/author/"+post.author} className="ra-source-avatar" aria-label={"Read more about "+authors[post.author]}><img src="/brand/hummin-symbol.svg" alt=""/></Link><Link to={base+"/author/"+post.author}>{authors[post.author]}</Link><time dateTime={post.date}>{niceDate(post.date)}</time><span>{minutes(post)} min read</span></div>
-  </SourceEditorialHero>
-  <div className="ra-source-body">
+  </SourceEditorialHeading>
+  <SourceEditorialBody article>
    <div className="ra-source-article-grid">
     <article className="ra-source-article">
      {post.figure?<figure className="ra-source-figure"><div><img src="/brand/insights-article-figure.svg" alt="" aria-hidden="true"/></div><figcaption>{post.figure}</figcaption></figure>:null}
@@ -76,7 +76,7 @@ export function ReactInsightArticle({post,posts,base}:Props){
     </aside>
    </div>
    {readNext.length?<section className="ra-source-read-next"><h2>Read next.</h2><div>{readNext.map(p=><SourceEditorialCard key={p.slug} post={p} base={base} variant="related"/>)}</div></section>:null}
-   <ReactInsightsNewsletter/>
-  </div>
- </div>;
+   <SourceEditorialNewsletter article><ReactInsightsNewsletter/></SourceEditorialNewsletter>
+  </SourceEditorialBody>
+ </SourceEditorialPage>;
 }
