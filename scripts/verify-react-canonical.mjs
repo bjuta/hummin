@@ -71,11 +71,14 @@ for(const width of [390,768,1440]){
    }
    if(kind==="home"&&width===1440){
     // Owner-authored UI anatomy, read-only: no form, emails or booking.
-    await page.getByRole("button",{name:"Open menu"}).click();
+    // Invoke the click directly so Playwright's pointer movement does not
+    // synthesize the source desktop hover-open immediately before the click.
+    // Hover behaviour is implemented separately in the shared header.
+    await page.getByRole("button",{name:"Open menu"}).evaluate(el=>el.click());
     assert.equal(await page.locator(".hm-site-nav-icon").count(),9,"Nine original icon-led drawer entries");
     assert.equal(await page.locator(".hm-site-nav-index").count(),0,"No invented numbered navigation");
     assert.equal(await page.locator(".hm-site-drawer-meta img").count(),2,"Original mail/location iconography");
-    await page.getByRole("button",{name:"Close menu"}).first().click();
+    await page.getByRole("button",{name:"Close menu"}).first().evaluate(el=>el.click());
     await page.locator(".hr-problem-card").nth(2).click();
     const dialog=page.getByRole("dialog",{name:"Systems the team does not use."});
     await dialog.waitFor({state:"visible"});
@@ -171,6 +174,15 @@ for(const width of [390,768,1440]){
    // Inspect the final settled contrast, never an in-between colour blend.
    if(width===1440&&(kind==="core"||kind==="eng")){
     await page.waitForTimeout(550);
+   }
+   // The source assessment invitation enters with hmRise (opacity + translation).
+   // Axe can otherwise sample its deliberately translucent opening frame and
+   // report a contrast failure that is absent once the control is fully visible.
+   const floatPrompt=page.locator(".hr-assessment-float-content");
+   if(await floatPrompt.count()){
+    await floatPrompt.evaluate(async el=>{
+      await Promise.all(el.getAnimations({subtree:true}).map(a=>a.finished.catch(()=>{})));
+    });
    }
    const axe=await new AxeBuilder({page}).withTags(["wcag2a","wcag2aa","wcag21a","wcag21aa"]).analyze();
    const blocking=axe.violations.filter(v=>v.impact==="serious"||v.impact==="critical");
