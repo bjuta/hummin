@@ -7,3 +7,5 @@
 2026-10-27 repeat offline contact/email/booking/CMS/Admin and assessment non-delivery tests on native Insights event-bound branch.
 
 2026-10-27 test provider-backed native booking client (mocked), Assessment no-delivery contract, existing service safety; no external calendar or email effects.
+
+2026-10-27 validate newsletter double-opt-in email parser and non-delivery Insights Preview service, in addition to existing 84 tests.
