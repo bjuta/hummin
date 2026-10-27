@@ -34,8 +34,8 @@ jobs:
         run: |
           npm run verify:analytics
           npm run verify:seo
-      - name: Source-native assessment and zero-delivery contract
-        run: node --experimental-strip-types --test tests/source-assessment-native.test.mjs
+      - name: Source-native assessment delivery and provider-backed booking client (mocked)
+        run: node --experimental-strip-types --test tests/source-assessment-native.test.mjs tests/source-assessment-delivery-contract.test.mjs tests/booking-native-client.test.mjs
       - name: Confirm public fallback and preview isolation have not been removed
         run: |
           node --input-type=module -e "
