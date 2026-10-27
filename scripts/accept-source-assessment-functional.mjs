@@ -49,6 +49,7 @@ try{
      await page.getByRole("button",{name:/^Next/}).click();
     } else if(q.type==="text"){
      await page.locator("textarea").fill("Enquiries answered within an hour.");
+     console.log("ASSESSMENT LAST STEP",JSON.stringify({width,current,buttons:await page.locator("button").allInnerTexts(),step:await page.getByText(/Question .* of 23/).allInnerTexts(),html:(await page.locator("body").innerText()).slice(-1600)}));
      await page.getByRole("button",{name:/See My Results/}).click();
     }else throw Error("Unsupported authored question kind "+q.type);
    }
