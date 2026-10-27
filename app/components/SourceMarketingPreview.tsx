@@ -42,6 +42,8 @@ export function SourceMarketingPreview({page,sourceImports}:{page:MarketingPage|
  const [copied,setCopied]=React.useState(false);
  const [fields,setFields]=React.useState<Record<string,string>>({});
  const [notice,setNotice]=React.useState("");
+ const [contactErrors,setContactErrors]=React.useState<Record<string,string>>({});
+ const [contactSending,setContactSending]=React.useState(false);
  const root=React.useRef<HTMLDivElement>(null);
  const pageRef=React.useRef<HTMLDivElement>(null);
  const lastOpener=React.useRef<HTMLElement|null>(null);
@@ -155,15 +157,70 @@ export function SourceMarketingPreview({page,sourceImports}:{page:MarketingPage|
  scope.pk={...(scope.pk||{}),
   primary:()=>closePeek(()=>go("contact")),
   secondary:()=>closePeek(()=>go(peek?.kind==="topic"?"core":"eng"))};
- scope.fields=(base.fields||[]).map(d=>({...d,value:fields[String(d.k)]??d.value,
-  onChange:(event:React.ChangeEvent<HTMLInputElement|HTMLTextAreaElement>)=>
-    setFields(old=>({...old,[String(d.k)]:event.target.value}))}));
- scope.submit=(event:React.FormEvent)=>{
+ scope.fields=(base.fields||[]).map(d=>({
+  ...d,
+  value:fields[String(d.k)]??d.value,
+  err:contactErrors[String(d.k)]||"",
+  inv:String(!!contactErrors[String(d.k)]),
+  bd:contactErrors[String(d.k)]?"#B5532C":d.bd,
+  onChange:(event:React.ChangeEvent<HTMLInputElement|HTMLTextAreaElement>)=>{
+   const value=event.currentTarget.value,key=String(d.k);
+   setFields(old=>({...old,[key]:value}));
+   setContactErrors(old=>({...old,[key]:""}));
+  }
+ }));
+ if(page==="contact"){
+  scope.sent=false;
+  scope.not_sent=true;
+  scope.sending=contactSending;
+  scope.sendingStr=String(contactSending);
+  scope.sendLabel=contactSending?"Checking…":"Send Enquiry";
+  scope.sendOp=contactSending?0.6:1;
+  scope.contactStatus=notice;
+ }
+ scope.submit=async (event:React.MouseEvent)=>{
   event?.preventDefault?.();
-  setNotice("This isolated Preview does not send enquiries. Use the live HUMMIN Contact page to submit.");
+  if(page!=="contact"||contactSending)return;
+  const name=(fields.name||"").trim(),biz=(fields.biz||"").trim(),
+   email=(fields.email||"").trim(),msg=(fields.msg||"").trim();
+  const errors:Record<string,string>={};
+  if(name.length<2||name.length>120)errors.name="Enter your name.";
+  if(biz.length<2||biz.length>160)errors.biz="Enter your business name.";
+  if(!/^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/.test(email)||email.length>254)
+   errors.email="Enter a valid work email.";
+  if(msg.length<10||msg.length>4000)
+   errors.msg="Please describe the challenge in at least 10 characters.";
+  if(Object.keys(errors).length){
+   setContactErrors(errors);
+   setNotice("Please check the highlighted fields.");
+   return;
+  }
+  setContactErrors({});
+  setContactSending(true);
+  setNotice("");
+  try{
+   const form=new FormData();
+   form.set("name",name);
+   form.set("businessName",biz);
+   form.set("email",email);
+   form.set("message",msg);
+   form.set("website","");
+   const response=await fetch("/__source-verify/contact",{
+    method:"POST",body:form,credentials:"same-origin",
+    headers:{"Accept":"application/json"}
+   });
+   const result=await response.json() as {ok?:boolean;delivered?:boolean;message?:string};
+   if(result.delivered)throw Error("Unexpected delivery from isolated Preview");
+   setNotice(result.message||"Validation unavailable.");
+  }catch{
+   setNotice("Preview validation is unavailable. No enquiry was sent.");
+  }finally{
+   setContactSending(false);
+  }
  };
- scope.reset=()=>{setFields({});setNotice("");};
- return <><ApprovedSiteRoot scope={scope}/>{notice&&
+ scope.reset=()=>{
+  setFields({});setContactErrors({});setContactSending(false);setNotice("");
+ }; return <><ApprovedSiteRoot scope={scope}/>{notice&&
    <div role="status" style={{position:"fixed",bottom:12,right:12,padding:"12px 16px",
      background:"#1E272A",color:"#F4F5F1",zIndex:100,borderRadius:8,maxWidth:350}}>
      {notice}
