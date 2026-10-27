@@ -31,20 +31,26 @@ export function SourceRemainingPreview({view}:{view:RemainingView}){
   if(view==="assessment")return;
   const frame=insightFrame.current;
   if(!frame)return;
-  const sections=[...frame.querySelectorAll<HTMLElement>("main,section,article,footer")];
   const measure=()=>{
+   const sections=[...frame.querySelectorAll<HTMLElement>("main,section,article,footer")];
+   if(!sections.length)return; // The original imported root may mount after the site shell.
    const top=frame.getBoundingClientRect().top;
    const bottoms=sections.filter(element=>element.getClientRects().length&&
      getComputedStyle(element).position!=="fixed")
     .map(element=>element.getBoundingClientRect().bottom-top);
+   if(!bottoms.length)return;
    const size=Math.ceil(Math.max(400,...bottoms));
    if(Number.isFinite(size)&&size<=30000)setSourceHeight(current=>
      current===size?current:size);
   };
   measure();
   const observer=new ResizeObserver(measure);
+  observer.observe(frame);
+  const sections=[...frame.querySelectorAll<HTMLElement>("main,section,article,footer")];
   for(const section of sections)observer.observe(section);
-  return ()=>observer.disconnect();
+  const mutation=new MutationObserver(measure);
+  mutation.observe(frame,{childList:true,subtree:true});
+  return ()=>{observer.disconnect();mutation.disconnect();};
  },[view,insightView]);
 
  const assessmentScope:SourceScope={
