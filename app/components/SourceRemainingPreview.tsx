@@ -23,6 +23,10 @@ export function SourceRemainingPreview({view}:{view:RemainingView}){
  const navigate=useNavigate();
  const [query,setQuery]=React.useState("");
  const [kind,setKind]=React.useState("All");
+ const [subEmail,setSubEmail]=React.useState("");
+ const [subError,setSubError]=React.useState("");
+ const [subSending,setSubSending]=React.useState(false);
+ const subPending=React.useRef(false);
  const [insightView,setInsightView]=React.useState<"index"|"article"|"topic"|"author">(
    view==="assessment"||view==="insights"?"index":view
  );
@@ -101,11 +105,39 @@ export function SourceRemainingPreview({view}:{view:RemainingView}){
   void navigator.clipboard?.writeText(window.location.href);
   setMessage("Preview link copied.");
  };
+ editorialScope.subEmail=subEmail;
+ editorialScope.subErr=subError;
+ editorialScope.subInv=String(!!subError);
+ editorialScope.subBd=subError?"#E58A5F":"rgba(244,245,241,0.3)";
+ editorialScope.subDone=false; // Never claim a confirmation email was sent from Preview.
  editorialScope.setSub=(event:React.ChangeEvent<HTMLInputElement>)=>{
-  const email=event.currentTarget.value;
-  setMessage(email?"Newsletter verification is not connected in this isolated Preview. No email was sent.":"");
+  setSubEmail(event.currentTarget.value);
+  setSubError("");
  };
- editorialScope.subscribe=()=>setMessage("No newsletter sign-up was sent from isolated Preview.");
+ editorialScope.subscribe=async ()=>{
+  if(subPending.current)return;
+  const email=subEmail.trim();
+  if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)||email.length>254){
+   setSubError("Enter a valid work email address.");return;
+  }
+  subPending.current=true;setSubSending(true);
+  setMessage("");
+  try{
+   const form=new FormData();
+   form.set("email",email);
+   const response=await fetch("/__source-verify/newsletter",{
+    method:"POST",credentials:"same-origin",body:form,headers:{"Accept":"application/json"}
+   });
+   const result=await response.json() as {ok?:boolean;validated?:boolean;queued?:boolean;subscribed?:boolean;message?:string};
+   if(result.queued||result.subscribed)throw Error("Unexpected subscription in isolated Preview");
+   if(!response.ok||!result.ok||!result.validated){
+    setSubError(result.message||"Preview email validation failed.");return;
+   }
+   setMessage(result.message||"Email validated. No subscription or email was created.");
+  }catch{
+   setSubError("Preview validation is unavailable. No subscription request was sent.");
+  }finally{subPending.current=false;setSubSending(false);}
+ };
  if(insightView==="index"){
   const text=query.trim().toLocaleLowerCase();
   const matches=(item:SourceScope)=>String(item.title||"").toLocaleLowerCase().includes(text)||
