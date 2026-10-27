@@ -51,7 +51,7 @@ export function SourceRemainingPreview({view}:{view:RemainingView}){
   const mutation=new MutationObserver(measure);
   mutation.observe(frame,{childList:true,subtree:true});
   return ()=>{observer.disconnect();mutation.disconnect();};
- },[view,insightView]);
+ },[view,insightView,sourceHeight]);
 
  const assessmentScope:SourceScope={
   ...sources.assessment.views[assessmentStage],__assets:sourceAssets,
