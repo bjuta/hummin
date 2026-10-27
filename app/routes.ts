@@ -6,6 +6,7 @@ export default [
  route("__source-legal/:document","routes/source.legal.preview.tsx",{id:"source-legal-preview"}),
  route("__source-verify/contact","routes/source.contact.verify.ts",{id:"source-contact-validation"}),
  route("__source-verify/assessment","routes/source.assessment.verify.ts",{id:"source-assessment-validation"}),
+ route("__source-verify/newsletter","routes/source.newsletter.verify.ts",{id:"source-newsletter-validation"}),
  route("admin/login","routes/admin.login.tsx"),
  route("admin/verify","routes/admin.verify.tsx"),
  route("admin/logout","routes/admin.logout.ts"),
