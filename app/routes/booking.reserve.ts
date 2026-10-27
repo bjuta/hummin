@@ -1,10 +1,12 @@
 import { isConfigured, reserve } from "../lib/calendar.server";
+import {transactionalHostBlock} from "../lib/transactional-host-guard.ts";
 import type { AppLoadContext } from "react-router";
 import {bookingConfirmationEmail,bookingReminderEmail,bookingInternalEmail} from "../lib/email-templates.server.ts";
 import {queueEmail,deliverDue} from "../lib/mail-outbox.server.ts";
 import {bookingLimit,verifyBookingTurnstile} from "../lib/booking-abuse.server.ts";
 import {bookingEmailKey} from "../lib/booking-email-keys.server.ts";
 export async function action({request,context}:{request:Request;context:AppLoadContext}){
+ const blocked=transactionalHostBlock(request);if(blocked)return blocked;
  const env=context.cloudflare.env;
  const err=(msg:string,status:number)=>Response.json({ok:false,message:msg},{status,headers:{"Cache-Control":"no-store"}});
  if(!isConfigured(env))return err("Live appointment booking is not yet available.",503);
