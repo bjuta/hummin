@@ -49,3 +49,4 @@ React legal CTA accessibility follow-up: deploy bcde3a1035cb394146fd12c723a45482
 2026-10-27 Screenshot-grounded shared Insights spacing, author mark and live footer correction. Verify HTML-archive-hidden isolated preview before further parity audit.
 2026-10-27 source-frame screenshot measurement: remove the 112px extra article-to-assessment gap. Build with archived HTML hidden; isolated Preview only.
 2026-10-27 source-preserving React primitive extraction: marketing hero and Engagements comparison centralized; verify TypeScript, content contracts, archive-hidden build and isolated Preview.
+2026-10-27 repeat primitive extraction preview verification after updating source-contract checks to read authoritative extracted components; no design changes.
