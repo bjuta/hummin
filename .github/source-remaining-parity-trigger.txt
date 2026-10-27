@@ -7,3 +7,5 @@ Read-only fifteen original-vs-native Assessment and Insights screenshots, unchan
 2026-10-27 verify all Assessment/Insights pixels after original-sendHeight-based native viewport deployment; strict pass/fail enforced.
 
 2026-10-27 verify all fifteen cases after section-mount guard and original Insights sendHeight measurement deployed to isolated Preview.
+
+2026-10-27 verify all 15 source-native Assessment/Insights visual cases after loading the original Insights Google Fonts stylesheet.
