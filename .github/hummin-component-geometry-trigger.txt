@@ -3,3 +3,4 @@
 2026-10-27 corrected measurement contract: embedded production iframe screens are explicitly flagged noncomparable, rather than reporting false layout deltas; run geometry baseline again.
 2026-10-27 frame-aware semantic heading measurement across all 42 cases; validate real page-coordinate matches; no production mutations.
 2026-10-27 verify fail-closed detection of incomplete editorial iframe references and usable semantic heading coordinates without changing release criteria.
+2026-10-27 remeasure page-family geometry after source-matched mobile hero font correction, with all 42 report cases and unchanged measurement integrity.
