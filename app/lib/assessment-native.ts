@@ -2,7 +2,7 @@
  * Original authored question/score data: ApprovedAssessmentContract.generated.json.
  * No original HTML or embedded DCLogic executes in the browser.
  */
-import original from "../data/ApprovedAssessmentContract.generated.json";
+import original from "../data/ApprovedAssessmentContract.generated.json" with {type:"json"};
 type AreaKey="direction"|"customers"|"operations"|"people"|"information";
 export type AnswerMap=Record<string,string>;
 type Option={label:string;pts?:number};
