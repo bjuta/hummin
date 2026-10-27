@@ -1,3 +1,4 @@
+import type {ReactNode} from "react";
 import {SourceButton as HButton,SourceIcon} from "./SourcePrimitives";
 import {HEADS,HERO_STYLE} from "../lib/react-site-content";
 
@@ -32,4 +33,10 @@ export function SourceMarketingHero({page}:{page:Page|"contact"}){
     </>:<><h1>{h.title}</h1><p>{h.lead}</p></>}
    </div>
  </section>;
+}
+
+/** One canonical page shell controls the shared hero-to-content boundary across
+ * all six marketing views. Markup/class names remain identical to pre-refactor. */
+export function SourceMarketingFrame({page,children}:{page:Page;children:ReactNode}){
+ return <div className="hr-page"><SourceMarketingHero page={page}/>{children}</div>;
 }

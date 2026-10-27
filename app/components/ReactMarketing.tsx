@@ -5,7 +5,7 @@ import {STAGES,DOMAINS,ENGS,TOPICS,VALUES,NEEDS,TIERS,TIER_ROWS} from "../lib/re
 import "./react-marketing.css";
 import {ReactAssessmentPromotion} from "./ReactAssessmentPromotion";
 import {SourceEngagementComparison} from "./SourceEngagementComparison";
-import {SourceMarketingHero as Hero} from "./SourceMarketingHero";
+import {SourceMarketingFrame} from "./SourceMarketingHero";
 import type {Page} from "./SourceMarketingHero";
 export {SourceMarketingHero as Hero} from "./SourceMarketingHero";
 
@@ -37,8 +37,7 @@ const homeTeasers=[
 function Home(){
  const [problem,setProblem]=useState<number|null>(null);
  const [tier,setTier]=useState<number|null>(null);
- return <div className="hr-page">
-  <Hero page="home"/>
+ return <SourceMarketingFrame page="home">
   <div className="hr-home-sections"><section className="hr-section hr-intro"><p className="hr-big">Good businesses encounter problems that do not fit neatly into departments.</p><div><p>A slow month of enquiries can look like a marketing problem. The cause may sit in how enquiries are answered, the tools the team uses, or who owns the follow-up.</p><p>We find the cause, bring in the people needed to fix it, and stay involved until the work is done.</p></div></section>
   <section className="hr-section"><span className="hr-eyebrow">Where we often start</span>
    <Shelf title="Problems owners bring to us.">{TOPICS.map((p,i)=><button type="button" key={p.title} className={"hr-problem-card hr-source-tone-"+i%3} onClick={()=>setProblem(i)} aria-haspopup="dialog" aria-label={p.title+" Read more"}>
@@ -64,18 +63,18 @@ function Home(){
   </div>
   {problem!==null?<ProblemModal index={problem} onClose={()=>setProblem(null)}/>:null}
   {tier!==null?<TierModal index={tier} onClose={()=>setTier(null)}/>:null}
- </div>;
+ </SourceMarketingFrame>;
 }
 function How(){
- return <div className="hr-page"><Hero page="how"/><section className="hr-section">
+ return <SourceMarketingFrame page="how"><section className="hr-section">
   <Shelf title="Four steps, in order.">{STAGES.map((s,i)=><article className={"hr-stage-card hr-stage-source-"+i} key={s.name}><SourceChip>Step {i+1} of 4</SourceChip><div><h3>{s.name}</h3><p>{s.what}</p><p className="hr-stage-out">You receive: {s.out}</p></div></article>)}</Shelf>
- </section><section className="hr-dark-section"><div className="hr-section-headline"><SectionTitle eyebrow="What we need from you">Four things we ask of every client.</SectionTitle><p>We agree these with you at the start of every engagement.</p></div><div className="hr-four-grid">{NEEDS.map(n=><div className="hr-need" key={n.v}><span className="hr-need-icon" aria-hidden="true"><SourceIcon name={n.icon} light/></span><h3>{n.v}</h3><p>{n.k}</p></div>)}</div></section></div>;
+ </section><section className="hr-dark-section"><div className="hr-section-headline"><SectionTitle eyebrow="What we need from you">Four things we ask of every client.</SectionTitle><p>We agree these with you at the start of every engagement.</p></div><div className="hr-four-grid">{NEEDS.map(n=><div className="hr-need" key={n.v}><span className="hr-need-icon" aria-hidden="true"><SourceIcon name={n.icon} light/></span><h3>{n.v}</h3><p>{n.k}</p></div>)}</div></section></SourceMarketingFrame>;
 }
 function Expertise(){
  const [search]=useSearchParams();
  const initial=Math.max(0,DOMAINS.findIndex(d=>d.name.toLowerCase()===search.get("area")?.toLowerCase()));
  const [active,setActive]=useState(initial),domain=DOMAINS[active];
- return <div className="hr-page"><Hero page="core"/>
+ return <SourceMarketingFrame page="core">
   <section className="hr-section hr-core-section">
    <Shelf title="Seven areas. Pick one.">{DOMAINS.map((d,i)=><button
     type="button" key={d.name} className={"hr-core-card hr-core-tone-"+(active===i?"active":i%3)}
@@ -90,26 +89,26 @@ function Expertise(){
    </div>
   </section>
   <p className="hr-expertise-note hr-core-note">Specialist partners are external professionals hired for a defined piece of work. We tell you who they are, what they are responsible for, and how they are paid. We do not take on work that needs qualifications or licences we do not hold.</p>
- </div>;
+ </SourceMarketingFrame>;
 }
 function Engagements(){
  const [search]=useSearchParams();
  const initial=Math.max(0,TIERS.findIndex(t=>t.name.toLowerCase()===search.get("tier")?.toLowerCase()));
  const [active,setActive]=useState(initial);
- return <div className="hr-page"><Hero page="eng"/><section className="hr-section hr-engagements-source-section">
+ return <SourceMarketingFrame page="eng"><section className="hr-section hr-engagements-source-section">
   <SourceEngagementComparison active={active} onChange={setActive}/>
- </section><section className="hr-residency"><img src="/brand/residency.webp" alt="A HUMMIN professional working at a client desk" loading="lazy"/><div><span className="hr-eyebrow">About Residency</span><h2>Inside your team. Employed by HUMMIN.</h2><p>Resident professionals stay HUMMIN employees. We manage and support them. Their role, hours, access to information, and who they report to are agreed in writing before they start. Final decisions stay with you.</p></div></section></div>;
+ </section><section className="hr-residency"><img src="/brand/residency.webp" alt="A HUMMIN professional working at a client desk" loading="lazy"/><div><span className="hr-eyebrow">About Residency</span><h2>Inside your team. Employed by HUMMIN.</h2><p>Resident professionals stay HUMMIN employees. We manage and support them. Their role, hours, access to information, and who they report to are agreed in writing before they start. Final decisions stay with you.</p></div></section></SourceMarketingFrame>;
 }
 function Who(){
- return <div className="hr-page"><Hero page="who"/><section className="hr-section hr-who-body"><figure><div className="hr-who-photo"><img src="/brand/who-owner.webp" alt="An established business owner in their workplace" loading="lazy"/></div></figure><div><p className="hr-big">We work best with businesses where <em>decisions sit with the owners</em>, the business is <em>already established</em>, and the owners <em>want more from it</em> than the current team has time or skills to deliver.</p><p>It also helps if you are ready to share information and take part in the change. The work goes faster when the people closest to it are involved.</p><HButton to="/assessment">Take the Assessment</HButton></div></section></div>;
+ return <SourceMarketingFrame page="who"><section className="hr-section hr-who-body"><figure><div className="hr-who-photo"><img src="/brand/who-owner.webp" alt="An established business owner in their workplace" loading="lazy"/></div></figure><div><p className="hr-big">We work best with businesses where <em>decisions sit with the owners</em>, the business is <em>already established</em>, and the owners <em>want more from it</em> than the current team has time or skills to deliver.</p><p>It also helps if you are ready to share information and take part in the change. The work goes faster when the people closest to it are involved.</p><HButton to="/assessment">Take the Assessment</HButton></div></section></SourceMarketingFrame>;
 }
 function About(){
  const [active,setActive]=useState(0),value=VALUES[active];
- return <div className="hr-page"><Hero page="about"/><section className="hr-section"><SectionTitle eyebrow="What we hold to">Six principles for how we work.</SectionTitle>
+ return <SourceMarketingFrame page="about"><section className="hr-section"><SectionTitle eyebrow="What we hold to">Six principles for how we work.</SectionTitle>
   <div className="hr-values-tabs" role="tablist" aria-label="Our values">{VALUES.map((v,i)=><button key={v.short} role="tab" id={"hr-value-tab-"+i} aria-selected={active===i} aria-controls="hr-value-panel" className={active===i?"active":""} onClick={()=>setActive(i)}>{v.short}</button>)}</div>
   <div id="hr-value-panel" role="tabpanel" aria-labelledby={"hr-value-tab-"+active} className="hr-value-panel"><div><span className="hr-eyebrow">What we do</span><div className="hr-value-do-copy"><h3>{value.t}</h3><p>{value.b}</p></div></div><div><span className="hr-eyebrow">What we avoid</span><p>{value.not}</p><small>{active+1} of {VALUES.length}</small></div></div>
   <div className="hr-founder"><img src="/brand/about-founder.webp" alt="Portrait of the HUMMIN founder" loading="lazy"/><div><h3>Muiruri Beautah</h3><p>Founder and Managing Director</p></div><p>Muiruri founded HUMMIN to give owners of established businesses a partner that understands the whole business and helps carry out the work.</p></div>
- </section><section className="hr-definition"><div><div className="hr-definition-wordline"><p className="hr-definition-word">hum·min</p><p>/ˈhʌm.ɪn/</p></div><div className="hr-definition-entries"><p><b>1</b> <em>noun</em> An embedded advisory and execution partner for owner-led businesses.</p><p><b>2</b> <em>verb, informal</em> To work steadily and well in the background.</p></div></div><img src="/brand/hummin-symbol.svg" alt="" aria-hidden="true"/></section></div>;
+ </section><section className="hr-definition"><div><div className="hr-definition-wordline"><p className="hr-definition-word">hum·min</p><p>/ˈhʌm.ɪn/</p></div><div className="hr-definition-entries"><p><b>1</b> <em>noun</em> An embedded advisory and execution partner for owner-led businesses.</p><p><b>2</b> <em>verb, informal</em> To work steadily and well in the background.</p></div></div><img src="/brand/hummin-symbol.svg" alt="" aria-hidden="true"/></section></SourceMarketingFrame>;
 }
 export function ReactMarketing({page}:{page:Page}){
  const views={home:Home,how:How,core:Expertise,eng:Engagements,who:Who,about:About};
