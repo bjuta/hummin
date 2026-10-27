@@ -1,5 +1,6 @@
 import {insightDetails,insightsAuthors} from "../lib/insights.server.ts";
 import { action as contactAction } from "./contact";
+import {isAuthorizedTransactionalHost} from "../lib/transactional-host-guard.ts";
 import type { AppLoadContext } from "react-router";
 export async function loader({ request, context }: { request: Request; context: AppLoadContext }) {
  const env=context.cloudflare.env;
@@ -21,7 +22,7 @@ export async function loader({ request, context }: { request: Request; context: 
  const assetUrl=new URL("/design/site/index.html",request.url);
  const response=await env.ASSETS.fetch(assetUrl.toString());
  if(!response.ok) return new Response("Design could not load",{status:503});
- const contactReady=env.CONTACT_ENABLED==="true"&&!!(env.DB&&env.RESEND_API_KEY&&env.TURNSTILE_SECRET_KEY&&env.TURNSTILE_SITE_KEY&&env.EMAIL_FROM);
+ const contactReady=isAuthorizedTransactionalHost(new URL(request.url).hostname)&&env.CONTACT_ENABLED==="true"&&!!(env.DB&&env.RESEND_API_KEY&&env.TURNSTILE_SECRET_KEY&&env.TURNSTILE_SITE_KEY&&env.EMAIL_FROM);
  // Inject only runtime configuration; retain the original site template and its design.
  const config='<script>window.HUMMIN_CONTACT_READY='+JSON.stringify(contactReady)+';window.HUMMIN_TURNSTILE_SITE_KEY='+JSON.stringify(contactReady?env.TURNSTILE_SITE_KEY:'')+';window.humminTurnstileLoaded=function(){window.dispatchEvent(new Event("hummin-turnstile-ready"));};</script>';
  const script=contactReady?'<script src="https://challenges.cloudflare.com/turnstile/v0/api.js?onload=humminTurnstileLoaded&render=explicit" async defer></script>':'';
