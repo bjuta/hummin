@@ -2,6 +2,7 @@ import {Form,useActionData,useLoaderData} from "react-router";
 import type {AppLoadContext} from "react-router";
 import {newsletterOptInEmail} from "../lib/email-templates.server.ts";
 import {deliverDue} from "../lib/mail-outbox.server.ts";
+import {parseNewsletterEmail} from "../lib/newsletter-contract";
 type Result={ok:boolean;message:string};
 export async function loader({context,request}:{context:AppLoadContext;request:Request}){
  const env=context.cloudflare.env;
@@ -15,8 +16,8 @@ export async function action({request,context}:{request:Request;context:AppLoadC
  if(Number(request.headers.get("content-length"))>4096)return fail("Request too large.",413);
  const origin=request.headers.get("origin");if(origin&&origin!==new URL(request.url).origin)return fail("Invalid origin.",403);
  let form:FormData;try{form=await request.formData();}catch{return fail("Invalid form.",400);}
- const email=String(form.get("email")||"").trim().toLowerCase(),token=String(form.get("cf-turnstile-response")||"");
- if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)||email.length>254)return fail("Enter a valid email address.",400);
+ const email=parseNewsletterEmail(form.get("email")),token=String(form.get("cf-turnstile-response")||"");
+ if(!email)return fail("Enter a valid email address.",400);
  if(!token||token.length>2048)return fail("Complete the verification.",400);
  try{
   const r=await fetch("https://challenges.cloudflare.com/turnstile/v0/siteverify",{method:"POST",body:new URLSearchParams({secret:e.TURNSTILE_SECRET_KEY,response:token})});
