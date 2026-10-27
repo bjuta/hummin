@@ -11,11 +11,12 @@ try{
  for(const width of [390,768,1440]){
   const ctx=await browser.newContext({viewport:{width,height:width===390?844:900},
    reducedMotion:"reduce",deviceScaleFactor:1,locale:"en-KE",timezoneId:"Africa/Nairobi"});
-  const page=await ctx.newPage(),mutations=[],errors=[];
+  const page=await ctx.newPage(),mutations=[],previewOptIns=[],errors=[];
   page.on("pageerror",error=>errors.push(String(error)));
   page.on("request",req=>{
    const u=new URL(req.url());
-   if(u.origin===base&&!["GET","HEAD"].includes(req.method())&&
+   if(u.pathname==="/__source-verify/newsletter"&&req.method()==="POST")previewOptIns.push(req.url());
+   else if(u.origin===base&&!["GET","HEAD"].includes(req.method())&&
     u.pathname!=="/api/analytics/event")mutations.push(req.url());
   });
   await page.route("**/api/analytics/event",r=>r.fulfill({status:204,body:""}));
@@ -43,10 +44,20 @@ try{
    await page.getByRole("heading",{name:/Why enquiries go unanswered/}).first().waitFor({timeout:7000});
    await page.getByRole("button",{name:/All Insights/}).first().click();
    await page.getByPlaceholder("Search guides, opinion, and news").waitFor({timeout:7000});
+   // Real HTTP request to isolated validation service; not a newsletter subscription.
+   await page.locator("#sub-email").fill("visitor@example.test");
+   const optIn=page.waitForResponse(r=>new URL(r.url()).pathname==="/__source-verify/newsletter"&&r.request().method()==="POST",{timeout:15000});
+   await page.getByRole("button",{name:"Subscribe",exact:true}).click();
+   const verified=await optIn;
+   assert.equal(verified.status(),200);
+   const checked=await verified.json();
+   assert.deepEqual([checked.ok,checked.validated,checked.subscribed,checked.queued],[true,true,false,false]);
+   await page.getByText(/No subscription was created and no email was sent/).first().waitFor();
+   assert.equal(previewOptIns.length,1,"Only one validation request was sent");
    assert.equal(mutations.length,0);
    assert.deepEqual(errors,[]);
    await page.screenshot({path:out+"/insights-"+width+".png",fullPage:true,animations:"disabled"});
-   reports.push({width,filter:true,search:true,article:true,back:true,mutations:0});
+   reports.push({width,filter:true,search:true,article:true,back:true,newsletterValidated:true,subscribed:false,mutations:0});
    console.log("NATIVE INSIGHTS INTERACTIONS PASS",JSON.stringify(reports.at(-1)));
   }catch(err){
    console.log("INSIGHTS FUNCTIONAL DIAGNOSTIC",JSON.stringify({width,errors,mutations,body:(await page.locator("body").innerText().catch(()=>(""))).slice(0,1600)}));
