@@ -137,6 +137,19 @@ for(const component of manifest.components){
  functions.push({name:component.name,export:fn,source:component.source,originalHash:component.sha256});
  output.push("export function "+fn+"({scope={}}:{scope?:SourceScope}){return React.createElement(React.Fragment,null"+(kids.length?","+kids.join(","):"")+");}");
 }
+// Compile the *entire* original marketing wrapper as well, retaining exact
+// outer container, content ordering, skip link, header, main, CTA and footer.
+const siteCatalog=JSON.parse(fs.readFileSync("artifacts/source-component-catalog/site/inventory.json","utf8"));
+const siteHTML=fs.readFileSync("artifacts/source-component-catalog/site/original.html","utf8");
+const rootNode=siteCatalog.elements[15];
+if(rootNode?.tag!=="div"||rootNode.startOffset==null)throw Error("Approved site root missing");
+const rawRoot=siteHTML.slice(rootNode.startOffset,rootNode.endOffset);
+const {createHash}=await import("node:crypto");
+const rootHash=createHash("sha256").update(rawRoot).digest("hex");
+if(!rootHash.startsWith("5b5073b31596b089"))throw Error("Original site root changed");
+const rootElements=renderChildren(parseFragment(rawRoot),"scope");
+output.push("export function ApprovedSiteRoot({scope={}}:{scope?:SourceScope}){return React.createElement(React.Fragment,null"+(rootElements.length?","+rootElements.join(","):"")+");}");
+
 const text=output.join("\n")+"\n";
 fs.writeFileSync(path.join(targetDir,"approved-components.tsx"),text);
 const hoverCss=Array.from(hover,([css,id])=>"["+quoted("data-source-hover")+"="+quoted(id)+"]:hover{"+css+"}").join("\n")+"\n";
