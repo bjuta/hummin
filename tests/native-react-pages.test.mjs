@@ -6,10 +6,16 @@ import {HERO_STYLE,HEADS,STAGES,DOMAINS,ENGS,TOPICS,VALUES,TIERS,NEEDS} from "..
 const read=path=>fs.readFileSync(path,"utf8");
 test("Six marketing routes are genuine React components preserving HUMMIN source copy",()=>{
  const comp=read("app/components/ReactMarketing.tsx");
+ const hero=read("app/components/SourceMarketingHero.tsx");
+ const comparison=read("app/components/SourceEngagementComparison.tsx");
+ assert.match(comp,/SourceMarketingHero as Hero/);
+ assert.match(comp,/SourceEngagementComparison/);
+ assert.match(hero,/export function SourceMarketingHero/);
+ assert.match(comparison,/export function SourceEngagementComparison/);
  assert.match(comp,/export function ReactMarketing/);
  for(const component of ["Home","How","Expertise","Engagements","Who","About"])assert.match(comp,new RegExp("function "+component+"\\("));
  for(const phrase of ["Inside your business.","Behind your progress.","Good businesses encounter problems that do not fit neatly into departments.","We find the cause","Four steps, in order.","Seven areas","Six principles for how we work.","Inside your team. Employed by HUMMIN.","Muiruri Beautah"]) {
-  const found=comp.includes(phrase)||JSON.stringify({HEADS,HERO_STYLE,STAGES,DOMAINS,ENGS,TOPICS,VALUES,TIERS}).includes(phrase);
+  const found=comp.includes(phrase)||hero.includes(phrase)||comparison.includes(phrase)||JSON.stringify({HEADS,HERO_STYLE,STAGES,DOMAINS,ENGS,TOPICS,VALUES,TIERS}).includes(phrase);
   assert.ok(found,"Missing reference copy: "+phrase);
  }
  assert.equal(STAGES.length,4);
