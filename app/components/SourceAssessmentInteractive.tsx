@@ -113,6 +113,7 @@ export function SourceAssessmentInteractive(){
      gateErr:{...old.gateErr,[key]:""}}));
    }
   }));
+  data.deliveryMessage="Your plan is unlocked in this isolated Preview. No email was sent.";
   data.unlock=unlock;
   data.restart=()=>{
    setState(initialAssessmentState());
