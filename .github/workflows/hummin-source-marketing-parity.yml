@@ -1,0 +1,29 @@
+name: HUMMIN original vs source-native marketing pixels
+on:
+  push:
+    branches: [feat/fullstack-workers-foundation]
+    paths: [.github/source-marketing-parity-trigger.txt]
+permissions:
+  contents: read
+jobs:
+  read-only:
+    if: github.repository == 'bjuta/hummin'
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: npm install --no-save --ignore-scripts --no-audit --no-fund playwright@1.56.1 pixelmatch@6.0.0 pngjs@7.0.0
+      - run: npx playwright install chromium --only-shell
+      - name: Capture all 21 production-versus-source-native visual pairs
+        run: node scripts/measure-approved-marketing-parity.mjs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: hummin-source-marketing-21-visual-cases
+          path: artifacts/source-marketing-parity
+          retention-days: 14
