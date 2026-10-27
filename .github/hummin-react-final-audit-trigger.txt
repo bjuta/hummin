@@ -6,3 +6,5 @@ Owner-source final gate: verify isolated React Preview deployed from 6fa0c1d3677
 
 
 2026-10-27 canonical release-candidate audit for isolated Preview e5679136d7d882dfc80d8e6db098f3badf1d1209: verify source-faithful icon-led drawer, original problem/engagement dialogs and behaviours, all native React routes, accessibility and read-only 42-screen production parity at 390/768/1440. Archived HTML remains reference-only and must not become a build dependency. No public cutover, no production data writes, no real enquiry/booking/email submissions; any failure blocks HTML retirement.
+
+2026-10-27 rerun the same isolated Preview e5679136d7d882dfc80d8e6db098f3badf1d1209 after acceptance-harness stabilization only: inspect the settled 480 ms source assessment prompt and invoke the click-toggle without Playwright synthesizing a hover-open first. No application-design change, no Preview redeploy, no public cutover. Proceed to the 42-screen comparison only if canonical checks pass.
