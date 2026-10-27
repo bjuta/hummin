@@ -1,0 +1,1 @@
+2026-10-27 baseline all 42 screens. Read-only component geometry comparison. No production writes, no React cutover, no archived HTML dependency.
