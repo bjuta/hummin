@@ -37,3 +37,5 @@ Retry source-faithful Preview build after Cloudflare/Vite optimizer WebSocket in
 2026-10-27 restore native Insights React event handlers (search, filter, article/back and internal routes); do not submit newsletters.
 
 2026-10-27 deploy no-delivery Assessment server-side payload validation and async results unlocking to isolated Workers Preview; no public routing changes.
+
+2026-10-27 deploy source-native Insights newsletter contract validation on isolated no-subscription endpoint; public routes and email dispatch unchanged.
