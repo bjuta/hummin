@@ -1,3 +1,5 @@
 One-shot snapshot 27 October 2026: commit only source-transcribed native components and original CSS after exact-source checks, TypeScript and build. Do not deploy or modify public routing.
 
 2026-10-27 source-exact whole site root + derived real page state snapshots and byte-matched assets, no public route change or deployment.
+
+2026-10-27 verified original SVG resource recovery and exact marketing state model snapshot; source-only build, no deploy.
