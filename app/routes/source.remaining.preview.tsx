@@ -9,6 +9,7 @@ export async function loader({request,params}:{request:Request;params:Record<str
   throw new Response("Not found",{status:404,headers:{"X-Robots-Tag":"noindex, nofollow"}});
  return {view:params.view};
 }
+export const links=()=>[{rel:"stylesheet",href:"https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&family=Figtree:wght@400;500;600;700&display=swap"}];
 export const meta=()=>[{title:"Internal HUMMIN source verification"},{name:"robots",content:"noindex,nofollow"}];
 export default function RemainingSourceRoute(){
  const {view}=useParams();
