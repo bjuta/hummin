@@ -9,3 +9,5 @@ One-shot snapshot 27 October 2026: commit only source-transcribed native compone
 2026-10-27 publish original-font local URLs and source-accurate hover selectors for internal marketing route, validate typecheck and build only.
 
 2026-10-27 restore all original Figtree and Newsreader source bytes, and assert 17/17 source font URLs resolve. Source-only build, no production deploy.
+
+2026-10-27 exact approved production footer links and Contact Turnstile/status geometry; verify compiler source contract, generated types, isolated build only.
