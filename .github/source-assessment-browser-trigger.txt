@@ -9,3 +9,5 @@ Check final 23rd question CTA and gate before release acceptance.
 2026-10-27 rerun full three-width 23-step browser acceptance on successfully deployed input-event correction.
 
 2026-10-27 wait for React client event hydration before Assessment clicks; no real submission.
+
+2026-10-27 validate all 23 questions and real Preview-only Assessment result validation POST (never live email or booking) across three widths.
