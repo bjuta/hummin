@@ -1,0 +1,33 @@
+name: HUMMIN source-native strict 42-case visual release gate
+on:
+  push:
+    branches: [feat/fullstack-workers-foundation]
+    paths: [.github/source-full-42-trigger.txt]
+permissions:
+  contents: read
+jobs:
+  strict-original-source:
+    if: github.repository == 'bjuta/hummin'
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: npm install --no-save --ignore-scripts --no-audit --no-fund playwright@1.56.1 pixelmatch@6.0.0 pngjs@7.0.0
+      - run: npx playwright install chromium --only-shell
+      - name: Enforce 21 marketing, 15 Assessment/Insights, and six legal visual cases
+        run: node scripts/measure-source-full-42.mjs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: hummin-source-native-42-visual-release-evidence
+          path: |
+            artifacts/source-native-full-42
+            artifacts/source-marketing-parity
+            artifacts/source-remaining-parity
+            artifacts/source-legal-parity
+          retention-days: 14
