@@ -68,7 +68,7 @@ function renderChildren(node,scope){
  return children.map(child=>render(child,scope)).filter(v=>v!==null);
 }
 function render(node,scope){
- if(node.nodeName==="#text")return "String("+expr(node.value||"",scope)+" ?? \"\")";
+ if(node.nodeName==="#text")return (node.value||"").includes("{{")?"sourceText("+expr(node.value||"",scope)+")":quoted(node.value||"");
  if(node.nodeName==="#comment"||node.nodeName==="#documentType")return null;
  if(!node.tagName){
   const kids=renderChildren(node,scope);
@@ -112,6 +112,7 @@ function render(node,scope){
    props.push(quoted("data-source-active")+":"+quoted(active.get(value)));
   }else if(key.startsWith("hint-placeholder-"))continue;
   else if(key==="src")props.push("src:sourceAsset("+scope+","+expr(value,scope)+")");
+  else if(key==="key")props.push("key:sourceKey("+expr(value,scope)+")");
   else if(key==="class")props.push("className:"+expr(value,scope));
   else if(key==="for")props.push("htmlFor:"+expr(value,scope));
   else if(key==="tabindex")props.push("tabIndex:"+expr(value,scope));
@@ -125,7 +126,7 @@ function render(node,scope){
 }
 const output=[];
 output.push('import * as React from "react";');
-output.push('import {sourceRead,sourceTruthy,sourceItems,sourceInvoke,sourceAsset,SourceImageSlot,SourceImport} from "../../app/components/source-native-bridge";');
+output.push('import {sourceRead,sourceTruthy,sourceItems,sourceInvoke,sourceAsset,sourceText,sourceKey,SourceImageSlot,SourceImport} from "../../app/components/source-native-bridge";');
 output.push('import type {SourceScope} from "../../app/components/source-native-bridge";');
 const functions=[];
 for(const component of manifest.components){
