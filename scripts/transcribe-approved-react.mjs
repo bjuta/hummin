@@ -147,7 +147,15 @@ const rawRoot=siteHTML.slice(rootNode.startOffset,rootNode.endOffset);
 const {createHash}=await import("node:crypto");
 const rootHash=createHash("sha256").update(rawRoot).digest("hex");
 if(!rootHash.startsWith("5b5073b31596b089"))throw Error("Original site root changed");
-const rootElements=renderChildren(parseFragment(rawRoot),"scope");
+// Approved production includes three source-authored footer links inserted
+// by scripts/restore-original.mjs. The archived template predates that
+// production patch; faithfully port the patch, not invented React markup.
+const sourceFooterAnchor='<span>© 2026 HUMMIN</span>';
+const productionFooterLinks='<a href="/newsletter" style="color:#E7EBE6;text-decoration:underline;text-underline-offset:4px">Notes from HUMMIN</a><a href="/privacy" style="color:#E7EBE6;text-decoration:underline;text-underline-offset:4px">Privacy</a><a href="/terms" style="color:#E7EBE6;text-decoration:underline;text-underline-offset:4px">Terms of Use</a>';
+if(rawRoot.split(sourceFooterAnchor).length!==2)
+ throw Error("Original footer location differs from approved production patch");
+const productionRoot=rawRoot.replace(sourceFooterAnchor,productionFooterLinks+sourceFooterAnchor);
+const rootElements=renderChildren(parseFragment(productionRoot),"scope");
 output.push("export function ApprovedSiteRoot({scope={}}:{scope?:SourceScope}){return React.createElement(React.Fragment,null"+(rootElements.length?","+rootElements.join(","):"")+");}");
 
 const text=output.join("\n")+"\n";
