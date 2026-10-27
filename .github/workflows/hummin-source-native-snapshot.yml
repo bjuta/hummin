@@ -41,6 +41,7 @@ jobs:
           npx esbuild artifacts/source-native-transcription/approved-components.tsx --bundle --platform=node --format=esm --packages=external --outfile=artifacts/source-native-transcription/renderable.mjs
           node scripts/verify-source-native-transcription.mjs
           node scripts/verify-approved-marketing-assembly.mjs
+          node scripts/verify-remaining-original-roots.mjs
           npm run typecheck
           npm run build
       - name: Copy approved source CSS without editing declarations
