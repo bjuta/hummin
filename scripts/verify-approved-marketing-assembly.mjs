@@ -18,6 +18,12 @@ for(const [route,headline] of Object.entries(routes)){
  const html=renderToStaticMarkup(React.createElement(modules.ApprovedSiteRoot,{scope:{...state,__assets:assets}}));
  assert.ok(html.includes(headline),route+" lost original source headline: "+headline);
  assert.ok(html.includes("sales@hummin.org"),route+" missing original site footer");
+ assert.ok(html.includes('href="/newsletter"')&&html.includes('href="/privacy"')&&html.includes('href="/terms"'),route+" missing approved production footer links");
+ if(route==="contact"){
+  assert.ok(html.includes('id="hummin-turnstile"'),"Contact missing exact source-approved verification slot");
+  assert.ok(html.includes("min-height:65px"),"Contact verification must retain approved geometry");
+ }
+
  assert.ok(!/<img[^>]*src="[a-f0-9]{8}-[a-f0-9-]{27,}"/i.test(html),route+" has unresolved original media IDs");
  assert.ok(!html.includes("{{ "),route+" has unresolved source interpolation");
  assert.ok(html.includes('id="main"'),route+" missing original main element");
