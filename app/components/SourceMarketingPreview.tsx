@@ -31,7 +31,7 @@ type Peek={kind:"topic"|"tier";index:number}|null;
  * All typography, markup and visuals originate in approved-source transcription.
  * The frontend never reads or executes the archived design template.
  */
-export function SourceMarketingPreview({page}:{page:MarketingPage}){
+export function SourceMarketingPreview({page,sourceImports}:{page:MarketingPage|"assess"|"insights";sourceImports?:Record<string,React.ComponentType>}){
  const navigate=useNavigate();
  const [menu,setMenu]=React.useState(false);
  const [core,setCore]=React.useState(0);
@@ -91,7 +91,7 @@ export function SourceMarketingPreview({page}:{page:MarketingPage}){
  if(page==="core")base=originals.core[core];
  if(page==="eng")base=originals.tier[tier];
  if(page==="about")base=originals.values[value];
- const scope:View={...base,__assets:sourceAssets,__imports:{},root,pageRef};
+ const scope:View={...base,__assets:sourceAssets,__imports:sourceImports||{},root,pageRef};
  if(menu){
   const open=originals.menu[page];
   for(const key of ["menuClosed","menuOpenBool","menuAria","menuOpenStr","drawerX","drawerVis",
