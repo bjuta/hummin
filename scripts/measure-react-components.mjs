@@ -101,6 +101,9 @@ try{
     return list;
    };
    const sourceHeadings=headings(p.frames),reactHeadings=headings(r.frames);
+   const referenceTemplateLeak=sourceHeadings.some(h=>/\\{\\{|\\}\\}/.test(h.text));
+   const invalidReference=referenceTemplateLeak||(embeddedReference&&sourceHeadings.length===0);
+   const measurementStatus=invalidReference?"reference-incomplete":embeddedReference?"frame-aware-headings":"standard";
    const used=new Set();
    const matchedHeadings=sourceHeadings.map(source=>{
     const index=reactHeadings.findIndex((candidate,i)=>!used.has(i)&&candidate.key===source.key);
@@ -110,11 +113,11 @@ try{
    });
    const groups={};
    for(const family of Object.keys(families)){
-    if(family==="landmarks"){groups[family]=matchedHeadings;continue}
+    if(family==="landmarks"){groups[family]=invalidReference?[]:matchedHeadings;continue}
     const left=pf.families?.[family]||[],right=rf.families?.[family]||[];
-    groups[family]=embeddedReference?[]:Array.from({length:Math.max(left.length,right.length)},(_,i)=>delta(left[i],right[i]));
+    groups[family]=embeddedReference||invalidReference?[]:Array.from({length:Math.max(left.length,right.length)},(_,i)=>delta(left[i],right[i]));
    }
-   const row={path,width,measurementStatus:embeddedReference?"frame-aware-headings":"standard",productionHeight:p.frames[0]?.documentHeight??null,previewHeight:r.frames[0]?.documentHeight??null,matchedHeadings:matchedHeadings.filter(x=>x.status==="matched").length,missingHeadings:matchedHeadings.filter(x=>x.status!=="matched").map(x=>x.text),groups,sourceFrames:p.frames,previewFrames:r.frames};
+   const row={path,width,measurementStatus,productionHeight:p.frames[0]?.documentHeight??null,previewHeight:r.frames[0]?.documentHeight??null,matchedHeadings:matchedHeadings.filter(x=>x.status==="matched").length,missingHeadings:matchedHeadings.filter(x=>x.status!=="matched").map(x=>x.text),groups,sourceFrames:p.frames,previewFrames:r.frames};
    report.push(row);
    console.log("COMPONENT GEOMETRY",path,width,"delta",row.productionHeight==null||row.previewHeight==null?"unknown":row.previewHeight-row.productionHeight);
   }
@@ -126,7 +129,7 @@ for(const row of report)for(const [family,items] of Object.entries(row.groups))f
  if(item.status!=="matched")continue;
  flat.push({path:row.path,width:row.width,family,dy:item.changes.y,dh:item.changes.height,dw:item.changes.width,fontChanged:item.fontChanged,fontSizeChanged:item.fontSizeChanged});
 }
-const summary={screens:report.length,standardScreens:report.filter(r=>r.measurementStatus==="standard").length,frameAwareScreens:report.filter(r=>r.measurementStatus==="frame-aware-headings").length,unmatchedHeadings:report.flatMap(r=>r.missingHeadings.map(text=>({path:r.path,width:r.width,text}))),measurementCount:flat.length,families:Object.fromEntries(Object.keys(families).map(f=>{
+const summary={screens:report.length,standardScreens:report.filter(r=>r.measurementStatus==="standard").length,frameAwareScreens:report.filter(r=>r.measurementStatus==="frame-aware-headings").length,incompleteReferenceScreens:report.filter(r=>r.measurementStatus==="reference-incomplete").map(r=>({path:r.path,width:r.width})),unmatchedHeadings:report.filter(r=>r.measurementStatus!=="reference-incomplete").flatMap(r=>r.missingHeadings.map(text=>({path:r.path,width:r.width,text}))),measurementCount:flat.length,families:Object.fromEntries(Object.keys(families).map(f=>{
  const rows=flat.filter(r=>r.family===f);
  return [f,{instances:rows.length,largeVerticalDifferences:rows.filter(r=>Math.abs(r.dy)>12||Math.abs(r.dh)>12).length,fontDifferences:rows.filter(r=>r.fontChanged||r.fontSizeChanged).length}];
 }))};
