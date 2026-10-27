@@ -3,3 +3,6 @@ Owner-source final gate: verify isolated React Preview deployed from 6fa0c1d3677
 2026-10-26 one consolidated finishing audit for isolated Preview ace8dba58ad7: source assets, Contacts validation, read-only 23-step Assessment navigation, article structures, original reveal-aware screenshot comparison at 390/768/1440. Preserve original production, no submissions, no concurrent workflows. Visual failure blocks cutover.
 
 2026-10-26 settled-state rerun of same deployed Preview ace8dba58ad7: fix transient contrast timing and restore All filter before default-page assertions. Use one workflow only. This is a read-only visual release gate, no production switch.
+
+
+2026-10-27 canonical release-candidate audit for isolated Preview e5679136d7d882dfc80d8e6db098f3badf1d1209: verify source-faithful icon-led drawer, original problem/engagement dialogs and behaviours, all native React routes, accessibility and read-only 42-screen production parity at 390/768/1440. Archived HTML remains reference-only and must not become a build dependency. No public cutover, no production data writes, no real enquiry/booking/email submissions; any failure blocks HTML retirement.
