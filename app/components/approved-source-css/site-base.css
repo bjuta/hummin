@@ -1,0 +1,15 @@
+
+body{margin:0;background:#F4F5F1;color:#1E272A;font-family:'Figtree',system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+*{box-sizing:border-box}
+a{color:#B5532C;text-decoration:none}
+a:hover{color:#1E272A}
+img{display:block;max-width:100%}
+html{scroll-behavior:smooth}
+:focus-visible{outline:2px solid #B5532C;outline-offset:3px}
+button{-webkit-tap-highlight-color:transparent}
+::selection{background:#B5532C;color:#FFFFFF}
+@keyframes hmFade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+@keyframes hmRise{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
+@keyframes hmPop{0%{transform:scale(0.6);opacity:0}70%{transform:scale(1.08);opacity:1}100%{transform:scale(1)}}
+@keyframes hmSpin{to{transform:rotate(360deg)}}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important;scroll-behavior:auto!important}}
