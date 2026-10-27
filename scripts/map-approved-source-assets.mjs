@@ -42,7 +42,7 @@ for(const id of missing){
  if(item?.mime!=="image/svg+xml")throw Error("No source-faithful asset for "+id);
  let bytes=Buffer.from(item.data,"base64");
  if(item.compressed)bytes=gunzipSync(bytes);
- if(!bytes.toString("utf8",0,512).includes("<svg")||/<script\\b/i.test(bytes.toString("utf8")))
+ if(!bytes.toString("utf8",0,512).includes("<svg")||/<script\b/i.test(bytes.toString("utf8")))
   throw Error("Unsafe original SVG asset "+id);
  const dir="public/brand/source-resources";
  fs.mkdirSync(dir,{recursive:true});
@@ -50,7 +50,7 @@ for(const id of missing){
  mappings[id]="/brand/source-resources/"+id+".svg";
 }
 
-const referencedFonts=[...new Set([...html.matchAll(/url\\(["']?([a-f0-9]{8}(?:-[a-f0-9]{4}){3}-[a-f0-9]{12})["']?\\)/gi)].map(m=>m[1]))];
+const referencedFonts=[...new Set([...html.matchAll(/url\(["']?([a-f0-9]{8}(?:-[a-f0-9]{4}){3}-[a-f0-9]{12})["']?\)/gi)].map(m=>m[1]))];
 for(const id of referencedFonts){
  if(mappings[id])continue;
  const item=manifest[id];
@@ -64,10 +64,14 @@ for(const id of referencedFonts){
  mappings[id]="/brand/source-resources/"+id+".woff2";
 }
 const originalFontCss=fs.readFileSync("app/components/approved-source-css/site-fonts.css","utf8");
-const deployedFontCss=originalFontCss.replace(/url\\(["']?([a-f0-9]{8}(?:-[a-f0-9]{4}){3}-[a-f0-9]{12})["']?\\)/gi,(_match,id)=>{
+const deployedFontCss=originalFontCss.replace(/url\(["']?([a-f0-9]{8}(?:-[a-f0-9]{4}){3}-[a-f0-9]{12})["']?\)/gi,(_match,id)=>{
  if(!mappings[id])throw Error("Unmapped source font CSS "+id);
  return 'url("'+mappings[id]+'")';
 });
+const originalFaces=[...originalFontCss.matchAll(/url\\(["']?([a-f0-9-]{36})["']?\\)/gi)];
+if(originalFaces.length!==17)throw Error("Expected exactly 17 original font-face URLs, found "+originalFaces.length);
+if([...deployedFontCss.matchAll(/url\\(["']?[a-f0-9-]{36}["']?\\)/gi)].length)
+ throw Error("Unresolved original font resource IDs remained in runtime CSS");
 fs.writeFileSync("app/components/ApprovedSourceFonts.runtime.css",deployedFontCss);
 
 fs.mkdirSync("artifacts/source-native-transcription",{recursive:true});
