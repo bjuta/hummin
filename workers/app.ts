@@ -1,5 +1,6 @@
 import { createRequestHandler } from "react-router";
 import {runMailWorker} from "../app/lib/mail-cron.server.ts";
+import {mayRunScheduledTransactions} from "../app/lib/transactional-host-guard.ts";
 import {isHumminPublicHost,robotsPolicy,sitemapXml,protectNonPublicResponse} from "../app/lib/seo.server.ts";
 import type { D1Database, ExecutionContext, Fetcher } from "@cloudflare/workers-types";
 
@@ -55,6 +56,7 @@ export default {
     return protectNonPublicResponse(new URL(request.url).hostname,response);
   },
   async scheduled(_controller:ScheduledController,env:HumminEnv,ctx:ExecutionContext){
+    if(!mayRunScheduledTransactions(env.SITE_URL))return;
     ctx.waitUntil(runMailWorker(env).then(()=>undefined).catch(e=>console.error("Scheduled email delivery failed",e instanceof Error?e.message:"unknown")));
   }
 };
