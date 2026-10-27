@@ -1,0 +1,38 @@
+name: HUMMIN source-native Assessment data extraction
+on:
+  push:
+    branches: [feat/fullstack-workers-foundation]
+    paths: [.github/source-assessment-contract-trigger.txt]
+permissions:
+  contents: write
+concurrency:
+  group: hummin-assessment-contract-extraction
+  cancel-in-progress: false
+jobs:
+  author-time-contract:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Export only questions, weights and authored result language
+        run: node scripts/export-native-assessment-contract.mjs
+      - name: Commit immutable data snapshot, not runtime HTML
+        run: |
+          git diff --check
+          git add -- app/data/ApprovedAssessmentContract.generated.json
+          if git diff --cached --quiet; then echo "Assessment contract unchanged"; exit 0; fi
+          git config user.name "hummin-source-extractor[bot]"
+          git config user.email "source-extractor@users.noreply.github.com"
+          git commit -m "Export original 23-step HUMMIN assessment data to standalone React JSON"
+          git push origin HEAD:feat/fullstack-workers-foundation
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: hummin-source-assessment-contract
+          path: app/data/ApprovedAssessmentContract.generated.json
+          retention-days: 14
