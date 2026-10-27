@@ -1,0 +1,1 @@
+Canonical read-only source-native release audit, all 42 production vs isolated Preview cases, three widths, with original fonts and legal source. Gate-only: no cutover, no HTML deletion. 2026-10-27.
