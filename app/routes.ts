@@ -2,9 +2,9 @@ import { type RouteConfig, index, route } from "@react-router/dev/routes";
 export default [
  index("routes/fidelity.ts"),
   route("__react/assessment","routes/fidelity.ts"),
- route("__react/insights","routes/react.insights.preview.tsx",{id:"react-insights-index"}),
- route("__react/insights/*","routes/react.insights.preview.tsx",{id:"react-insights-detail"}),
- route("__react/:page","routes/react.preview.tsx"),
+ route("__react/insights","routes/fidelity.ts",{id:"react-insights-index"}),
+ route("__react/insights/*","routes/fidelity.ts",{id:"react-insights-detail"}),
+ route("__react/:page","routes/fidelity.ts"),
  route("admin/login","routes/admin.login.tsx"),
  route("admin/verify","routes/admin.verify.tsx"),
  route("admin/logout","routes/admin.logout.ts"),
@@ -33,6 +33,6 @@ export default [
  route("email/mark-light.png","routes/email.logo.ts",{id:"email-mark-light"}),
  route("email/mark-dark.png","routes/email.logo.ts",{id:"email-mark-dark"}),
  route("email/motif.svg","routes/email.logo.ts",{id:"email-motif"}),
- route("privacy","routes/privacy.tsx"),
- route("terms","routes/terms.tsx")
+ route("privacy","routes/fidelity.ts"),
+ route("terms","routes/fidelity.ts")
 ] satisfies RouteConfig;
