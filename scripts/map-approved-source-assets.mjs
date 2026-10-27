@@ -68,9 +68,9 @@ const deployedFontCss=originalFontCss.replace(/url\(["']?([a-f0-9]{8}(?:-[a-f0-9
  if(!mappings[id])throw Error("Unmapped source font CSS "+id);
  return 'url("'+mappings[id]+'")';
 });
-const originalFaces=[...originalFontCss.matchAll(/url\\(["']?([a-f0-9-]{36})["']?\\)/gi)];
+const originalFaces=[...originalFontCss.matchAll(/url\(["']?([a-f0-9-]{36})["']?\)/gi)];
 if(originalFaces.length!==17)throw Error("Expected exactly 17 original font-face URLs, found "+originalFaces.length);
-if([...deployedFontCss.matchAll(/url\\(["']?[a-f0-9-]{36}["']?\\)/gi)].length)
+if([...deployedFontCss.matchAll(/url\(["']?[a-f0-9-]{36}["']?\)/gi)].length)
  throw Error("Unresolved original font resource IDs remained in runtime CSS");
 fs.writeFileSync("app/components/ApprovedSourceFonts.runtime.css",deployedFontCss);
 
