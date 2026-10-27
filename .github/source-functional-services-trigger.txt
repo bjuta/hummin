@@ -11,3 +11,5 @@
 2026-10-27 validate newsletter double-opt-in email parser and non-delivery Insights Preview service, in addition to existing 84 tests.
 
 2026-10-27 reject Preview email, contact, newsletter, Google reservation and scheduled mail despite configured provider secrets; preserve public host behavior.
+
+2026-10-27 Final existing 92-unit offline regression after preview cron and transactional guard hardening.
