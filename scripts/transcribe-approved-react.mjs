@@ -12,6 +12,7 @@ const manifest=JSON.parse(fs.readFileSync(path.join(sourceDir,"manifest.json"),"
 if(manifest.summary.count!==45)throw Error("Expected 45 checksum-validated components");
 fs.mkdirSync(targetDir,{recursive:true});
 const hover=new Map();
+const active=new Map();
 const warnings=[];
 let serial=0;
 
@@ -66,7 +67,7 @@ function renderChildren(node,scope){
  return children.map(child=>render(child,scope)).filter(v=>v!==null);
 }
 function render(node,scope){
- if(node.nodeName==="#text")return quoted(node.value||"");
+ if(node.nodeName==="#text")return expr(node.value||"",scope);
  if(node.nodeName==="#comment"||node.nodeName==="#documentType")return null;
  if(!node.tagName){
   const kids=renderChildren(node,scope);
@@ -106,7 +107,8 @@ function render(node,scope){
    if(!hover.has(value))hover.set(value,"source-hover-"+hover.size);
    props.push(quoted("data-source-hover")+":"+quoted(hover.get(value)));
   }else if(key==="style-active"){
-   props.push(quoted("data-source-active")+":"+quoted(value));
+   if(!active.has(value))active.set(value,"source-active-"+active.size);
+   props.push(quoted("data-source-active")+":"+quoted(active.get(value)));
   }else if(key.startsWith("hint-placeholder-"))continue;
   else if(key==="src")props.push("src:sourceAsset("+scope+","+expr(value,scope)+")");
   else if(key==="class")props.push("className:"+expr(value,scope));
@@ -137,6 +139,8 @@ const text=output.join("\n")+"\n";
 fs.writeFileSync(path.join(targetDir,"approved-components.tsx"),text);
 const hoverCss=Array.from(hover,([css,id])=>"["+quoted("data-source-hover")+"="+quoted(id)+"]:hover{"+css+"}").join("\n")+"\n";
 fs.writeFileSync(path.join(targetDir,"source-hover.css"),hoverCss);
-const details={count:functions.length,generatedBytes:Buffer.byteLength(text),hoverStates:hover.size,functions,status:"unwired source transcription, not visually accepted"};
+const activeCss=Array.from(active,([css,id])=>"["+quoted("data-source-active")+"="+quoted(id)+"]:active{"+css+"}").join("\n")+"\n";
+fs.writeFileSync(path.join(targetDir,"source-active.css"),activeCss);
+const details={count:functions.length,generatedBytes:Buffer.byteLength(text),hoverStates:hover.size,activeStates:active.size,functions,status:"unwired source transcription, not visually accepted"};
 fs.writeFileSync(path.join(targetDir,"transcription-manifest.json"),JSON.stringify(details,null,2));
 console.log("SOURCE NATIVE TRANSCRIPTION",functions.length,"components",details.generatedBytes,"bytes",hover.size,"original hover treatments");
