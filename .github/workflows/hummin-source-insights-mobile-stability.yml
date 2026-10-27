@@ -1,0 +1,27 @@
+name: HUMMIN repeated 390px Insights source frame stability
+on:
+  push:
+    branches: [feat/fullstack-workers-foundation]
+    paths: [.github/source-insights-mobile-stability-trigger.txt]
+permissions:
+  contents: read
+jobs:
+  inspect-mobile:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: npm install --no-save --ignore-scripts --no-audit --no-fund playwright@1.56.1
+      - run: npx playwright install chromium --only-shell
+      - run: node scripts/verify-insights-mobile-stability.mjs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: hummin-390px-original-native-stability-evidence
+          path: artifacts/insights-mobile-stability
+          retention-days: 14
