@@ -1,6 +1,6 @@
 import { type RouteConfig, index, route } from "@react-router/dev/routes";
 export default [
- index("routes/react.marketing.gated.tsx"),
+ index("routes/fidelity.ts"),
  route("__react/contact","routes/react.contact.preview.tsx"),
  route("__react/assessment","routes/react.assessment.preview.tsx"),
  route("__react/insights","routes/react.insights.preview.tsx",{id:"react-insights-index"}),
