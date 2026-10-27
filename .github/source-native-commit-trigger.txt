@@ -1,0 +1,1 @@
+One-shot snapshot 27 October 2026: commit only source-transcribed native components and original CSS after exact-source checks, TypeScript and build. Do not deploy or modify public routing.
