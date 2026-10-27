@@ -97,3 +97,8 @@
 /* Source article navigation/help sidebar is a restrained 280px column;
    it must not stretch to fill the entire remaining editorial row. */
 @media(min-width:751px){.ra-source-sidebar{flex:0 1 280px;min-width:260px}}
+
+/* Production reference: the article newsletter ends flush with the following
+   assessment band. The former 112px lower body inset produced a measured
+   112px step in the 1440px full-page screenshot. */
+.ra-source-body{padding-bottom:0}
