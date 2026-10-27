@@ -21,6 +21,10 @@ jobs:
         run: node scripts/catalog-approved-source.mjs
       - name: Extract original source primitives, bindings and CSS without restyling
         run: node scripts/extract-source-blueprints.mjs
+      - name: Generate native React components from exact source fragments
+        run: node scripts/transcribe-approved-react.mjs
+      - name: Parse and bundle all transcribed components without deploying
+        run: npx esbuild artifacts/source-native-transcription/approved-components.tsx --bundle --platform=browser --external:react --outfile=/tmp/hummin-source-native-test.js
       - name: Typecheck reverted application
         run: npm run typecheck
       - name: Build reverted application
@@ -33,4 +37,5 @@ jobs:
           path: |
             artifacts/source-component-catalog
             artifacts/source-component-blueprints
+            artifacts/source-native-transcription
           retention-days: 30
