@@ -186,7 +186,7 @@ export function SourceMarketingPreview({page,sourceImports}:{page:MarketingPage|
   const errors:Record<string,string>={};
   if(name.length<2||name.length>120)errors.name="Enter your name.";
   if(biz.length<2||biz.length>160)errors.biz="Enter your business name.";
-  if(!/^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/.test(email)||email.length>254)
+  if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)||email.length>254)
    errors.email="Enter a valid work email.";
   if(msg.length<10||msg.length>4000)
    errors.msg="Please describe the challenge in at least 10 characters.";
