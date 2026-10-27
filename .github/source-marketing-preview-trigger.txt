@@ -3,3 +3,5 @@ Deploy source-derived seven marketing views to isolated Workers Preview. Keep pu
 2026-10-27 re-deploy isolated source Preview with all eight exact font subsets wired into browser CSS. Public hummin.org untouched.
 
 2026-10-27 staging-only deployment after exact production footer and Contact source patch port; ensure seven route smoke checks, no public changes.
+
+2026-10-27 original Assessment and Insights source roots in isolated Preview only; no cutover, no production DB.
