@@ -121,3 +121,8 @@
 .hr-insights-source-to-core{justify-self:start;font-size:15px;font-weight:600;color:var(--hummin-rust);border-bottom:1px solid var(--hummin-rust);text-decoration:none;padding-bottom:2px}
 .hr-insights-source-to-core:hover{color:var(--hummin-ink);border-color:var(--hummin-ink)}
 @media(prefers-reduced-motion:reduce){.hr-insights-source-list-card{transition:none}}
+
+/* Pixel-reference alignment: the Insights newsletter adjoins the Assessment band. */
+.hr-insights-source-newsletter-wrap{padding-bottom:0}
+.hr-insights-source-author-heading .hr-insights-source-list-title{font-size:clamp(48px,7cqw,88px)}
+.hr-insights-source-author-avatar img{width:70%;height:70%;object-fit:contain}
