@@ -1,0 +1,1 @@
+2026-10-27 repeated 3x approved/native 390px Insights height stability after transient 38px capture mismatch; no writes.
