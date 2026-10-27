@@ -1,0 +1,1 @@
+Deploy source-derived seven marketing views to isolated Workers Preview. Keep public hummin.org and production database untouched. 2026-10-27.
