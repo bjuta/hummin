@@ -54,3 +54,4 @@ React legal CTA accessibility follow-up: deploy bcde3a1035cb394146fd12c723a45482
 2026-10-27 verify six source-faithful marketing page frames reuse one shared component with unchanged markup, archived HTML hidden, isolated preview only.
 2026-10-27 shared editorial layout componentization of index, topic, author and article; verify original DOM class hooks, source-independent build, TypeScript and isolated preview.
 2026-10-27 editorial source contract updated to validate new shared heading wrapper without changing authoritative hero geometry; run source-hidden build.
+2026-10-27 coordinated five-page 390px mobile hero correction from measured 52px React to 48px production; verify hidden-source build and isolated Preview only.
