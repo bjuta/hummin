@@ -40,7 +40,7 @@ export function SourceRemainingPreview({view}:{view:RemainingView}){
  };
  const OriginalAssessment=()=>React.createElement("div",{
   className:"hm-frame-shell",
-  style:{position:"relative",height:"900px",minHeight:0,overflowY:"auto",overscrollBehavior:"contain",background:"#1E272A"}
+  style:{position:"relative",height:"960px",minHeight:0,overflowY:"auto",overscrollBehavior:"contain",background:"#1E272A"}
  },React.createElement(ApprovedAssessmentRoot,{scope:assessmentScope}));
  const OriginalInsights=()=>React.createElement("div",{
   className:"hm-frame-shell",
