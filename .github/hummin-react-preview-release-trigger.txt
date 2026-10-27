@@ -47,3 +47,4 @@ React legal CTA accessibility follow-up: deploy bcde3a1035cb394146fd12c723a45482
 2026-10-27 retry same Preview candidate: preserve non-visual legal discoverability without using a scroll-lock/overflow-hidden pattern.
 2026-10-27: deploy isolated Engagements source editorial geometry from 2af54063c17597f40e43d2001c99489a1b2f5cac. No HTML build access, no production cutover.
 2026-10-27 Screenshot-grounded shared Insights spacing, author mark and live footer correction. Verify HTML-archive-hidden isolated preview before further parity audit.
+2026-10-27 source-frame screenshot measurement: remove the 112px extra article-to-assessment gap. Build with archived HTML hidden; isolated Preview only.
