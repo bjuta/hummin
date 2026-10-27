@@ -41,3 +41,5 @@ Retry source-faithful Preview build after Cloudflare/Vite optimizer WebSocket in
 2026-10-27 deploy source-native Insights newsletter contract validation on isolated no-subscription endpoint; public routes and email dispatch unchanged.
 
 2026-10-27 enforce no external email/calendar/Turnstile/booking or cron side effects from isolated Preview even with provider secrets configured; guarded public routes only.
+
+2026-10-27 preserve Cache-Control no-store for blocked Preview newsletter Form POST responses with app route headers; no send.
