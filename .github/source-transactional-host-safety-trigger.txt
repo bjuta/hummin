@@ -1,0 +1,1 @@
+2026-10-27 probe safe invalid POSTs to 4 Preview transactional endpoints and ensure booking slots remain disabled after guarded deployment, no production writes.
