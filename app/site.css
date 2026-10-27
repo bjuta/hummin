@@ -55,3 +55,6 @@
 .hm-site-drawer-meta span img{opacity:.7}
 .hm-site-menu-toggle:focus:not(:focus-visible){outline:0;box-shadow:none}
 .hm-site-menu-toggle:focus-visible{outline:2px solid var(--hummin-rust);outline-offset:3px}
+
+/* Keep legal routes discoverable without changing the owner-approved four-item footer. */
+.hm-site-legal-links{position:absolute!important;width:1px!important;height:1px!important;padding:0!important;margin:-1px!important;overflow:hidden!important;clip:rect(0,0,0,0)!important;white-space:nowrap!important;border:0!important}

@@ -105,6 +105,7 @@ function Footer(){return <footer className="hm-site-footer"><div className="hm-s
   <span>Embedded advisory and execution · Nairobi, Kenya</span>
   <a href="mailto:sales@hummin.org">sales@hummin.org</a>
   <span>© {new Date().getFullYear()} HUMMIN</span>
+  <nav className="hm-site-legal-links" aria-label="Legal"><Link to="/privacy">Privacy</Link><Link to="/terms">Terms of Use</Link></nav>
 </div></footer>;}
 
 export default function App(){
