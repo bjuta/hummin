@@ -5,3 +5,5 @@ Deploy source-derived seven marketing views to isolated Workers Preview. Keep pu
 2026-10-27 staging-only deployment after exact production footer and Contact source patch port; ensure seven route smoke checks, no public changes.
 
 2026-10-27 original Assessment and Insights source roots in isolated Preview only; no cutover, no production DB.
+
+2026-10-27 source-matched 900px Assessment viewport and clamp(64px,8cqw,112px) editorial height trimming; isolated Preview only.
