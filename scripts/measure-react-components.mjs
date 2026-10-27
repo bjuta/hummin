@@ -94,7 +94,7 @@ try{
    const headings=frames=>{
     const list=[];
     for(const frame of frames)for(const heading of frame.families?.landmarks||[]){
-     const key=heading.text.toLowerCase().replace(/\\s+/g," ").trim();
+     const key=heading.text.toLowerCase().replace(/\s+/g," ").trim();
      if(!key)continue;
      list.push({...heading,key,y:heading.y+(frame.frameOffset?.y||0),x:heading.x+(frame.frameOffset?.x||0),frame:frame.pathname});
     }
