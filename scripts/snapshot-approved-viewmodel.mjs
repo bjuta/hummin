@@ -25,7 +25,7 @@ const sandbox=vm.createContext({
  console:{log:()=>{}},setTimeout:()=>0,clearTimeout:()=>{},Date,
 });
 const Component=vm.runInContext(source+"\nComponent",sandbox,{timeout:5000});
-const pages=["home","how","core","eng","who","about","contact"];
+const pages=["home","how","core","eng","who","about","contact","assess","insights"];
 const snapshot=(page,changes={})=>{
  const model=new Component();
  model.state={...model.state,page,...changes};
