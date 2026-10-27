@@ -40,11 +40,11 @@ export function SourceRemainingPreview({view}:{view:RemainingView}){
  };
  const OriginalAssessment=()=>React.createElement("div",{
   className:"hm-frame-shell",
-  style:{position:"relative",minHeight:"960px",background:"#1E272A"}
+  style:{position:"relative",height:"900px",minHeight:0,overflowY:"auto",overscrollBehavior:"contain",background:"#1E272A"}
  },React.createElement(ApprovedAssessmentRoot,{scope:assessmentScope}));
  const OriginalInsights=()=>React.createElement("div",{
   className:"hm-frame-shell",
-  style:{position:"relative",minHeight:"580px",background:"#F4F5F1"}
+  style:{position:"relative",minHeight:"580px",marginBottom:"calc(-1 * clamp(64px, 8cqw, 112px))",background:"#F4F5F1"}
  },React.createElement(ApprovedInsightsRoot,{scope:editorialScope}));
  const imports:Record<string,React.ComponentType>={
   "HUMMIN Assessment v2":OriginalAssessment,
