@@ -31,6 +31,11 @@ jobs:
         run: |
           node scripts/snapshot-approved-viewmodel.mjs
           node scripts/map-approved-source-assets.mjs
+          node scripts/map-assessment-original-assets.mjs
+          node scripts/snapshot-remaining-viewmodels.mjs
+          cp artifacts/source-native-transcription/marketing-viewmodels.json app/data/ApprovedMarketingViewmodels.generated.json
+          cp artifacts/source-native-transcription/remaining-viewmodels.json app/data/ApprovedRemainingViewmodels.generated.json
+          cp artifacts/source-native-transcription/asset-map.json app/data/ApprovedSourceAssets.generated.json
       - name: Validate source DOM, typed output and source-only app build
         run: |
           npx esbuild artifacts/source-native-transcription/approved-components.tsx --bundle --platform=node --format=esm --packages=external --outfile=artifacts/source-native-transcription/renderable.mjs
@@ -49,12 +54,11 @@ jobs:
       - name: Preserve source-authored marketing view models and exact media paths
         run: |
           mkdir -p app/data
-          cp artifacts/source-native-transcription/marketing-viewmodels.json app/data/ApprovedMarketingViewmodels.generated.json
-          cp artifacts/source-native-transcription/asset-map.json app/data/ApprovedSourceAssets.generated.json public/brand/source-resources
+          test -s app/data/ApprovedRemainingViewmodels.generated.json
       - name: Commit source-verified React markup, CSS and marketing data to development branch
         run: |
           git diff --check
-          git add -- app/components/ApprovedSourceTranscription.generated.tsx app/components/ApprovedSourceHover.generated.css app/components/ApprovedSourceActive.generated.css app/components/ApprovedSourceFonts.runtime.css app/components/approved-source-css app/data/ApprovedMarketingViewmodels.generated.json app/data/ApprovedSourceAssets.generated.json public/brand/source-resources
+          git add -- app/components/ApprovedSourceTranscription.generated.tsx app/components/ApprovedSourceHover.generated.css app/components/ApprovedSourceActive.generated.css app/components/ApprovedSourceFonts.runtime.css app/components/ApprovedAssessmentFonts.runtime.css app/components/approved-source-css app/data/ApprovedMarketingViewmodels.generated.json app/data/ApprovedRemainingViewmodels.generated.json app/data/ApprovedSourceAssets.generated.json public/brand/source-resources
           if git diff --cached --quiet; then echo "Source transcription unchanged"; exit 0; fi
           git config user.name "hummin-source-extractor[bot]"
           git config user.email "source-extractor@users.noreply.github.com"
