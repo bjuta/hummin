@@ -37,7 +37,7 @@ const snapshots={
  menu:Object.fromEntries(pages.map(p=>[p,snapshot(p,{menu:true})])),
  core:Array.from({length:7},(_,i)=>snapshot("core",{core:i})),
  tier:Array.from({length:3},(_,i)=>snapshot("eng",{tier:i})),
- values:Array.from({length:4},(_,i)=>snapshot("about",{val:i})),
+ values:Array.from({length:6},(_,i)=>snapshot("about",{val:i})),
  topicPeek:Array.from({length:6},(_,i)=>snapshot("home",{peek:{kind:"topic",i},peekOpen:true})),
  tierPeek:Array.from({length:3},(_,i)=>snapshot("home",{peek:{kind:"tier",i},peekOpen:true})),
  sent:snapshot("contact",{sent:true}),
