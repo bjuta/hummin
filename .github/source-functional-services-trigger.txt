@@ -3,3 +3,5 @@
 2026-10-27 rerun offline unit/service suites after updating stale Admin standalone-shell assertion; no real email/booking.
 
 2026-10-27 fresh source/native acceptance after isolated contact verification route, corrected React form and no-delivery browser success.
+
+2026-10-27 repeat offline contact/email/booking/CMS/Admin and assessment non-delivery tests on native Insights event-bound branch.
