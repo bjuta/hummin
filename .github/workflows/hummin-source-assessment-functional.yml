@@ -1,0 +1,36 @@
+name: HUMMIN source-native Assessment functional acceptance
+on:
+  push:
+    branches: [feat/fullstack-workers-foundation]
+    paths: [.github/source-assessment-functional-trigger.txt]
+permissions:
+  contents: read
+jobs:
+  isolated-functional:
+    if: github.repository == 'bjuta/hummin'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: npm install --no-audit --no-fund
+      - name: Validate 23 original questions, native scores, safe flow and no-delivery boundaries
+        run: node --experimental-strip-types --test tests/source-assessment-native.test.mjs tests/source-assessment-delivery-contract.test.mjs
+      - run: npm run typecheck
+      - run: npm run build
+      - name: Confirm non-public Preview route and absence of production cutover
+        run: |
+          node --input-type=module -e "
+            import fs from 'node:fs';
+            const paths=fs.readFileSync('app/routes.ts','utf8');
+            const native=fs.readFileSync('app/components/SourceAssessmentInteractive.tsx','utf8');
+            const original=fs.readFileSync('app/routes/fidelity.ts','utf8');
+            if(!paths.includes('route(\"assessment\",\"routes/fidelity.ts\"'))throw Error('Unexpected public Assessment cutover');
+            if(!original.includes('/design/site/index.html'))throw Error('Production rollback fallback was modified');
+            if(!native.includes('showBooking')&&!fs.readFileSync('app/lib/assessment-native.ts','utf8').includes('showBooking:false'))throw Error('Mock booking boundary missing');
+            console.log('PRODUCTION UNCHANGED; PREVIEW NON-DELIVERY CONTRACT CONFIRMED');
+          "

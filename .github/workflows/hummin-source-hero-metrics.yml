@@ -1,0 +1,25 @@
+name: HUMMIN exact source font and heading geometry
+on:
+  push:
+    branches: [feat/fullstack-workers-foundation]
+    paths: [.github/source-hero-metrics-trigger.txt]
+permissions:
+  contents: read
+jobs:
+  geometry:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: npm install --no-save --ignore-scripts --no-audit --no-fund playwright@1.56.1
+      - run: npx playwright install chromium --only-shell
+      - run: node scripts/inspect-approved-hero-metrics.mjs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: hummin-source-hero-font-metrics
+          path: artifacts/source-hero-fonts
+          retention-days: 14

@@ -1,0 +1,5 @@
+# Do not commit real credentials. Copy to .dev.vars for local testing.
+RESEND_API_KEY=
+EMAIL_FROM=HUMMIN Website <website@notify.hummin.org>
+TURNSTILE_SECRET_KEY=
+# Non-secret vars SITE_URL and TURNSTILE_SITE_KEY are in wrangler.jsonc.

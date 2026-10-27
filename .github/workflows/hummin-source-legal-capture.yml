@@ -1,0 +1,29 @@
+name: HUMMIN read-only owner-approved legal source capture
+on:
+  push:
+    branches: [feat/fullstack-workers-foundation]
+    paths: [.github/source-legal-capture-trigger.txt]
+permissions:
+  contents: read
+jobs:
+  legal-source:
+    if: github.repository == 'bjuta/hummin'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: npm install --no-save --ignore-scripts --no-audit --no-fund playwright@1.56.1
+      - run: npx playwright install chromium --only-shell
+      - name: Extract original rendered Privacy and Terms DOM across three widths
+        run: node scripts/capture-source-legal.mjs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: hummin-owner-source-legal-six
+          path: artifacts/source-legal-reference
+          retention-days: 14

@@ -1,0 +1,1 @@
+Read-only font and hero geometry for source-derived preview versus approved production; three widths; no deployment.

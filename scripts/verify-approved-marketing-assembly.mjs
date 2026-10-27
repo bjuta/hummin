@@ -1,0 +1,36 @@
+import assert from "node:assert/strict";
+import fs from "node:fs";
+import {pathToFileURL} from "node:url";
+import * as React from "react";
+import {renderToStaticMarkup} from "react-dom/server";
+const base="artifacts/source-native-transcription";
+const snapshots=JSON.parse(fs.readFileSync(base+"/marketing-viewmodels.json","utf8"));
+const assets=JSON.parse(fs.readFileSync(base+"/asset-map.json","utf8"));
+const modules=await import(pathToFileURL(process.cwd()+"/"+base+"/renderable.mjs").href);
+assert.equal(typeof modules.ApprovedSiteRoot,"function","Exact original outer root was not transcribed");
+assert.equal(snapshots.values.length,6);
+assert.equal(snapshots.core.length,7);
+assert.equal(snapshots.tier.length,3);
+const routes={home:"Inside your business.",how:"Understand the problem.",core:"The skills we bring",eng:"Review. Project. Residency.",who:"You know your business.",about:"About HUMMIN.",contact:"Discuss a business challenge."};
+for(const [route,headline] of Object.entries(routes)){
+ const state=snapshots.pages[route];
+ assert.equal(state["is_"+route],true);
+ const html=renderToStaticMarkup(React.createElement(modules.ApprovedSiteRoot,{scope:{...state,__assets:assets}}));
+ assert.ok(html.includes(headline),route+" lost original source headline: "+headline);
+ assert.ok(html.includes("sales@hummin.org"),route+" missing original site footer");
+ assert.ok(html.includes('href="/newsletter"')&&html.includes('href="/privacy"')&&html.includes('href="/terms"'),route+" missing approved production footer links");
+ if(route==="contact"){
+  assert.ok(html.includes('id="hummin-turnstile"'),"Contact missing exact source-approved verification slot");
+  assert.ok(html.includes("min-height:65px"),"Contact verification must retain approved geometry");
+ }
+
+ assert.ok(!/<img[^>]*src="[a-f0-9]{8}-[a-f0-9-]{27,}"/i.test(html),route+" has unresolved original media IDs");
+ assert.ok(!html.includes("{{ "),route+" has unresolved source interpolation");
+ assert.ok(html.includes('id="main"'),route+" missing original main element");
+ console.log("MARKETING SOURCE ASSEMBLY",route,html.length,"markup chars",state.nav.length,"navigation entries");
+}
+const menu=renderToStaticMarkup(React.createElement(modules.ApprovedSiteRoot,{scope:{...snapshots.menu.home,__assets:assets}}));
+assert.ok(menu.includes("translateX(0)"),"Original open drawer CSS missing");
+assert.ok(menu.includes('aria-expanded="true"'),"Original menu state missing");
+assert.ok(Object.keys(assets).length>25,"Incomplete original media manifest coverage");
+console.log("MARKETING ASSEMBLY VERIFIED",Object.keys(routes).length,"routes",Object.keys(assets).length,"source media URLs");

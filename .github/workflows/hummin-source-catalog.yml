@@ -1,0 +1,45 @@
+name: HUMMIN source catalogue and rollback verification
+on:
+  push:
+    branches: [feat/fullstack-workers-foundation]
+    paths: [.github/source-catalog-trigger.txt]
+permissions:
+  contents: read
+jobs:
+  extract:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: npm install --no-save --no-audit --no-fund parse5@7.3.0
+      - name: Preserve complete original component structures
+        run: node scripts/catalog-approved-source.mjs
+      - name: Extract original source primitives, bindings and CSS without restyling
+        run: node scripts/extract-source-blueprints.mjs
+      - name: Generate native React components from exact source fragments
+        run: node scripts/transcribe-approved-react.mjs
+      - name: Parse and bundle all transcribed components without deploying
+        run: npx esbuild artifacts/source-native-transcription/approved-components.tsx --bundle --platform=node --format=esm --packages=external --outfile=artifacts/source-native-transcription/renderable.mjs
+      - name: Check native React DOM against untouched source fragments
+        run: node scripts/verify-source-native-transcription.mjs
+      - name: Inspect remaining source root and runtime shapes
+        run: node scripts/inspect-remaining-native-sources.mjs
+      - name: Typecheck reverted application
+        run: npm run typecheck
+      - name: Build reverted application
+        run: npm run build
+      - name: Save source catalog even if build fails
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: hummin-approved-source-component-catalog
+          path: |
+            artifacts/source-component-catalog
+            artifacts/source-component-blueprints
+            artifacts/source-native-transcription
+          retention-days: 30

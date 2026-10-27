@@ -1,0 +1,55 @@
+name: HUMMIN live public smoke
+on:
+  push:
+    branches: [feat/fullstack-workers-foundation]
+    paths: [.github/hummin-live-smoke-trigger-20261026.txt]
+permissions:
+  contents: read
+jobs:
+  public-smoke:
+    if: github.repository == 'bjuta/hummin'
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Verify published HUMMIN public pages and APIs
+        run: |
+          node --input-type=module -e '
+            import assert from "node:assert/strict";
+            const root="https://hummin.org";
+            const pages=[
+              ["/","HUMMIN"],["/privacy","Privacy notice"],
+              ["/terms","Terms of use"],["/assessment","hummin-assessment-frame"],
+              ["/contact","HUMMIN"],["/insights","hummin-insights-frame"],
+              ["/admin/login","HUMMIN"],["/robots.txt","User-agent"],
+              ["/sitemap.xml","urlset"]
+            ];
+            for(const [path,expected] of pages){
+              const r=await fetch(root+path,{redirect:"follow",signal:AbortSignal.timeout(25000)});
+              const body=await r.text();
+              console.log(path,r.status,r.url,"bytes",body.length,"robots",r.headers.get("x-robots-tag"));
+              assert.equal(r.status,200,path+" status");
+              assert.ok(body.includes(expected),path+" content "+expected);
+              assert.ok(!/noindex/.test(r.headers.get("x-robots-tag")||""),path+" must be public");
+            }
+            for(const host of ["https://www.hummin.org/","https://hummin-web-production.grimpossible.workers.dev/privacy"]){
+              const r=await fetch(host,{redirect:"follow",signal:AbortSignal.timeout(25000)});
+              const body=await r.text();
+              console.log(host,r.status,r.url,"bytes",body.length,"robots",r.headers.get("x-robots-tag"));
+              assert.equal(r.status,200);
+              assert.ok(body.includes("HUMMIN")||body.includes("Privacy notice"));
+            }
+            const slots=await fetch(root+"/api/booking/slots",{signal:AbortSignal.timeout(25000)});
+            const v=await slots.json();
+            console.log("BOOKING",slots.status,"enabled",v.enabled,"days",v.days?.length,"sitekey",!!v.siteKey);
+            assert.equal(slots.status,200);
+            assert.equal(v.enabled,true);
+            assert.ok(Array.isArray(v.days)&&v.days.length>0);
+            assert.ok(typeof v.siteKey==="string"&&v.siteKey.length>5);
+            console.log("PASS HUMMIN live public smoke: all primary pages, booking availability, www and staging");
+          '

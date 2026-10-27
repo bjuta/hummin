@@ -1,0 +1,5 @@
+2026-10-27 baseline exact source iframe vs native Insights section and footer geometry; no production mutations.
+
+2026-10-27 inspect original iframe Figtree font resources, loaded faces, hero paragraph metrics against native Preview, across source widths.
+
+2026-10-27 investigate 390px Insights index 38px shell/CTA gap from failed combined 41/42 visual audit; read-only.

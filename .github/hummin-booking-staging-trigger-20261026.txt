@@ -1,0 +1,21 @@
+One-time HUMMIN staging booking acceptance trigger
+source_commit=e05098b9196b9c2edd6b77a1da9595815c3892e9
+isolated_workers_dev_only=true
+
+Binding-complete repeat deployment after green but disabled availability check; attempt 2.
+
+Deploy and verify HUMMIN internal booking email alert and backfill for confirmed booking 2026-10-28T07:00Z.
+
+Apply CI-verified privacy notice, footer link and staging privacy gate; retain isolated hostname and Google email bindings. Base 920939a9bd7d43d0cb6dd9668f6e5f1720e75d87.
+
+Release-hardening staging deployment: enforce noindex for all nonpublic Worker routes, including Admin and API, after verified CI c869be0a26fb5b63456e1706b543c22c5a4d3af2.
+
+Legal design fidelity release: original user-uploaded HUMMIN Privacy + Terms hero/tabs/TOC/layout, exact section structure and shared responsive CSS; verifies /privacy and /terms, build & staging booking remains isolated. CI success on 2a805a2c81f6a161dcce101375b15bf79ec7556e.
+
+Validate both HUMMIN user-designed legal pages in live staging via scripts/check-production-staging.mjs, after CI and Wrangler deployment.
+
+Release enhancement: add en-KE document language to generated assessment and insights assets; preserve all source visuals and 19 staging bindings.
+
+Production Staging accessibility correction: dynamic design template lang=en-KE, exact Assessment/Insights contrast overrides. Verified CI 23cae5940b9797c60f34cec471d1d1f9f3e4f61e.
+
+Final source-fidelity badge contrast fix for Insights checklist, passing full CI commit 65d1e1c2ebd06ba34ae37b4f67f9ea5b7da0fb7e.

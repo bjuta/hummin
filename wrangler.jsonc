@@ -1,0 +1,16 @@
+{
+  "name": "hummin-web",
+  "main": "./workers/app.ts",
+  "compatibility_date": "2026-10-01",
+  "compatibility_flags": ["nodejs_compat"],
+  "observability": { "enabled": true },
+  "triggers": { "crons": ["*/5 * * * *"] },
+  "assets": { "directory": "./build/client", "binding": "ASSETS" },
+  "vars": {
+    "SITE_URL": "https://hummin.org",
+    "TURNSTILE_SITE_KEY": "",
+    "CONTACT_ENABLED": "false"
+  }
+  // D1 binding is added after creating the database:
+  // "d1_databases": [{"binding":"DB","database_name":"hummin-web","database_id":"<REAL_UUID>","migrations_dir":"migrations"}]
+}

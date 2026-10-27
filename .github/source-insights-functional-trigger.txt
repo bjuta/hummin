@@ -1,0 +1,5 @@
+2026-10-27 isolated Insights search, filter tabs, selected approved article, back navigation and no-delivery acceptance across three widths.
+
+2026-10-27 acceptance native Insights index/filter/article and server-side newsletter email validation without subscription or mail across three widths.
+
+2026-10-27 Rerun Insights search/newsletter safe validation after fail-closed staging controls.

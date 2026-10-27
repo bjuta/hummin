@@ -1,0 +1,26 @@
+name: HUMMIN verify deployed Preview transactions blocked
+on:
+  push:
+    branches: [feat/fullstack-workers-foundation]
+    paths: [.github/source-transactional-host-safety-trigger.txt]
+permissions:
+  contents: read
+jobs:
+  smoke:
+    runs-on: ubuntu-latest
+    timeout-minutes: 7
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Probe fake invalid POSTs and disabled booking slots only
+        run: node scripts/accept-preview-transactional-host-safety.mjs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: hummin-preview-transactions-guarded
+          path: artifacts/preview-transaction-guard
+          retention-days: 14

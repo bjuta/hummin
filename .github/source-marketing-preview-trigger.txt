@@ -1,0 +1,45 @@
+Deploy source-derived seven marketing views to isolated Workers Preview. Keep public hummin.org and production database untouched. 2026-10-27.
+
+2026-10-27 re-deploy isolated source Preview with all eight exact font subsets wired into browser CSS. Public hummin.org untouched.
+
+2026-10-27 staging-only deployment after exact production footer and Contact source patch port; ensure seven route smoke checks, no public changes.
+
+2026-10-27 original Assessment and Insights source roots in isolated Preview only; no cutover, no production DB.
+
+2026-10-27 source-matched 900px Assessment viewport and clamp(64px,8cqw,112px) editorial height trimming; isolated Preview only.
+
+2026-10-27 deploy exact production-restored 960px Assessment viewport and preserve Preview-native navigation; no public routing.
+
+2026-10-27 deploy exact owner-source Legal Privacy/Terms native React shell with original production CSS; isolated Preview only.
+
+2026-10-27 re-deploy Insights native Preview using original iframe sendHeight content-bottom sizing, no guessed negative margins; keep public unchanged.
+
+Retry source-faithful Preview build after Cloudflare/Vite optimizer WebSocket initialisation failure; no production deployment.
+
+2026-10-27 deploy Insights frame measurement race guard: never clamp before source sections mount; observe late content injection. Source geometry remains authoritative.
+
+2026-10-27 isolated Preview regression repair: reconnect original Insights ResizeObserver after height changes; no public routing.
+
+2026-10-27 source-correct original Google Figtree and Newsreader stylesheet for Assessment/Insights, matching original Insights iframe loaded font CSS; no public deploy.
+
+2026-10-27 isolated Preview verification: source-authored Google Figtree/Newsreader font stylesheet for Insights only; no production routes, databases or messaging.
+
+2026-10-27 isolated Preview: complete source-derived 23-step Assessment, local scoring/results, explicit no-delivery gate; preserve marketing/Insights/legal and production fallback.
+
+2026-10-27 native Assessment textarea and currency event handler reads source value before queued React state updates; Preview only.
+
+2026-10-27 redeploy fixed React input handling with guarded one-shot transient Vite optimizer retry; public site untouched.
+
+2026-10-27 verify native contact field validation against isolated no-delivery endpoint; public contact untouched.
+
+2026-10-27 corrected isolated native contact email parser; redeploy to test actual browser submission.
+
+2026-10-27 restore native Insights React event handlers (search, filter, article/back and internal routes); do not submit newsletters.
+
+2026-10-27 deploy no-delivery Assessment server-side payload validation and async results unlocking to isolated Workers Preview; no public routing changes.
+
+2026-10-27 deploy source-native Insights newsletter contract validation on isolated no-subscription endpoint; public routes and email dispatch unchanged.
+
+2026-10-27 enforce no external email/calendar/Turnstile/booking or cron side effects from isolated Preview even with provider secrets configured; guarded public routes only.
+
+2026-10-27 preserve Cache-Control no-store for blocked Preview newsletter Form POST responses with app route headers; no send.

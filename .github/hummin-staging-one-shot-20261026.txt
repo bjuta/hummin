@@ -1,0 +1,6 @@
+HUMMIN isolated staging rollout
+PR: 1
+Baseline verified development commit: 07b62ccab73433906fdee3d269d3fddb68867540
+Scope: tracked Wrangler D1 migrations + workers.dev staging only.
+No custom domain routes, DNS, Google Workspace MX, or public booking activation.
+This file is a single-use workflow trigger and is not changed again.

@@ -1,0 +1,7 @@
+Read-only production versus source-native marketing Preview: 7 routes x 3 widths, unchanged strict thresholds, screenshots and diff archive. No deployment.
+
+2026-10-27 rerun exact source marketing 7x3 pixel audit after verified browser font URL restoration, unchanged 8%/12px rules.
+
+2026-10-27 unchanged strict 21-case comparison after exact production source footer and contact geometry transcription; non-destructive visual audit.
+
+2026-10-27 equivalent prefers-reduced-motion screenshots, reject hidden data-rise references, unchanged strict pixel and height limits; source vs native marketing 21 cases.

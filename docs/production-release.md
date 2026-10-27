@@ -1,0 +1,73 @@
+# HUMMIN production staging and controlled cutover
+
+Prepared 25 October 2026. **Production site and Google Workspace DNS are not changed by these steps.**
+
+## Verified environment inventory
+- Existing website: `hummin.org` is an active Cloudflare zone. Apex A record currently points to `68.65.120.91`, proxied. `www` CNAME targets apex.
+- No HUMMIN Worker routes or custom Worker domains are installed. MX records continue to point to Google Workspace.
+- Preview Worker: `hummin-web-preview`, preview D1 `a6fb62df-824e-4231-8630-34ce1e6c27f4`.
+- New isolated production D1: `hummin-web-production`, `acd04e85-a433-463b-865f-a01f8aac3e27`. Do not copy preview account sessions, invented test records, OTP challenges, or test bookings.
+- Staging Worker intended name: `hummin-web-production`; public custom domain routing **not configured**.
+
+## Safe sequence
+1. Verify `npm run check:production:config` and all CI steps, confirm precise commit SHA.
+2. Run `npm run db:production` from the approved branch with authenticated Cloudflare operator access. This applies all tracked migrations using Wrangler (do not execute raw migration SQL without recording Wrangler migration state).
+3. Review D1 migration results, ensure fresh empty operational/customer tables. Confirm retention, least-privilege policy, backups/time-travel recovery capability.
+4. Create a standalone staging Worker only with `npm run deploy:production:staging`. Ensure no custom hostname routes are assigned. It uses `workers.dev` and the isolated database; contact, booking, availability and Admin authentication are explicitly OFF.
+5. Configure `RESEND_API_KEY`, `EMAIL_FROM`, Turnstile and calendar credentials only when authorised. Never commit tokens. Explicitly enable services only after real end-to-end tests; do not copy the preview Admin pepper or customer records.
+6. Test homepage, assessment, Insights index/article/author/topic/SEO, newsletter, downloads, forms, OTP, security and accessibility at desktop/mobile sizes. Verify any published CMS articles and redirect behaviour, canonical links, no indexing of staging and no unexpected outbound email.
+7. Provision `sales@hummin.org` as Owner in production through an authorised workflow. Do not assume preview identities exist in production.
+8. Capture the pre-cutover apex A record and public response; document an operator who can roll back the site rapidly. Confirm HTTPS, www redirect, caching, robots, sitemap, logging and traffic monitoring.
+9. **Separate owner approval required:** attach production Worker routes/domains to `hummin.org` and `www.hummin.org` only after service/visual/security gates succeed. Keep MX/SPF/DKIM/DMARC records untouched.
+10. Post-cutover, test each public workflow, email deliverability, live booking, Admin login, CMS publication, and restore procedures. Roll back routing to prior server immediately for critical failures.
+
+## Outstanding hard gates
+- Google Calendar booking is disabled on preview. Preview documentation records API event creation but not the full published assessment-to-calendar flow.
+- Automated CI success is not a substitute for device-sized visual parity testing of the supplied website and Admin HTML.
+- Verify legal/privacy/retention review and final brand assets.
+- Verify production sender deliverability, abuse prevention, booking/replay protection, OTP session protection and newsletter unsubscribe.
+- Verify analytics with actual recorded events.
+- Approve the public domain cutover explicitly, after the above.
+
+
+## Staging execution checkpoint (25 October 2026)
+- [x] New empty isolated D1 exists; no schema or customer records have been copied.
+- [x] Production configuration is fail-closed and passed CI.
+- [x] Manually gated `.github/workflows/stage-production.yml` created for migration and isolated Worker staging.
+- [ ] **Workflow has not been executed**. It needs an authorised GitHub production-staging environment and Cloudflare API token/account ID GitHub secrets.
+- [x] The manual workflow is registered on the default branch and follows the SHA-pinned development release.
+- [ ] Execute the manual staging workflow only after the approval and secrets are in place; review its logs and confirm the production `d1_migrations` history.
+- [ ] The CI workflow now runs a Wrangler-native local D1 migration rehearsal, in addition to the SQLite schema check. Require both checks green on the approved release SHA.
+- [ ] Confirm the Worker hostname is correct for the Cloudflare account. Do not introduce public routes in the workflow.
+- [ ] Confirm the Worker renders correctly and service flags are false.
+- [ ] Deploy the public domain only after service-gate acceptance.
+
+The preview D1 was constructed using direct SQL and does **not** currently have a Wrangler `d1_migrations` table. Do not use preview migration history as a production baseline. Use tracked migrations on the empty production database.
+
+## GitHub credential handoff (no secret values in source or chat)
+1. Open the [GitHub repository Environments settings](https://github.com/bjuta/hummin/settings/environments) and configure `production-staging` with any required reviewer approval.
+2. Add environment-scoped secrets `CLOUDFLARE_API_TOKEN` (minimum Worker and D1 permissions for this account) and `CLOUDFLARE_ACCOUNT_ID`. Do not place token strings into commit history, email or a chat message.
+3. In [Stage production infrastructure](https://github.com/bjuta/hummin/actions/workflows/stage-production.yml), choose **Run workflow**, select `main`, and enter the exact full 40-character **verified** development commit SHA for `release_sha`.
+4. The job checks out the development branch and fails if its HEAD has moved; approval must be repeated for a different SHA.
+5. Confirm production migration history and isolated Worker URL in the job logs before considering any public-domain cutover. The job must never configure zone routes.
+
+## Verified pre-cutover snapshot — 26 October 2026
+
+Live Cloudflare read-only verification:
+- `hummin.org` zone active; apex proxied A record is `68.65.120.91`, record ID `3a7ab5c82ee5901b07d3db934ba894ef`.
+- `www.hummin.org` proxied CNAME targets `hummin.org`, record ID `14d34872240f539ee03e357cf806afa6`.
+- **No** custom HUMMIN Worker zone routes exist. Google Workspace MX records were present; do not alter MX, SPF, DKIM or DMARC during site cutover.
+- Isolated staging Worker `hummin-web-production` was serving version `99d57a0e-f515-4139-b7ed-5c6bb4884d06` at the start of this audit.
+- Isolated staging D1 `acd04e85-a433-463b-865f-a01f8aac3e27` returned an available time-travel bookmark. A bookmark is a recovery capability, **not** a completed restore rehearsal.
+- Complete assessment-to-calendar booking, external Google invitation and HUMMIN-branded confirmation receipt, and internal `sales@hummin.org` notification have been accepted against Production Staging. Do not repeat bookings to verify previously proven integrations.
+
+### Operator rollback checklist (public cutover only, requires separate approval)
+
+1. Record the exact pre-cutover DNS records above, current zone Worker routes, Worker version ID, and a fresh D1 bookmark immediately before any route change.
+2. Attach the reviewed, SHA-pinned production Worker to the public host only after the legal, browser/accessibility, consent, monitoring and owner gates all pass. **Do not change MX/SPF/DKIM/DMARC**.
+3. Verify `/`, `/privacy`, `/assessment`, `/contact`, `/admin/login`, `/insights`, `/robots.txt`, `/sitemap.xml` and booking slot security on the public domain. Check that the public host is indexed only after approval and staging hosts remain noindex.
+4. If significant regressions occur, remove the newly attached HUMMIN Worker zone route or custom hostname mapping to restore traffic to the original apex origin `68.65.120.91`. Confirm the original website and Google Workspace mail still work.
+5. If a deployment version alone is defective, use the Cloudflare Worker deployment versions API to redeploy a previously verified version. Do **not** time-travel D1 while legitimate bookings or submissions might be lost; database restoration requires a separately authorised data reconciliation plan.
+6. Reverify public HTTPS, `www`, primary calls to action, contact and email, admin login, calendar read/booking, and error rates after rollback.
+
+**Execution status:** read-only recovery prerequisites verified, but no route switch or destructive rollback rehearsal conducted. The source release remains a draft PR, and the actual public cutover still requires owner approval.

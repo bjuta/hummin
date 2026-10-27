@@ -1,0 +1,9 @@
+
+body{margin:0;background:#F4F5F1;color:#1E272A;font-family:'Figtree',system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+*{box-sizing:border-box}
+a{color:#B5532C;text-decoration:none}
+a:hover{color:#1E272A}
+:focus-visible{outline:2px solid #B5532C;outline-offset:3px}
+input::placeholder{color:inherit;opacity:0.6}
+@keyframes inIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}

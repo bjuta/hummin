@@ -1,0 +1,28 @@
+name: HUMMIN read-only native Insights boundary diagnostics
+on:
+  push:
+    branches: [feat/fullstack-workers-foundation]
+    paths: [.github/source-insights-geometry-trigger.txt]
+permissions:
+  contents: read
+jobs:
+  measure:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: npm install --no-save --ignore-scripts --no-audit --no-fund playwright@1.56.1
+      - run: npx playwright install chromium --only-shell
+      - name: Measure original Insights iframe boundaries and native root geometry
+        run: node scripts/diagnose-source-insights-geometry.mjs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: hummin-source-insights-layout-evidence
+          path: artifacts/source-insights-geometry
+          retention-days: 14

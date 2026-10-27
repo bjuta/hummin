@@ -1,0 +1,70 @@
+# HUMMIN React migration — source-first component contract
+
+## Why we changed the method
+
+The prior approach iteratively approximated every page from screenshots. It produced repeated CSS overrides and passed functional checks while failing visual comparisons. The original HTML is an archival design reference, not the runtime or build source. React components, versioned presentation files, and JSON content are the implementation and deployment source.
+
+## Source assets
+
+- Marketing HTML and style rules: `design/sources/site-v4.template.json` (JSON-encoded authoritative HTML).
+- Insights HTML: `design/sources/insights-v4.html.gz.b64`.
+- Original static resources: manifest shards under `design/sources`.
+- Original Figtree and Newsreader fonts, SVG icon variants, hero artwork and photography have been permanently committed under `public/brand`.
+
+A newly uploaded owner HTML file should be compared to the repository source first; replace the authoritative source if it supersedes these versions. **Do not hand-transcribe the site again.**
+
+## Reusable primitive layer
+
+`app/components/SourcePrimitives.tsx`:
+
+- `SourceButton`: original CTA DOM/class styles, used by marketing pages.
+- `SourceSectionTitle`: common headings/eyebrows.
+- `SourceShelf`: the original horizontal shelf plus native scrolling and accessible controls.
+- `SourceIcon`: static owner-supplied Lucide/brand SVGs, never re-drawn approximations.
+- `SourceChip`: consistent inline metadata/badge markup.
+- `SourceDialog`: shared problem/engagement modal structure, accessible close and Escape behavior.
+
+`app/components/SourceEditorialCard.tsx` uses a single data/router implementation for the three **source-authored** editorial variants: latest, topic/author archive and related reading. It retains each original class structure for styling.
+
+## Style foundation
+
+`app/components/source-foundation.css` is a committed snapshot of the approved foundation, independent of HTML. Its palette is exposed as semantic `--hummin-*` variables. The old extraction script is retained only in repository history/legacy tooling, never invoked by the React build.
+
+The marketing, Contact, Insights, article, assessment, promotion and legal styles now reference these shared variables (448 existing colour literals consolidated mechanically, without changing their computed values).
+
+**Rule:** new page-specific CSS is allowed for genuinely unique compositions; repeated controls and colours must come from the foundation and primitives. Do not stack emergency `!important` override sections to make individual screenshots look similar.
+
+## Fidelity completion process
+
+1. Inventory repeatable sections across the original HTML (hero, shelf, poster, section heading, CTA, tabs, modal, editorial/card, forms).
+2. Port each pattern **once** into a primitive. Use original tokens, source content, source imagery and source DOM; adapt only interactivity/bindings needed for React.
+3. Instantiate the pattern across all applicable routes. Data remains in source-derived content modules. Shared backend operations remain unchanged.
+4. Run local source-contract and build checks before consuming hosted CI minutes:
+   - `npm run verify:design-source`
+   - `node --test tests/source-editorial-contract.test.mjs`
+   - `npm run typecheck`
+   - `npm run build`
+5. Only after a complete local pass, deploy one consolidated isolated Preview candidate and run one sequential release gate. Compare trustworthy full-page captures from production, with rendered frame/scroll effects settled.
+6. Inspect **systemic** differences (font metrics, root width/padding, card variant geometry, animation/reveal timing), fix in shared primitives or source token extraction, then verify the affected routes together. Treat incomplete production source captures as blocked/invalid evidence, never as proof that React should delete real content.
+7. Preserve D1, Cloudflare Turnstile, Resend, booking calendar, newsletter and Admin functionality. No real test emails or reservations, no public cutover without owner approval.
+
+## Status
+
+The shared source primitives and versioned assets were **built and deployed successfully** to isolated React Preview in GitHub Actions run [40390575461](https://github.com/bjuta/hummin/actions/runs/40390575461). In that run, the entire `design/sources` directory was removed from the build checkout before design/asset/SEO tests, TypeScript checking and the build; Preview deployment and route smoke checks passed. **The public React cutover and full-site visual fidelity are still not approved**, and `design/sources` remains archived because public routes retain a legacy fallback. See [legacy-html-retirement.md](legacy-html-retirement.md).
+
+The goal of this architecture is to eliminate repeated visual patching, not to relax HUMMIN's requirement for full fidelity.
+
+
+## HTML-removal safety — enforced after migration
+
+The **normal React build is now self-contained**. Versioned assets live under `public/brand`, React article blocks live in `app/lib/react-original-insights.json`, and `app/components/source-foundation.css` is a static CSS snapshot rather than a build-generated file. `prebuild` only makes independently-authored downloadable tools; `pretypecheck` is removed. CI tests now validate React components and these committed assets directly.
+
+**Do not delete the original `design/sources` bundle yet.** The public-host reversible route gate still calls `app/routes/fidelity.ts`, which fetches `/design/site/index.html` generated by the old restoration path. Removing the original while this production fallback is live would break public pages. Legacy restoration scripts remain preserved for rollback but are not part of normal React builds, typechecks or current React acceptance.
+
+The safe deletion sequence, after owner-approved public React routing, is:
+
+1. Confirm no public route uses `originalLoader` or `/design/*` and no build hook references `restore-original.mjs`, `extract-react-assets.mjs`, `extract-react-insights.mjs` or `sync-source-foundation.mjs`.
+2. Run `npm run verify:design-source`, `npm run verify:seo`, `npm run verify:insights`, `npm run verify:boot`, `npm run typecheck` and `npm run build` **with `design/sources` temporarily absent**. Confirm all required local assets and articles remain available.
+3. Confirm release sign-off and rollback strategy. Only then remove the legacy `design/sources/*` HTML/bundle files and unused restoration/extraction scripts from the working branch in a separate reversible commit. No automatic history rewriting; historic commits can still contain old HTML.
+
+**Current status:** build dependency removed in code; separate no-source build execution and public cutover not yet certified. Public site untouched.

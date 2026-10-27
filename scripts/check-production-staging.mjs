@@ -1,0 +1,50 @@
+import assert from "node:assert/strict";
+const base=(process.env.HUMMIN_STAGING_URL||"https://hummin-web-production.grimpossible.workers.dev").replace(/\/$/,"");
+assert.match(base,/^https:\/\/hummin-web-production\.[a-z0-9-]+\.workers\.dev$/,"Run only against the isolated production Worker URL");
+const read=async(path)=>{
+ const r=await fetch(base+path,{redirect:"manual",signal:AbortSignal.timeout(20000)});
+ return {response:r,body:await r.text()};
+};
+const home=await read("/");
+assert.equal(home.response.status,200,"Homepage must load");
+assert.match(home.response.headers.get("x-robots-tag")||"",/noindex/i,"Staging homepage must not be indexed");
+assert.match(home.body,/<meta name="robots" content="noindex,nofollow">/i,"Staging template must retain noindex");
+const robots=await read("/robots.txt");
+assert.equal(robots.response.status,200);
+assert.match(robots.body,/Disallow: \/\n/);
+const sitemap=await read("/sitemap.xml");
+assert.equal(sitemap.response.status,404,"Staging sitemap must not be publicly crawlable");
+const slots=await read("/api/booking/slots");
+assert.equal(slots.response.status,200,"Staging booking endpoint must respond");
+assert.match(slots.response.headers.get("x-robots-tag")||"",/noindex/i,"Staging booking API must not be indexed");
+const slotData=JSON.parse(slots.body);
+assert.equal(slotData.enabled,true,"Staging should serve verified live bookings while isolated from public domain");
+assert.ok(Array.isArray(slotData.days)&&slotData.days.length>0,"Google-backed availability should contain days");
+assert.ok(typeof slotData.siteKey==="string"&&slotData.siteKey.length>5,"Turnstile public key must be supplied");
+const privacy=await read("/privacy");
+assert.equal(privacy.response.status,200,"Privacy route must load");
+assert.match(privacy.response.headers.get("x-robots-tag")||"",/noindex/i,"Staging privacy page must not be indexed");
+assert.match(privacy.body,/Privacy notice/i,"Privacy notice must be published on staging");
+for(const heading of ["Information we receive","Providers and international processing","How long information is kept","Your choices and rights"])
+ assert.ok(privacy.body.includes(heading),"Missing privacy section: "+heading);
+assert.doesNotMatch(privacy.body,/Privacy notice under review|Publication required before launch|This placeholder is not a completed privacy policy/i,"Privacy placeholder must not ship");
+assert.match(privacy.body,/hummin-legal-hero/,"Privacy must use supplied HUMMIN Legal design");
+assert.match(privacy.body,/Read the Terms of Use/,"Privacy page must link to Terms");
+const terms=await read("/terms");
+assert.equal(terms.response.status,200,"Terms route must load");
+assert.match(terms.response.headers.get("x-robots-tag")||"",/noindex/i,"Staging Terms page must not be indexed");
+assert.match(terms.body,/Terms of use\./i,"Terms heading must be present");
+assert.match(terms.body,/hummin-legal-hero/,"Terms must use supplied HUMMIN Legal design");
+for(const heading of ["About these terms","The Business Assessment","Booking a call","Law and disputes"])
+ assert.ok(terms.body.includes(heading),"Missing Terms section: "+heading);
+
+const login=await read("/admin/login");
+assert.equal(login.response.status,200);
+assert.match(login.response.headers.get("x-robots-tag")||"",/noindex/i,"Staging Admin login must not be indexed");
+assert.match(login.body,/Send sign-in code/i,"Activated Owner login must load");
+assert.doesNotMatch(login.body,/Staff access is not currently available/i,"Admin must not have silently reverted to disabled");
+const contact=await read("/contact");
+assert.equal(contact.response.status,200,"Contact page must load");
+assert.match(contact.body,/Send Enquiry/i,"Contact form must be active");
+assert.doesNotMatch(contact.body,/The online form is not activated yet/i,"Contact must not have silently reverted to disabled");
+console.log("PASS staging smoke: crawler policy, live Admin and contact, live calendar-backed booking; privacy page complete but owner approval pending");

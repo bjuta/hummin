@@ -1,0 +1,28 @@
+name: HUMMIN isolated Assessment 23-step browser acceptance
+on:
+  push:
+    branches: [feat/fullstack-workers-foundation]
+    paths: [.github/source-assessment-browser-trigger.txt]
+permissions:
+  contents: read
+jobs:
+  non-delivery-browser:
+    runs-on: ubuntu-latest
+    timeout-minutes: 18
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: npm install --no-save --ignore-scripts --no-audit --no-fund playwright@1.56.1
+      - run: npx playwright install chromium --only-shell
+      - name: Execute all 23 native questions, original scoring and unlocking in three browser widths
+        run: node scripts/accept-source-assessment-functional.mjs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: hummin-assessment-native-interactive-three-widths
+          path: artifacts/source-assessment-functional
+          retention-days: 14

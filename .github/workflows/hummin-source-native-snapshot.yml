@@ -1,0 +1,67 @@
+name: HUMMIN one-shot source-native code snapshot
+on:
+  push:
+    branches: [feat/fullstack-workers-foundation]
+    paths: [.github/source-native-commit-trigger.txt]
+permissions:
+  contents: write
+concurrency:
+  group: hummin-source-native-snapshot
+  cancel-in-progress: false
+jobs:
+  snapshot:
+    if: github.repository == 'bjuta/hummin'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: npm install --no-save --no-audit --no-fund parse5@7.3.0
+      - name: Extract and checksum original source fragments
+        run: |
+          node scripts/catalog-approved-source.mjs
+          node scripts/extract-source-blueprints.mjs
+      - name: Generate native React modules with exact original inline styles
+        run: node scripts/transcribe-approved-react.mjs
+      - name: Derive original source data and exact asset-ID mapping
+        run: |
+          node scripts/snapshot-approved-viewmodel.mjs
+          node scripts/map-approved-source-assets.mjs
+          node scripts/map-assessment-original-assets.mjs
+          node scripts/snapshot-remaining-viewmodels.mjs
+          cp artifacts/source-native-transcription/marketing-viewmodels.json app/data/ApprovedMarketingViewmodels.generated.json
+          cp artifacts/source-native-transcription/remaining-viewmodels.json app/data/ApprovedRemainingViewmodels.generated.json
+          cp artifacts/source-native-transcription/asset-map.json app/data/ApprovedSourceAssets.generated.json
+      - name: Validate source DOM, typed output and source-only app build
+        run: |
+          npx esbuild artifacts/source-native-transcription/approved-components.tsx --bundle --platform=node --format=esm --packages=external --outfile=artifacts/source-native-transcription/renderable.mjs
+          node scripts/verify-source-native-transcription.mjs
+          node scripts/verify-approved-marketing-assembly.mjs
+          node scripts/verify-remaining-original-roots.mjs
+          npm run typecheck
+          npm run build
+      - name: Copy approved source CSS without editing declarations
+        run: |
+          mkdir -p app/components/approved-source-css
+          cp artifacts/source-component-catalog/site/css/0012.css app/components/approved-source-css/site-fonts.css
+          cp artifacts/source-component-catalog/site/css/0014.css app/components/approved-source-css/site-base.css
+          cp artifacts/source-component-catalog/assessment/css/0012.css app/components/approved-source-css/assessment-fonts.css
+          cp artifacts/source-component-catalog/assessment/css/0013.css app/components/approved-source-css/assessment-base.css
+          cp artifacts/source-component-catalog/insights/css/0013.css app/components/approved-source-css/insights-base.css
+      - name: Preserve source-authored marketing view models and exact media paths
+        run: |
+          mkdir -p app/data
+          test -s app/data/ApprovedRemainingViewmodels.generated.json
+      - name: Commit source-verified React markup, CSS and marketing data to development branch
+        run: |
+          git diff --check
+          git add -- app/components/ApprovedSourceTranscription.generated.tsx app/components/ApprovedSourceHover.generated.css app/components/ApprovedSourceActive.generated.css app/components/ApprovedSourceFonts.runtime.css app/components/ApprovedAssessmentFonts.runtime.css app/components/approved-source-css app/data/ApprovedMarketingViewmodels.generated.json app/data/ApprovedRemainingViewmodels.generated.json app/data/ApprovedSourceAssets.generated.json public/brand/source-resources
+          if git diff --cached --quiet; then echo "Source transcription unchanged"; exit 0; fi
+          git config user.name "hummin-source-extractor[bot]"
+          git config user.email "source-extractor@users.noreply.github.com"
+          git commit -m "Snapshot exact owner-approved source as typed, unwired React components"
+          git push origin HEAD:feat/fullstack-workers-foundation

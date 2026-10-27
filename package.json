@@ -1,0 +1,53 @@
+{
+  "name": "hummin",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "react-router dev",
+    "build": "react-router build",
+    "typegen": "react-router typegen",
+    "typecheck": "npm run typegen && tsc --noEmit",
+    "preview": "npm run build && vite preview",
+    "deploy": "node -e \"console.error('Choose deploy:preview or deploy:production:staging explicitly; public domain routing requires separate approval.'); process.exit(1)\"",
+    "db:local": "wrangler d1 migrations apply hummin-web --local",
+    "db:remote": "wrangler d1 migrations apply hummin-web --remote",
+    "deploy:preview": "wrangler deploy",
+    "db:preview": "wrangler d1 migrations apply hummin-web-preview --config wrangler.preview.jsonc --remote",
+    "prebuild": "node scripts/build-insights-downloads.mjs",
+    "verify:email": "node --experimental-strip-types --test tests/enquiry-email.test.mjs tests/email-workflows.test.mjs tests/booking-reconciliation.test.mjs tests/booking-internal.test.mjs",
+    "verify:insights": "node --experimental-strip-types --test tests/insights-publications.test.mjs",
+    "verify:admin": "node --experimental-strip-types --test tests/admin-auth.test.mjs",
+    "verify:admin-data": "node --experimental-strip-types --test tests/admin-data.test.mjs",
+    "verify:admin-fidelity": "node --test tests/admin-fidelity.test.mjs",
+    "verify:insights-publications": "node --experimental-strip-types --test tests/insights-publications.test.mjs",
+    "verify:admin-operations": "node --experimental-strip-types --test tests/admin-operations.test.mjs",
+    "verify:analytics": "node --experimental-strip-types --test tests/analytics-events.test.mjs",
+    "db:production": "wrangler d1 migrations apply hummin-web-production --config wrangler.production.jsonc --remote",
+    "deploy:production:staging": "npm run verify:html-removal-ready && HUMMIN_DEPLOY_TARGET=production npm run build && wrangler deploy --config build/server/wrangler.json",
+    "check:production:config": "node scripts/check-production-config.mjs",
+    "verify:production:migrations": "node --experimental-sqlite scripts/verify-production-migrations.mjs",
+    "verify:seo": "node --experimental-strip-types --test tests/seo-release.test.mjs",
+    "verify:production:wrangler-migrations": "wrangler d1 migrations apply hummin-web-production --config wrangler.production.jsonc --local --persist-to .wrangler/production-schema-check",
+    "verify:boot": "node scripts/verify-restored.mjs",
+    "verify:design-source": "node scripts/verify-restored.mjs",
+    "verify:static-assets": "node scripts/verify-restored.mjs",
+    "verify:html-removal-ready": "node scripts/check-legacy-html-detach.mjs"
+  },
+  "dependencies": {
+    "isbot": "5.1.32",
+    "react": "19.2.1",
+    "react-dom": "19.2.1",
+    "react-router": "7.9.6"
+  },
+  "devDependencies": {
+    "@cloudflare/vite-plugin": "1.15.3",
+    "@cloudflare/workers-types": "4.20260702.1",
+    "@react-router/dev": "7.9.6",
+    "@types/node": "24.10.1",
+    "@types/react": "19.2.7",
+    "@types/react-dom": "19.2.3",
+    "typescript": "5.9.3",
+    "vite": "^7.0.0",
+    "wrangler": "4.88.0"
+  }
+}

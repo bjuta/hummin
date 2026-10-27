@@ -1,0 +1,756 @@
+{
+  "sourceSha256": "121a2ffcf33cdc8428fcd998b2fa88754d88bcac94a8b9ef73aee2b8de71a607",
+  "AREAS": [
+    {
+      "k": "direction",
+      "name": "Direction"
+    },
+    {
+      "k": "customers",
+      "name": "Customers"
+    },
+    {
+      "k": "operations",
+      "name": "Operations"
+    },
+    {
+      "k": "people",
+      "name": "People"
+    },
+    {
+      "k": "information",
+      "name": "Information"
+    }
+  ],
+  "GOALS": [
+    {
+      "label": "Grow sales",
+      "w": {
+        "direction": 1,
+        "customers": 1.6,
+        "operations": 1,
+        "people": 0.8,
+        "information": 1
+      }
+    },
+    {
+      "label": "Free up my time",
+      "w": {
+        "direction": 1,
+        "customers": 0.8,
+        "operations": 1.4,
+        "people": 1.5,
+        "information": 1
+      }
+    },
+    {
+      "label": "Improve profit margins",
+      "w": {
+        "direction": 1,
+        "customers": 1,
+        "operations": 1.4,
+        "people": 0.8,
+        "information": 1.4
+      }
+    },
+    {
+      "label": "Prepare it to run without me",
+      "w": {
+        "direction": 1.4,
+        "customers": 0.8,
+        "operations": 1.2,
+        "people": 1.5,
+        "information": 1.2
+      }
+    }
+  ],
+  "STEPS": [
+    {
+      "type": "choice",
+      "area": "goal",
+      "id": "goal",
+      "text": "What do you most want from the business in the next 12 months?",
+      "why": "We weight your results around this goal.",
+      "options": [
+        {
+          "label": "Grow sales"
+        },
+        {
+          "label": "Free up my time"
+        },
+        {
+          "label": "Improve profit margins"
+        },
+        {
+          "label": "Prepare it to run without me"
+        }
+      ]
+    },
+    {
+      "type": "choice",
+      "area": "direction",
+      "id": "d1",
+      "text": "How would your team describe the main goal for this year?",
+      "why": "If the goal is not clear to the team, effort goes in different directions.",
+      "options": [
+        {
+          "label": "They would all say the same thing, in similar words.",
+          "pts": 3
+        },
+        {
+          "label": "Most of them would get close.",
+          "pts": 2
+        },
+        {
+          "label": "They would give different answers.",
+          "pts": 1
+        },
+        {
+          "label": "We have not set one.",
+          "pts": 0
+        }
+      ]
+    },
+    {
+      "type": "choice",
+      "area": "direction",
+      "id": "d2",
+      "text": "How do you decide which projects to take on?",
+      "why": "Without written priorities, the urgent usually beats the important.",
+      "options": [
+        {
+          "label": "Against a short, written list of priorities.",
+          "pts": 3
+        },
+        {
+          "label": "We discuss it, but nothing is written down.",
+          "pts": 2
+        },
+        {
+          "label": "Mostly on instinct or urgency.",
+          "pts": 1
+        },
+        {
+          "label": "Whatever comes up first.",
+          "pts": 0
+        }
+      ]
+    },
+    {
+      "type": "choice",
+      "area": "direction",
+      "id": "d3",
+      "text": "How often do you check progress against your plan?",
+      "why": "A plan only helps if someone looks at it.",
+      "options": [
+        {
+          "label": "Monthly, with figures.",
+          "pts": 3
+        },
+        {
+          "label": "Every few months.",
+          "pts": 2
+        },
+        {
+          "label": "Once a year, if that.",
+          "pts": 1
+        },
+        {
+          "label": "We do not have a plan to check against.",
+          "pts": 0
+        }
+      ]
+    },
+    {
+      "type": "choice",
+      "area": "customers",
+      "id": "c1",
+      "text": "When an enquiry arrives, who replies, and how fast?",
+      "why": "Speed of reply is one of the strongest signs of whether an enquiry becomes a sale.",
+      "options": [
+        {
+          "label": "A named person, within the hour.",
+          "pts": 3
+        },
+        {
+          "label": "Someone replies the same day.",
+          "pts": 2
+        },
+        {
+          "label": "It depends on who sees it.",
+          "pts": 1
+        },
+        {
+          "label": "Nobody tracks this.",
+          "pts": 0
+        }
+      ]
+    },
+    {
+      "type": "choice",
+      "area": "customers",
+      "id": "c2",
+      "text": "Where are enquiries recorded?",
+      "why": "An enquiry that is not recorded cannot be followed up.",
+      "options": [
+        {
+          "label": "In one system the whole team uses.",
+          "pts": 3
+        },
+        {
+          "label": "In a spreadsheet.",
+          "pts": 2
+        },
+        {
+          "label": "In phones, chats, and inboxes.",
+          "pts": 1
+        },
+        {
+          "label": "They are not recorded.",
+          "pts": 0
+        }
+      ]
+    },
+    {
+      "type": "choice",
+      "area": "customers",
+      "id": "c3",
+      "text": "Do you know which channel brings your best customers?",
+      "why": "Knowing this tells you where to spend time and money.",
+      "options": [
+        {
+          "label": "Yes, we track it.",
+          "pts": 3
+        },
+        {
+          "label": "We have a good idea.",
+          "pts": 2
+        },
+        {
+          "label": "We would be guessing.",
+          "pts": 1
+        },
+        {
+          "label": "No.",
+          "pts": 0
+        }
+      ]
+    },
+    {
+      "type": "choice",
+      "area": "operations",
+      "id": "o1",
+      "text": "If a key person were away for two weeks, what would happen?",
+      "why": "This shows how much of the business lives in people’s heads.",
+      "options": [
+        {
+          "label": "Work would continue. It is written down.",
+          "pts": 3
+        },
+        {
+          "label": "Some delays, but we would manage.",
+          "pts": 2
+        },
+        {
+          "label": "Important work would stop.",
+          "pts": 1
+        },
+        {
+          "label": "The business would struggle badly.",
+          "pts": 0
+        }
+      ]
+    },
+    {
+      "type": "choice",
+      "area": "operations",
+      "id": "o2",
+      "text": "How are routine tasks done?",
+      "why": "Consistent work is easier to check, teach, and improve.",
+      "options": [
+        {
+          "label": "The same way each time, from written steps.",
+          "pts": 3
+        },
+        {
+          "label": "Mostly the same way, but nothing is written.",
+          "pts": 2
+        },
+        {
+          "label": "Each person does it their own way.",
+          "pts": 1
+        },
+        {
+          "label": "We fix problems as they happen.",
+          "pts": 0
+        }
+      ]
+    },
+    {
+      "type": "choice",
+      "area": "operations",
+      "id": "o3",
+      "text": "How much of your own week goes on day-to-day running?",
+      "why": "Time spent running the business is time not spent growing it.",
+      "options": [
+        {
+          "label": "Under a quarter.",
+          "pts": 3
+        },
+        {
+          "label": "About half.",
+          "pts": 2
+        },
+        {
+          "label": "Most of it.",
+          "pts": 1
+        },
+        {
+          "label": "Nearly all of it.",
+          "pts": 0
+        }
+      ]
+    },
+    {
+      "type": "choice",
+      "area": "people",
+      "id": "p1",
+      "text": "Does everyone know what they are responsible for?",
+      "why": "Unclear roles lead to gaps and duplicated work.",
+      "options": [
+        {
+          "label": "Yes. Roles are written and up to date.",
+          "pts": 3
+        },
+        {
+          "label": "Mostly, but some roles overlap.",
+          "pts": 2
+        },
+        {
+          "label": "Roles are unclear.",
+          "pts": 1
+        },
+        {
+          "label": "Everyone does a bit of everything.",
+          "pts": 0
+        }
+      ]
+    },
+    {
+      "type": "choice",
+      "area": "people",
+      "id": "p2",
+      "text": "How do new staff learn the job?",
+      "why": "How people are trained shapes how well the work is done.",
+      "options": [
+        {
+          "label": "A planned induction with written guides.",
+          "pts": 3
+        },
+        {
+          "label": "They shadow a colleague.",
+          "pts": 2
+        },
+        {
+          "label": "They pick it up as they go.",
+          "pts": 1
+        },
+        {
+          "label": "We rarely have time to train anyone.",
+          "pts": 0
+        }
+      ]
+    },
+    {
+      "type": "choice",
+      "area": "people",
+      "id": "p3",
+      "text": "When someone is not performing, what happens?",
+      "why": "How this is handled affects the whole team.",
+      "options": [
+        {
+          "label": "We address it quickly, with clear expectations.",
+          "pts": 3
+        },
+        {
+          "label": "We talk about it, eventually.",
+          "pts": 2
+        },
+        {
+          "label": "We work around it.",
+          "pts": 1
+        },
+        {
+          "label": "Nothing changes.",
+          "pts": 0
+        }
+      ]
+    },
+    {
+      "type": "choice",
+      "area": "information",
+      "id": "i1",
+      "text": "How soon after month end do you see your figures?",
+      "why": "Late figures mean late decisions.",
+      "options": [
+        {
+          "label": "Within a week.",
+          "pts": 3
+        },
+        {
+          "label": "Within a month.",
+          "pts": 2
+        },
+        {
+          "label": "When the accountant sends them.",
+          "pts": 1
+        },
+        {
+          "label": "We do not see monthly figures.",
+          "pts": 0
+        }
+      ]
+    },
+    {
+      "type": "choice",
+      "area": "information",
+      "id": "i2",
+      "text": "Which figures do you check every week?",
+      "why": "A few figures, checked often, beat many figures checked rarely.",
+      "options": [
+        {
+          "label": "A short set we agreed on.",
+          "pts": 3
+        },
+        {
+          "label": "Sales only.",
+          "pts": 2
+        },
+        {
+          "label": "Whatever someone mentions.",
+          "pts": 1
+        },
+        {
+          "label": "None.",
+          "pts": 0
+        }
+      ]
+    },
+    {
+      "type": "choice",
+      "area": "information",
+      "id": "i3",
+      "text": "When you make a big decision, what is it based on?",
+      "why": "Good records make decisions faster and safer.",
+      "options": [
+        {
+          "label": "Records we trust.",
+          "pts": 3
+        },
+        {
+          "label": "Records, plus judgement.",
+          "pts": 2
+        },
+        {
+          "label": "Mostly judgement.",
+          "pts": 1
+        },
+        {
+          "label": "Gut feeling.",
+          "pts": 0
+        }
+      ]
+    },
+    {
+      "type": "numbers",
+      "area": "numbers",
+      "id": "nums",
+      "text": "A few numbers, so we can estimate what the gaps cost.",
+      "why": "Rough figures are fine. If you do not know one, say so; that tells us something too."
+    },
+    {
+      "type": "choice",
+      "area": "you",
+      "id": "size",
+      "text": "How many people work in the business?",
+      "why": "This helps us compare you with similar businesses.",
+      "options": [
+        {
+          "label": "1 to 5"
+        },
+        {
+          "label": "6 to 20"
+        },
+        {
+          "label": "21 to 50"
+        },
+        {
+          "label": "More than 50"
+        }
+      ]
+    },
+    {
+      "type": "choice",
+      "area": "you",
+      "id": "obstacle",
+      "text": "What has stopped you fixing this so far?",
+      "why": "Most owners already know what needs to change. Something gets in the way.",
+      "options": [
+        {
+          "label": "Time"
+        },
+        {
+          "label": "The right skills in the team"
+        },
+        {
+          "label": "Not sure where to start"
+        },
+        {
+          "label": "Cost"
+        },
+        {
+          "label": "We tried before and it did not stick"
+        }
+      ]
+    },
+    {
+      "type": "choice",
+      "area": "you",
+      "id": "help",
+      "text": "How would you prefer to fix it?",
+      "why": "There is no wrong answer. It changes what we suggest next.",
+      "options": [
+        {
+          "label": "Myself, with a clear plan"
+        },
+        {
+          "label": "With guidance from someone experienced"
+        },
+        {
+          "label": "Have it done, working with my team"
+        }
+      ]
+    },
+    {
+      "type": "choice",
+      "area": "you",
+      "id": "timing",
+      "text": "When would you like to start?",
+      "why": "This helps us suggest a realistic next step.",
+      "options": [
+        {
+          "label": "This month"
+        },
+        {
+          "label": "In the next three months"
+        },
+        {
+          "label": "Later this year"
+        },
+        {
+          "label": "I am just exploring"
+        }
+      ]
+    },
+    {
+      "type": "choice",
+      "area": "you",
+      "id": "decide",
+      "text": "Who makes the final decision on work like this?",
+      "why": "So we know who should be part of the conversation.",
+      "options": [
+        {
+          "label": "Me"
+        },
+        {
+          "label": "Me, with a partner or family"
+        },
+        {
+          "label": "Someone else"
+        }
+      ]
+    },
+    {
+      "type": "text",
+      "area": "you",
+      "id": "ninety",
+      "text": "If the next 90 days went well, what would be different?",
+      "why": "Optional. A sentence or two is plenty.",
+      "ph": "For example: every enquiry gets a reply the same day, and I take a week off."
+    }
+  ],
+  "SECTIONS": [
+    {
+      "k": "goal",
+      "name": "Your goal"
+    },
+    {
+      "k": "direction",
+      "name": "Direction"
+    },
+    {
+      "k": "customers",
+      "name": "Customers"
+    },
+    {
+      "k": "operations",
+      "name": "Operations"
+    },
+    {
+      "k": "people",
+      "name": "People"
+    },
+    {
+      "k": "information",
+      "name": "Information"
+    },
+    {
+      "k": "numbers",
+      "name": "Your numbers"
+    },
+    {
+      "k": "you",
+      "name": "About you"
+    }
+  ],
+  "SEG": [
+    {
+      "k": "goal"
+    },
+    {
+      "k": "direction"
+    },
+    {
+      "k": "customers"
+    },
+    {
+      "k": "operations"
+    },
+    {
+      "k": "people"
+    },
+    {
+      "k": "information"
+    },
+    {
+      "k": "tail"
+    }
+  ],
+  "CURRENCIES": [
+    [
+      "KES",
+      "Kenyan shilling (KES)"
+    ],
+    [
+      "USD",
+      "US dollar (USD)"
+    ],
+    [
+      "UGX",
+      "Ugandan shilling (UGX)"
+    ],
+    [
+      "TZS",
+      "Tanzanian shilling (TZS)"
+    ],
+    [
+      "RWF",
+      "Rwandan franc (RWF)"
+    ],
+    [
+      "NGN",
+      "Nigerian naira (NGN)"
+    ],
+    [
+      "ZAR",
+      "South African rand (ZAR)"
+    ],
+    [
+      "GBP",
+      "Pound sterling (GBP)"
+    ],
+    [
+      "EUR",
+      "Euro (EUR)"
+    ]
+  ],
+  "NUMS": [
+    {
+      "k": "sale",
+      "label": "Average value of a sale or order",
+      "ph": "25000",
+      "unit": "",
+      "money": true,
+      "help": "Roughly what a typical customer spends in one purchase."
+    },
+    {
+      "k": "enq",
+      "label": "New enquiries in a typical month",
+      "ph": "40",
+      "unit": "a month",
+      "help": "Calls, messages, emails, and walk-ins from people who might buy."
+    },
+    {
+      "k": "conv",
+      "label": "Of every 10 enquiries, how many become customers?",
+      "ph": "3",
+      "unit": "out of 10",
+      "help": "Your best estimate."
+    },
+    {
+      "k": "hours",
+      "label": "Hours a week you spend on day-to-day running",
+      "ph": "45",
+      "unit": "hours a week",
+      "help": "Approving, chasing, fixing, and answering questions."
+    }
+  ],
+  "GAP": [
+    0.05,
+    0.15,
+    0.35,
+    0.5
+  ],
+  "PLAN": {
+    "direction": {
+      "diy": "Write the one goal for the next 12 months in a single sentence. Share it with the team this week and ask each person how their work supports it.",
+      "help": "A Review to set priorities with figures, then monthly check-ins until the plan runs on its own."
+    },
+    "customers": {
+      "diy": "Name one person to own every enquiry. For 30 days, log each one with the date, source, reply time, and outcome.",
+      "help": "A Project to set up a simple CRM and a reply routine your team will use."
+    },
+    "operations": {
+      "diy": "Pick the three tasks that go wrong most often. Write the steps for each on one page, and have the person who does them check it.",
+      "help": "A Review of how work moves through the business, then a Project to remove the steps that slow it down."
+    },
+    "people": {
+      "diy": "Write a five-line role for each person: what they own, what they decide, and who they report to. Go through it with each of them.",
+      "help": "Clear roles, a hiring plan for gaps, and training on new ways of working."
+    },
+    "information": {
+      "diy": "Choose five figures to see every Monday: sales, enquiries, cash in the bank, money owed to you, and one figure for your biggest bottleneck.",
+      "help": "A Project to build a simple monthly dashboard from the records you already have."
+    }
+  },
+  "PT": [
+    {
+      "bg": "#1E272A",
+      "fg": "#F4F5F1",
+      "chipBg": "rgba(244,245,241,0.08)",
+      "chipBd": "rgba(244,245,241,0.18)"
+    },
+    {
+      "bg": "#434F4F",
+      "fg": "#F4F5F1",
+      "chipBg": "rgba(244,245,241,0.1)",
+      "chipBd": "rgba(244,245,241,0.22)"
+    },
+    {
+      "bg": "#E7EBE6",
+      "fg": "#1E272A",
+      "chipBg": "rgba(30,39,42,0.06)",
+      "chipBd": "rgba(30,39,42,0.14)"
+    }
+  ]
+}

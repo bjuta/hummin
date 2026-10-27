@@ -1,0 +1,15 @@
+2026-10-27 accept all 23 original Assessment questions, local score, unlock, restart at 390,768,1440 without real emails or reservations on isolated Preview.
+
+Rerun with read-only browser hydration and click diagnostics for first step.
+
+Inspect client script resources and hydration markers after Start click.
+
+Check final 23rd question CTA and gate before release acceptance.
+
+2026-10-27 rerun full three-width 23-step browser acceptance on successfully deployed input-event correction.
+
+2026-10-27 wait for React client event hydration before Assessment clicks; no real submission.
+
+2026-10-27 validate all 23 questions and real Preview-only Assessment result validation POST (never live email or booking) across three widths.
+
+2026-10-27 Rerun 23-step native Assessment after isolated Preview host protection; one safe validation POST per width.
