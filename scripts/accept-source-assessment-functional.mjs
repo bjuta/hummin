@@ -17,10 +17,11 @@ try{
   const ctx=await browser.newContext({viewport:{width,height:width===390?844:900},
     deviceScaleFactor:1,isMobile:width===390,hasTouch:width===390,
     reducedMotion:"reduce",locale:"en-KE",timezoneId:"Africa/Nairobi"});
-  const page=await ctx.newPage(),mutations=[],runtimeErrors=[];
+  const page=await ctx.newPage(),mutations=[],previewRequests=[],runtimeErrors=[];
   page.on("pageerror",error=>runtimeErrors.push("pageerror: "+String(error)));
   page.on("console",message=>{if(message.type()==="error")runtimeErrors.push("console: "+message.text());});
   page.on("request",request=>{
+   if(new URL(request.url()).pathname==="/__source-verify/assessment")previewRequests.push(request);
    if(/\/(?:api\/assessment\/email|api\/booking\/reserve|api\/booking\/slots|contact)(?:\?|$)/.test(new URL(request.url()).pathname))
     mutations.push(request.url());
   });
@@ -63,15 +64,22 @@ try{
    await page.locator("#g-name").fill("Preview Verification");
    await page.locator("#g-email").fill("preview@example.test");
    await page.locator("#g-biz").fill("Local-only Test");
+   const verification=page.waitForResponse(r=>new URL(r.url()).pathname==="/__source-verify/assessment"&&r.request().method()==="POST",{timeout:12000});
    await page.getByRole("button",{name:"Open My Plan"}).click();
+   const verified=await verification;
+   assert.equal(verified.status(),200,"Preview validation endpoint accepted source model");
+   const check=await verified.json();
+   assert.deepEqual([check.ok,check.validated,check.delivered,check.queued],[true,true,false,false]);
+   assert.equal(previewRequests.length,1,"Only one source-native validation request");
    await page.getByText("Your plan is unlocked in this isolated Preview. No email was sent.").first().waitFor();
    assert.equal(await page.getByText(/A copy of your plan is on its way to/).count(),0,"False email delivery claim");
    assert.equal(await page.getByRole("button",{name:/Confirm .*$/}).count(),0,"Fake booking confirmation remains exposed");
    assert.equal(mutations.length,0,"Preview attempted transactional external operations");
+   assert.deepEqual(runtimeErrors,[],"No client errors during async local unlock");
    await page.screenshot({path:dir+"/assessment-"+width+"-results.png",fullPage:true,animations:"disabled"});
    await page.getByRole("button",{name:"Start Again"}).click();
    await page.getByRole("button",{name:/Start the Assessment/i}).waitFor();
-   reports.push({width,steps:current,score:100,unlocked:true,restarted:true,mutations:0,pass:true});
+   reports.push({width,steps:current,score:100,unlocked:true,restarted:true,previewValidationRequests:1,mutations:0,pass:true});
    console.log("NATIVE ASSESSMENT INTERACTIVE PASS",JSON.stringify(reports.at(-1)));
   }catch(err){
    reports.push({width,current,pass:false,error:String(err),mutations});
