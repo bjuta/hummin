@@ -61,7 +61,8 @@ async function capture(ctx,url,file){
    h1:[...document.querySelectorAll("h1")].filter(el=>el.getClientRects().length).map(el=>el.textContent?.trim()).slice(0,2),
    images:[...document.images].filter(el=>el.getClientRects().length).map(el=>({src:el.getAttribute("src"),loaded:el.naturalWidth>0})).slice(0,20),
    fonts:document.fonts.status,
-   runtimeMarkers:document.body.innerText?.includes("{{ ")||false
+   runtimeMarkers:document.body.innerText?.includes("{{ ")||false,
+   hiddenReveals:[...document.querySelectorAll("[data-rise]")].filter(el=>el.getClientRects().length>0&&(getComputedStyle(el).opacity==="0"||getComputedStyle(el).visibility==="hidden")).length
   }));
   const buf=await page.screenshot({path:file,fullPage:true,animations:"disabled",timeout:40000});
   return {png:PNG.sync.read(buf),meta};
@@ -69,7 +70,7 @@ async function capture(ctx,url,file){
 }
 try{
  for(const width of widths){
-  const ctx=await browser.newContext({viewport:{width,height:width===390?844:900},deviceScaleFactor:1,isMobile:width===390,hasTouch:width===390,locale:"en-KE",timezoneId:"Africa/Nairobi"});
+  const ctx=await browser.newContext({viewport:{width,height:width===390?844:900},deviceScaleFactor:1,isMobile:width===390,hasTouch:width===390,reducedMotion:"reduce",locale:"en-KE",timezoneId:"Africa/Nairobi"});
   for(const [path,slug] of routes){
    const id=slug+"-"+width;
    try{
@@ -80,7 +81,7 @@ try{
     const changed=pixelmatch(p.data,c.data,diff.data,width,height,{threshold:.12,includeAA:false});
     fs.writeFileSync(dir+"/"+id+"-diff.png",PNG.sync.write(diff));
     const mismatch=changed/(width*height),heightDelta=Math.abs(original.png.height-candidate.png.height);
-    const pass=mismatch<=.08&&heightDelta<=12&&candidate.meta.width-candidate.meta.viewport<=3&&!candidate.meta.runtimeMarkers;
+    const pass=original.meta.hiddenReveals===0&&candidate.meta.hiddenReveals===0&&mismatch<=.08&&heightDelta<=12&&candidate.meta.width-candidate.meta.viewport<=3&&!candidate.meta.runtimeMarkers;
     const result={route:path,slug,width,pass,mismatch:Number(mismatch.toFixed(5)),heightDelta,original:original.meta,candidate:candidate.meta};
     checks.push(result);
     console.log("SOURCE MARKETING PIXEL CHECK",JSON.stringify({slug,width,pass,mismatch:result.mismatch,heightDelta,loadedImages:candidate.meta.images.filter(i=>i.loaded).length}));
