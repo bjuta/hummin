@@ -4,7 +4,7 @@ import sourceAssets from "../data/ApprovedSourceAssets.generated.json";
 import sourceModels from "../data/ApprovedRemainingViewmodels.generated.json";
 import type {SourceScope} from "./source-native-bridge";
 import {assessmentQuestions,assessmentQuestionCount,assessmentFlowModel,assessmentResultsModel,
- assessmentCanAdvance,validateAssessmentGate,initialAssessmentState} from "../lib/assessment-native";
+ assessmentCanAdvance,assessmentScore,validateAssessmentGate,initialAssessmentState} from "../lib/assessment-native";
 import type {AssessmentState} from "../lib/assessment-native";
 
 /** Fully local source-faithful Assessment state machine, never submitting in isolated Preview.
@@ -13,6 +13,8 @@ import type {AssessmentState} from "../lib/assessment-native";
 export function SourceAssessmentInteractive(){
  const [state,setState]=React.useState<AssessmentState>(initialAssessmentState);
  const [message,setMessage]=React.useState("");
+ const [validating,setValidating]=React.useState(false);
+ const validatingRef=React.useRef(false);
  const root=React.useRef<HTMLDivElement>(null);
  const qRef=React.useRef<HTMLHeadingElement>(null);
  const bookRef=React.useRef<HTMLElement>(null);
@@ -62,15 +64,50 @@ export function SourceAssessmentInteractive(){
    event.preventDefault();pick(q.options![k-1].label);
   }
  };
- const unlock=()=>{
+ const unlock=async ()=>{
+  if(validatingRef.current||state.unlocked)return;
   const errors=validateAssessmentGate(state.gate);
   if(Object.keys(errors).length){
    setState(old=>({...old,gateErr:errors}));
    window.setTimeout(()=>document.getElementById("g-"+Object.keys(errors)[0])?.focus(),0);
    return;
   }
-  setState(old=>({...old,gateErr:{},unlocked:true}));
-  setMessage("Results unlocked locally in isolated Preview. No email was sent or queued.");
+  validatingRef.current=true;
+  setValidating(true);
+  setMessage("");
+  try{
+   const result=assessmentResultsModel(state);
+   const priorities=(result.plan as {name:string}[]).map(item=>item.name);
+   const r=assessmentScore(state);
+   const payload={
+    name:state.gate.name.trim(),business:state.gate.biz.trim(),
+    email:state.gate.email.trim(),goal:r.goal.label,score:r.score,
+    priorities,token:"",
+    // The email endpoint's historical cost field is specifically KES.
+    // Never mislabel estimates entered in another currency as KES.
+    ...(state.cur==="KES"&&r.monthly!=null?{monthlyCost:r.monthly}:{})
+   };
+   const response=await fetch("/__source-verify/assessment",{
+    method:"POST",credentials:"same-origin",
+    headers:{"Content-Type":"application/json","Accept":"application/json"},
+    body:JSON.stringify(payload)
+   });
+   const outcome=await response.json() as {
+    ok?:boolean;validated?:boolean;delivered?:boolean;queued?:boolean;message?:string
+   };
+   if(outcome.delivered||outcome.queued)throw Error("Unexpected delivery claim in Preview");
+   if(!response.ok||!outcome.ok||!outcome.validated){
+    setMessage(outcome.message||"Preview assessment validation failed. No email was sent.");
+    return;
+   }
+   setState(old=>({...old,gateErr:{},unlocked:true}));
+   setMessage(outcome.message||"Results validated locally. No email was sent.");
+  }catch{
+   setMessage("Preview assessment validation is unavailable. No email was sent or queued.");
+  }finally{
+   validatingRef.current=false;
+   setValidating(false);
+  }
  };
  let data:SourceScope;
  if(state.stage==="intro"){
@@ -119,6 +156,7 @@ export function SourceAssessmentInteractive(){
   }));
   data.deliveryMessage="Your plan is unlocked in this isolated Preview. No email was sent.";
   data.unlock=unlock;
+  data.unlockPending=validating;
   data.restart=()=>{
    setState(initialAssessmentState());
    setMessage("");
