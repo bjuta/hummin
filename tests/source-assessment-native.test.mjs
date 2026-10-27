@@ -88,7 +88,8 @@ test("result access validates fields without sending enquiries or reserving cale
  assert.deepEqual(validateAssessmentGate({name:"Good Name",email:"person@example.test",biz:"Example Trading"}),{});
  const code=fs.readFileSync("app/components/SourceAssessmentInteractive.tsx","utf8");
  assert.ok(code.includes("SourceAssessmentInteractive"));
- assert.ok(!/fetch\s*\(|\/api\/booking\/reserve|\/api\/assessment\/email/.test(code),"Preview must not call live transactional endpoints");
+ assert.match(code,/fetch\("\/__source-verify\/assessment"/,"Native Preview must exercise its no-delivery endpoint");
+ assert.doesNotMatch(code,/fetch\("\/api\/booking\/reserve"|fetch\("\/api\/assessment\/email"/,"Preview must not call transactional endpoints");
  const model=fs.readFileSync("app/lib/assessment-native.ts","utf8");
  assert.ok(model.includes("showBooking:false"));
 });
