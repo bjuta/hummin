@@ -7,7 +7,7 @@ const parts=fs.readdirSync(dir).filter(n=>/^assessment\.\d+\.part$/.test(n)).sor
 const match=parts.match(/<script\s+type="__bundler\/manifest"[^>]*>([\s\S]*?)<\/script>/);
 if(!match)throw Error("Original Assessment manifest missing");
 const manifest=JSON.parse(match[1]);
-const mapping=JSON.parse(fs.readFileSync("app/data/ApprovedSourceAssets.generated.json","utf8"));
+const mapping=JSON.parse(fs.readFileSync("artifacts/source-native-transcription/asset-map.json","utf8"));
 const out="public/brand/source-resources";
 fs.mkdirSync(out,{recursive:true});
 for(const [id,file] of Object.entries(manifest)){
@@ -31,5 +31,5 @@ const css=original.replace(/url\(["']?([a-f0-9-]{36})["']?\)/gi,(_whole,id)=>{
  return 'url("'+mapping[id]+'")';
 });
 fs.writeFileSync("app/components/ApprovedAssessmentFonts.runtime.css",css);
-fs.writeFileSync("app/data/ApprovedSourceAssets.generated.json",JSON.stringify(mapping,null,2)+"\n");
+fs.writeFileSync("artifacts/source-native-transcription/asset-map.json",JSON.stringify(mapping,null,2)+"\n");
 console.log("ASSESSMENT MEDIA",Object.keys(manifest).length,"approved resources",ids.length,"original font references");
