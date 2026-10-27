@@ -29,6 +29,17 @@ These are test-specific assurances, not claims of production transactional accep
 
 The repository cannot prove whether externally stored Preview secrets or calendars are truly sandboxed; verify them separately before activating any transactional endpoint. No booking flag, real email provider, secret or Google Calendar credential has been enabled or changed here.
 
+## Hardened candidate: final consolidated acceptance
+
+After deploying the fail-closed transactional host guards, the *same isolated Preview* was retested:
+
+- [Strict visual release gate #40577095108](https://github.com/bjuta/hummin/actions/runs/40577095108): **42/42 PASS** (21 marketing + 15 Assessment/Insights + six legal). Screenshot evidence: [artifact 12768660737](https://github.com/bjuta/hummin/actions/runs/40577095108/artifacts/12768660737). The previously flaky 390px Insights comparison passed with 0px height difference and 0.816% pixel mismatch.
+- [Offline regression #40577107259](https://github.com/bjuta/hummin/actions/runs/40577107259): **92/92 PASS**, including four independent tests of the Preview transactional/cron safety guard.
+- [Assessment browser #40577058697](https://github.com/bjuta/hummin/actions/runs/40577058697), [Contact browser #40577069466](https://github.com/bjuta/hummin/actions/runs/40577069466), and [Insights browser #40577082750](https://github.com/bjuta/hummin/actions/runs/40577082750): all **3/3 viewport cases PASS** against the hardened candidate, with zero real emails, reservations or subscriber writes.
+- [Deployed HTTP transaction isolation #40576903097](https://github.com/bjuta/hummin/actions/runs/40576903097): **5/5 PASS**. Four live-service paths explicitly reject with HTTP 503; calendar slots remain disabled. No external provider actions were attempted.
+
+The production `main` commit remains `0d42b6554dd1c51df84dda5931df0e29de1aea60`, not merged or cut over. Approval for external email/calendar delivery, production data migrations and source HTML retirement has **not** been granted.
+
 ## Verified Preview external-effect isolation — 27 October 2026
 
 A read-only inspection of the **deployed** Cloudflare `hummin-web-preview` Worker confirmed that its D1 binding matches the repository Preview database, booking is switched off, and its base URL points to the isolated Worker. The account also has **Resend, Turnstile and Google Calendar credentials configured**, and `CONTACT_ENABLED` is on. Credential presence does **not** establish that those external providers are sandbox accounts.
