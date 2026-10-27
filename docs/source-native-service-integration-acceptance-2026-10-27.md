@@ -29,6 +29,18 @@ These are test-specific assurances, not claims of production transactional accep
 
 The repository cannot prove whether externally stored Preview secrets or calendars are truly sandboxed; verify them separately before activating any transactional endpoint. No booking flag, real email provider, secret or Google Calendar credential has been enabled or changed here.
 
+## Verified Preview external-effect isolation — 27 October 2026
+
+A read-only inspection of the **deployed** Cloudflare `hummin-web-preview` Worker confirmed that its D1 binding matches the repository Preview database, booking is switched off, and its base URL points to the isolated Worker. The account also has **Resend, Turnstile and Google Calendar credentials configured**, and `CONTACT_ENABLED` is on. Credential presence does **not** establish that those external providers are sandbox accounts.
+
+To close that exposure without changing secrets or provider state, development code now explicitly blocks live transactions on every hostname except the owner-approved public `hummin.org` and `www.hummin.org`. This includes `/contact`, `/api/assessment/email`, `/api/booking/reserve`, `/newsletter`, and external calendar availability queries. The original contact-page fallback no longer advertises an active transactional form on Preview. Scheduled mail dispatch, newsletter queues and calendar reconciliation are disabled when the Worker `SITE_URL` is not an approved public hostname. All three no-delivery `/__source-verify/...` endpoints remain independently usable for UI testing.
+
+- [Five deployed safety probes — 5/5 PASS](https://github.com/bjuta/hummin/actions/runs/40576903097): all four fake invalid transactional POST requests rejected HTTP 503, and booking slots reported disabled with no slots. No real recipient, booking or provider mutation was submitted.
+- [Existing service and host-safety regression — 92/92 PASS](https://github.com/bjuta/hummin/actions/runs/40576152047).
+- External provider credentials were neither read in plaintext nor modified. No staging/provider delivery is claimed and no production host cutover was approved.
+
+**This is a deliberate fail-closed barrier**: isolated transaction testing must use separately authorized sandbox providers and a separately reviewed route/mode. Do not remove it merely to make real service calls from Preview. The presence of previously configured secret bindings is a reason for stricter isolation, not permission to use them.
+
 ## Production protections retained
 
 - Public website routes still resolve to the legacy source restoration in `app/routes/fidelity.ts`; no automatic public React cutover, PR merge, DNS change or HTML retirement.
