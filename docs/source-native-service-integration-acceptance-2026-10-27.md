@@ -3,6 +3,14 @@
 **Branch:** `feat/fullstack-workers-foundation`  
 **Public release:** BLOCKED; production `main`, email providers, D1 and Calendar untouched.
 
+## Final restored visual release gate
+
+- Consolidated **42/42 PASS** on the latest isolated Preview: [run 40573986728](https://github.com/bjuta/hummin/actions/runs/40573986728), evidence [artifact 12766756996](https://github.com/bjuta/hummin/actions/runs/40573986728/artifacts/12766756996).
+- Seven marketing routes 21/21, Assessment and four Insights states 15/15, Privacy/Terms 6/6.
+- Previously intermittent 390px Insights mismatch was a frame-settling race in screenshot capture, not a durable page-height mismatch: original/native comparison now reports **0px height difference and 0.816% pixel difference**. The strict thresholds remain 8% pixel difference and 12px page height.
+- Independent three-session mobile original/native frame stability [run 40574448080](https://github.com/bjuta/hummin/actions/runs/40574448080) proves identical **3,683px frame heights and 4,348px pages** in all three checks, with no horizontal overflow.
+- Audit script now waits for steady actual frame metrics before capturing evidence. It does not edit the page, screenshots, styling or release thresholds.
+
 ## Source-backed native integrations
 
 | Integration | Implementation | Evidence | Release meaning |
