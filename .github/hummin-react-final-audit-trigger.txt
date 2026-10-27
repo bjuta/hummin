@@ -11,3 +11,4 @@ Owner-source final gate: verify isolated React Preview deployed from 6fa0c1d3677
 
 2026-10-27 final audit for deployed Preview 5be3c32553e85ce9acab6dcc09d04ec560e5856d: exact four-item source footer, source 900px Assessment host geometry, source-faithful drawer/dialog interactions, archived HTML hidden during build. Read-only canonical + 42-screen parity only; no public cutover and no production writes.
 2026-10-27 screenshot-derived Insights shared-layout and Engagements test against production; assess full 42 cases with fixed unchanged thresholds, no writes or public cutover.
+2026-10-27 full 42-case strict visual acceptance remeasurement after shared marketing geometry corrections; unchanged 8 percent mismatch, 12px height gate; production read-only.
