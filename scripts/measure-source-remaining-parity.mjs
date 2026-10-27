@@ -103,4 +103,9 @@ try{
  }
 }finally{await browser.close()}
 fs.writeFileSync(dir+"/summary.json",JSON.stringify({original:origin,candidate:preview,criteria:{pixelMismatch:.08,heightDelta:12},checks},null,2));
-console.log("SOURCE REMAINING SUMMARY",checks.filter(r=>r.pass).length+"/"+checks.length,"passed strict visual thresholds");
+const passed=checks.filter(r=>r.pass).length;
+console.log("SOURCE REMAINING SUMMARY",passed+"/"+checks.length,"passed strict visual thresholds");
+if(checks.length!==routes.length*widths.length||passed!==checks.length){
+ console.error("SOURCE REMAINING PARITY NOT ACCEPTED: failed or missing visual comparisons; inspect uploaded captures.");
+ process.exitCode=1;
+}
