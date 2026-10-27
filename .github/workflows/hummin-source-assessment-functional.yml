@@ -19,7 +19,7 @@ jobs:
           node-version: '22'
       - run: npm install --no-audit --no-fund
       - name: Validate 23 original questions, native scores, safe flow and no-delivery boundaries
-        run: node --experimental-strip-types --test tests/source-assessment-native.test.mjs
+        run: node --experimental-strip-types --test tests/source-assessment-native.test.mjs tests/source-assessment-delivery-contract.test.mjs
       - run: npm run typecheck
       - run: npm run build
       - name: Confirm non-public Preview route and absence of production cutover
