@@ -6692,6 +6692,1918 @@
       "contactStatus": "",
       "sent": false,
       "not_sent": true
+    },
+    "assess": {
+      "root": {
+        "current": null
+      },
+      "is_home": false,
+      "is_how": false,
+      "is_core": false,
+      "is_eng": false,
+      "is_who": false,
+      "is_assess": true,
+      "is_about": false,
+      "is_insights": false,
+      "is_contact": false,
+      "nav": [
+        {
+          "label": "Home",
+          "icon": "/brand/icons/house.svg",
+          "color": "#434F4F",
+          "weight": 400,
+          "bg": "transparent",
+          "op": 0.7
+        },
+        {
+          "label": "How We Work",
+          "icon": "/brand/icons/route.svg",
+          "color": "#434F4F",
+          "weight": 400,
+          "bg": "transparent",
+          "op": 0.7
+        },
+        {
+          "label": "Applied Expertise",
+          "icon": "/brand/icons/layers.svg",
+          "color": "#434F4F",
+          "weight": 400,
+          "bg": "transparent",
+          "op": 0.7
+        },
+        {
+          "label": "Engagements",
+          "icon": "/brand/icons/handshake.svg",
+          "color": "#434F4F",
+          "weight": 400,
+          "bg": "transparent",
+          "op": 0.7
+        },
+        {
+          "label": "Who We Work With",
+          "icon": "/brand/icons/users.svg",
+          "color": "#434F4F",
+          "weight": 400,
+          "bg": "transparent",
+          "op": 0.7
+        },
+        {
+          "current": "page",
+          "label": "Assessment",
+          "icon": "/brand/icons/clipboard-check.svg",
+          "color": "#1E272A",
+          "weight": 600,
+          "bg": "#E7EBE6",
+          "op": 1
+        },
+        {
+          "label": "About",
+          "icon": "/brand/icons/building-2.svg",
+          "color": "#434F4F",
+          "weight": 400,
+          "bg": "transparent",
+          "op": 0.7
+        },
+        {
+          "label": "Insights",
+          "icon": "/brand/icons/newspaper.svg",
+          "color": "#434F4F",
+          "weight": 400,
+          "bg": "transparent",
+          "op": 0.7
+        },
+        {
+          "label": "Contact",
+          "icon": "/brand/icons/mail.svg",
+          "color": "#434F4F",
+          "weight": 400,
+          "bg": "transparent",
+          "op": 0.7
+        }
+      ],
+      "pageRef": {
+        "current": null
+      },
+      "peekCloseRef": {
+        "current": null
+      },
+      "sentRef": {
+        "current": null
+      },
+      "headShadow": "none",
+      "icoMenuOp": 1,
+      "icoXOp": 0,
+      "icoMenuTf": "none",
+      "icoXTf": "rotate(-90deg) scale(0.6)",
+      "tierTabId": "tier-tab-0",
+      "valTabId": "val-tab-0",
+      "peekVis": "hidden",
+      "peekEvents": "none",
+      "peekOp": 0,
+      "peekTf": "translate3d(0,24px,0) scale(0.97)",
+      "peekHidden": "true",
+      "copyLabel": "Copy",
+      "copyBg": "transparent",
+      "copyStatus": "",
+      "sending": false,
+      "sendingStr": "false",
+      "sendLabel": "Send Enquiry",
+      "sendOp": 1,
+      "menuClosed": true,
+      "menuOpenBool": false,
+      "menuAria": "Open menu",
+      "menuOpenStr": "false",
+      "drawerX": "translateX(-102%)",
+      "drawerVis": "hidden",
+      "scrimOpacity": 0,
+      "scrimEvents": "none",
+      "inner": false,
+      "insightPost": null,
+      "insightNonce": 0,
+      "insightTeasers": [
+        {
+          "slug": "enquiries-30-day-fix",
+          "type": "Guide",
+          "read": "4 min read",
+          "title": "Why enquiries go unanswered, and a 30-day fix",
+          "excerpt": "Most owners get more enquiries than they think. The problem is what happens next.",
+          "by": "HUMMIN Team · 20 Oct",
+          "bg": "#E7EBE6",
+          "fg": "#1E272A",
+          "bd": "#E7EBE6",
+          "chipBg": "rgba(30,39,42,0.06)",
+          "chipBd": "rgba(30,39,42,0.14)",
+          "aria": "Guide: Why enquiries go unanswered, and a 30-day fix"
+        },
+        {
+          "slug": "five-monday-figures",
+          "type": "Guide",
+          "read": "3 min read",
+          "title": "Five figures every owner should see on Monday",
+          "excerpt": "A short set of weekly figures shows problems while you can still act.",
+          "by": "HUMMIN Team · 13 Oct",
+          "bg": "#E7EBE6",
+          "fg": "#1E272A",
+          "bd": "#E7EBE6",
+          "chipBg": "rgba(30,39,42,0.06)",
+          "chipBd": "rgba(30,39,42,0.14)",
+          "aria": "Guide: Five figures every owner should see on Monday"
+        },
+        {
+          "slug": "runs-through-the-owner",
+          "type": "Opinion",
+          "read": "3 min read",
+          "title": "When the business still runs through the owner",
+          "excerpt": "Owners often become the bottleneck in the business they built.",
+          "by": "Muiruri Beautah · 6 Oct",
+          "bg": "#1E272A",
+          "fg": "#F4F5F1",
+          "bd": "#1E272A",
+          "chipBg": "rgba(244,245,241,0.08)",
+          "chipBd": "rgba(244,245,241,0.18)",
+          "aria": "Opinion: When the business still runs through the owner"
+        }
+      ],
+      "head": {
+        "label": "How We Work",
+        "icon": "/brand/icons/route.svg",
+        "iconPaper": "/brand/icons/route-light.svg",
+        "title": "Understand the problem. Then fix it.",
+        "lead": "We begin by understanding the business. Then we agree what needs to change, who will do the work, and how progress will be measured.",
+        "bg": "radial-gradient(circle at 70% 20%,#5E6967 0%,#2A3538 40%,#1E272A 72%)",
+        "glow": "radial-gradient(circle at 12% 95%,rgba(30,39,42,0.6),transparent 45%)",
+        "chip": "Four steps",
+        "img": "Image: reviewing a process with the people who run it."
+      },
+      "show_band": false,
+      "stages": [
+        {
+          "name": "Understand",
+          "short": "We find the cause behind the symptom.",
+          "what": "We talk to you and your team, look at how the work gets done, and review the numbers. We look for the cause behind the symptom.",
+          "out": "a clear statement of the problem and what it costs the business."
+        },
+        {
+          "name": "Architect",
+          "short": "We agree the plan, the people, and the cost.",
+          "what": "We agree what needs to change, who will do it, what it will cost, and how we will measure it.",
+          "out": "a plan with roles, costs, and measures."
+        },
+        {
+          "name": "Execute",
+          "short": "We do the work with your team.",
+          "what": "We do the work alongside your team and report progress to the person who makes decisions.",
+          "out": "the agreed work, done and measured."
+        },
+        {
+          "name": "Institutionalise",
+          "short": "We write it down and hand it over.",
+          "what": "We write down the new way of working, train the people who will run it, and hand it over.",
+          "out": "written processes, trained staff, and measures you can keep using."
+        }
+      ],
+      "domains": [
+        {
+          "name": "Strategy",
+          "icon": "compass",
+          "lead": "Decide which problems to solve first, and why.",
+          "jobs": "We review how the business makes money and where it loses it, set clear priorities for the next 12 months, and turn the plan into a schedule of work with named owners.",
+          "bg": "#B5532C",
+          "fg": "#FFFFFF",
+          "pressed": "true",
+          "iconUrl": "/brand/icons/compass-light.svg",
+          "kind": "",
+          "ring": "#B5532C"
+        },
+        {
+          "name": "Technology",
+          "icon": "monitor-smartphone",
+          "lead": "Make your systems fit the way the business works.",
+          "jobs": "We build or fix websites, set up CRMs so every enquiry is recorded, and automate repeated admin tasks.",
+          "bg": "#434F4F",
+          "fg": "#F4F5F1",
+          "pressed": "false",
+          "iconUrl": "/brand/icons/monitor-smartphone-light.svg",
+          "kind": "",
+          "ring": "transparent"
+        },
+        {
+          "name": "Marketing",
+          "icon": "megaphone",
+          "lead": "Bring in the right customers, and keep track of them.",
+          "jobs": "We clarify who you sell to and what you say, plan and run advertising, and check what happens to each enquiry after it arrives.",
+          "bg": "#1E272A",
+          "fg": "#F4F5F1",
+          "pressed": "false",
+          "iconUrl": "/brand/icons/megaphone-light.svg",
+          "kind": "",
+          "ring": "transparent"
+        },
+        {
+          "name": "Operations",
+          "icon": "workflow",
+          "lead": "Make everyday work run smoothly.",
+          "jobs": "We map how work moves through the business, remove the steps that slow it down, and set up simple reports on how it is going.",
+          "bg": "#E7EBE6",
+          "fg": "#1E272A",
+          "pressed": "false",
+          "iconUrl": "/brand/icons/workflow.svg",
+          "kind": "",
+          "ring": "transparent"
+        },
+        {
+          "name": "Talent",
+          "icon": "user-round-check",
+          "lead": "Put the right people in the right roles.",
+          "jobs": "We write clear roles and responsibilities, help recruit for key positions, and train staff on new processes and tools.",
+          "bg": "#434F4F",
+          "fg": "#F4F5F1",
+          "pressed": "false",
+          "iconUrl": "/brand/icons/user-round-check-light.svg",
+          "kind": "",
+          "ring": "transparent"
+        },
+        {
+          "name": "Data",
+          "icon": "chart-column",
+          "lead": "Base decisions on records you can trust.",
+          "jobs": "We choose the figures worth tracking, build simple monthly dashboards, and measure whether a change worked.",
+          "bg": "#1E272A",
+          "fg": "#F4F5F1",
+          "pressed": "false",
+          "iconUrl": "/brand/icons/chart-column-light.svg",
+          "kind": "",
+          "ring": "transparent"
+        },
+        {
+          "name": "Specialist Partners",
+          "icon": "briefcase",
+          "lead": "Bring in qualified experts when the work needs them.",
+          "jobs": "Accountants, financial advisers, lawyers, HR professionals, software engineers, and recruiters, managed by HUMMIN under one agreement.",
+          "ext": true,
+          "bg": "#E7EBE6",
+          "fg": "#1E272A",
+          "pressed": "false",
+          "iconUrl": "/brand/icons/briefcase.svg",
+          "kind": "External partners",
+          "ring": "transparent"
+        }
+      ],
+      "cur": {
+        "name": "Strategy",
+        "lead": "Decide which problems to solve first, and why.",
+        "jobs": "We review how the business makes money and where it loses it, set clear priorities for the next 12 months, and turn the plan into a schedule of work with named owners.",
+        "iconPaper": "/brand/icons/compass-light.svg"
+      },
+      "stagePosters": [
+        {
+          "name": "Understand",
+          "short": "We find the cause behind the symptom.",
+          "what": "We talk to you and your team, look at how the work gets done, and review the numbers. We look for the cause behind the symptom.",
+          "out": "a clear statement of the problem and what it costs the business.",
+          "bg": "#E7EBE6",
+          "fg": "#1E272A",
+          "glow": "radial-gradient(circle at 80% 10%,rgba(255,255,255,0.7),transparent 50%)",
+          "chipBg": "rgba(30,39,42,0.06)",
+          "chipBd": "rgba(30,39,42,0.14)",
+          "stepLabel": "Step 1 of 4"
+        },
+        {
+          "name": "Architect",
+          "short": "We agree the plan, the people, and the cost.",
+          "what": "We agree what needs to change, who will do it, what it will cost, and how we will measure it.",
+          "out": "a plan with roles, costs, and measures.",
+          "bg": "#434F4F",
+          "fg": "#F4F5F1",
+          "glow": "radial-gradient(circle at 80% 10%,rgba(186,196,190,0.35),transparent 55%)",
+          "chipBg": "rgba(244,245,241,0.1)",
+          "chipBd": "rgba(244,245,241,0.22)",
+          "stepLabel": "Step 2 of 4"
+        },
+        {
+          "name": "Execute",
+          "short": "We do the work with your team.",
+          "what": "We do the work alongside your team and report progress to the person who makes decisions.",
+          "out": "the agreed work, done and measured.",
+          "bg": "#2A3538",
+          "fg": "#F4F5F1",
+          "glow": "radial-gradient(circle at 80% 0%,rgba(46,107,92,0.45),transparent 55%)",
+          "chipBg": "rgba(244,245,241,0.08)",
+          "chipBd": "rgba(244,245,241,0.18)",
+          "stepLabel": "Step 3 of 4"
+        },
+        {
+          "name": "Institutionalise",
+          "short": "We write it down and hand it over.",
+          "what": "We write down the new way of working, train the people who will run it, and hand it over.",
+          "out": "written processes, trained staff, and measures you can keep using.",
+          "bg": "#1E272A",
+          "fg": "#F4F5F1",
+          "glow": "radial-gradient(circle at 85% 0%,rgba(181,83,44,0.45),transparent 55%)",
+          "chipBg": "rgba(244,245,241,0.08)",
+          "chipBd": "rgba(244,245,241,0.16)",
+          "stepLabel": "Step 4 of 4"
+        }
+      ],
+      "engs": [
+        {
+          "tag": "Short engagement",
+          "icon": "/brand/icons/search.svg",
+          "name": "Review",
+          "body": "We investigate a problem and give you a clear plan to fix it.",
+          "itemsText": "You get a review of the area that is not working, our findings in order of priority, and a practical plan with costs and measures.",
+          "comm": "a fixed fee for an agreed scope."
+        },
+        {
+          "tag": "Defined work",
+          "icon": "/brand/icons/hammer.svg",
+          "name": "Project",
+          "body": "We design and deliver a defined piece of work.",
+          "itemsText": "You get agreed deliverables and milestones, a clear definition of done, any specialist partners managed by us, and regular progress reports.",
+          "comm": "paid at milestones. Any extra costs are agreed in advance."
+        },
+        {
+          "tag": "Ongoing",
+          "icon": "/brand/icons/door-open.svg",
+          "name": "Residency",
+          "body": "A HUMMIN professional works inside your team, with support from Applied Expertise.",
+          "itemsText": "They coordinate the agreed work day to day, bring in HUMMIN specialists when needed, and are managed by HUMMIN. Their role and reporting lines are set in the contract.",
+          "comm": "a monthly fee based on scope and the people involved."
+        }
+      ],
+      "values": [
+        {
+          "short": "Understanding",
+          "t": "Understanding before intervention.",
+          "b": "We investigate before prescribing.",
+          "not": "Recommend a fix before we understand the problem."
+        },
+        {
+          "short": "Action",
+          "t": "Intelligence in action.",
+          "b": "We connect insight to implementation.",
+          "not": "Hand over a report and walk away when the work is ours to do."
+        },
+        {
+          "short": "Independence",
+          "t": "Proximity with independence.",
+          "b": "We work closely with clients without surrendering professional judgement.",
+          "not": "Tell you what you want to hear."
+        },
+        {
+          "short": "Discipline",
+          "t": "Adaptability with discipline.",
+          "b": "We tailor solutions without compromising quality or accountability.",
+          "not": "Sell every client the same solution."
+        },
+        {
+          "short": "Responsibility",
+          "t": "Partnership with responsibility.",
+          "b": "We treat trust as an obligation and agreed outcomes as a shared priority.",
+          "not": "Share your information without your permission."
+        },
+        {
+          "short": "Capability",
+          "t": "Capability beyond dependency.",
+          "b": "We build systems and people that become stronger through our involvement.",
+          "not": "Make the business depend on us."
+        }
+      ],
+      "valueTabs": [
+        {
+          "id": "val-tab-0",
+          "tab": 0,
+          "short": "Understanding",
+          "sel": "true",
+          "bg": "#1E272A",
+          "fg": "#F4F5F1",
+          "bd": "#1E272A"
+        },
+        {
+          "id": "val-tab-1",
+          "tab": -1,
+          "short": "Action",
+          "sel": "false",
+          "bg": "transparent",
+          "fg": "#1E272A",
+          "bd": "#BAC4BE"
+        },
+        {
+          "id": "val-tab-2",
+          "tab": -1,
+          "short": "Independence",
+          "sel": "false",
+          "bg": "transparent",
+          "fg": "#1E272A",
+          "bd": "#BAC4BE"
+        },
+        {
+          "id": "val-tab-3",
+          "tab": -1,
+          "short": "Discipline",
+          "sel": "false",
+          "bg": "transparent",
+          "fg": "#1E272A",
+          "bd": "#BAC4BE"
+        },
+        {
+          "id": "val-tab-4",
+          "tab": -1,
+          "short": "Responsibility",
+          "sel": "false",
+          "bg": "transparent",
+          "fg": "#1E272A",
+          "bd": "#BAC4BE"
+        },
+        {
+          "id": "val-tab-5",
+          "tab": -1,
+          "short": "Capability",
+          "sel": "false",
+          "bg": "transparent",
+          "fg": "#1E272A",
+          "bd": "#BAC4BE"
+        }
+      ],
+      "val": {
+        "short": "Understanding",
+        "t": "Understanding before intervention.",
+        "b": "We investigate before prescribing.",
+        "not": "Recommend a fix before we understand the problem.",
+        "pos": "1 of 6"
+      },
+      "needs": [
+        {
+          "icon": "/brand/icons/user-round-check-light.svg",
+          "v": "A decision-maker",
+          "k": "One person who can approve changes."
+        },
+        {
+          "icon": "/brand/icons/key-round-light.svg",
+          "v": "Access",
+          "k": "To the information and systems the work depends on."
+        },
+        {
+          "icon": "/brand/icons/clock-light.svg",
+          "v": "Time",
+          "k": "With the people who do the work every day."
+        },
+        {
+          "icon": "/brand/icons/target-light.svg",
+          "v": "A measure",
+          "k": "Agreed at the start, so we both know what a good result looks like."
+        }
+      ],
+      "topics": [
+        {
+          "title": "Enquiries that go unanswered.",
+          "area": "Marketing · Operations",
+          "lead": "Enquiries arrive, but no one owns the follow-up. Some never get a reply.",
+          "look": "How enquiries arrive, who answers them, how quickly, and what gets recorded.",
+          "start": "A Review. It shows where enquiries are lost and what to fix first.",
+          "bg": "#E7EBE6",
+          "fg": "#1E272A",
+          "mark": "/brand/hummin-mark-mist.svg",
+          "chipBg": "rgba(30,39,42,0.06)",
+          "chipBd": "rgba(30,39,42,0.12)",
+          "aria": "Enquiries that go unanswered. Read more"
+        },
+        {
+          "title": "A website that loses visitors.",
+          "area": "Technology",
+          "lead": "People visit the site but do not call, write, or buy.",
+          "look": "What visitors look for, where they leave, and how the site asks them to get in touch.",
+          "start": "A Review, then a Project to rebuild the pages that matter.",
+          "bg": "#1E272A",
+          "fg": "#F4F5F1",
+          "mark": "/brand/hummin-mark-tone.svg",
+          "chipBg": "rgba(244,245,241,0.08)",
+          "chipBd": "rgba(244,245,241,0.16)",
+          "aria": "A website that loses visitors. Read more"
+        },
+        {
+          "title": "Systems the team does not use.",
+          "area": "Technology · Talent",
+          "lead": "The business paid for tools, but the team works around them.",
+          "look": "How the work is done today, where the tools get in the way, and what training is missing.",
+          "start": "A Review. Often followed by a Project to set the tools up properly.",
+          "bg": "#434F4F",
+          "fg": "#F4F5F1",
+          "mark": "/brand/hummin-mark-tone.svg",
+          "chipBg": "rgba(244,245,241,0.1)",
+          "chipBd": "rgba(244,245,241,0.2)",
+          "aria": "Systems the team does not use. Read more"
+        },
+        {
+          "title": "Too much still runs through the owner.",
+          "area": "Strategy · Operations",
+          "lead": "Decisions and approvals wait for one person, so work slows down.",
+          "look": "Which decisions can be handed over, to whom, and within what limits.",
+          "start": "A Review, then a Residency to make the change stick.",
+          "bg": "#E7EBE6",
+          "fg": "#1E272A",
+          "mark": "/brand/hummin-mark-mist.svg",
+          "chipBg": "rgba(30,39,42,0.06)",
+          "chipBd": "rgba(30,39,42,0.12)",
+          "aria": "Too much still runs through the owner. Read more"
+        },
+        {
+          "title": "Figures that arrive too late to act on.",
+          "area": "Data",
+          "lead": "Reports come weeks after the month ends, when it is too late to act.",
+          "look": "Which figures matter, where they come from, and how to get them sooner.",
+          "start": "A Project to set up a simple monthly dashboard.",
+          "bg": "#1E272A",
+          "fg": "#F4F5F1",
+          "mark": "/brand/hummin-mark-tone.svg",
+          "chipBg": "rgba(244,245,241,0.08)",
+          "chipBd": "rgba(244,245,241,0.16)",
+          "aria": "Figures that arrive too late to act on. Read more"
+        },
+        {
+          "title": "A team stretched too thin.",
+          "area": "Talent",
+          "lead": "Good people are doing too many jobs, and some work is not getting done.",
+          "look": "Who does what today, what can be removed, and which roles are missing.",
+          "start": "A Review of roles and workload.",
+          "bg": "#434F4F",
+          "fg": "#F4F5F1",
+          "mark": "/brand/hummin-mark-tone.svg",
+          "chipBg": "rgba(244,245,241,0.1)",
+          "chipBd": "rgba(244,245,241,0.2)",
+          "aria": "A team stretched too thin. Read more"
+        }
+      ],
+      "posters": [
+        {
+          "name": "Review",
+          "tag": "Short engagement",
+          "body": "Find the problem and get a clear plan.",
+          "bg": "#E7EBE6",
+          "fg": "#1E272A",
+          "glow": "radial-gradient(circle at 80% 10%,rgba(255,255,255,0.7),transparent 50%)",
+          "chipBg": "rgba(30,39,42,0.06)",
+          "chipBd": "rgba(30,39,42,0.12)",
+          "aria": "Review: Find the problem and get a clear plan. Read more"
+        },
+        {
+          "name": "Project",
+          "tag": "Defined work",
+          "body": "Design and deliver a defined piece of work.",
+          "bg": "#434F4F",
+          "fg": "#F4F5F1",
+          "glow": "radial-gradient(circle at 80% 10%,rgba(186,196,190,0.35),transparent 55%)",
+          "chipBg": "rgba(244,245,241,0.1)",
+          "chipBd": "rgba(244,245,241,0.2)",
+          "aria": "Project: Design and deliver a defined piece of work. Read more"
+        },
+        {
+          "name": "Residency",
+          "tag": "Ongoing",
+          "body": "A HUMMIN professional inside your team.",
+          "bg": "#1E272A",
+          "fg": "#F4F5F1",
+          "glow": "radial-gradient(circle at 85% 0%,rgba(181,83,44,0.45),transparent 55%)",
+          "chipBg": "rgba(244,245,241,0.08)",
+          "chipBd": "rgba(244,245,241,0.16)",
+          "aria": "Residency: A HUMMIN professional inside your team. Read more"
+        }
+      ],
+      "engCards": [
+        {
+          "tag": "Short engagement",
+          "icon": "search",
+          "name": "Review",
+          "body": "We investigate a problem and give you a clear plan to fix it.",
+          "itemsText": "You get a review of the area that is not working, our findings in order of priority, and a practical plan with costs and measures.",
+          "comm": "a fixed fee for an agreed scope.",
+          "bg": "#E7EBE6",
+          "fg": "#1E272A",
+          "glow": "radial-gradient(circle at 80% 10%,rgba(255,255,255,0.7),transparent 50%)",
+          "chipBg": "rgba(30,39,42,0.06)",
+          "chipBd": "rgba(30,39,42,0.12)"
+        },
+        {
+          "tag": "Defined work",
+          "icon": "hammer",
+          "name": "Project",
+          "body": "We design and deliver a defined piece of work.",
+          "itemsText": "You get agreed deliverables and milestones, a clear definition of done, any specialist partners managed by us, and regular progress reports.",
+          "comm": "paid at milestones. Any extra costs are agreed in advance.",
+          "bg": "#434F4F",
+          "fg": "#F4F5F1",
+          "glow": "radial-gradient(circle at 80% 10%,rgba(186,196,190,0.35),transparent 55%)",
+          "chipBg": "rgba(244,245,241,0.1)",
+          "chipBd": "rgba(244,245,241,0.2)"
+        },
+        {
+          "tag": "Ongoing",
+          "icon": "door-open",
+          "name": "Residency",
+          "body": "A HUMMIN professional works inside your team, with support from Applied Expertise.",
+          "itemsText": "They coordinate the agreed work day to day, bring in HUMMIN specialists when needed, and are managed by HUMMIN. Their role and reporting lines are set in the contract.",
+          "comm": "a monthly fee based on scope and the people involved.",
+          "bg": "#1E272A",
+          "fg": "#F4F5F1",
+          "glow": "radial-gradient(circle at 85% 0%,rgba(181,83,44,0.45),transparent 55%)",
+          "chipBg": "rgba(244,245,241,0.08)",
+          "chipBd": "rgba(244,245,241,0.16)"
+        }
+      ],
+      "tierTabs": [
+        {
+          "id": "tier-tab-0",
+          "tab": 0,
+          "name": "Review",
+          "sel": "true",
+          "bg": "#1E272A",
+          "fg": "#F4F5F1"
+        },
+        {
+          "id": "tier-tab-1",
+          "tab": -1,
+          "name": "Project",
+          "sel": "false",
+          "bg": "transparent",
+          "fg": "#1E272A"
+        },
+        {
+          "id": "tier-tab-2",
+          "tab": -1,
+          "name": "Residency",
+          "sel": "false",
+          "bg": "transparent",
+          "fg": "#1E272A"
+        }
+      ],
+      "tierCols": [
+        {
+          "aria": "Show Review",
+          "name": "Review",
+          "tag": "Short engagement",
+          "bg": "#E7EBE6",
+          "fg": "#1E272A",
+          "glow": "radial-gradient(circle at 80% 10%,rgba(255,255,255,0.7),transparent 50%)",
+          "chipBg": "rgba(30,39,42,0.06)",
+          "chipBd": "rgba(30,39,42,0.14)"
+        },
+        {
+          "aria": "Show Project",
+          "name": "Project",
+          "tag": "Defined work",
+          "bg": "#F4F5F1",
+          "fg": "#5E6967",
+          "glow": "none",
+          "chipBg": "rgba(30,39,42,0.04)",
+          "chipBd": "rgba(30,39,42,0.12)"
+        },
+        {
+          "aria": "Show Residency",
+          "name": "Residency",
+          "tag": "Ongoing",
+          "bg": "#F4F5F1",
+          "fg": "#5E6967",
+          "glow": "none",
+          "chipBg": "rgba(30,39,42,0.04)",
+          "chipBd": "rgba(30,39,42,0.12)"
+        }
+      ],
+      "tierRows": [
+        {
+          "label": "Best when",
+          "cells": [
+            {
+              "text": "You know something is wrong, but not exactly what.",
+              "bg": "#E7EBE6",
+              "fg": "#1E272A",
+              "line": "rgba(127,140,136,0.35)",
+              "radius": "0"
+            },
+            {
+              "text": "You know what needs to change and need it done.",
+              "bg": "transparent",
+              "fg": "#434F4F",
+              "line": "#D0D8D2",
+              "radius": "0"
+            },
+            {
+              "text": "You need someone close to the work, week after week.",
+              "bg": "transparent",
+              "fg": "#434F4F",
+              "line": "#D0D8D2",
+              "radius": "0"
+            }
+          ]
+        },
+        {
+          "label": "What happens",
+          "cells": [
+            {
+              "text": "We investigate the problem and set out a clear plan to fix it.",
+              "bg": "#E7EBE6",
+              "fg": "#1E272A",
+              "line": "rgba(127,140,136,0.35)",
+              "radius": "0"
+            },
+            {
+              "text": "We design and deliver a defined piece of work, managing any specialists involved.",
+              "bg": "transparent",
+              "fg": "#434F4F",
+              "line": "#D0D8D2",
+              "radius": "0"
+            },
+            {
+              "text": "A HUMMIN professional works inside your team, supported by our Applied Expertise.",
+              "bg": "transparent",
+              "fg": "#434F4F",
+              "line": "#D0D8D2",
+              "radius": "0"
+            }
+          ]
+        },
+        {
+          "label": "You get",
+          "cells": [
+            {
+              "text": "Findings in order of priority, and a practical plan with costs and measures.",
+              "bg": "#E7EBE6",
+              "fg": "#1E272A",
+              "line": "rgba(127,140,136,0.35)",
+              "radius": "0"
+            },
+            {
+              "text": "Agreed deliverables, milestones, and regular progress reports.",
+              "bg": "transparent",
+              "fg": "#434F4F",
+              "line": "#D0D8D2",
+              "radius": "0"
+            },
+            {
+              "text": "Day-to-day coordination, and access to HUMMIN specialists when needed.",
+              "bg": "transparent",
+              "fg": "#434F4F",
+              "line": "#D0D8D2",
+              "radius": "0"
+            }
+          ]
+        },
+        {
+          "label": "Ends",
+          "cells": [
+            {
+              "text": "When the plan is delivered to you.",
+              "bg": "#E7EBE6",
+              "fg": "#1E272A",
+              "line": "rgba(127,140,136,0.35)",
+              "radius": "0"
+            },
+            {
+              "text": "When the agreed work meets its definition of done.",
+              "bg": "transparent",
+              "fg": "#434F4F",
+              "line": "#D0D8D2",
+              "radius": "0"
+            },
+            {
+              "text": "Ongoing, reviewed on dates we agree.",
+              "bg": "transparent",
+              "fg": "#434F4F",
+              "line": "#D0D8D2",
+              "radius": "0"
+            }
+          ]
+        },
+        {
+          "label": "Your part",
+          "cells": [
+            {
+              "text": "Share information and give us time with your team.",
+              "bg": "#E7EBE6",
+              "fg": "#1E272A",
+              "line": "rgba(127,140,136,0.35)",
+              "radius": "0"
+            },
+            {
+              "text": "Approve the plan and make decisions on time.",
+              "bg": "transparent",
+              "fg": "#434F4F",
+              "line": "#D0D8D2",
+              "radius": "0"
+            },
+            {
+              "text": "Set direction and agree the role and reporting lines.",
+              "bg": "transparent",
+              "fg": "#434F4F",
+              "line": "#D0D8D2",
+              "radius": "0"
+            }
+          ]
+        },
+        {
+          "label": "Fees",
+          "cells": [
+            {
+              "text": "A fixed fee for an agreed scope.",
+              "bg": "#E7EBE6",
+              "fg": "#1E272A",
+              "line": "rgba(127,140,136,0.35)",
+              "radius": "0 0 20px 20px"
+            },
+            {
+              "text": "Paid at milestones. Extra costs are agreed in advance.",
+              "bg": "transparent",
+              "fg": "#434F4F",
+              "line": "#D0D8D2",
+              "radius": "0"
+            },
+            {
+              "text": "A monthly fee based on scope and the people involved.",
+              "bg": "transparent",
+              "fg": "#434F4F",
+              "line": "#D0D8D2",
+              "radius": "0"
+            }
+          ]
+        }
+      ],
+      "tierCta": "Discuss a Review",
+      "show_float": false,
+      "fields": [
+        {
+          "k": "name",
+          "id": "f-name",
+          "errId": "f-name-err",
+          "inv": "false",
+          "ac": "name",
+          "label": "Name",
+          "type": "text",
+          "ph": "Your full name",
+          "multi": false,
+          "single": true,
+          "value": "",
+          "err": "",
+          "bd": "#BAC4BE"
+        },
+        {
+          "k": "biz",
+          "id": "f-biz",
+          "errId": "f-biz-err",
+          "inv": "false",
+          "ac": "organization",
+          "label": "Business Name",
+          "type": "text",
+          "ph": "Registered or trading name",
+          "multi": false,
+          "single": true,
+          "value": "",
+          "err": "",
+          "bd": "#BAC4BE"
+        },
+        {
+          "k": "email",
+          "id": "f-email",
+          "errId": "f-email-err",
+          "inv": "false",
+          "ac": "email",
+          "label": "Work Email",
+          "type": "email",
+          "ph": "name@business.com",
+          "multi": false,
+          "single": true,
+          "value": "",
+          "err": "",
+          "bd": "#BAC4BE"
+        },
+        {
+          "k": "msg",
+          "id": "f-msg",
+          "errId": "f-msg-err",
+          "inv": "false",
+          "ac": "off",
+          "label": "What Would You Like to Work On?",
+          "type": "text",
+          "ph": "A few sentences about the challenge",
+          "multi": true,
+          "single": false,
+          "value": "",
+          "err": "",
+          "bd": "#BAC4BE"
+        }
+      ],
+      "pk": {
+        "chip": "",
+        "title": "",
+        "lead": "",
+        "rows": [],
+        "primaryLabel": "",
+        "secondaryLabel": "",
+        "bg": "#E7EBE6",
+        "fg": "#1E272A",
+        "glow": "none",
+        "chipBg": "rgba(30,39,42,0.06)",
+        "chipBd": "rgba(30,39,42,0.12)"
+      },
+      "contactReady": true,
+      "contactInactive": false,
+      "contactStatus": "",
+      "sent": false,
+      "not_sent": true
+    },
+    "insights": {
+      "root": {
+        "current": null
+      },
+      "is_home": false,
+      "is_how": false,
+      "is_core": false,
+      "is_eng": false,
+      "is_who": false,
+      "is_assess": false,
+      "is_about": false,
+      "is_insights": true,
+      "is_contact": false,
+      "nav": [
+        {
+          "label": "Home",
+          "icon": "/brand/icons/house.svg",
+          "color": "#434F4F",
+          "weight": 400,
+          "bg": "transparent",
+          "op": 0.7
+        },
+        {
+          "label": "How We Work",
+          "icon": "/brand/icons/route.svg",
+          "color": "#434F4F",
+          "weight": 400,
+          "bg": "transparent",
+          "op": 0.7
+        },
+        {
+          "label": "Applied Expertise",
+          "icon": "/brand/icons/layers.svg",
+          "color": "#434F4F",
+          "weight": 400,
+          "bg": "transparent",
+          "op": 0.7
+        },
+        {
+          "label": "Engagements",
+          "icon": "/brand/icons/handshake.svg",
+          "color": "#434F4F",
+          "weight": 400,
+          "bg": "transparent",
+          "op": 0.7
+        },
+        {
+          "label": "Who We Work With",
+          "icon": "/brand/icons/users.svg",
+          "color": "#434F4F",
+          "weight": 400,
+          "bg": "transparent",
+          "op": 0.7
+        },
+        {
+          "label": "Assessment",
+          "icon": "/brand/icons/clipboard-check.svg",
+          "color": "#434F4F",
+          "weight": 400,
+          "bg": "transparent",
+          "op": 0.7
+        },
+        {
+          "label": "About",
+          "icon": "/brand/icons/building-2.svg",
+          "color": "#434F4F",
+          "weight": 400,
+          "bg": "transparent",
+          "op": 0.7
+        },
+        {
+          "current": "page",
+          "label": "Insights",
+          "icon": "/brand/icons/newspaper.svg",
+          "color": "#1E272A",
+          "weight": 600,
+          "bg": "#E7EBE6",
+          "op": 1
+        },
+        {
+          "label": "Contact",
+          "icon": "/brand/icons/mail.svg",
+          "color": "#434F4F",
+          "weight": 400,
+          "bg": "transparent",
+          "op": 0.7
+        }
+      ],
+      "pageRef": {
+        "current": null
+      },
+      "peekCloseRef": {
+        "current": null
+      },
+      "sentRef": {
+        "current": null
+      },
+      "headShadow": "none",
+      "icoMenuOp": 1,
+      "icoXOp": 0,
+      "icoMenuTf": "none",
+      "icoXTf": "rotate(-90deg) scale(0.6)",
+      "tierTabId": "tier-tab-0",
+      "valTabId": "val-tab-0",
+      "peekVis": "hidden",
+      "peekEvents": "none",
+      "peekOp": 0,
+      "peekTf": "translate3d(0,24px,0) scale(0.97)",
+      "peekHidden": "true",
+      "copyLabel": "Copy",
+      "copyBg": "transparent",
+      "copyStatus": "",
+      "sending": false,
+      "sendingStr": "false",
+      "sendLabel": "Send Enquiry",
+      "sendOp": 1,
+      "menuClosed": true,
+      "menuOpenBool": false,
+      "menuAria": "Open menu",
+      "menuOpenStr": "false",
+      "drawerX": "translateX(-102%)",
+      "drawerVis": "hidden",
+      "scrimOpacity": 0,
+      "scrimEvents": "none",
+      "inner": false,
+      "insightPost": null,
+      "insightNonce": 0,
+      "insightTeasers": [
+        {
+          "slug": "enquiries-30-day-fix",
+          "type": "Guide",
+          "read": "4 min read",
+          "title": "Why enquiries go unanswered, and a 30-day fix",
+          "excerpt": "Most owners get more enquiries than they think. The problem is what happens next.",
+          "by": "HUMMIN Team · 20 Oct",
+          "bg": "#E7EBE6",
+          "fg": "#1E272A",
+          "bd": "#E7EBE6",
+          "chipBg": "rgba(30,39,42,0.06)",
+          "chipBd": "rgba(30,39,42,0.14)",
+          "aria": "Guide: Why enquiries go unanswered, and a 30-day fix"
+        },
+        {
+          "slug": "five-monday-figures",
+          "type": "Guide",
+          "read": "3 min read",
+          "title": "Five figures every owner should see on Monday",
+          "excerpt": "A short set of weekly figures shows problems while you can still act.",
+          "by": "HUMMIN Team · 13 Oct",
+          "bg": "#E7EBE6",
+          "fg": "#1E272A",
+          "bd": "#E7EBE6",
+          "chipBg": "rgba(30,39,42,0.06)",
+          "chipBd": "rgba(30,39,42,0.14)",
+          "aria": "Guide: Five figures every owner should see on Monday"
+        },
+        {
+          "slug": "runs-through-the-owner",
+          "type": "Opinion",
+          "read": "3 min read",
+          "title": "When the business still runs through the owner",
+          "excerpt": "Owners often become the bottleneck in the business they built.",
+          "by": "Muiruri Beautah · 6 Oct",
+          "bg": "#1E272A",
+          "fg": "#F4F5F1",
+          "bd": "#1E272A",
+          "chipBg": "rgba(244,245,241,0.08)",
+          "chipBd": "rgba(244,245,241,0.18)",
+          "aria": "Opinion: When the business still runs through the owner"
+        }
+      ],
+      "head": {
+        "label": "How We Work",
+        "icon": "/brand/icons/route.svg",
+        "iconPaper": "/brand/icons/route-light.svg",
+        "title": "Understand the problem. Then fix it.",
+        "lead": "We begin by understanding the business. Then we agree what needs to change, who will do the work, and how progress will be measured.",
+        "bg": "radial-gradient(circle at 70% 20%,#5E6967 0%,#2A3538 40%,#1E272A 72%)",
+        "glow": "radial-gradient(circle at 12% 95%,rgba(30,39,42,0.6),transparent 45%)",
+        "chip": "Four steps",
+        "img": "Image: reviewing a process with the people who run it."
+      },
+      "show_band": true,
+      "stages": [
+        {
+          "name": "Understand",
+          "short": "We find the cause behind the symptom.",
+          "what": "We talk to you and your team, look at how the work gets done, and review the numbers. We look for the cause behind the symptom.",
+          "out": "a clear statement of the problem and what it costs the business."
+        },
+        {
+          "name": "Architect",
+          "short": "We agree the plan, the people, and the cost.",
+          "what": "We agree what needs to change, who will do it, what it will cost, and how we will measure it.",
+          "out": "a plan with roles, costs, and measures."
+        },
+        {
+          "name": "Execute",
+          "short": "We do the work with your team.",
+          "what": "We do the work alongside your team and report progress to the person who makes decisions.",
+          "out": "the agreed work, done and measured."
+        },
+        {
+          "name": "Institutionalise",
+          "short": "We write it down and hand it over.",
+          "what": "We write down the new way of working, train the people who will run it, and hand it over.",
+          "out": "written processes, trained staff, and measures you can keep using."
+        }
+      ],
+      "domains": [
+        {
+          "name": "Strategy",
+          "icon": "compass",
+          "lead": "Decide which problems to solve first, and why.",
+          "jobs": "We review how the business makes money and where it loses it, set clear priorities for the next 12 months, and turn the plan into a schedule of work with named owners.",
+          "bg": "#B5532C",
+          "fg": "#FFFFFF",
+          "pressed": "true",
+          "iconUrl": "/brand/icons/compass-light.svg",
+          "kind": "",
+          "ring": "#B5532C"
+        },
+        {
+          "name": "Technology",
+          "icon": "monitor-smartphone",
+          "lead": "Make your systems fit the way the business works.",
+          "jobs": "We build or fix websites, set up CRMs so every enquiry is recorded, and automate repeated admin tasks.",
+          "bg": "#434F4F",
+          "fg": "#F4F5F1",
+          "pressed": "false",
+          "iconUrl": "/brand/icons/monitor-smartphone-light.svg",
+          "kind": "",
+          "ring": "transparent"
+        },
+        {
+          "name": "Marketing",
+          "icon": "megaphone",
+          "lead": "Bring in the right customers, and keep track of them.",
+          "jobs": "We clarify who you sell to and what you say, plan and run advertising, and check what happens to each enquiry after it arrives.",
+          "bg": "#1E272A",
+          "fg": "#F4F5F1",
+          "pressed": "false",
+          "iconUrl": "/brand/icons/megaphone-light.svg",
+          "kind": "",
+          "ring": "transparent"
+        },
+        {
+          "name": "Operations",
+          "icon": "workflow",
+          "lead": "Make everyday work run smoothly.",
+          "jobs": "We map how work moves through the business, remove the steps that slow it down, and set up simple reports on how it is going.",
+          "bg": "#E7EBE6",
+          "fg": "#1E272A",
+          "pressed": "false",
+          "iconUrl": "/brand/icons/workflow.svg",
+          "kind": "",
+          "ring": "transparent"
+        },
+        {
+          "name": "Talent",
+          "icon": "user-round-check",
+          "lead": "Put the right people in the right roles.",
+          "jobs": "We write clear roles and responsibilities, help recruit for key positions, and train staff on new processes and tools.",
+          "bg": "#434F4F",
+          "fg": "#F4F5F1",
+          "pressed": "false",
+          "iconUrl": "/brand/icons/user-round-check-light.svg",
+          "kind": "",
+          "ring": "transparent"
+        },
+        {
+          "name": "Data",
+          "icon": "chart-column",
+          "lead": "Base decisions on records you can trust.",
+          "jobs": "We choose the figures worth tracking, build simple monthly dashboards, and measure whether a change worked.",
+          "bg": "#1E272A",
+          "fg": "#F4F5F1",
+          "pressed": "false",
+          "iconUrl": "/brand/icons/chart-column-light.svg",
+          "kind": "",
+          "ring": "transparent"
+        },
+        {
+          "name": "Specialist Partners",
+          "icon": "briefcase",
+          "lead": "Bring in qualified experts when the work needs them.",
+          "jobs": "Accountants, financial advisers, lawyers, HR professionals, software engineers, and recruiters, managed by HUMMIN under one agreement.",
+          "ext": true,
+          "bg": "#E7EBE6",
+          "fg": "#1E272A",
+          "pressed": "false",
+          "iconUrl": "/brand/icons/briefcase.svg",
+          "kind": "External partners",
+          "ring": "transparent"
+        }
+      ],
+      "cur": {
+        "name": "Strategy",
+        "lead": "Decide which problems to solve first, and why.",
+        "jobs": "We review how the business makes money and where it loses it, set clear priorities for the next 12 months, and turn the plan into a schedule of work with named owners.",
+        "iconPaper": "/brand/icons/compass-light.svg"
+      },
+      "stagePosters": [
+        {
+          "name": "Understand",
+          "short": "We find the cause behind the symptom.",
+          "what": "We talk to you and your team, look at how the work gets done, and review the numbers. We look for the cause behind the symptom.",
+          "out": "a clear statement of the problem and what it costs the business.",
+          "bg": "#E7EBE6",
+          "fg": "#1E272A",
+          "glow": "radial-gradient(circle at 80% 10%,rgba(255,255,255,0.7),transparent 50%)",
+          "chipBg": "rgba(30,39,42,0.06)",
+          "chipBd": "rgba(30,39,42,0.14)",
+          "stepLabel": "Step 1 of 4"
+        },
+        {
+          "name": "Architect",
+          "short": "We agree the plan, the people, and the cost.",
+          "what": "We agree what needs to change, who will do it, what it will cost, and how we will measure it.",
+          "out": "a plan with roles, costs, and measures.",
+          "bg": "#434F4F",
+          "fg": "#F4F5F1",
+          "glow": "radial-gradient(circle at 80% 10%,rgba(186,196,190,0.35),transparent 55%)",
+          "chipBg": "rgba(244,245,241,0.1)",
+          "chipBd": "rgba(244,245,241,0.22)",
+          "stepLabel": "Step 2 of 4"
+        },
+        {
+          "name": "Execute",
+          "short": "We do the work with your team.",
+          "what": "We do the work alongside your team and report progress to the person who makes decisions.",
+          "out": "the agreed work, done and measured.",
+          "bg": "#2A3538",
+          "fg": "#F4F5F1",
+          "glow": "radial-gradient(circle at 80% 0%,rgba(46,107,92,0.45),transparent 55%)",
+          "chipBg": "rgba(244,245,241,0.08)",
+          "chipBd": "rgba(244,245,241,0.18)",
+          "stepLabel": "Step 3 of 4"
+        },
+        {
+          "name": "Institutionalise",
+          "short": "We write it down and hand it over.",
+          "what": "We write down the new way of working, train the people who will run it, and hand it over.",
+          "out": "written processes, trained staff, and measures you can keep using.",
+          "bg": "#1E272A",
+          "fg": "#F4F5F1",
+          "glow": "radial-gradient(circle at 85% 0%,rgba(181,83,44,0.45),transparent 55%)",
+          "chipBg": "rgba(244,245,241,0.08)",
+          "chipBd": "rgba(244,245,241,0.16)",
+          "stepLabel": "Step 4 of 4"
+        }
+      ],
+      "engs": [
+        {
+          "tag": "Short engagement",
+          "icon": "/brand/icons/search.svg",
+          "name": "Review",
+          "body": "We investigate a problem and give you a clear plan to fix it.",
+          "itemsText": "You get a review of the area that is not working, our findings in order of priority, and a practical plan with costs and measures.",
+          "comm": "a fixed fee for an agreed scope."
+        },
+        {
+          "tag": "Defined work",
+          "icon": "/brand/icons/hammer.svg",
+          "name": "Project",
+          "body": "We design and deliver a defined piece of work.",
+          "itemsText": "You get agreed deliverables and milestones, a clear definition of done, any specialist partners managed by us, and regular progress reports.",
+          "comm": "paid at milestones. Any extra costs are agreed in advance."
+        },
+        {
+          "tag": "Ongoing",
+          "icon": "/brand/icons/door-open.svg",
+          "name": "Residency",
+          "body": "A HUMMIN professional works inside your team, with support from Applied Expertise.",
+          "itemsText": "They coordinate the agreed work day to day, bring in HUMMIN specialists when needed, and are managed by HUMMIN. Their role and reporting lines are set in the contract.",
+          "comm": "a monthly fee based on scope and the people involved."
+        }
+      ],
+      "values": [
+        {
+          "short": "Understanding",
+          "t": "Understanding before intervention.",
+          "b": "We investigate before prescribing.",
+          "not": "Recommend a fix before we understand the problem."
+        },
+        {
+          "short": "Action",
+          "t": "Intelligence in action.",
+          "b": "We connect insight to implementation.",
+          "not": "Hand over a report and walk away when the work is ours to do."
+        },
+        {
+          "short": "Independence",
+          "t": "Proximity with independence.",
+          "b": "We work closely with clients without surrendering professional judgement.",
+          "not": "Tell you what you want to hear."
+        },
+        {
+          "short": "Discipline",
+          "t": "Adaptability with discipline.",
+          "b": "We tailor solutions without compromising quality or accountability.",
+          "not": "Sell every client the same solution."
+        },
+        {
+          "short": "Responsibility",
+          "t": "Partnership with responsibility.",
+          "b": "We treat trust as an obligation and agreed outcomes as a shared priority.",
+          "not": "Share your information without your permission."
+        },
+        {
+          "short": "Capability",
+          "t": "Capability beyond dependency.",
+          "b": "We build systems and people that become stronger through our involvement.",
+          "not": "Make the business depend on us."
+        }
+      ],
+      "valueTabs": [
+        {
+          "id": "val-tab-0",
+          "tab": 0,
+          "short": "Understanding",
+          "sel": "true",
+          "bg": "#1E272A",
+          "fg": "#F4F5F1",
+          "bd": "#1E272A"
+        },
+        {
+          "id": "val-tab-1",
+          "tab": -1,
+          "short": "Action",
+          "sel": "false",
+          "bg": "transparent",
+          "fg": "#1E272A",
+          "bd": "#BAC4BE"
+        },
+        {
+          "id": "val-tab-2",
+          "tab": -1,
+          "short": "Independence",
+          "sel": "false",
+          "bg": "transparent",
+          "fg": "#1E272A",
+          "bd": "#BAC4BE"
+        },
+        {
+          "id": "val-tab-3",
+          "tab": -1,
+          "short": "Discipline",
+          "sel": "false",
+          "bg": "transparent",
+          "fg": "#1E272A",
+          "bd": "#BAC4BE"
+        },
+        {
+          "id": "val-tab-4",
+          "tab": -1,
+          "short": "Responsibility",
+          "sel": "false",
+          "bg": "transparent",
+          "fg": "#1E272A",
+          "bd": "#BAC4BE"
+        },
+        {
+          "id": "val-tab-5",
+          "tab": -1,
+          "short": "Capability",
+          "sel": "false",
+          "bg": "transparent",
+          "fg": "#1E272A",
+          "bd": "#BAC4BE"
+        }
+      ],
+      "val": {
+        "short": "Understanding",
+        "t": "Understanding before intervention.",
+        "b": "We investigate before prescribing.",
+        "not": "Recommend a fix before we understand the problem.",
+        "pos": "1 of 6"
+      },
+      "needs": [
+        {
+          "icon": "/brand/icons/user-round-check-light.svg",
+          "v": "A decision-maker",
+          "k": "One person who can approve changes."
+        },
+        {
+          "icon": "/brand/icons/key-round-light.svg",
+          "v": "Access",
+          "k": "To the information and systems the work depends on."
+        },
+        {
+          "icon": "/brand/icons/clock-light.svg",
+          "v": "Time",
+          "k": "With the people who do the work every day."
+        },
+        {
+          "icon": "/brand/icons/target-light.svg",
+          "v": "A measure",
+          "k": "Agreed at the start, so we both know what a good result looks like."
+        }
+      ],
+      "topics": [
+        {
+          "title": "Enquiries that go unanswered.",
+          "area": "Marketing · Operations",
+          "lead": "Enquiries arrive, but no one owns the follow-up. Some never get a reply.",
+          "look": "How enquiries arrive, who answers them, how quickly, and what gets recorded.",
+          "start": "A Review. It shows where enquiries are lost and what to fix first.",
+          "bg": "#E7EBE6",
+          "fg": "#1E272A",
+          "mark": "/brand/hummin-mark-mist.svg",
+          "chipBg": "rgba(30,39,42,0.06)",
+          "chipBd": "rgba(30,39,42,0.12)",
+          "aria": "Enquiries that go unanswered. Read more"
+        },
+        {
+          "title": "A website that loses visitors.",
+          "area": "Technology",
+          "lead": "People visit the site but do not call, write, or buy.",
+          "look": "What visitors look for, where they leave, and how the site asks them to get in touch.",
+          "start": "A Review, then a Project to rebuild the pages that matter.",
+          "bg": "#1E272A",
+          "fg": "#F4F5F1",
+          "mark": "/brand/hummin-mark-tone.svg",
+          "chipBg": "rgba(244,245,241,0.08)",
+          "chipBd": "rgba(244,245,241,0.16)",
+          "aria": "A website that loses visitors. Read more"
+        },
+        {
+          "title": "Systems the team does not use.",
+          "area": "Technology · Talent",
+          "lead": "The business paid for tools, but the team works around them.",
+          "look": "How the work is done today, where the tools get in the way, and what training is missing.",
+          "start": "A Review. Often followed by a Project to set the tools up properly.",
+          "bg": "#434F4F",
+          "fg": "#F4F5F1",
+          "mark": "/brand/hummin-mark-tone.svg",
+          "chipBg": "rgba(244,245,241,0.1)",
+          "chipBd": "rgba(244,245,241,0.2)",
+          "aria": "Systems the team does not use. Read more"
+        },
+        {
+          "title": "Too much still runs through the owner.",
+          "area": "Strategy · Operations",
+          "lead": "Decisions and approvals wait for one person, so work slows down.",
+          "look": "Which decisions can be handed over, to whom, and within what limits.",
+          "start": "A Review, then a Residency to make the change stick.",
+          "bg": "#E7EBE6",
+          "fg": "#1E272A",
+          "mark": "/brand/hummin-mark-mist.svg",
+          "chipBg": "rgba(30,39,42,0.06)",
+          "chipBd": "rgba(30,39,42,0.12)",
+          "aria": "Too much still runs through the owner. Read more"
+        },
+        {
+          "title": "Figures that arrive too late to act on.",
+          "area": "Data",
+          "lead": "Reports come weeks after the month ends, when it is too late to act.",
+          "look": "Which figures matter, where they come from, and how to get them sooner.",
+          "start": "A Project to set up a simple monthly dashboard.",
+          "bg": "#1E272A",
+          "fg": "#F4F5F1",
+          "mark": "/brand/hummin-mark-tone.svg",
+          "chipBg": "rgba(244,245,241,0.08)",
+          "chipBd": "rgba(244,245,241,0.16)",
+          "aria": "Figures that arrive too late to act on. Read more"
+        },
+        {
+          "title": "A team stretched too thin.",
+          "area": "Talent",
+          "lead": "Good people are doing too many jobs, and some work is not getting done.",
+          "look": "Who does what today, what can be removed, and which roles are missing.",
+          "start": "A Review of roles and workload.",
+          "bg": "#434F4F",
+          "fg": "#F4F5F1",
+          "mark": "/brand/hummin-mark-tone.svg",
+          "chipBg": "rgba(244,245,241,0.1)",
+          "chipBd": "rgba(244,245,241,0.2)",
+          "aria": "A team stretched too thin. Read more"
+        }
+      ],
+      "posters": [
+        {
+          "name": "Review",
+          "tag": "Short engagement",
+          "body": "Find the problem and get a clear plan.",
+          "bg": "#E7EBE6",
+          "fg": "#1E272A",
+          "glow": "radial-gradient(circle at 80% 10%,rgba(255,255,255,0.7),transparent 50%)",
+          "chipBg": "rgba(30,39,42,0.06)",
+          "chipBd": "rgba(30,39,42,0.12)",
+          "aria": "Review: Find the problem and get a clear plan. Read more"
+        },
+        {
+          "name": "Project",
+          "tag": "Defined work",
+          "body": "Design and deliver a defined piece of work.",
+          "bg": "#434F4F",
+          "fg": "#F4F5F1",
+          "glow": "radial-gradient(circle at 80% 10%,rgba(186,196,190,0.35),transparent 55%)",
+          "chipBg": "rgba(244,245,241,0.1)",
+          "chipBd": "rgba(244,245,241,0.2)",
+          "aria": "Project: Design and deliver a defined piece of work. Read more"
+        },
+        {
+          "name": "Residency",
+          "tag": "Ongoing",
+          "body": "A HUMMIN professional inside your team.",
+          "bg": "#1E272A",
+          "fg": "#F4F5F1",
+          "glow": "radial-gradient(circle at 85% 0%,rgba(181,83,44,0.45),transparent 55%)",
+          "chipBg": "rgba(244,245,241,0.08)",
+          "chipBd": "rgba(244,245,241,0.16)",
+          "aria": "Residency: A HUMMIN professional inside your team. Read more"
+        }
+      ],
+      "engCards": [
+        {
+          "tag": "Short engagement",
+          "icon": "search",
+          "name": "Review",
+          "body": "We investigate a problem and give you a clear plan to fix it.",
+          "itemsText": "You get a review of the area that is not working, our findings in order of priority, and a practical plan with costs and measures.",
+          "comm": "a fixed fee for an agreed scope.",
+          "bg": "#E7EBE6",
+          "fg": "#1E272A",
+          "glow": "radial-gradient(circle at 80% 10%,rgba(255,255,255,0.7),transparent 50%)",
+          "chipBg": "rgba(30,39,42,0.06)",
+          "chipBd": "rgba(30,39,42,0.12)"
+        },
+        {
+          "tag": "Defined work",
+          "icon": "hammer",
+          "name": "Project",
+          "body": "We design and deliver a defined piece of work.",
+          "itemsText": "You get agreed deliverables and milestones, a clear definition of done, any specialist partners managed by us, and regular progress reports.",
+          "comm": "paid at milestones. Any extra costs are agreed in advance.",
+          "bg": "#434F4F",
+          "fg": "#F4F5F1",
+          "glow": "radial-gradient(circle at 80% 10%,rgba(186,196,190,0.35),transparent 55%)",
+          "chipBg": "rgba(244,245,241,0.1)",
+          "chipBd": "rgba(244,245,241,0.2)"
+        },
+        {
+          "tag": "Ongoing",
+          "icon": "door-open",
+          "name": "Residency",
+          "body": "A HUMMIN professional works inside your team, with support from Applied Expertise.",
+          "itemsText": "They coordinate the agreed work day to day, bring in HUMMIN specialists when needed, and are managed by HUMMIN. Their role and reporting lines are set in the contract.",
+          "comm": "a monthly fee based on scope and the people involved.",
+          "bg": "#1E272A",
+          "fg": "#F4F5F1",
+          "glow": "radial-gradient(circle at 85% 0%,rgba(181,83,44,0.45),transparent 55%)",
+          "chipBg": "rgba(244,245,241,0.08)",
+          "chipBd": "rgba(244,245,241,0.16)"
+        }
+      ],
+      "tierTabs": [
+        {
+          "id": "tier-tab-0",
+          "tab": 0,
+          "name": "Review",
+          "sel": "true",
+          "bg": "#1E272A",
+          "fg": "#F4F5F1"
+        },
+        {
+          "id": "tier-tab-1",
+          "tab": -1,
+          "name": "Project",
+          "sel": "false",
+          "bg": "transparent",
+          "fg": "#1E272A"
+        },
+        {
+          "id": "tier-tab-2",
+          "tab": -1,
+          "name": "Residency",
+          "sel": "false",
+          "bg": "transparent",
+          "fg": "#1E272A"
+        }
+      ],
+      "tierCols": [
+        {
+          "aria": "Show Review",
+          "name": "Review",
+          "tag": "Short engagement",
+          "bg": "#E7EBE6",
+          "fg": "#1E272A",
+          "glow": "radial-gradient(circle at 80% 10%,rgba(255,255,255,0.7),transparent 50%)",
+          "chipBg": "rgba(30,39,42,0.06)",
+          "chipBd": "rgba(30,39,42,0.14)"
+        },
+        {
+          "aria": "Show Project",
+          "name": "Project",
+          "tag": "Defined work",
+          "bg": "#F4F5F1",
+          "fg": "#5E6967",
+          "glow": "none",
+          "chipBg": "rgba(30,39,42,0.04)",
+          "chipBd": "rgba(30,39,42,0.12)"
+        },
+        {
+          "aria": "Show Residency",
+          "name": "Residency",
+          "tag": "Ongoing",
+          "bg": "#F4F5F1",
+          "fg": "#5E6967",
+          "glow": "none",
+          "chipBg": "rgba(30,39,42,0.04)",
+          "chipBd": "rgba(30,39,42,0.12)"
+        }
+      ],
+      "tierRows": [
+        {
+          "label": "Best when",
+          "cells": [
+            {
+              "text": "You know something is wrong, but not exactly what.",
+              "bg": "#E7EBE6",
+              "fg": "#1E272A",
+              "line": "rgba(127,140,136,0.35)",
+              "radius": "0"
+            },
+            {
+              "text": "You know what needs to change and need it done.",
+              "bg": "transparent",
+              "fg": "#434F4F",
+              "line": "#D0D8D2",
+              "radius": "0"
+            },
+            {
+              "text": "You need someone close to the work, week after week.",
+              "bg": "transparent",
+              "fg": "#434F4F",
+              "line": "#D0D8D2",
+              "radius": "0"
+            }
+          ]
+        },
+        {
+          "label": "What happens",
+          "cells": [
+            {
+              "text": "We investigate the problem and set out a clear plan to fix it.",
+              "bg": "#E7EBE6",
+              "fg": "#1E272A",
+              "line": "rgba(127,140,136,0.35)",
+              "radius": "0"
+            },
+            {
+              "text": "We design and deliver a defined piece of work, managing any specialists involved.",
+              "bg": "transparent",
+              "fg": "#434F4F",
+              "line": "#D0D8D2",
+              "radius": "0"
+            },
+            {
+              "text": "A HUMMIN professional works inside your team, supported by our Applied Expertise.",
+              "bg": "transparent",
+              "fg": "#434F4F",
+              "line": "#D0D8D2",
+              "radius": "0"
+            }
+          ]
+        },
+        {
+          "label": "You get",
+          "cells": [
+            {
+              "text": "Findings in order of priority, and a practical plan with costs and measures.",
+              "bg": "#E7EBE6",
+              "fg": "#1E272A",
+              "line": "rgba(127,140,136,0.35)",
+              "radius": "0"
+            },
+            {
+              "text": "Agreed deliverables, milestones, and regular progress reports.",
+              "bg": "transparent",
+              "fg": "#434F4F",
+              "line": "#D0D8D2",
+              "radius": "0"
+            },
+            {
+              "text": "Day-to-day coordination, and access to HUMMIN specialists when needed.",
+              "bg": "transparent",
+              "fg": "#434F4F",
+              "line": "#D0D8D2",
+              "radius": "0"
+            }
+          ]
+        },
+        {
+          "label": "Ends",
+          "cells": [
+            {
+              "text": "When the plan is delivered to you.",
+              "bg": "#E7EBE6",
+              "fg": "#1E272A",
+              "line": "rgba(127,140,136,0.35)",
+              "radius": "0"
+            },
+            {
+              "text": "When the agreed work meets its definition of done.",
+              "bg": "transparent",
+              "fg": "#434F4F",
+              "line": "#D0D8D2",
+              "radius": "0"
+            },
+            {
+              "text": "Ongoing, reviewed on dates we agree.",
+              "bg": "transparent",
+              "fg": "#434F4F",
+              "line": "#D0D8D2",
+              "radius": "0"
+            }
+          ]
+        },
+        {
+          "label": "Your part",
+          "cells": [
+            {
+              "text": "Share information and give us time with your team.",
+              "bg": "#E7EBE6",
+              "fg": "#1E272A",
+              "line": "rgba(127,140,136,0.35)",
+              "radius": "0"
+            },
+            {
+              "text": "Approve the plan and make decisions on time.",
+              "bg": "transparent",
+              "fg": "#434F4F",
+              "line": "#D0D8D2",
+              "radius": "0"
+            },
+            {
+              "text": "Set direction and agree the role and reporting lines.",
+              "bg": "transparent",
+              "fg": "#434F4F",
+              "line": "#D0D8D2",
+              "radius": "0"
+            }
+          ]
+        },
+        {
+          "label": "Fees",
+          "cells": [
+            {
+              "text": "A fixed fee for an agreed scope.",
+              "bg": "#E7EBE6",
+              "fg": "#1E272A",
+              "line": "rgba(127,140,136,0.35)",
+              "radius": "0 0 20px 20px"
+            },
+            {
+              "text": "Paid at milestones. Extra costs are agreed in advance.",
+              "bg": "transparent",
+              "fg": "#434F4F",
+              "line": "#D0D8D2",
+              "radius": "0"
+            },
+            {
+              "text": "A monthly fee based on scope and the people involved.",
+              "bg": "transparent",
+              "fg": "#434F4F",
+              "line": "#D0D8D2",
+              "radius": "0"
+            }
+          ]
+        }
+      ],
+      "tierCta": "Discuss a Review",
+      "show_float": true,
+      "fields": [
+        {
+          "k": "name",
+          "id": "f-name",
+          "errId": "f-name-err",
+          "inv": "false",
+          "ac": "name",
+          "label": "Name",
+          "type": "text",
+          "ph": "Your full name",
+          "multi": false,
+          "single": true,
+          "value": "",
+          "err": "",
+          "bd": "#BAC4BE"
+        },
+        {
+          "k": "biz",
+          "id": "f-biz",
+          "errId": "f-biz-err",
+          "inv": "false",
+          "ac": "organization",
+          "label": "Business Name",
+          "type": "text",
+          "ph": "Registered or trading name",
+          "multi": false,
+          "single": true,
+          "value": "",
+          "err": "",
+          "bd": "#BAC4BE"
+        },
+        {
+          "k": "email",
+          "id": "f-email",
+          "errId": "f-email-err",
+          "inv": "false",
+          "ac": "email",
+          "label": "Work Email",
+          "type": "email",
+          "ph": "name@business.com",
+          "multi": false,
+          "single": true,
+          "value": "",
+          "err": "",
+          "bd": "#BAC4BE"
+        },
+        {
+          "k": "msg",
+          "id": "f-msg",
+          "errId": "f-msg-err",
+          "inv": "false",
+          "ac": "off",
+          "label": "What Would You Like to Work On?",
+          "type": "text",
+          "ph": "A few sentences about the challenge",
+          "multi": true,
+          "single": false,
+          "value": "",
+          "err": "",
+          "bd": "#BAC4BE"
+        }
+      ],
+      "pk": {
+        "chip": "",
+        "title": "",
+        "lead": "",
+        "rows": [],
+        "primaryLabel": "",
+        "secondaryLabel": "",
+        "bg": "#E7EBE6",
+        "fg": "#1E272A",
+        "glow": "none",
+        "chipBg": "rgba(30,39,42,0.06)",
+        "chipBd": "rgba(30,39,42,0.12)"
+      },
+      "contactReady": true,
+      "contactInactive": false,
+      "contactStatus": "",
+      "sent": false,
+      "not_sent": true
     }
   },
   "menu": {
@@ -13306,6 +15218,1918 @@
       ],
       "tierCta": "Discuss a Review",
       "show_float": false,
+      "fields": [
+        {
+          "k": "name",
+          "id": "f-name",
+          "errId": "f-name-err",
+          "inv": "false",
+          "ac": "name",
+          "label": "Name",
+          "type": "text",
+          "ph": "Your full name",
+          "multi": false,
+          "single": true,
+          "value": "",
+          "err": "",
+          "bd": "#BAC4BE"
+        },
+        {
+          "k": "biz",
+          "id": "f-biz",
+          "errId": "f-biz-err",
+          "inv": "false",
+          "ac": "organization",
+          "label": "Business Name",
+          "type": "text",
+          "ph": "Registered or trading name",
+          "multi": false,
+          "single": true,
+          "value": "",
+          "err": "",
+          "bd": "#BAC4BE"
+        },
+        {
+          "k": "email",
+          "id": "f-email",
+          "errId": "f-email-err",
+          "inv": "false",
+          "ac": "email",
+          "label": "Work Email",
+          "type": "email",
+          "ph": "name@business.com",
+          "multi": false,
+          "single": true,
+          "value": "",
+          "err": "",
+          "bd": "#BAC4BE"
+        },
+        {
+          "k": "msg",
+          "id": "f-msg",
+          "errId": "f-msg-err",
+          "inv": "false",
+          "ac": "off",
+          "label": "What Would You Like to Work On?",
+          "type": "text",
+          "ph": "A few sentences about the challenge",
+          "multi": true,
+          "single": false,
+          "value": "",
+          "err": "",
+          "bd": "#BAC4BE"
+        }
+      ],
+      "pk": {
+        "chip": "",
+        "title": "",
+        "lead": "",
+        "rows": [],
+        "primaryLabel": "",
+        "secondaryLabel": "",
+        "bg": "#E7EBE6",
+        "fg": "#1E272A",
+        "glow": "none",
+        "chipBg": "rgba(30,39,42,0.06)",
+        "chipBd": "rgba(30,39,42,0.12)"
+      },
+      "contactReady": true,
+      "contactInactive": false,
+      "contactStatus": "",
+      "sent": false,
+      "not_sent": true
+    },
+    "assess": {
+      "root": {
+        "current": null
+      },
+      "is_home": false,
+      "is_how": false,
+      "is_core": false,
+      "is_eng": false,
+      "is_who": false,
+      "is_assess": true,
+      "is_about": false,
+      "is_insights": false,
+      "is_contact": false,
+      "nav": [
+        {
+          "label": "Home",
+          "icon": "/brand/icons/house.svg",
+          "color": "#434F4F",
+          "weight": 400,
+          "bg": "transparent",
+          "op": 0.7
+        },
+        {
+          "label": "How We Work",
+          "icon": "/brand/icons/route.svg",
+          "color": "#434F4F",
+          "weight": 400,
+          "bg": "transparent",
+          "op": 0.7
+        },
+        {
+          "label": "Applied Expertise",
+          "icon": "/brand/icons/layers.svg",
+          "color": "#434F4F",
+          "weight": 400,
+          "bg": "transparent",
+          "op": 0.7
+        },
+        {
+          "label": "Engagements",
+          "icon": "/brand/icons/handshake.svg",
+          "color": "#434F4F",
+          "weight": 400,
+          "bg": "transparent",
+          "op": 0.7
+        },
+        {
+          "label": "Who We Work With",
+          "icon": "/brand/icons/users.svg",
+          "color": "#434F4F",
+          "weight": 400,
+          "bg": "transparent",
+          "op": 0.7
+        },
+        {
+          "current": "page",
+          "label": "Assessment",
+          "icon": "/brand/icons/clipboard-check.svg",
+          "color": "#1E272A",
+          "weight": 600,
+          "bg": "#E7EBE6",
+          "op": 1
+        },
+        {
+          "label": "About",
+          "icon": "/brand/icons/building-2.svg",
+          "color": "#434F4F",
+          "weight": 400,
+          "bg": "transparent",
+          "op": 0.7
+        },
+        {
+          "label": "Insights",
+          "icon": "/brand/icons/newspaper.svg",
+          "color": "#434F4F",
+          "weight": 400,
+          "bg": "transparent",
+          "op": 0.7
+        },
+        {
+          "label": "Contact",
+          "icon": "/brand/icons/mail.svg",
+          "color": "#434F4F",
+          "weight": 400,
+          "bg": "transparent",
+          "op": 0.7
+        }
+      ],
+      "pageRef": {
+        "current": null
+      },
+      "peekCloseRef": {
+        "current": null
+      },
+      "sentRef": {
+        "current": null
+      },
+      "headShadow": "none",
+      "icoMenuOp": 0,
+      "icoXOp": 1,
+      "icoMenuTf": "rotate(90deg) scale(0.6)",
+      "icoXTf": "none",
+      "tierTabId": "tier-tab-0",
+      "valTabId": "val-tab-0",
+      "peekVis": "hidden",
+      "peekEvents": "none",
+      "peekOp": 0,
+      "peekTf": "translate3d(0,24px,0) scale(0.97)",
+      "peekHidden": "true",
+      "copyLabel": "Copy",
+      "copyBg": "transparent",
+      "copyStatus": "",
+      "sending": false,
+      "sendingStr": "false",
+      "sendLabel": "Send Enquiry",
+      "sendOp": 1,
+      "menuClosed": false,
+      "menuOpenBool": true,
+      "menuAria": "Close menu",
+      "menuOpenStr": "true",
+      "drawerX": "translateX(0)",
+      "drawerVis": "visible",
+      "scrimOpacity": 1,
+      "scrimEvents": "auto",
+      "inner": false,
+      "insightPost": null,
+      "insightNonce": 0,
+      "insightTeasers": [
+        {
+          "slug": "enquiries-30-day-fix",
+          "type": "Guide",
+          "read": "4 min read",
+          "title": "Why enquiries go unanswered, and a 30-day fix",
+          "excerpt": "Most owners get more enquiries than they think. The problem is what happens next.",
+          "by": "HUMMIN Team · 20 Oct",
+          "bg": "#E7EBE6",
+          "fg": "#1E272A",
+          "bd": "#E7EBE6",
+          "chipBg": "rgba(30,39,42,0.06)",
+          "chipBd": "rgba(30,39,42,0.14)",
+          "aria": "Guide: Why enquiries go unanswered, and a 30-day fix"
+        },
+        {
+          "slug": "five-monday-figures",
+          "type": "Guide",
+          "read": "3 min read",
+          "title": "Five figures every owner should see on Monday",
+          "excerpt": "A short set of weekly figures shows problems while you can still act.",
+          "by": "HUMMIN Team · 13 Oct",
+          "bg": "#E7EBE6",
+          "fg": "#1E272A",
+          "bd": "#E7EBE6",
+          "chipBg": "rgba(30,39,42,0.06)",
+          "chipBd": "rgba(30,39,42,0.14)",
+          "aria": "Guide: Five figures every owner should see on Monday"
+        },
+        {
+          "slug": "runs-through-the-owner",
+          "type": "Opinion",
+          "read": "3 min read",
+          "title": "When the business still runs through the owner",
+          "excerpt": "Owners often become the bottleneck in the business they built.",
+          "by": "Muiruri Beautah · 6 Oct",
+          "bg": "#1E272A",
+          "fg": "#F4F5F1",
+          "bd": "#1E272A",
+          "chipBg": "rgba(244,245,241,0.08)",
+          "chipBd": "rgba(244,245,241,0.18)",
+          "aria": "Opinion: When the business still runs through the owner"
+        }
+      ],
+      "head": {
+        "label": "How We Work",
+        "icon": "/brand/icons/route.svg",
+        "iconPaper": "/brand/icons/route-light.svg",
+        "title": "Understand the problem. Then fix it.",
+        "lead": "We begin by understanding the business. Then we agree what needs to change, who will do the work, and how progress will be measured.",
+        "bg": "radial-gradient(circle at 70% 20%,#5E6967 0%,#2A3538 40%,#1E272A 72%)",
+        "glow": "radial-gradient(circle at 12% 95%,rgba(30,39,42,0.6),transparent 45%)",
+        "chip": "Four steps",
+        "img": "Image: reviewing a process with the people who run it."
+      },
+      "show_band": false,
+      "stages": [
+        {
+          "name": "Understand",
+          "short": "We find the cause behind the symptom.",
+          "what": "We talk to you and your team, look at how the work gets done, and review the numbers. We look for the cause behind the symptom.",
+          "out": "a clear statement of the problem and what it costs the business."
+        },
+        {
+          "name": "Architect",
+          "short": "We agree the plan, the people, and the cost.",
+          "what": "We agree what needs to change, who will do it, what it will cost, and how we will measure it.",
+          "out": "a plan with roles, costs, and measures."
+        },
+        {
+          "name": "Execute",
+          "short": "We do the work with your team.",
+          "what": "We do the work alongside your team and report progress to the person who makes decisions.",
+          "out": "the agreed work, done and measured."
+        },
+        {
+          "name": "Institutionalise",
+          "short": "We write it down and hand it over.",
+          "what": "We write down the new way of working, train the people who will run it, and hand it over.",
+          "out": "written processes, trained staff, and measures you can keep using."
+        }
+      ],
+      "domains": [
+        {
+          "name": "Strategy",
+          "icon": "compass",
+          "lead": "Decide which problems to solve first, and why.",
+          "jobs": "We review how the business makes money and where it loses it, set clear priorities for the next 12 months, and turn the plan into a schedule of work with named owners.",
+          "bg": "#B5532C",
+          "fg": "#FFFFFF",
+          "pressed": "true",
+          "iconUrl": "/brand/icons/compass-light.svg",
+          "kind": "",
+          "ring": "#B5532C"
+        },
+        {
+          "name": "Technology",
+          "icon": "monitor-smartphone",
+          "lead": "Make your systems fit the way the business works.",
+          "jobs": "We build or fix websites, set up CRMs so every enquiry is recorded, and automate repeated admin tasks.",
+          "bg": "#434F4F",
+          "fg": "#F4F5F1",
+          "pressed": "false",
+          "iconUrl": "/brand/icons/monitor-smartphone-light.svg",
+          "kind": "",
+          "ring": "transparent"
+        },
+        {
+          "name": "Marketing",
+          "icon": "megaphone",
+          "lead": "Bring in the right customers, and keep track of them.",
+          "jobs": "We clarify who you sell to and what you say, plan and run advertising, and check what happens to each enquiry after it arrives.",
+          "bg": "#1E272A",
+          "fg": "#F4F5F1",
+          "pressed": "false",
+          "iconUrl": "/brand/icons/megaphone-light.svg",
+          "kind": "",
+          "ring": "transparent"
+        },
+        {
+          "name": "Operations",
+          "icon": "workflow",
+          "lead": "Make everyday work run smoothly.",
+          "jobs": "We map how work moves through the business, remove the steps that slow it down, and set up simple reports on how it is going.",
+          "bg": "#E7EBE6",
+          "fg": "#1E272A",
+          "pressed": "false",
+          "iconUrl": "/brand/icons/workflow.svg",
+          "kind": "",
+          "ring": "transparent"
+        },
+        {
+          "name": "Talent",
+          "icon": "user-round-check",
+          "lead": "Put the right people in the right roles.",
+          "jobs": "We write clear roles and responsibilities, help recruit for key positions, and train staff on new processes and tools.",
+          "bg": "#434F4F",
+          "fg": "#F4F5F1",
+          "pressed": "false",
+          "iconUrl": "/brand/icons/user-round-check-light.svg",
+          "kind": "",
+          "ring": "transparent"
+        },
+        {
+          "name": "Data",
+          "icon": "chart-column",
+          "lead": "Base decisions on records you can trust.",
+          "jobs": "We choose the figures worth tracking, build simple monthly dashboards, and measure whether a change worked.",
+          "bg": "#1E272A",
+          "fg": "#F4F5F1",
+          "pressed": "false",
+          "iconUrl": "/brand/icons/chart-column-light.svg",
+          "kind": "",
+          "ring": "transparent"
+        },
+        {
+          "name": "Specialist Partners",
+          "icon": "briefcase",
+          "lead": "Bring in qualified experts when the work needs them.",
+          "jobs": "Accountants, financial advisers, lawyers, HR professionals, software engineers, and recruiters, managed by HUMMIN under one agreement.",
+          "ext": true,
+          "bg": "#E7EBE6",
+          "fg": "#1E272A",
+          "pressed": "false",
+          "iconUrl": "/brand/icons/briefcase.svg",
+          "kind": "External partners",
+          "ring": "transparent"
+        }
+      ],
+      "cur": {
+        "name": "Strategy",
+        "lead": "Decide which problems to solve first, and why.",
+        "jobs": "We review how the business makes money and where it loses it, set clear priorities for the next 12 months, and turn the plan into a schedule of work with named owners.",
+        "iconPaper": "/brand/icons/compass-light.svg"
+      },
+      "stagePosters": [
+        {
+          "name": "Understand",
+          "short": "We find the cause behind the symptom.",
+          "what": "We talk to you and your team, look at how the work gets done, and review the numbers. We look for the cause behind the symptom.",
+          "out": "a clear statement of the problem and what it costs the business.",
+          "bg": "#E7EBE6",
+          "fg": "#1E272A",
+          "glow": "radial-gradient(circle at 80% 10%,rgba(255,255,255,0.7),transparent 50%)",
+          "chipBg": "rgba(30,39,42,0.06)",
+          "chipBd": "rgba(30,39,42,0.14)",
+          "stepLabel": "Step 1 of 4"
+        },
+        {
+          "name": "Architect",
+          "short": "We agree the plan, the people, and the cost.",
+          "what": "We agree what needs to change, who will do it, what it will cost, and how we will measure it.",
+          "out": "a plan with roles, costs, and measures.",
+          "bg": "#434F4F",
+          "fg": "#F4F5F1",
+          "glow": "radial-gradient(circle at 80% 10%,rgba(186,196,190,0.35),transparent 55%)",
+          "chipBg": "rgba(244,245,241,0.1)",
+          "chipBd": "rgba(244,245,241,0.22)",
+          "stepLabel": "Step 2 of 4"
+        },
+        {
+          "name": "Execute",
+          "short": "We do the work with your team.",
+          "what": "We do the work alongside your team and report progress to the person who makes decisions.",
+          "out": "the agreed work, done and measured.",
+          "bg": "#2A3538",
+          "fg": "#F4F5F1",
+          "glow": "radial-gradient(circle at 80% 0%,rgba(46,107,92,0.45),transparent 55%)",
+          "chipBg": "rgba(244,245,241,0.08)",
+          "chipBd": "rgba(244,245,241,0.18)",
+          "stepLabel": "Step 3 of 4"
+        },
+        {
+          "name": "Institutionalise",
+          "short": "We write it down and hand it over.",
+          "what": "We write down the new way of working, train the people who will run it, and hand it over.",
+          "out": "written processes, trained staff, and measures you can keep using.",
+          "bg": "#1E272A",
+          "fg": "#F4F5F1",
+          "glow": "radial-gradient(circle at 85% 0%,rgba(181,83,44,0.45),transparent 55%)",
+          "chipBg": "rgba(244,245,241,0.08)",
+          "chipBd": "rgba(244,245,241,0.16)",
+          "stepLabel": "Step 4 of 4"
+        }
+      ],
+      "engs": [
+        {
+          "tag": "Short engagement",
+          "icon": "/brand/icons/search.svg",
+          "name": "Review",
+          "body": "We investigate a problem and give you a clear plan to fix it.",
+          "itemsText": "You get a review of the area that is not working, our findings in order of priority, and a practical plan with costs and measures.",
+          "comm": "a fixed fee for an agreed scope."
+        },
+        {
+          "tag": "Defined work",
+          "icon": "/brand/icons/hammer.svg",
+          "name": "Project",
+          "body": "We design and deliver a defined piece of work.",
+          "itemsText": "You get agreed deliverables and milestones, a clear definition of done, any specialist partners managed by us, and regular progress reports.",
+          "comm": "paid at milestones. Any extra costs are agreed in advance."
+        },
+        {
+          "tag": "Ongoing",
+          "icon": "/brand/icons/door-open.svg",
+          "name": "Residency",
+          "body": "A HUMMIN professional works inside your team, with support from Applied Expertise.",
+          "itemsText": "They coordinate the agreed work day to day, bring in HUMMIN specialists when needed, and are managed by HUMMIN. Their role and reporting lines are set in the contract.",
+          "comm": "a monthly fee based on scope and the people involved."
+        }
+      ],
+      "values": [
+        {
+          "short": "Understanding",
+          "t": "Understanding before intervention.",
+          "b": "We investigate before prescribing.",
+          "not": "Recommend a fix before we understand the problem."
+        },
+        {
+          "short": "Action",
+          "t": "Intelligence in action.",
+          "b": "We connect insight to implementation.",
+          "not": "Hand over a report and walk away when the work is ours to do."
+        },
+        {
+          "short": "Independence",
+          "t": "Proximity with independence.",
+          "b": "We work closely with clients without surrendering professional judgement.",
+          "not": "Tell you what you want to hear."
+        },
+        {
+          "short": "Discipline",
+          "t": "Adaptability with discipline.",
+          "b": "We tailor solutions without compromising quality or accountability.",
+          "not": "Sell every client the same solution."
+        },
+        {
+          "short": "Responsibility",
+          "t": "Partnership with responsibility.",
+          "b": "We treat trust as an obligation and agreed outcomes as a shared priority.",
+          "not": "Share your information without your permission."
+        },
+        {
+          "short": "Capability",
+          "t": "Capability beyond dependency.",
+          "b": "We build systems and people that become stronger through our involvement.",
+          "not": "Make the business depend on us."
+        }
+      ],
+      "valueTabs": [
+        {
+          "id": "val-tab-0",
+          "tab": 0,
+          "short": "Understanding",
+          "sel": "true",
+          "bg": "#1E272A",
+          "fg": "#F4F5F1",
+          "bd": "#1E272A"
+        },
+        {
+          "id": "val-tab-1",
+          "tab": -1,
+          "short": "Action",
+          "sel": "false",
+          "bg": "transparent",
+          "fg": "#1E272A",
+          "bd": "#BAC4BE"
+        },
+        {
+          "id": "val-tab-2",
+          "tab": -1,
+          "short": "Independence",
+          "sel": "false",
+          "bg": "transparent",
+          "fg": "#1E272A",
+          "bd": "#BAC4BE"
+        },
+        {
+          "id": "val-tab-3",
+          "tab": -1,
+          "short": "Discipline",
+          "sel": "false",
+          "bg": "transparent",
+          "fg": "#1E272A",
+          "bd": "#BAC4BE"
+        },
+        {
+          "id": "val-tab-4",
+          "tab": -1,
+          "short": "Responsibility",
+          "sel": "false",
+          "bg": "transparent",
+          "fg": "#1E272A",
+          "bd": "#BAC4BE"
+        },
+        {
+          "id": "val-tab-5",
+          "tab": -1,
+          "short": "Capability",
+          "sel": "false",
+          "bg": "transparent",
+          "fg": "#1E272A",
+          "bd": "#BAC4BE"
+        }
+      ],
+      "val": {
+        "short": "Understanding",
+        "t": "Understanding before intervention.",
+        "b": "We investigate before prescribing.",
+        "not": "Recommend a fix before we understand the problem.",
+        "pos": "1 of 6"
+      },
+      "needs": [
+        {
+          "icon": "/brand/icons/user-round-check-light.svg",
+          "v": "A decision-maker",
+          "k": "One person who can approve changes."
+        },
+        {
+          "icon": "/brand/icons/key-round-light.svg",
+          "v": "Access",
+          "k": "To the information and systems the work depends on."
+        },
+        {
+          "icon": "/brand/icons/clock-light.svg",
+          "v": "Time",
+          "k": "With the people who do the work every day."
+        },
+        {
+          "icon": "/brand/icons/target-light.svg",
+          "v": "A measure",
+          "k": "Agreed at the start, so we both know what a good result looks like."
+        }
+      ],
+      "topics": [
+        {
+          "title": "Enquiries that go unanswered.",
+          "area": "Marketing · Operations",
+          "lead": "Enquiries arrive, but no one owns the follow-up. Some never get a reply.",
+          "look": "How enquiries arrive, who answers them, how quickly, and what gets recorded.",
+          "start": "A Review. It shows where enquiries are lost and what to fix first.",
+          "bg": "#E7EBE6",
+          "fg": "#1E272A",
+          "mark": "/brand/hummin-mark-mist.svg",
+          "chipBg": "rgba(30,39,42,0.06)",
+          "chipBd": "rgba(30,39,42,0.12)",
+          "aria": "Enquiries that go unanswered. Read more"
+        },
+        {
+          "title": "A website that loses visitors.",
+          "area": "Technology",
+          "lead": "People visit the site but do not call, write, or buy.",
+          "look": "What visitors look for, where they leave, and how the site asks them to get in touch.",
+          "start": "A Review, then a Project to rebuild the pages that matter.",
+          "bg": "#1E272A",
+          "fg": "#F4F5F1",
+          "mark": "/brand/hummin-mark-tone.svg",
+          "chipBg": "rgba(244,245,241,0.08)",
+          "chipBd": "rgba(244,245,241,0.16)",
+          "aria": "A website that loses visitors. Read more"
+        },
+        {
+          "title": "Systems the team does not use.",
+          "area": "Technology · Talent",
+          "lead": "The business paid for tools, but the team works around them.",
+          "look": "How the work is done today, where the tools get in the way, and what training is missing.",
+          "start": "A Review. Often followed by a Project to set the tools up properly.",
+          "bg": "#434F4F",
+          "fg": "#F4F5F1",
+          "mark": "/brand/hummin-mark-tone.svg",
+          "chipBg": "rgba(244,245,241,0.1)",
+          "chipBd": "rgba(244,245,241,0.2)",
+          "aria": "Systems the team does not use. Read more"
+        },
+        {
+          "title": "Too much still runs through the owner.",
+          "area": "Strategy · Operations",
+          "lead": "Decisions and approvals wait for one person, so work slows down.",
+          "look": "Which decisions can be handed over, to whom, and within what limits.",
+          "start": "A Review, then a Residency to make the change stick.",
+          "bg": "#E7EBE6",
+          "fg": "#1E272A",
+          "mark": "/brand/hummin-mark-mist.svg",
+          "chipBg": "rgba(30,39,42,0.06)",
+          "chipBd": "rgba(30,39,42,0.12)",
+          "aria": "Too much still runs through the owner. Read more"
+        },
+        {
+          "title": "Figures that arrive too late to act on.",
+          "area": "Data",
+          "lead": "Reports come weeks after the month ends, when it is too late to act.",
+          "look": "Which figures matter, where they come from, and how to get them sooner.",
+          "start": "A Project to set up a simple monthly dashboard.",
+          "bg": "#1E272A",
+          "fg": "#F4F5F1",
+          "mark": "/brand/hummin-mark-tone.svg",
+          "chipBg": "rgba(244,245,241,0.08)",
+          "chipBd": "rgba(244,245,241,0.16)",
+          "aria": "Figures that arrive too late to act on. Read more"
+        },
+        {
+          "title": "A team stretched too thin.",
+          "area": "Talent",
+          "lead": "Good people are doing too many jobs, and some work is not getting done.",
+          "look": "Who does what today, what can be removed, and which roles are missing.",
+          "start": "A Review of roles and workload.",
+          "bg": "#434F4F",
+          "fg": "#F4F5F1",
+          "mark": "/brand/hummin-mark-tone.svg",
+          "chipBg": "rgba(244,245,241,0.1)",
+          "chipBd": "rgba(244,245,241,0.2)",
+          "aria": "A team stretched too thin. Read more"
+        }
+      ],
+      "posters": [
+        {
+          "name": "Review",
+          "tag": "Short engagement",
+          "body": "Find the problem and get a clear plan.",
+          "bg": "#E7EBE6",
+          "fg": "#1E272A",
+          "glow": "radial-gradient(circle at 80% 10%,rgba(255,255,255,0.7),transparent 50%)",
+          "chipBg": "rgba(30,39,42,0.06)",
+          "chipBd": "rgba(30,39,42,0.12)",
+          "aria": "Review: Find the problem and get a clear plan. Read more"
+        },
+        {
+          "name": "Project",
+          "tag": "Defined work",
+          "body": "Design and deliver a defined piece of work.",
+          "bg": "#434F4F",
+          "fg": "#F4F5F1",
+          "glow": "radial-gradient(circle at 80% 10%,rgba(186,196,190,0.35),transparent 55%)",
+          "chipBg": "rgba(244,245,241,0.1)",
+          "chipBd": "rgba(244,245,241,0.2)",
+          "aria": "Project: Design and deliver a defined piece of work. Read more"
+        },
+        {
+          "name": "Residency",
+          "tag": "Ongoing",
+          "body": "A HUMMIN professional inside your team.",
+          "bg": "#1E272A",
+          "fg": "#F4F5F1",
+          "glow": "radial-gradient(circle at 85% 0%,rgba(181,83,44,0.45),transparent 55%)",
+          "chipBg": "rgba(244,245,241,0.08)",
+          "chipBd": "rgba(244,245,241,0.16)",
+          "aria": "Residency: A HUMMIN professional inside your team. Read more"
+        }
+      ],
+      "engCards": [
+        {
+          "tag": "Short engagement",
+          "icon": "search",
+          "name": "Review",
+          "body": "We investigate a problem and give you a clear plan to fix it.",
+          "itemsText": "You get a review of the area that is not working, our findings in order of priority, and a practical plan with costs and measures.",
+          "comm": "a fixed fee for an agreed scope.",
+          "bg": "#E7EBE6",
+          "fg": "#1E272A",
+          "glow": "radial-gradient(circle at 80% 10%,rgba(255,255,255,0.7),transparent 50%)",
+          "chipBg": "rgba(30,39,42,0.06)",
+          "chipBd": "rgba(30,39,42,0.12)"
+        },
+        {
+          "tag": "Defined work",
+          "icon": "hammer",
+          "name": "Project",
+          "body": "We design and deliver a defined piece of work.",
+          "itemsText": "You get agreed deliverables and milestones, a clear definition of done, any specialist partners managed by us, and regular progress reports.",
+          "comm": "paid at milestones. Any extra costs are agreed in advance.",
+          "bg": "#434F4F",
+          "fg": "#F4F5F1",
+          "glow": "radial-gradient(circle at 80% 10%,rgba(186,196,190,0.35),transparent 55%)",
+          "chipBg": "rgba(244,245,241,0.1)",
+          "chipBd": "rgba(244,245,241,0.2)"
+        },
+        {
+          "tag": "Ongoing",
+          "icon": "door-open",
+          "name": "Residency",
+          "body": "A HUMMIN professional works inside your team, with support from Applied Expertise.",
+          "itemsText": "They coordinate the agreed work day to day, bring in HUMMIN specialists when needed, and are managed by HUMMIN. Their role and reporting lines are set in the contract.",
+          "comm": "a monthly fee based on scope and the people involved.",
+          "bg": "#1E272A",
+          "fg": "#F4F5F1",
+          "glow": "radial-gradient(circle at 85% 0%,rgba(181,83,44,0.45),transparent 55%)",
+          "chipBg": "rgba(244,245,241,0.08)",
+          "chipBd": "rgba(244,245,241,0.16)"
+        }
+      ],
+      "tierTabs": [
+        {
+          "id": "tier-tab-0",
+          "tab": 0,
+          "name": "Review",
+          "sel": "true",
+          "bg": "#1E272A",
+          "fg": "#F4F5F1"
+        },
+        {
+          "id": "tier-tab-1",
+          "tab": -1,
+          "name": "Project",
+          "sel": "false",
+          "bg": "transparent",
+          "fg": "#1E272A"
+        },
+        {
+          "id": "tier-tab-2",
+          "tab": -1,
+          "name": "Residency",
+          "sel": "false",
+          "bg": "transparent",
+          "fg": "#1E272A"
+        }
+      ],
+      "tierCols": [
+        {
+          "aria": "Show Review",
+          "name": "Review",
+          "tag": "Short engagement",
+          "bg": "#E7EBE6",
+          "fg": "#1E272A",
+          "glow": "radial-gradient(circle at 80% 10%,rgba(255,255,255,0.7),transparent 50%)",
+          "chipBg": "rgba(30,39,42,0.06)",
+          "chipBd": "rgba(30,39,42,0.14)"
+        },
+        {
+          "aria": "Show Project",
+          "name": "Project",
+          "tag": "Defined work",
+          "bg": "#F4F5F1",
+          "fg": "#5E6967",
+          "glow": "none",
+          "chipBg": "rgba(30,39,42,0.04)",
+          "chipBd": "rgba(30,39,42,0.12)"
+        },
+        {
+          "aria": "Show Residency",
+          "name": "Residency",
+          "tag": "Ongoing",
+          "bg": "#F4F5F1",
+          "fg": "#5E6967",
+          "glow": "none",
+          "chipBg": "rgba(30,39,42,0.04)",
+          "chipBd": "rgba(30,39,42,0.12)"
+        }
+      ],
+      "tierRows": [
+        {
+          "label": "Best when",
+          "cells": [
+            {
+              "text": "You know something is wrong, but not exactly what.",
+              "bg": "#E7EBE6",
+              "fg": "#1E272A",
+              "line": "rgba(127,140,136,0.35)",
+              "radius": "0"
+            },
+            {
+              "text": "You know what needs to change and need it done.",
+              "bg": "transparent",
+              "fg": "#434F4F",
+              "line": "#D0D8D2",
+              "radius": "0"
+            },
+            {
+              "text": "You need someone close to the work, week after week.",
+              "bg": "transparent",
+              "fg": "#434F4F",
+              "line": "#D0D8D2",
+              "radius": "0"
+            }
+          ]
+        },
+        {
+          "label": "What happens",
+          "cells": [
+            {
+              "text": "We investigate the problem and set out a clear plan to fix it.",
+              "bg": "#E7EBE6",
+              "fg": "#1E272A",
+              "line": "rgba(127,140,136,0.35)",
+              "radius": "0"
+            },
+            {
+              "text": "We design and deliver a defined piece of work, managing any specialists involved.",
+              "bg": "transparent",
+              "fg": "#434F4F",
+              "line": "#D0D8D2",
+              "radius": "0"
+            },
+            {
+              "text": "A HUMMIN professional works inside your team, supported by our Applied Expertise.",
+              "bg": "transparent",
+              "fg": "#434F4F",
+              "line": "#D0D8D2",
+              "radius": "0"
+            }
+          ]
+        },
+        {
+          "label": "You get",
+          "cells": [
+            {
+              "text": "Findings in order of priority, and a practical plan with costs and measures.",
+              "bg": "#E7EBE6",
+              "fg": "#1E272A",
+              "line": "rgba(127,140,136,0.35)",
+              "radius": "0"
+            },
+            {
+              "text": "Agreed deliverables, milestones, and regular progress reports.",
+              "bg": "transparent",
+              "fg": "#434F4F",
+              "line": "#D0D8D2",
+              "radius": "0"
+            },
+            {
+              "text": "Day-to-day coordination, and access to HUMMIN specialists when needed.",
+              "bg": "transparent",
+              "fg": "#434F4F",
+              "line": "#D0D8D2",
+              "radius": "0"
+            }
+          ]
+        },
+        {
+          "label": "Ends",
+          "cells": [
+            {
+              "text": "When the plan is delivered to you.",
+              "bg": "#E7EBE6",
+              "fg": "#1E272A",
+              "line": "rgba(127,140,136,0.35)",
+              "radius": "0"
+            },
+            {
+              "text": "When the agreed work meets its definition of done.",
+              "bg": "transparent",
+              "fg": "#434F4F",
+              "line": "#D0D8D2",
+              "radius": "0"
+            },
+            {
+              "text": "Ongoing, reviewed on dates we agree.",
+              "bg": "transparent",
+              "fg": "#434F4F",
+              "line": "#D0D8D2",
+              "radius": "0"
+            }
+          ]
+        },
+        {
+          "label": "Your part",
+          "cells": [
+            {
+              "text": "Share information and give us time with your team.",
+              "bg": "#E7EBE6",
+              "fg": "#1E272A",
+              "line": "rgba(127,140,136,0.35)",
+              "radius": "0"
+            },
+            {
+              "text": "Approve the plan and make decisions on time.",
+              "bg": "transparent",
+              "fg": "#434F4F",
+              "line": "#D0D8D2",
+              "radius": "0"
+            },
+            {
+              "text": "Set direction and agree the role and reporting lines.",
+              "bg": "transparent",
+              "fg": "#434F4F",
+              "line": "#D0D8D2",
+              "radius": "0"
+            }
+          ]
+        },
+        {
+          "label": "Fees",
+          "cells": [
+            {
+              "text": "A fixed fee for an agreed scope.",
+              "bg": "#E7EBE6",
+              "fg": "#1E272A",
+              "line": "rgba(127,140,136,0.35)",
+              "radius": "0 0 20px 20px"
+            },
+            {
+              "text": "Paid at milestones. Extra costs are agreed in advance.",
+              "bg": "transparent",
+              "fg": "#434F4F",
+              "line": "#D0D8D2",
+              "radius": "0"
+            },
+            {
+              "text": "A monthly fee based on scope and the people involved.",
+              "bg": "transparent",
+              "fg": "#434F4F",
+              "line": "#D0D8D2",
+              "radius": "0"
+            }
+          ]
+        }
+      ],
+      "tierCta": "Discuss a Review",
+      "show_float": false,
+      "fields": [
+        {
+          "k": "name",
+          "id": "f-name",
+          "errId": "f-name-err",
+          "inv": "false",
+          "ac": "name",
+          "label": "Name",
+          "type": "text",
+          "ph": "Your full name",
+          "multi": false,
+          "single": true,
+          "value": "",
+          "err": "",
+          "bd": "#BAC4BE"
+        },
+        {
+          "k": "biz",
+          "id": "f-biz",
+          "errId": "f-biz-err",
+          "inv": "false",
+          "ac": "organization",
+          "label": "Business Name",
+          "type": "text",
+          "ph": "Registered or trading name",
+          "multi": false,
+          "single": true,
+          "value": "",
+          "err": "",
+          "bd": "#BAC4BE"
+        },
+        {
+          "k": "email",
+          "id": "f-email",
+          "errId": "f-email-err",
+          "inv": "false",
+          "ac": "email",
+          "label": "Work Email",
+          "type": "email",
+          "ph": "name@business.com",
+          "multi": false,
+          "single": true,
+          "value": "",
+          "err": "",
+          "bd": "#BAC4BE"
+        },
+        {
+          "k": "msg",
+          "id": "f-msg",
+          "errId": "f-msg-err",
+          "inv": "false",
+          "ac": "off",
+          "label": "What Would You Like to Work On?",
+          "type": "text",
+          "ph": "A few sentences about the challenge",
+          "multi": true,
+          "single": false,
+          "value": "",
+          "err": "",
+          "bd": "#BAC4BE"
+        }
+      ],
+      "pk": {
+        "chip": "",
+        "title": "",
+        "lead": "",
+        "rows": [],
+        "primaryLabel": "",
+        "secondaryLabel": "",
+        "bg": "#E7EBE6",
+        "fg": "#1E272A",
+        "glow": "none",
+        "chipBg": "rgba(30,39,42,0.06)",
+        "chipBd": "rgba(30,39,42,0.12)"
+      },
+      "contactReady": true,
+      "contactInactive": false,
+      "contactStatus": "",
+      "sent": false,
+      "not_sent": true
+    },
+    "insights": {
+      "root": {
+        "current": null
+      },
+      "is_home": false,
+      "is_how": false,
+      "is_core": false,
+      "is_eng": false,
+      "is_who": false,
+      "is_assess": false,
+      "is_about": false,
+      "is_insights": true,
+      "is_contact": false,
+      "nav": [
+        {
+          "label": "Home",
+          "icon": "/brand/icons/house.svg",
+          "color": "#434F4F",
+          "weight": 400,
+          "bg": "transparent",
+          "op": 0.7
+        },
+        {
+          "label": "How We Work",
+          "icon": "/brand/icons/route.svg",
+          "color": "#434F4F",
+          "weight": 400,
+          "bg": "transparent",
+          "op": 0.7
+        },
+        {
+          "label": "Applied Expertise",
+          "icon": "/brand/icons/layers.svg",
+          "color": "#434F4F",
+          "weight": 400,
+          "bg": "transparent",
+          "op": 0.7
+        },
+        {
+          "label": "Engagements",
+          "icon": "/brand/icons/handshake.svg",
+          "color": "#434F4F",
+          "weight": 400,
+          "bg": "transparent",
+          "op": 0.7
+        },
+        {
+          "label": "Who We Work With",
+          "icon": "/brand/icons/users.svg",
+          "color": "#434F4F",
+          "weight": 400,
+          "bg": "transparent",
+          "op": 0.7
+        },
+        {
+          "label": "Assessment",
+          "icon": "/brand/icons/clipboard-check.svg",
+          "color": "#434F4F",
+          "weight": 400,
+          "bg": "transparent",
+          "op": 0.7
+        },
+        {
+          "label": "About",
+          "icon": "/brand/icons/building-2.svg",
+          "color": "#434F4F",
+          "weight": 400,
+          "bg": "transparent",
+          "op": 0.7
+        },
+        {
+          "current": "page",
+          "label": "Insights",
+          "icon": "/brand/icons/newspaper.svg",
+          "color": "#1E272A",
+          "weight": 600,
+          "bg": "#E7EBE6",
+          "op": 1
+        },
+        {
+          "label": "Contact",
+          "icon": "/brand/icons/mail.svg",
+          "color": "#434F4F",
+          "weight": 400,
+          "bg": "transparent",
+          "op": 0.7
+        }
+      ],
+      "pageRef": {
+        "current": null
+      },
+      "peekCloseRef": {
+        "current": null
+      },
+      "sentRef": {
+        "current": null
+      },
+      "headShadow": "none",
+      "icoMenuOp": 0,
+      "icoXOp": 1,
+      "icoMenuTf": "rotate(90deg) scale(0.6)",
+      "icoXTf": "none",
+      "tierTabId": "tier-tab-0",
+      "valTabId": "val-tab-0",
+      "peekVis": "hidden",
+      "peekEvents": "none",
+      "peekOp": 0,
+      "peekTf": "translate3d(0,24px,0) scale(0.97)",
+      "peekHidden": "true",
+      "copyLabel": "Copy",
+      "copyBg": "transparent",
+      "copyStatus": "",
+      "sending": false,
+      "sendingStr": "false",
+      "sendLabel": "Send Enquiry",
+      "sendOp": 1,
+      "menuClosed": false,
+      "menuOpenBool": true,
+      "menuAria": "Close menu",
+      "menuOpenStr": "true",
+      "drawerX": "translateX(0)",
+      "drawerVis": "visible",
+      "scrimOpacity": 1,
+      "scrimEvents": "auto",
+      "inner": false,
+      "insightPost": null,
+      "insightNonce": 0,
+      "insightTeasers": [
+        {
+          "slug": "enquiries-30-day-fix",
+          "type": "Guide",
+          "read": "4 min read",
+          "title": "Why enquiries go unanswered, and a 30-day fix",
+          "excerpt": "Most owners get more enquiries than they think. The problem is what happens next.",
+          "by": "HUMMIN Team · 20 Oct",
+          "bg": "#E7EBE6",
+          "fg": "#1E272A",
+          "bd": "#E7EBE6",
+          "chipBg": "rgba(30,39,42,0.06)",
+          "chipBd": "rgba(30,39,42,0.14)",
+          "aria": "Guide: Why enquiries go unanswered, and a 30-day fix"
+        },
+        {
+          "slug": "five-monday-figures",
+          "type": "Guide",
+          "read": "3 min read",
+          "title": "Five figures every owner should see on Monday",
+          "excerpt": "A short set of weekly figures shows problems while you can still act.",
+          "by": "HUMMIN Team · 13 Oct",
+          "bg": "#E7EBE6",
+          "fg": "#1E272A",
+          "bd": "#E7EBE6",
+          "chipBg": "rgba(30,39,42,0.06)",
+          "chipBd": "rgba(30,39,42,0.14)",
+          "aria": "Guide: Five figures every owner should see on Monday"
+        },
+        {
+          "slug": "runs-through-the-owner",
+          "type": "Opinion",
+          "read": "3 min read",
+          "title": "When the business still runs through the owner",
+          "excerpt": "Owners often become the bottleneck in the business they built.",
+          "by": "Muiruri Beautah · 6 Oct",
+          "bg": "#1E272A",
+          "fg": "#F4F5F1",
+          "bd": "#1E272A",
+          "chipBg": "rgba(244,245,241,0.08)",
+          "chipBd": "rgba(244,245,241,0.18)",
+          "aria": "Opinion: When the business still runs through the owner"
+        }
+      ],
+      "head": {
+        "label": "How We Work",
+        "icon": "/brand/icons/route.svg",
+        "iconPaper": "/brand/icons/route-light.svg",
+        "title": "Understand the problem. Then fix it.",
+        "lead": "We begin by understanding the business. Then we agree what needs to change, who will do the work, and how progress will be measured.",
+        "bg": "radial-gradient(circle at 70% 20%,#5E6967 0%,#2A3538 40%,#1E272A 72%)",
+        "glow": "radial-gradient(circle at 12% 95%,rgba(30,39,42,0.6),transparent 45%)",
+        "chip": "Four steps",
+        "img": "Image: reviewing a process with the people who run it."
+      },
+      "show_band": true,
+      "stages": [
+        {
+          "name": "Understand",
+          "short": "We find the cause behind the symptom.",
+          "what": "We talk to you and your team, look at how the work gets done, and review the numbers. We look for the cause behind the symptom.",
+          "out": "a clear statement of the problem and what it costs the business."
+        },
+        {
+          "name": "Architect",
+          "short": "We agree the plan, the people, and the cost.",
+          "what": "We agree what needs to change, who will do it, what it will cost, and how we will measure it.",
+          "out": "a plan with roles, costs, and measures."
+        },
+        {
+          "name": "Execute",
+          "short": "We do the work with your team.",
+          "what": "We do the work alongside your team and report progress to the person who makes decisions.",
+          "out": "the agreed work, done and measured."
+        },
+        {
+          "name": "Institutionalise",
+          "short": "We write it down and hand it over.",
+          "what": "We write down the new way of working, train the people who will run it, and hand it over.",
+          "out": "written processes, trained staff, and measures you can keep using."
+        }
+      ],
+      "domains": [
+        {
+          "name": "Strategy",
+          "icon": "compass",
+          "lead": "Decide which problems to solve first, and why.",
+          "jobs": "We review how the business makes money and where it loses it, set clear priorities for the next 12 months, and turn the plan into a schedule of work with named owners.",
+          "bg": "#B5532C",
+          "fg": "#FFFFFF",
+          "pressed": "true",
+          "iconUrl": "/brand/icons/compass-light.svg",
+          "kind": "",
+          "ring": "#B5532C"
+        },
+        {
+          "name": "Technology",
+          "icon": "monitor-smartphone",
+          "lead": "Make your systems fit the way the business works.",
+          "jobs": "We build or fix websites, set up CRMs so every enquiry is recorded, and automate repeated admin tasks.",
+          "bg": "#434F4F",
+          "fg": "#F4F5F1",
+          "pressed": "false",
+          "iconUrl": "/brand/icons/monitor-smartphone-light.svg",
+          "kind": "",
+          "ring": "transparent"
+        },
+        {
+          "name": "Marketing",
+          "icon": "megaphone",
+          "lead": "Bring in the right customers, and keep track of them.",
+          "jobs": "We clarify who you sell to and what you say, plan and run advertising, and check what happens to each enquiry after it arrives.",
+          "bg": "#1E272A",
+          "fg": "#F4F5F1",
+          "pressed": "false",
+          "iconUrl": "/brand/icons/megaphone-light.svg",
+          "kind": "",
+          "ring": "transparent"
+        },
+        {
+          "name": "Operations",
+          "icon": "workflow",
+          "lead": "Make everyday work run smoothly.",
+          "jobs": "We map how work moves through the business, remove the steps that slow it down, and set up simple reports on how it is going.",
+          "bg": "#E7EBE6",
+          "fg": "#1E272A",
+          "pressed": "false",
+          "iconUrl": "/brand/icons/workflow.svg",
+          "kind": "",
+          "ring": "transparent"
+        },
+        {
+          "name": "Talent",
+          "icon": "user-round-check",
+          "lead": "Put the right people in the right roles.",
+          "jobs": "We write clear roles and responsibilities, help recruit for key positions, and train staff on new processes and tools.",
+          "bg": "#434F4F",
+          "fg": "#F4F5F1",
+          "pressed": "false",
+          "iconUrl": "/brand/icons/user-round-check-light.svg",
+          "kind": "",
+          "ring": "transparent"
+        },
+        {
+          "name": "Data",
+          "icon": "chart-column",
+          "lead": "Base decisions on records you can trust.",
+          "jobs": "We choose the figures worth tracking, build simple monthly dashboards, and measure whether a change worked.",
+          "bg": "#1E272A",
+          "fg": "#F4F5F1",
+          "pressed": "false",
+          "iconUrl": "/brand/icons/chart-column-light.svg",
+          "kind": "",
+          "ring": "transparent"
+        },
+        {
+          "name": "Specialist Partners",
+          "icon": "briefcase",
+          "lead": "Bring in qualified experts when the work needs them.",
+          "jobs": "Accountants, financial advisers, lawyers, HR professionals, software engineers, and recruiters, managed by HUMMIN under one agreement.",
+          "ext": true,
+          "bg": "#E7EBE6",
+          "fg": "#1E272A",
+          "pressed": "false",
+          "iconUrl": "/brand/icons/briefcase.svg",
+          "kind": "External partners",
+          "ring": "transparent"
+        }
+      ],
+      "cur": {
+        "name": "Strategy",
+        "lead": "Decide which problems to solve first, and why.",
+        "jobs": "We review how the business makes money and where it loses it, set clear priorities for the next 12 months, and turn the plan into a schedule of work with named owners.",
+        "iconPaper": "/brand/icons/compass-light.svg"
+      },
+      "stagePosters": [
+        {
+          "name": "Understand",
+          "short": "We find the cause behind the symptom.",
+          "what": "We talk to you and your team, look at how the work gets done, and review the numbers. We look for the cause behind the symptom.",
+          "out": "a clear statement of the problem and what it costs the business.",
+          "bg": "#E7EBE6",
+          "fg": "#1E272A",
+          "glow": "radial-gradient(circle at 80% 10%,rgba(255,255,255,0.7),transparent 50%)",
+          "chipBg": "rgba(30,39,42,0.06)",
+          "chipBd": "rgba(30,39,42,0.14)",
+          "stepLabel": "Step 1 of 4"
+        },
+        {
+          "name": "Architect",
+          "short": "We agree the plan, the people, and the cost.",
+          "what": "We agree what needs to change, who will do it, what it will cost, and how we will measure it.",
+          "out": "a plan with roles, costs, and measures.",
+          "bg": "#434F4F",
+          "fg": "#F4F5F1",
+          "glow": "radial-gradient(circle at 80% 10%,rgba(186,196,190,0.35),transparent 55%)",
+          "chipBg": "rgba(244,245,241,0.1)",
+          "chipBd": "rgba(244,245,241,0.22)",
+          "stepLabel": "Step 2 of 4"
+        },
+        {
+          "name": "Execute",
+          "short": "We do the work with your team.",
+          "what": "We do the work alongside your team and report progress to the person who makes decisions.",
+          "out": "the agreed work, done and measured.",
+          "bg": "#2A3538",
+          "fg": "#F4F5F1",
+          "glow": "radial-gradient(circle at 80% 0%,rgba(46,107,92,0.45),transparent 55%)",
+          "chipBg": "rgba(244,245,241,0.08)",
+          "chipBd": "rgba(244,245,241,0.18)",
+          "stepLabel": "Step 3 of 4"
+        },
+        {
+          "name": "Institutionalise",
+          "short": "We write it down and hand it over.",
+          "what": "We write down the new way of working, train the people who will run it, and hand it over.",
+          "out": "written processes, trained staff, and measures you can keep using.",
+          "bg": "#1E272A",
+          "fg": "#F4F5F1",
+          "glow": "radial-gradient(circle at 85% 0%,rgba(181,83,44,0.45),transparent 55%)",
+          "chipBg": "rgba(244,245,241,0.08)",
+          "chipBd": "rgba(244,245,241,0.16)",
+          "stepLabel": "Step 4 of 4"
+        }
+      ],
+      "engs": [
+        {
+          "tag": "Short engagement",
+          "icon": "/brand/icons/search.svg",
+          "name": "Review",
+          "body": "We investigate a problem and give you a clear plan to fix it.",
+          "itemsText": "You get a review of the area that is not working, our findings in order of priority, and a practical plan with costs and measures.",
+          "comm": "a fixed fee for an agreed scope."
+        },
+        {
+          "tag": "Defined work",
+          "icon": "/brand/icons/hammer.svg",
+          "name": "Project",
+          "body": "We design and deliver a defined piece of work.",
+          "itemsText": "You get agreed deliverables and milestones, a clear definition of done, any specialist partners managed by us, and regular progress reports.",
+          "comm": "paid at milestones. Any extra costs are agreed in advance."
+        },
+        {
+          "tag": "Ongoing",
+          "icon": "/brand/icons/door-open.svg",
+          "name": "Residency",
+          "body": "A HUMMIN professional works inside your team, with support from Applied Expertise.",
+          "itemsText": "They coordinate the agreed work day to day, bring in HUMMIN specialists when needed, and are managed by HUMMIN. Their role and reporting lines are set in the contract.",
+          "comm": "a monthly fee based on scope and the people involved."
+        }
+      ],
+      "values": [
+        {
+          "short": "Understanding",
+          "t": "Understanding before intervention.",
+          "b": "We investigate before prescribing.",
+          "not": "Recommend a fix before we understand the problem."
+        },
+        {
+          "short": "Action",
+          "t": "Intelligence in action.",
+          "b": "We connect insight to implementation.",
+          "not": "Hand over a report and walk away when the work is ours to do."
+        },
+        {
+          "short": "Independence",
+          "t": "Proximity with independence.",
+          "b": "We work closely with clients without surrendering professional judgement.",
+          "not": "Tell you what you want to hear."
+        },
+        {
+          "short": "Discipline",
+          "t": "Adaptability with discipline.",
+          "b": "We tailor solutions without compromising quality or accountability.",
+          "not": "Sell every client the same solution."
+        },
+        {
+          "short": "Responsibility",
+          "t": "Partnership with responsibility.",
+          "b": "We treat trust as an obligation and agreed outcomes as a shared priority.",
+          "not": "Share your information without your permission."
+        },
+        {
+          "short": "Capability",
+          "t": "Capability beyond dependency.",
+          "b": "We build systems and people that become stronger through our involvement.",
+          "not": "Make the business depend on us."
+        }
+      ],
+      "valueTabs": [
+        {
+          "id": "val-tab-0",
+          "tab": 0,
+          "short": "Understanding",
+          "sel": "true",
+          "bg": "#1E272A",
+          "fg": "#F4F5F1",
+          "bd": "#1E272A"
+        },
+        {
+          "id": "val-tab-1",
+          "tab": -1,
+          "short": "Action",
+          "sel": "false",
+          "bg": "transparent",
+          "fg": "#1E272A",
+          "bd": "#BAC4BE"
+        },
+        {
+          "id": "val-tab-2",
+          "tab": -1,
+          "short": "Independence",
+          "sel": "false",
+          "bg": "transparent",
+          "fg": "#1E272A",
+          "bd": "#BAC4BE"
+        },
+        {
+          "id": "val-tab-3",
+          "tab": -1,
+          "short": "Discipline",
+          "sel": "false",
+          "bg": "transparent",
+          "fg": "#1E272A",
+          "bd": "#BAC4BE"
+        },
+        {
+          "id": "val-tab-4",
+          "tab": -1,
+          "short": "Responsibility",
+          "sel": "false",
+          "bg": "transparent",
+          "fg": "#1E272A",
+          "bd": "#BAC4BE"
+        },
+        {
+          "id": "val-tab-5",
+          "tab": -1,
+          "short": "Capability",
+          "sel": "false",
+          "bg": "transparent",
+          "fg": "#1E272A",
+          "bd": "#BAC4BE"
+        }
+      ],
+      "val": {
+        "short": "Understanding",
+        "t": "Understanding before intervention.",
+        "b": "We investigate before prescribing.",
+        "not": "Recommend a fix before we understand the problem.",
+        "pos": "1 of 6"
+      },
+      "needs": [
+        {
+          "icon": "/brand/icons/user-round-check-light.svg",
+          "v": "A decision-maker",
+          "k": "One person who can approve changes."
+        },
+        {
+          "icon": "/brand/icons/key-round-light.svg",
+          "v": "Access",
+          "k": "To the information and systems the work depends on."
+        },
+        {
+          "icon": "/brand/icons/clock-light.svg",
+          "v": "Time",
+          "k": "With the people who do the work every day."
+        },
+        {
+          "icon": "/brand/icons/target-light.svg",
+          "v": "A measure",
+          "k": "Agreed at the start, so we both know what a good result looks like."
+        }
+      ],
+      "topics": [
+        {
+          "title": "Enquiries that go unanswered.",
+          "area": "Marketing · Operations",
+          "lead": "Enquiries arrive, but no one owns the follow-up. Some never get a reply.",
+          "look": "How enquiries arrive, who answers them, how quickly, and what gets recorded.",
+          "start": "A Review. It shows where enquiries are lost and what to fix first.",
+          "bg": "#E7EBE6",
+          "fg": "#1E272A",
+          "mark": "/brand/hummin-mark-mist.svg",
+          "chipBg": "rgba(30,39,42,0.06)",
+          "chipBd": "rgba(30,39,42,0.12)",
+          "aria": "Enquiries that go unanswered. Read more"
+        },
+        {
+          "title": "A website that loses visitors.",
+          "area": "Technology",
+          "lead": "People visit the site but do not call, write, or buy.",
+          "look": "What visitors look for, where they leave, and how the site asks them to get in touch.",
+          "start": "A Review, then a Project to rebuild the pages that matter.",
+          "bg": "#1E272A",
+          "fg": "#F4F5F1",
+          "mark": "/brand/hummin-mark-tone.svg",
+          "chipBg": "rgba(244,245,241,0.08)",
+          "chipBd": "rgba(244,245,241,0.16)",
+          "aria": "A website that loses visitors. Read more"
+        },
+        {
+          "title": "Systems the team does not use.",
+          "area": "Technology · Talent",
+          "lead": "The business paid for tools, but the team works around them.",
+          "look": "How the work is done today, where the tools get in the way, and what training is missing.",
+          "start": "A Review. Often followed by a Project to set the tools up properly.",
+          "bg": "#434F4F",
+          "fg": "#F4F5F1",
+          "mark": "/brand/hummin-mark-tone.svg",
+          "chipBg": "rgba(244,245,241,0.1)",
+          "chipBd": "rgba(244,245,241,0.2)",
+          "aria": "Systems the team does not use. Read more"
+        },
+        {
+          "title": "Too much still runs through the owner.",
+          "area": "Strategy · Operations",
+          "lead": "Decisions and approvals wait for one person, so work slows down.",
+          "look": "Which decisions can be handed over, to whom, and within what limits.",
+          "start": "A Review, then a Residency to make the change stick.",
+          "bg": "#E7EBE6",
+          "fg": "#1E272A",
+          "mark": "/brand/hummin-mark-mist.svg",
+          "chipBg": "rgba(30,39,42,0.06)",
+          "chipBd": "rgba(30,39,42,0.12)",
+          "aria": "Too much still runs through the owner. Read more"
+        },
+        {
+          "title": "Figures that arrive too late to act on.",
+          "area": "Data",
+          "lead": "Reports come weeks after the month ends, when it is too late to act.",
+          "look": "Which figures matter, where they come from, and how to get them sooner.",
+          "start": "A Project to set up a simple monthly dashboard.",
+          "bg": "#1E272A",
+          "fg": "#F4F5F1",
+          "mark": "/brand/hummin-mark-tone.svg",
+          "chipBg": "rgba(244,245,241,0.08)",
+          "chipBd": "rgba(244,245,241,0.16)",
+          "aria": "Figures that arrive too late to act on. Read more"
+        },
+        {
+          "title": "A team stretched too thin.",
+          "area": "Talent",
+          "lead": "Good people are doing too many jobs, and some work is not getting done.",
+          "look": "Who does what today, what can be removed, and which roles are missing.",
+          "start": "A Review of roles and workload.",
+          "bg": "#434F4F",
+          "fg": "#F4F5F1",
+          "mark": "/brand/hummin-mark-tone.svg",
+          "chipBg": "rgba(244,245,241,0.1)",
+          "chipBd": "rgba(244,245,241,0.2)",
+          "aria": "A team stretched too thin. Read more"
+        }
+      ],
+      "posters": [
+        {
+          "name": "Review",
+          "tag": "Short engagement",
+          "body": "Find the problem and get a clear plan.",
+          "bg": "#E7EBE6",
+          "fg": "#1E272A",
+          "glow": "radial-gradient(circle at 80% 10%,rgba(255,255,255,0.7),transparent 50%)",
+          "chipBg": "rgba(30,39,42,0.06)",
+          "chipBd": "rgba(30,39,42,0.12)",
+          "aria": "Review: Find the problem and get a clear plan. Read more"
+        },
+        {
+          "name": "Project",
+          "tag": "Defined work",
+          "body": "Design and deliver a defined piece of work.",
+          "bg": "#434F4F",
+          "fg": "#F4F5F1",
+          "glow": "radial-gradient(circle at 80% 10%,rgba(186,196,190,0.35),transparent 55%)",
+          "chipBg": "rgba(244,245,241,0.1)",
+          "chipBd": "rgba(244,245,241,0.2)",
+          "aria": "Project: Design and deliver a defined piece of work. Read more"
+        },
+        {
+          "name": "Residency",
+          "tag": "Ongoing",
+          "body": "A HUMMIN professional inside your team.",
+          "bg": "#1E272A",
+          "fg": "#F4F5F1",
+          "glow": "radial-gradient(circle at 85% 0%,rgba(181,83,44,0.45),transparent 55%)",
+          "chipBg": "rgba(244,245,241,0.08)",
+          "chipBd": "rgba(244,245,241,0.16)",
+          "aria": "Residency: A HUMMIN professional inside your team. Read more"
+        }
+      ],
+      "engCards": [
+        {
+          "tag": "Short engagement",
+          "icon": "search",
+          "name": "Review",
+          "body": "We investigate a problem and give you a clear plan to fix it.",
+          "itemsText": "You get a review of the area that is not working, our findings in order of priority, and a practical plan with costs and measures.",
+          "comm": "a fixed fee for an agreed scope.",
+          "bg": "#E7EBE6",
+          "fg": "#1E272A",
+          "glow": "radial-gradient(circle at 80% 10%,rgba(255,255,255,0.7),transparent 50%)",
+          "chipBg": "rgba(30,39,42,0.06)",
+          "chipBd": "rgba(30,39,42,0.12)"
+        },
+        {
+          "tag": "Defined work",
+          "icon": "hammer",
+          "name": "Project",
+          "body": "We design and deliver a defined piece of work.",
+          "itemsText": "You get agreed deliverables and milestones, a clear definition of done, any specialist partners managed by us, and regular progress reports.",
+          "comm": "paid at milestones. Any extra costs are agreed in advance.",
+          "bg": "#434F4F",
+          "fg": "#F4F5F1",
+          "glow": "radial-gradient(circle at 80% 10%,rgba(186,196,190,0.35),transparent 55%)",
+          "chipBg": "rgba(244,245,241,0.1)",
+          "chipBd": "rgba(244,245,241,0.2)"
+        },
+        {
+          "tag": "Ongoing",
+          "icon": "door-open",
+          "name": "Residency",
+          "body": "A HUMMIN professional works inside your team, with support from Applied Expertise.",
+          "itemsText": "They coordinate the agreed work day to day, bring in HUMMIN specialists when needed, and are managed by HUMMIN. Their role and reporting lines are set in the contract.",
+          "comm": "a monthly fee based on scope and the people involved.",
+          "bg": "#1E272A",
+          "fg": "#F4F5F1",
+          "glow": "radial-gradient(circle at 85% 0%,rgba(181,83,44,0.45),transparent 55%)",
+          "chipBg": "rgba(244,245,241,0.08)",
+          "chipBd": "rgba(244,245,241,0.16)"
+        }
+      ],
+      "tierTabs": [
+        {
+          "id": "tier-tab-0",
+          "tab": 0,
+          "name": "Review",
+          "sel": "true",
+          "bg": "#1E272A",
+          "fg": "#F4F5F1"
+        },
+        {
+          "id": "tier-tab-1",
+          "tab": -1,
+          "name": "Project",
+          "sel": "false",
+          "bg": "transparent",
+          "fg": "#1E272A"
+        },
+        {
+          "id": "tier-tab-2",
+          "tab": -1,
+          "name": "Residency",
+          "sel": "false",
+          "bg": "transparent",
+          "fg": "#1E272A"
+        }
+      ],
+      "tierCols": [
+        {
+          "aria": "Show Review",
+          "name": "Review",
+          "tag": "Short engagement",
+          "bg": "#E7EBE6",
+          "fg": "#1E272A",
+          "glow": "radial-gradient(circle at 80% 10%,rgba(255,255,255,0.7),transparent 50%)",
+          "chipBg": "rgba(30,39,42,0.06)",
+          "chipBd": "rgba(30,39,42,0.14)"
+        },
+        {
+          "aria": "Show Project",
+          "name": "Project",
+          "tag": "Defined work",
+          "bg": "#F4F5F1",
+          "fg": "#5E6967",
+          "glow": "none",
+          "chipBg": "rgba(30,39,42,0.04)",
+          "chipBd": "rgba(30,39,42,0.12)"
+        },
+        {
+          "aria": "Show Residency",
+          "name": "Residency",
+          "tag": "Ongoing",
+          "bg": "#F4F5F1",
+          "fg": "#5E6967",
+          "glow": "none",
+          "chipBg": "rgba(30,39,42,0.04)",
+          "chipBd": "rgba(30,39,42,0.12)"
+        }
+      ],
+      "tierRows": [
+        {
+          "label": "Best when",
+          "cells": [
+            {
+              "text": "You know something is wrong, but not exactly what.",
+              "bg": "#E7EBE6",
+              "fg": "#1E272A",
+              "line": "rgba(127,140,136,0.35)",
+              "radius": "0"
+            },
+            {
+              "text": "You know what needs to change and need it done.",
+              "bg": "transparent",
+              "fg": "#434F4F",
+              "line": "#D0D8D2",
+              "radius": "0"
+            },
+            {
+              "text": "You need someone close to the work, week after week.",
+              "bg": "transparent",
+              "fg": "#434F4F",
+              "line": "#D0D8D2",
+              "radius": "0"
+            }
+          ]
+        },
+        {
+          "label": "What happens",
+          "cells": [
+            {
+              "text": "We investigate the problem and set out a clear plan to fix it.",
+              "bg": "#E7EBE6",
+              "fg": "#1E272A",
+              "line": "rgba(127,140,136,0.35)",
+              "radius": "0"
+            },
+            {
+              "text": "We design and deliver a defined piece of work, managing any specialists involved.",
+              "bg": "transparent",
+              "fg": "#434F4F",
+              "line": "#D0D8D2",
+              "radius": "0"
+            },
+            {
+              "text": "A HUMMIN professional works inside your team, supported by our Applied Expertise.",
+              "bg": "transparent",
+              "fg": "#434F4F",
+              "line": "#D0D8D2",
+              "radius": "0"
+            }
+          ]
+        },
+        {
+          "label": "You get",
+          "cells": [
+            {
+              "text": "Findings in order of priority, and a practical plan with costs and measures.",
+              "bg": "#E7EBE6",
+              "fg": "#1E272A",
+              "line": "rgba(127,140,136,0.35)",
+              "radius": "0"
+            },
+            {
+              "text": "Agreed deliverables, milestones, and regular progress reports.",
+              "bg": "transparent",
+              "fg": "#434F4F",
+              "line": "#D0D8D2",
+              "radius": "0"
+            },
+            {
+              "text": "Day-to-day coordination, and access to HUMMIN specialists when needed.",
+              "bg": "transparent",
+              "fg": "#434F4F",
+              "line": "#D0D8D2",
+              "radius": "0"
+            }
+          ]
+        },
+        {
+          "label": "Ends",
+          "cells": [
+            {
+              "text": "When the plan is delivered to you.",
+              "bg": "#E7EBE6",
+              "fg": "#1E272A",
+              "line": "rgba(127,140,136,0.35)",
+              "radius": "0"
+            },
+            {
+              "text": "When the agreed work meets its definition of done.",
+              "bg": "transparent",
+              "fg": "#434F4F",
+              "line": "#D0D8D2",
+              "radius": "0"
+            },
+            {
+              "text": "Ongoing, reviewed on dates we agree.",
+              "bg": "transparent",
+              "fg": "#434F4F",
+              "line": "#D0D8D2",
+              "radius": "0"
+            }
+          ]
+        },
+        {
+          "label": "Your part",
+          "cells": [
+            {
+              "text": "Share information and give us time with your team.",
+              "bg": "#E7EBE6",
+              "fg": "#1E272A",
+              "line": "rgba(127,140,136,0.35)",
+              "radius": "0"
+            },
+            {
+              "text": "Approve the plan and make decisions on time.",
+              "bg": "transparent",
+              "fg": "#434F4F",
+              "line": "#D0D8D2",
+              "radius": "0"
+            },
+            {
+              "text": "Set direction and agree the role and reporting lines.",
+              "bg": "transparent",
+              "fg": "#434F4F",
+              "line": "#D0D8D2",
+              "radius": "0"
+            }
+          ]
+        },
+        {
+          "label": "Fees",
+          "cells": [
+            {
+              "text": "A fixed fee for an agreed scope.",
+              "bg": "#E7EBE6",
+              "fg": "#1E272A",
+              "line": "rgba(127,140,136,0.35)",
+              "radius": "0 0 20px 20px"
+            },
+            {
+              "text": "Paid at milestones. Extra costs are agreed in advance.",
+              "bg": "transparent",
+              "fg": "#434F4F",
+              "line": "#D0D8D2",
+              "radius": "0"
+            },
+            {
+              "text": "A monthly fee based on scope and the people involved.",
+              "bg": "transparent",
+              "fg": "#434F4F",
+              "line": "#D0D8D2",
+              "radius": "0"
+            }
+          ]
+        }
+      ],
+      "tierCta": "Discuss a Review",
+      "show_float": true,
       "fields": [
         {
           "k": "name",
