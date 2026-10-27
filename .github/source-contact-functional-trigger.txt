@@ -1,3 +1,5 @@
 2026-10-27 inspect pure contact input contract and use browser to validate no-delivery Preview contact at three widths; no production effects.
 
 2026-10-27 verify corrected Preview email parsing and no-delivery requests at all 3 viewport widths.
+
+2026-10-27 Rerun safe Contact Preview validation at three widths after live transactional host guard.
