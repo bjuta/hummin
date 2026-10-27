@@ -152,9 +152,9 @@ output.push("export function ApprovedSiteRoot({scope={}}:{scope?:SourceScope}){r
 
 const text=output.join("\n")+"\n";
 fs.writeFileSync(path.join(targetDir,"approved-components.tsx"),text);
-const hoverCss=Array.from(hover,([css,id])=>"["+quoted("data-source-hover")+"="+quoted(id)+"]:hover{"+css+"}").join("\n")+"\n";
+const hoverCss=Array.from(hover,([css,id])=>"[data-source-hover="+quoted(id)+"]:hover{"+css+"}").join("\n")+"\n";
 fs.writeFileSync(path.join(targetDir,"source-hover.css"),hoverCss);
-const activeCss=Array.from(active,([css,id])=>"["+quoted("data-source-active")+"="+quoted(id)+"]:active{"+css+"}").join("\n")+"\n";
+const activeCss=Array.from(active,([css,id])=>"[data-source-active="+quoted(id)+"]:active{"+css+"}").join("\n")+"\n";
 fs.writeFileSync(path.join(targetDir,"source-active.css"),activeCss);
 // Candidate checked-in files: the normal app build must not read archived HTML.
 const portable=text.replaceAll("../../app/components/source-native-bridge","./source-native-bridge");
