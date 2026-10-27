@@ -1,0 +1,1 @@
+2026-10-27 isolated Insights search, filter tabs, selected approved article, back navigation and no-delivery acceptance across three widths.
