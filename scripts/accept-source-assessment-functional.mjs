@@ -35,7 +35,7 @@ try{
    assert.match(res.headers()["x-robots-tag"]||"",/noindex/);
    await page.getByRole("button",{name:/Start the Assessment/i}).click();
    await page.waitForTimeout(350);
-   console.log("ASSESSMENT START DIAGNOSTIC",JSON.stringify({width,steps:await page.getByText(/Question 1 of 23/).count(),introButtons:await page.getByRole("button",{name:/Start the Assessment/i}).count(),runtimeErrors,dom:(await page.locator("body").innerText()).slice(0,1300)}));
+   console.log("ASSESSMENT START DIAGNOSTIC",JSON.stringify({width,steps:await page.getByText(/Question 1 of 23/).count(),introButtons:await page.getByRole("button",{name:/Start the Assessment/i}).count(),runtimeErrors,js:await page.evaluate(()=>({scripts:[...document.querySelectorAll("script[src]")].map(e=>e.getAttribute("src")).slice(-10),mainButtons:[...document.querySelectorAll("button")].slice(0,6).map(x=>({text:x.innerText.slice(0,42),onclick:typeof x.onclick,outer:x.outerHTML.slice(0,180)})),ready:document.readyState,resources:performance.getEntriesByType("resource").filter(x=>x.name.includes("js")||x.name.includes("source.remaining")).slice(-12).map(x=>x.name)})),dom:(await page.locator("body").innerText()).slice(0,1300)}));
    for(const q of contract.STEPS){
     current++;
     await page.getByText("Question "+current+" of 23",{exact:true}).waitFor({timeout:14000});
