@@ -51,8 +51,21 @@ async function inspect(context,url){
     self:fmt(el),parent:fmt(el.parentElement),next:fmt(el.parentElement?.nextElementSibling),
     grandparent:fmt(el.parentElement?.parentElement)
    }));
+   const fontDoc=document.getElementById("hummin-insights-frame")?.contentDocument||document;
+   const heroText=[...fontDoc.querySelectorAll("p")].find(p=>p.textContent?.startsWith("Practical guides, opinion"));
+   const heroTypography=heroText?(()=>{
+     const r=heroText.getBoundingClientRect(),s=fontDoc.defaultView.getComputedStyle(heroText);
+     return {x:r.x,y:r.y,width:r.width,height:r.height,
+      fontFamily:s.fontFamily,fontSize:s.fontSize,fontWeight:s.fontWeight,
+      lineHeight:s.lineHeight,letterSpacing:s.letterSpacing,maxWidth:s.maxWidth,
+      text:heroText.textContent};
+   })():null;
+   const fontResources=fontDoc.defaultView.performance.getEntriesByType("resource")
+    .map(item=>item.name).filter(url=>/woff2|fonts.googleapis|fonts.gstatic/.test(url)).slice(0,35);
+   const fontFaces=[...fontDoc.fonts].filter(font=>/Figtree|Newsreader/.test(font.family))
+    .map(font=>({family:font.family,weight:font.weight,status:font.status})).slice(0,14);
    return {height:document.documentElement.scrollHeight,viewport:innerWidth,
-    footer:fmt(document.querySelector("footer")),rust,frames,shells,
+    footer:fmt(document.querySelector("footer")),rust,frames,shells,heroTypography,fontResources,fontFaces,
     h1:[...document.querySelectorAll("h1")].map(e=>e.innerText)};
   });
   return data;
