@@ -19,3 +19,5 @@ Retry source-faithful Preview build after Cloudflare/Vite optimizer WebSocket in
 2026-10-27 deploy Insights frame measurement race guard: never clamp before source sections mount; observe late content injection. Source geometry remains authoritative.
 
 2026-10-27 isolated Preview regression repair: reconnect original Insights ResizeObserver after height changes; no public routing.
+
+2026-10-27 source-correct original Google Figtree and Newsreader stylesheet for Assessment/Insights, matching original Insights iframe loaded font CSS; no public deploy.
