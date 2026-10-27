@@ -17,6 +17,8 @@ export function sourceRead(scope:SourceScope, path:string):unknown {
 }
 export const sourceTruthy=(value:unknown):boolean=>Boolean(value)&&value!=="false";
 export const sourceItems=(value:unknown):unknown[]=>Array.isArray(value)?value:[];
+export const sourceText=(value:unknown):string=>value==null?"":String(value);
+export const sourceKey=(value:unknown):React.Key|undefined=>value==null?undefined:(typeof value==="number"?value:String(value));
 export function sourceInvoke(handler:unknown,event:unknown):void {
  if(typeof handler==="function")(handler as (event:unknown)=>void)(event);
 }
