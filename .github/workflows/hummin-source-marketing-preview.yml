@@ -25,7 +25,19 @@ jobs:
       - name: Validate source-native code and safe marketing Preview route
         run: |
           npm run typecheck
-          npm run build
+          set +e
+          npm run build > /tmp/hummin-preview-build.log 2>&1
+          code=$?
+          set -e
+          cat /tmp/hummin-preview-build.log
+          if [ "$code" -ne 0 ]; then
+            if grep -q 'The WebSocket is undefined' /tmp/hummin-preview-build.log; then
+              echo "Retrying one transient Cloudflare/Vite dependency-optimizer WebSocket failure"
+              npm run build
+            else
+              exit "$code"
+            fi
+          fi
           node --input-type=module -e "
             import fs from 'node:fs';
             const cfg=JSON.parse(fs.readFileSync('build/server/wrangler.json','utf8'));
