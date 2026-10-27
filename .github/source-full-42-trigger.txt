@@ -11,3 +11,5 @@ Canonical read-only source-native release audit, all 42 production vs isolated P
 2026-10-27 final owner-source 42-case visual regression after Assessment validation, booking client safety, and Insights newsletter no-delivery UI.
 
 2026-10-27 confirm exact original/native 42-case pixel threshold after read-only font/image and stable-frame settling for transient mobile Insights height.
+
+2026-10-27 Final source-native strict 42-case visual gate on transaction-hardened Preview with stable 390px frame capture.
