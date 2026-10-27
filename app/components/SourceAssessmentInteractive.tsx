@@ -93,10 +93,14 @@ export function SourceAssessmentInteractive(){
    }
   }));
   data.cur=state.cur;
-  data.setCur=(event:React.ChangeEvent<HTMLSelectElement>)=>
-   setState(old=>({...old,cur:event.currentTarget.value}));
-  data.setText=(event:React.ChangeEvent<HTMLTextAreaElement>)=>
-   setState(old=>({...old,text:event.currentTarget.value}));
+  data.setCur=(event:React.ChangeEvent<HTMLSelectElement>)=>{
+   const value=event.currentTarget.value;
+   setState(old=>({...old,cur:value}));
+  };
+  data.setText=(event:React.ChangeEvent<HTMLTextAreaElement>)=>{
+   const value=event.currentTarget.value;
+   setState(old=>({...old,text:value}));
+  };
   data.next=next;
   data.back=back;
   data.onKey=onKey;
