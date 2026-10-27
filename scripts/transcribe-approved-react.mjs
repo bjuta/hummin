@@ -165,6 +165,20 @@ const productionSite=productionRoot.replace(sourceSubmitRow,restoredContactSlot+
 const rootElements=renderChildren(parseFragment(productionSite),"scope");
 output.push("export function ApprovedSiteRoot({scope={}}:{scope?:SourceScope}){return React.createElement(React.Fragment,null"+(rootElements.length?","+rootElements.join(","):"")+");}");
 
+// Preserve the original Assessment and Insights x-dc root elements byte-for-byte.
+// Both documents have one authored div under x-dc (after their helmet).
+for(const [sourceName,exportName,offsetStart] of [
+ ["assessment","ApprovedAssessmentRoot",7627],
+ ["insights","ApprovedInsightsRoot",12649]
+]){
+ const original=fs.readFileSync("artifacts/source-component-catalog/"+sourceName+"/original.html","utf8");
+ const catalog=JSON.parse(fs.readFileSync("artifacts/source-component-catalog/"+sourceName+"/inventory.json","utf8"));
+ const root=catalog.elements.find(n=>n.tag==="div"&&n.startOffset===offsetStart);
+ if(!root||!root.endOffset)throw Error(sourceName+" original root changed");
+ const raw=original.slice(root.startOffset,root.endOffset);
+ const elements=renderChildren(parseFragment(raw),"scope");
+ output.push("export function "+exportName+"({scope={}}:{scope?:SourceScope}){return React.createElement(React.Fragment,null"+(elements.length?","+elements.join(","):"")+");}");
+}
 const text=output.join("\n")+"\n";
 fs.writeFileSync(path.join(targetDir,"approved-components.tsx"),text);
 const hoverCss=Array.from(hover,([css,id])=>"[data-source-hover="+quoted(id)+"]:hover{"+css+"}").join("\n")+"\n";
