@@ -51,3 +51,4 @@ React legal CTA accessibility follow-up: deploy bcde3a1035cb394146fd12c723a45482
 2026-10-27 source-preserving React primitive extraction: marketing hero and Engagements comparison centralized; verify TypeScript, content contracts, archive-hidden build and isolated Preview.
 2026-10-27 repeat primitive extraction preview verification after updating source-contract checks to read authoritative extracted components; no design changes.
 2026-10-27 verify shared page discriminant type moved with source marketing hero; content contract retained.
+2026-10-27 verify six source-faithful marketing page frames reuse one shared component with unchanged markup, archived HTML hidden, isolated preview only.
