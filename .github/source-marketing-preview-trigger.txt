@@ -35,3 +35,5 @@ Retry source-faithful Preview build after Cloudflare/Vite optimizer WebSocket in
 2026-10-27 corrected isolated native contact email parser; redeploy to test actual browser submission.
 
 2026-10-27 restore native Insights React event handlers (search, filter, article/back and internal routes); do not submit newsletters.
+
+2026-10-27 deploy no-delivery Assessment server-side payload validation and async results unlocking to isolated Workers Preview; no public routing changes.
