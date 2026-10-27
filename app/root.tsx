@@ -104,7 +104,6 @@ function Footer(){return <footer className="hm-site-footer"><div className="hm-s
   <Link to="/" className="hm-site-footer-brand" aria-label="HUMMIN home"><img src="/brand/hummin-symbol.svg" width="44" height="44" alt=""/><span>HUMMIN</span></Link>
   <span>Embedded advisory and execution · Nairobi, Kenya</span>
   <a href="mailto:sales@hummin.org">sales@hummin.org</a>
-  <Link to="/insights">Notes from HUMMIN</Link><Link to="/privacy">Privacy</Link><Link to="/terms">Terms of Use</Link>
   <span>© {new Date().getFullYear()} HUMMIN</span>
 </div></footer>;}
 
