@@ -8,7 +8,7 @@ const photos:Record<string,string>={
  home:"/brand/home-hero.webp",how:"/brand/how-hero.webp",core:"/brand/expertise-hero.webp",
  eng:"/brand/engagements-hero.webp",who:"/brand/who-hero.webp",about:"/brand/about-hero.webp"
 };
-type Page="home"|"how"|"core"|"eng"|"who"|"about";
+export type Page="home"|"how"|"core"|"eng"|"who"|"about";
 
 export function SourceMarketingHero({page}:{page:Page|"contact"}){
  const h=HEADS[page as keyof typeof HEADS];
