@@ -324,3 +324,31 @@
    unlike the terracotta global assessment band further down the page. */
 .hr-who-body .hr-link-btn{background:var(--hummin-ink);color:var(--hummin-paper)}
 .hr-who-body .hr-link-btn:hover{background:var(--hummin-slate)}
+
+/* Source-v4 Engagements: the comparison occupies the original editorial main
+   inset. Unlike the generic React section it does not have a second top inset. */
+.hr-engagements-source-section{
+  padding:clamp(48px,7cqw,104px) clamp(20px,5cqw,64px) clamp(64px,8cqw,112px);
+  gap:28px;
+}
+.hr-engagements-source-section .hr-comparison-scroll{
+  scrollbar-width:thin;
+}
+.hr-engagements-source-section .hr-comparison{
+  grid-template-columns:170px repeat(3,minmax(0,1fr));
+}
+.hr-engagements-source-section .hr-comparison-row>div{
+  font-size:16px;
+  line-height:1.5;
+}
+.hr-residency>img{
+  flex:1 1 420px;
+  min-height:420px;
+  width:50%;
+  object-fit:cover;
+}
+@media(max-width:600px){
+  .hr-engagements-source-section{
+    padding:48px 20px 64px;
+  }
+}

@@ -122,7 +122,7 @@ function Engagements(){
  const initial=Math.max(0,TIERS.findIndex(t=>t.name.toLowerCase()===search.get("tier")?.toLowerCase()));
  const [active,setActive]=useState(initial);
  const keys=["best","what","get","ends","role","fees"] as const;
- return <div className="hr-page"><Hero page="eng"/><section className="hr-section">
+ return <div className="hr-page"><Hero page="eng"/><section className="hr-section hr-engagements-source-section">
   <div className="hr-section-headline"><SectionTitle>Compare the three.</SectionTitle><div className="hr-pill-tabs" role="tablist" aria-label="Choose an engagement">{TIERS.map((t,i)=><button key={t.name} role="tab" aria-selected={active===i} id={"hr-tier-tab-"+i} aria-controls="hr-tier-panel" onClick={()=>setActive(i)} className={active===i?"active":""}>{t.name}</button>)}</div></div>
   <div className="hr-comparison-scroll" role="tabpanel" id="hr-tier-panel" aria-labelledby={"hr-tier-tab-"+active} tabIndex={0}><div className="hr-comparison">
    <div/><>{TIERS.map((t,i)=><button key={t.name} type="button" className={"hr-comparison-head hr-tier-"+i+(active===i?" active":"")} onClick={()=>setActive(i)}><span>{t.tag}</span><strong>{t.name}</strong></button>)}</>
