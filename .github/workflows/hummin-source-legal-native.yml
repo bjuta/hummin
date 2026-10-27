@@ -1,0 +1,62 @@
+name: HUMMIN owner-source legal native snapshot
+on:
+  push:
+    branches: [feat/fullstack-workers-foundation]
+    paths: [.github/source-legal-native-trigger.txt]
+permissions:
+  contents: write
+concurrency:
+  group: hummin-approved-legal-native
+  cancel-in-progress: false
+jobs:
+  exact-source-transcription:
+    if: github.repository == 'bjuta/hummin'
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: npm install --no-audit --no-fund
+      - run: npm install --no-save --ignore-scripts --no-audit --no-fund playwright@1.56.1 parse5@7.3.0
+      - run: npx playwright install chromium --only-shell
+      - name: Capture six authoritative legal documents and exact live CSS
+        run: node scripts/capture-source-legal.mjs
+      - name: Compile source tree and original styles to typed React
+        run: node scripts/transcribe-approved-legal.mjs
+      - name: Verify source-markup, legal content, and build
+        run: |
+          npm run typecheck
+          npm run build
+          node --input-type=module -e "
+            import fs from 'node:fs';
+            const s=fs.readFileSync('app/components/ApprovedLegalSource.generated.tsx','utf8');
+            for(const piece of ['Privacy notice.','Terms of use.','Who is responsible?','Law and disputes','hummin-legal-toc','hm-site-drawer']){
+              if(!s.includes(piece))throw Error('Missing source legal DOM: '+piece);
+            }
+            for(const name of ['legal-root.css','legal-document.css']){
+              if(fs.statSync('app/components/approved-source-css/'+name).size<1000)throw Error('Source legal CSS missing');
+            }
+          "
+      - name: Commit source-verified legal React modules to development branch
+        run: |
+          git diff --check
+          git add -- app/components/ApprovedLegalSource.generated.tsx app/components/approved-source-css/legal-root.css app/components/approved-source-css/legal-document.css
+          if git diff --cached --quiet; then echo "Exact legal source unchanged"; exit 0; fi
+          git config user.name "hummin-source-extractor[bot]"
+          git config user.email "source-extractor@users.noreply.github.com"
+          git commit -m "Transcribe production-verified Privacy/Terms source DOM and CSS into native React"
+          git push origin HEAD:feat/fullstack-workers-foundation
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: hummin-approved-legal-native-six
+          path: |
+            artifacts/source-legal-reference
+            app/components/ApprovedLegalSource.generated.tsx
+            app/components/approved-source-css/legal-root.css
+            app/components/approved-source-css/legal-document.css
+          retention-days: 14
