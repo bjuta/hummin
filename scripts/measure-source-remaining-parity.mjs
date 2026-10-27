@@ -66,6 +66,29 @@ async function capture(ctx,url,file){
    }catch{}
   }
   await page.waitForTimeout(500);
+  // The original iframe publishes its final height asynchronously; the native
+  // ResizeObserver follows the same content height after fonts/images/reveals.
+  // Screenshotting before that contract settles can fabricate a 38px mismatch
+  // only in the following orange CTA. Never alter screenshots or thresholds.
+  if(url.includes("/insights")||url.includes("/__source-review/insights")||
+     url.includes("/__source-review/article")||url.includes("/__source-review/topic")||
+     url.includes("/__source-review/author")){
+   await page.evaluate(async()=>{
+    const frame=document.getElementById("hummin-insights-frame")||
+      document.querySelector(".hm-frame-shell");
+    if(!frame)throw Error("Insights height frame missing");
+    let prior="",stable=0;
+    for(let i=0;i<45&&stable<6;i++){
+     await new Promise(resolve=>setTimeout(resolve,160));
+     const box=frame.getBoundingClientRect();
+     const mark=[Math.round(box.height*10)/10,document.documentElement.scrollHeight,
+       Math.round(box.bottom*10)/10,document.fonts.status].join(":");
+     stable=mark===prior?stable+1:0;
+     prior=mark;
+    }
+    if(stable<6)throw Error("Insights original/native frame did not settle before visual evidence: "+prior);
+   });
+  }
   const meta=await page.evaluate(()=>({
    height:document.documentElement.scrollHeight,
    width:document.documentElement.scrollWidth,
