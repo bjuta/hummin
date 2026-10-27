@@ -15,6 +15,12 @@
 
 These are test-specific assurances, not claims of production transactional acceptance. The preview-only validation endpoints reject `hummin.org` and `www.hummin.org`, require same origin, report no delivery and do not import outbox, Calendar, or D1 mutations. Turnstile **is not simulated as successful** in these endpoints.
 
+## Verified Preview configuration
+
+`wrangler.preview.jsonc` names an independent Workers deployment (`hummin-web-preview`) and D1 binding (`hummin-web-preview`), rather than the public Worker/database names. Its configured `BOOKING_ENABLED` is explicitly `"false"`, and no availability-enable flag is declared. The source-native booking client is **not wired to a real booking button**. Therefore this checkpoint has no authorized live booking path.
+
+The repository cannot prove whether externally stored Preview secrets or calendars are truly sandboxed; verify them separately before activating any transactional endpoint. No booking flag, real email provider, secret or Google Calendar credential has been enabled or changed here.
+
 ## Production protections retained
 
 - Public website routes still resolve to the legacy source restoration in `app/routes/fidelity.ts`; no automatic public React cutover, PR merge, DNS change or HTML retirement.
