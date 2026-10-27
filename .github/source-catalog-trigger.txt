@@ -1,2 +1,3 @@
 Run source-only component extraction from approved archived source. No deployment.
 Recheck unique original-source route IDs and removed page imports.
+Final owner-source extraction and rollback build check, no deployment.
