@@ -37,7 +37,19 @@ const html=JSON.parse(fs.readFileSync("design/sources/site-v4.template.json","ut
 const ids=[...new Set([...html.matchAll(/(?:src|href)="([a-f0-9]{8}(?:-[a-f0-9]{4}){3}-[a-f0-9]{12})"/gi)].map(m=>m[1]))];
 const imageIds=ids.filter(id=>manifest[id]?.mime?.startsWith("image/"));
 const missing=imageIds.filter(id=>!mappings[id]);
-if(missing.length)throw Error("Unmatched original site media: "+missing.join(", "));
+for(const id of missing){
+ const item=manifest[id];
+ if(item?.mime!=="image/svg+xml")throw Error("No source-faithful asset for "+id);
+ let bytes=Buffer.from(item.data,"base64");
+ if(item.compressed)bytes=gunzipSync(bytes);
+ if(!bytes.toString("utf8",0,512).includes("<svg")||/<script\\b/i.test(bytes.toString("utf8")))
+  throw Error("Unsafe original SVG asset "+id);
+ const dir="public/brand/source-resources";
+ fs.mkdirSync(dir,{recursive:true});
+ fs.writeFileSync(path.join(dir,id+".svg"),bytes);
+ mappings[id]="/brand/source-resources/"+id+".svg";
+}
+
 fs.mkdirSync("artifacts/source-native-transcription",{recursive:true});
 fs.writeFileSync("artifacts/source-native-transcription/asset-map.json",JSON.stringify(mappings,null,2)+"\n");
 console.log("APPROVED ASSET MAP",imageIds.length,"site media ids",Object.keys(mappings).length,"exactly matched assets");
