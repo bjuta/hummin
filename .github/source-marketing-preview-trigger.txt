@@ -9,3 +9,5 @@ Deploy source-derived seven marketing views to isolated Workers Preview. Keep pu
 2026-10-27 source-matched 900px Assessment viewport and clamp(64px,8cqw,112px) editorial height trimming; isolated Preview only.
 
 2026-10-27 deploy exact production-restored 960px Assessment viewport and preserve Preview-native navigation; no public routing.
+
+2026-10-27 deploy exact owner-source Legal Privacy/Terms native React shell with original production CSS; isolated Preview only.
