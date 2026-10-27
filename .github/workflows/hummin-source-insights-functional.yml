@@ -1,0 +1,29 @@
+name: HUMMIN isolated Insights native interactions
+on:
+  push:
+    branches: [feat/fullstack-workers-foundation]
+    paths: [.github/source-insights-functional-trigger.txt]
+permissions:
+  contents: read
+jobs:
+  insights:
+    runs-on: ubuntu-latest
+    timeout-minutes: 18
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: npm install --no-save --ignore-scripts --no-audit --no-fund playwright@1.56.1
+      - run: npx playwright install chromium --only-shell
+      - run: npm run typecheck
+      - name: Check native search, filter, article and back interactions; no mutations
+        run: node scripts/accept-source-insights-functional.mjs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: hummin-native-insights-interactions-three-widths
+          path: artifacts/source-insights-functional
+          retention-days: 14
