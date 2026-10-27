@@ -6,6 +6,7 @@ import "./react-marketing.css";
 import {ReactAssessmentPromotion} from "./ReactAssessmentPromotion";
 import {SourceEngagementComparison} from "./SourceEngagementComparison";
 import {SourceMarketingHero as Hero} from "./SourceMarketingHero";
+import type {Page} from "./SourceMarketingHero";
 export {SourceMarketingHero as Hero} from "./SourceMarketingHero";
 
 const sourceDomain=(area:string)=>area.split(" · ")[0];
