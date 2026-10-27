@@ -50,7 +50,7 @@ jobs:
         run: |
           mkdir -p app/data
           cp artifacts/source-native-transcription/marketing-viewmodels.json app/data/ApprovedMarketingViewmodels.generated.json
-          cp artifacts/source-native-transcription/asset-map.json app/data/ApprovedSourceAssets.generated.json public/brand/source-resources
+          cp artifacts/source-native-transcription/asset-map.json app/data/ApprovedSourceAssets.generated.json
       - name: Commit source-verified React markup, CSS and marketing data to development branch
         run: |
           git diff --check
