@@ -34,6 +34,17 @@ async function capture(ctx,url,file){
  try{
   const response=await page.goto(url,{waitUntil:"domcontentloaded",timeout:45000});
   assert.equal(response?.status(),200,url+" HTTP status");
+  // An iframe can stay hidden until its design runtime initializes and the
+  // parent receives its ready/height message. An incomplete production frame
+  // is invalid reference evidence, not a React visual failure.
+  if(url.startsWith(origin)&&url.includes("/insights")){
+   await page.waitForFunction(()=>{
+    const iframe=document.getElementById("hummin-insights-frame");
+    return !!iframe&&iframe.dataset.hmLoaded==="true"&&
+      getComputedStyle(iframe).visibility!=="hidden"&&iframe.getBoundingClientRect().height>500;
+   },null,{timeout:30000});
+   await page.waitForTimeout(500);
+  }
   await page.waitForTimeout(500);
   for(const frame of page.frames()){
    try{
