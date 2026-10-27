@@ -63,7 +63,10 @@ export function SourceMarketingPreview({page,sourceImports}:{page:MarketingPage|
   setMenu(false);
   setPeek(null);
   const path=paths[target]||target;
-  navigate(isMarketingPage(path)?"/__source-preview/"+path:"/"+path);
+  const destination=isMarketingPage(path)?"/__source-preview/"+path:
+   path==="assessment"?"/__source-review/assessment":
+   path==="insights"?"/__source-review/insights":"/"+path;
+  navigate(destination);
   window.scrollTo({top:0,behavior:"instant"});
  },[navigate]);
  const openPeek=(kind:"topic"|"tier",index:number)=>{
