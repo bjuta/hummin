@@ -352,3 +352,17 @@
     padding:48px 20px 64px;
   }
 }
+
+/* Source-aligned section box model. The source places section boxes inside
+   the page gutter and below the hero inset; React formerly painted those
+   insets as internal padding. Preserve content coordinates while exposing
+   the same outer section rectangles to layout and accessibility tooling. */
+.hr-page > .hr-section:not(.hr-engagements-source-section){
+  margin-inline:clamp(20px,5cqw,64px);
+  margin-top:clamp(64px,8cqw,112px);
+  padding-inline:0;
+  padding-top:0;
+}
+@media(max-width:600px){
+ .hr-page > .hr-section:not(.hr-engagements-source-section){margin-top:64px}
+}
