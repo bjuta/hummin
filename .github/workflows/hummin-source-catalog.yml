@@ -1,0 +1,32 @@
+name: HUMMIN source catalogue and rollback verification
+on:
+  push:
+    branches: [feat/fullstack-workers-foundation]
+    paths: [.github/source-catalog-trigger.txt]
+permissions:
+  contents: read
+jobs:
+  extract:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: npm install --no-save --no-audit --no-fund parse5@7.3.0
+      - name: Preserve complete original component structures
+        run: node scripts/catalog-approved-source.mjs
+      - name: Typecheck reverted application
+        run: npm run typecheck
+      - name: Build reverted application
+        run: npm run build
+      - name: Save source catalog even if build fails
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: hummin-approved-source-component-catalog
+          path: artifacts/source-component-catalog
+          retention-days: 30
