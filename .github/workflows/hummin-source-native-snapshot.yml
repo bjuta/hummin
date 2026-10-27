@@ -54,7 +54,7 @@ jobs:
       - name: Commit source-verified React markup, CSS and marketing data to development branch
         run: |
           git diff --check
-          git add -- app/components/ApprovedSourceTranscription.generated.tsx app/components/ApprovedSourceHover.generated.css app/components/ApprovedSourceActive.generated.css app/components/approved-source-css app/data/ApprovedMarketingViewmodels.generated.json app/data/ApprovedSourceAssets.generated.json
+          git add -- app/components/ApprovedSourceTranscription.generated.tsx app/components/ApprovedSourceHover.generated.css app/components/ApprovedSourceActive.generated.css app/components/ApprovedSourceFonts.runtime.css app/components/approved-source-css app/data/ApprovedMarketingViewmodels.generated.json app/data/ApprovedSourceAssets.generated.json
           if git diff --cached --quiet; then echo "Source transcription unchanged"; exit 0; fi
           git config user.name "hummin-source-extractor[bot]"
           git config user.email "source-extractor@users.noreply.github.com"
