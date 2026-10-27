@@ -23,6 +23,30 @@ export function SourceRemainingPreview({view}:{view:RemainingView}){
    view==="assessment"||view==="insights"?"index":view
  );
  const [message,setMessage]=React.useState("");
+ // Mirror the approved Insights frame's actual sendHeight() contract:
+ // measure the last non-fixed content section, not the outer body/shell height.
+ const insightFrame=React.useRef<HTMLDivElement>(null);
+ const [sourceHeight,setSourceHeight]=React.useState<number|null>(null);
+ React.useLayoutEffect(()=>{
+  if(view==="assessment")return;
+  const frame=insightFrame.current;
+  if(!frame)return;
+  const sections=[...frame.querySelectorAll<HTMLElement>("main,section,article,footer")];
+  const measure=()=>{
+   const top=frame.getBoundingClientRect().top;
+   const bottoms=sections.filter(element=>element.getClientRects().length&&
+     getComputedStyle(element).position!=="fixed")
+    .map(element=>element.getBoundingClientRect().bottom-top);
+   const size=Math.ceil(Math.max(400,...bottoms));
+   if(Number.isFinite(size)&&size<=30000)setSourceHeight(current=>
+     current===size?current:size);
+  };
+  measure();
+  const observer=new ResizeObserver(measure);
+  for(const section of sections)observer.observe(section);
+  return ()=>observer.disconnect();
+ },[view,insightView]);
+
  const assessmentScope:SourceScope={
   ...sources.assessment.views[assessmentStage],__assets:sourceAssets,
   start:()=>setAssessmentStage("first"),
@@ -43,8 +67,8 @@ export function SourceRemainingPreview({view}:{view:RemainingView}){
   style:{position:"relative",height:"960px",minHeight:0,overflowY:"auto",overscrollBehavior:"contain",background:"#1E272A"}
  },React.createElement(ApprovedAssessmentRoot,{scope:assessmentScope}));
  const OriginalInsights=()=>React.createElement("div",{
-  className:"hm-frame-shell",
-  style:{position:"relative",minHeight:"580px",marginBottom:"calc(-1 * clamp(64px, 8cqw, 112px))",background:"#F4F5F1"}
+  className:"hm-frame-shell",ref:insightFrame,
+  style:{position:"relative",height:sourceHeight===null?"auto":sourceHeight+"px",minHeight:"580px",overflow:"hidden",background:"#F4F5F1"}
  },React.createElement(ApprovedInsightsRoot,{scope:editorialScope}));
  const imports:Record<string,React.ComponentType>={
   "HUMMIN Assessment v2":OriginalAssessment,
