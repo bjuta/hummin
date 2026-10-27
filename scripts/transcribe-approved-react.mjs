@@ -155,7 +155,14 @@ const productionFooterLinks='<a href="/newsletter" style="color:#E7EBE6;text-dec
 if(rawRoot.split(sourceFooterAnchor).length!==2)
  throw Error("Original footer location differs from approved production patch");
 const productionRoot=rawRoot.replace(sourceFooterAnchor,productionFooterLinks+sourceFooterAnchor);
-const rootElements=renderChildren(parseFragment(productionRoot),"scope");
+// This exact contact verification/status slot is a production-approved
+// restoration in scripts/restore-original.mjs. It is non-submitting here.
+const sourceSubmitRow='<div style="display:flex;gap:16px;align-items:center;flex-wrap:wrap"><button type="button" sc-camel-on-click="{{ submit }}"';
+const restoredContactSlot='<div id="hummin-turnstile" style="min-height:65px"></div><p role="alert" style="font-size:14px;color:#B5532C">{{ contactStatus }}</p>';
+if(productionRoot.split(sourceSubmitRow).length!==2)
+ throw Error("Approved contact submit row no longer matches production source patch");
+const productionSite=productionRoot.replace(sourceSubmitRow,restoredContactSlot+sourceSubmitRow);
+const rootElements=renderChildren(parseFragment(productionSite),"scope");
 output.push("export function ApprovedSiteRoot({scope={}}:{scope?:SourceScope}){return React.createElement(React.Fragment,null"+(rootElements.length?","+rootElements.join(","):"")+");}");
 
 const text=output.join("\n")+"\n";
