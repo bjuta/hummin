@@ -45,3 +45,4 @@ React legal CTA accessibility follow-up: deploy bcde3a1035cb394146fd12c723a45482
 2026-10-27 source-parity candidate 337648db404e12eb491480b03351cf0edf9f18fa: restore the exact four-item source footer and the original 900px Assessment host viewport using native React/CSS only. Build must succeed with design/sources hidden; deploy Preview only.
 2026-10-27 retry source-parity candidate after preserving Privacy/Terms as non-visual shell links required by release contracts. Visual footer remains the exact four-item source footer.
 2026-10-27 retry same Preview candidate: preserve non-visual legal discoverability without using a scroll-lock/overflow-hidden pattern.
+2026-10-27: deploy isolated Engagements source editorial geometry from 2af54063c17597f40e43d2001c99489a1b2f5cac. No HTML build access, no production cutover.
