@@ -92,7 +92,7 @@ export function ReactInsights({posts,view,selected="",preview=false}:ReactInsigh
       <p className="hr-insights-source-list-lead">{insightTopicLeads[topic]}</p>
      </>:view==="author"&&author?<>
       <div className="hr-insights-source-author-heading">
-       <div className="hr-insights-source-author-avatar">{selected==="muiruri"?<img src="/brand/about-founder.webp" alt="Portrait of Muiruri Beautah"/>:<img src="/brand/insights-team-avatar.svg" alt=""/>}</div>
+       <div className="hr-insights-source-author-avatar">{selected==="muiruri"?<img src="/brand/about-founder.webp" alt="Portrait of Muiruri Beautah"/>:<img src="/brand/hummin-symbol.svg" alt=""/>}</div>
        <div><span className="hr-insights-source-eyebrow">Author</span><h1 className="hr-insights-source-list-title">{author.name}</h1><span className="hr-insights-source-author-role">{author.role}</span></div>
       </div>
       <p className="hr-insights-source-list-lead">{author.bio}</p>
