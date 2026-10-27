@@ -49,7 +49,7 @@ export function SourceAssessmentInteractive(){
    top();
   },260);
  };
- const back=()=>move(state.step===0?-1:state.step-1);
+ const back=()=>state.step===0?(setState(old=>({...old,stage:"intro",step:0})),top()):move(state.step-1);
  const next=()=>{if(assessmentCanAdvance(state))move(state.step+1);};
  const onKey=(event:React.KeyboardEvent)=>{
   if(state.stage!=="flow")return;
