@@ -1,3 +1,5 @@
 2026-10-27 test native 23-question Assessment engine and safe non-delivery Preview, no production changes.
 
 2026-10-27 shared production Assessment email validator and isolated no-delivery integration; test source payload, host, origin, and security controls.
+
+2026-10-27 repeat delivery contract unit checks with direct TS route imports to confirm actual Preview action.
