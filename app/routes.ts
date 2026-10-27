@@ -4,6 +4,7 @@ export default [
  route("__source-preview/:page","routes/source.marketing.preview.tsx",{id:"source-marketing-preview"}),
  route("__source-review/:view","routes/source.remaining.preview.tsx",{id:"source-remaining-preview"}),
  route("__source-legal/:document","routes/source.legal.preview.tsx",{id:"source-legal-preview"}),
+ route("__source-verify/contact","routes/source.contact.verify.ts",{id:"source-contact-validation"}),
  route("admin/login","routes/admin.login.tsx"),
  route("admin/verify","routes/admin.verify.tsx"),
  route("admin/logout","routes/admin.logout.ts"),
