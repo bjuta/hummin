@@ -1,6 +1,6 @@
 import type {AppLoadContext} from "react-router";
-import {isHumminPublicHost} from "../lib/seo.server";
-import {parseAssessmentDeliveryInput} from "../lib/assessment-delivery-contract";
+import {isHumminPublicHost} from "../lib/seo.server.ts";
+import {parseAssessmentDeliveryInput} from "../lib/assessment-delivery-contract.ts";
 
 /** Source-native Assessment contract check; zero delivery capability by construction.
  * A 200 response NEVER means email was queued or a booking was made.
