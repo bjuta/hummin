@@ -19,6 +19,8 @@ jobs:
       - run: npm install --no-save --no-audit --no-fund parse5@7.3.0
       - name: Preserve complete original component structures
         run: node scripts/catalog-approved-source.mjs
+      - name: Extract original source primitives, bindings and CSS without restyling
+        run: node scripts/extract-source-blueprints.mjs
       - name: Typecheck reverted application
         run: npm run typecheck
       - name: Build reverted application
@@ -28,5 +30,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: hummin-approved-source-component-catalog
-          path: artifacts/source-component-catalog
+          path: |
+            artifacts/source-component-catalog
+            artifacts/source-component-blueprints
           retention-days: 30
