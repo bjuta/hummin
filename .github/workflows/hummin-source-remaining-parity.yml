@@ -1,0 +1,28 @@
+name: HUMMIN original Assessment/Insights visual parity
+on:
+  push:
+    branches: [feat/fullstack-workers-foundation]
+    paths: [.github/source-remaining-parity-trigger.txt]
+permissions:
+  contents: read
+jobs:
+  assessment-editorial:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: npm install --no-save --ignore-scripts --no-audit --no-fund playwright@1.56.1 pixelmatch@6.0.0 pngjs@7.0.0
+      - run: npx playwright install chromium --only-shell
+      - name: Measure Assessment and Insights against live HUMMIN
+        run: node scripts/measure-source-remaining-parity.mjs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: hummin-source-remaining-15-visual-cases
+          path: artifacts/source-remaining-parity
+          retention-days: 14
