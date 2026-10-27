@@ -36,6 +36,21 @@ try {
      }
      window.scrollTo(0,0);await pause(200);
     });
+    if(width===1440&&route==="privacy"){
+     const sourceSheets=await page.evaluate(async()=>Promise.all(
+      [...document.querySelectorAll('link[rel="stylesheet"]')]
+       .filter(link=>new URL(link.href).origin===location.origin)
+       .map(async link=>({name:new URL(link.href).pathname.split("/").at(-1),
+        text:await fetch(link.href).then(response=>{
+         if(!response.ok)throw Error("Original CSS unavailable: "+link.href);
+         return response.text();
+        })}))));
+     for(const sheet of sourceSheets){
+      assert.match(sheet.name,/^[A-Za-z0-9_.-]+\\.css$/);
+      fs.writeFileSync(output+"/"+sheet.name,sheet.text);
+      console.log("LEGAL ORIGINAL CSS",sheet.name,sheet.text.length);
+     }
+    }
     const captured=await page.evaluate(()=>{
      const main=document.querySelector("main");
      const root=main||document.body;
