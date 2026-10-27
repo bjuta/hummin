@@ -16,7 +16,7 @@ for(const [key,name] of Object.entries(cssNames)){
  const source=path.join(artifacts,name);
  if(!fs.existsSync(source))throw Error("Original legal CSS not captured: "+source);
  const content=fs.readFileSync(source,"utf8");
- if(!content.includes("hummin-")||content.length<400)throw Error("Invalid original CSS "+name);
+ if(content.length<1000||!content.includes("{")||!content.includes("}"))throw Error("Invalid or incomplete original CSS "+name);
  fs.writeFileSync(path.join(cssOut,"legal-"+key+".css"),content);
 }
 const attrs={
