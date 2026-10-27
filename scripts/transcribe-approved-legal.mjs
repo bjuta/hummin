@@ -56,7 +56,8 @@ function render(node,scope="{}"){
  if(raw.id==="site-nav"){
   const i=props.findIndex(p=>p.startsWith('"inert":'));
   if(i>=0)props[i]='"inert":!menuOpen';
-  props.push('"data-native-menu":menuOpen?"open":"closed"');
+  const classIndex=props.findIndex(p=>p.startsWith('"className":'));
+  if(classIndex>=0)props[classIndex]='"className":menuOpen?"hm-site-drawer hm-site-drawer-open":"hm-site-drawer"';
  }
  const children=voids.has(node.tagName)?[]:(node.childNodes||[]).map(n=>render(n,scope)).filter(v=>v!==null);
  return "React.createElement("+JSON.stringify(node.tagName)+",{"+props.join(",")+"}"+(children.length?","+children.join(","):"")+")";
