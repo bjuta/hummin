@@ -31,3 +31,5 @@ Retry source-faithful Preview build after Cloudflare/Vite optimizer WebSocket in
 2026-10-27 redeploy fixed React input handling with guarded one-shot transient Vite optimizer retry; public site untouched.
 
 2026-10-27 verify native contact field validation against isolated no-delivery endpoint; public contact untouched.
+
+2026-10-27 corrected isolated native contact email parser; redeploy to test actual browser submission.
