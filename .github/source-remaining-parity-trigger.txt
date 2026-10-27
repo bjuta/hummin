@@ -5,3 +5,5 @@ Read-only fifteen original-vs-native Assessment and Insights screenshots, unchan
 2026-10-27 source-restored 960px Assessment viewport, production-safe source Preview navigation; measure all 15 and fail nonpassing gates.
 
 2026-10-27 verify all Assessment/Insights pixels after original-sendHeight-based native viewport deployment; strict pass/fail enforced.
+
+2026-10-27 verify all fifteen cases after section-mount guard and original Insights sendHeight measurement deployed to isolated Preview.
