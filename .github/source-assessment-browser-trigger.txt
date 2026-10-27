@@ -3,3 +3,5 @@
 Rerun with read-only browser hydration and click diagnostics for first step.
 
 Inspect client script resources and hydration markers after Start click.
+
+Check final 23rd question CTA and gate before release acceptance.
