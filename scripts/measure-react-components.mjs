@@ -19,7 +19,10 @@ const families={
  cards:".hr-stage-card, .hr-insights-featured, .hr-insights-source-list-card, .hr-comparison, .ra-source-related-card",
  assessment:".hr-assessment-band, .hr-assessment-float, .ra-root",
  newsletter:".ra-source-newsletter, .hr-insights-source-newsletter-wrap",
- footer:"footer, .hm-site-footer"
+ footer:"footer, .hm-site-footer",
+ landmarks:"h1, h2, h3, [role=heading]",
+ buttons:"button, a[role=button]",
+ images:"main img, article img, section img"
 };
 const outDir="artifacts/react-component-geometry";
 fs.mkdirSync(outDir,{recursive:true});
@@ -52,14 +55,17 @@ async function sample(context,base,path){
        font:s.fontFamily,fontSize:s.fontSize,lineHeight:s.lineHeight,padding:s.padding,display:s.display,
        background:s.backgroundColor,objectFit:s.objectFit||null};
      };
-     const result={pathname:location.pathname,documentHeight:document.documentElement.scrollHeight,families:{}};
+     const result={pathname:location.pathname,documentHeight:document.documentElement.scrollHeight,viewportWidth:innerWidth,families:{}};
      for(const [family,selector] of Object.entries(families)){
       result.families[family]=Array.from(document.querySelectorAll(selector))
-       .filter(el=>el.getClientRects().length>0).slice(0,family==="sections"?30:15).map(measure);
+       .filter(el=>el.getClientRects().length>0).slice(0,family==="sections"?30:family==="landmarks"?45:15).map(measure);
      }
      return result;
     },families);
-    frames.push(result);
+    const owner=frame.parentFrame();
+    let frameOffset={x:0,y:0};
+    if(owner){try{const element=await frame.frameElement();const rect=await element.boundingBox();if(rect)frameOffset={x:rect.x,y:rect.y};}catch{}}
+    frames.push({...result,frameOffset,embedded:!!owner});
    }catch(error){frames.push({error:String(error).slice(0,180)})}
   }
   return {frames};
@@ -79,15 +85,36 @@ try{
    const p=await sample(context,production,path),r=await sample(context,preview,path);
    // Choose the most component-rich frame, retaining all frames in raw output.
    const richness=f=>Object.values(f.families||{}).reduce((n,x)=>n+x.length,0);
-   const embeddedReference=p.frames.length>1&&p.frames.some(frame=>frame.pathname?.startsWith("/design/"));
+   const embeddedReference=p.frames.some(frame=>frame.embedded);
    const pf=[...p.frames].sort((a,b)=>richness(b)-richness(a))[0]||{};
    const rf=[...r.frames].sort((a,b)=>richness(b)-richness(a))[0]||{};
+   // Embeds can use entirely different CSS hooks, and iframe content may be
+   // taller than its clipping viewport. Do not compare unrelated elements by
+   // list index. Match headings by normalized visible text, in page coords.
+   const headings=frames=>{
+    const list=[];
+    for(const frame of frames)for(const heading of frame.families?.landmarks||[]){
+     const key=heading.text.toLowerCase().replace(/\\s+/g," ").trim();
+     if(!key)continue;
+     list.push({...heading,key,y:heading.y+(frame.frameOffset?.y||0),x:heading.x+(frame.frameOffset?.x||0),frame:frame.pathname});
+    }
+    return list;
+   };
+   const sourceHeadings=headings(p.frames),reactHeadings=headings(r.frames);
+   const used=new Set();
+   const matchedHeadings=sourceHeadings.map(source=>{
+    const index=reactHeadings.findIndex((candidate,i)=>!used.has(i)&&candidate.key===source.key);
+    if(index<0)return {status:"missing",text:source.text,production:true,preview:false};
+    used.add(index);
+    return {text:source.text,...delta(source,reactHeadings[index])};
+   });
    const groups={};
    for(const family of Object.keys(families)){
+    if(family==="landmarks"){groups[family]=matchedHeadings;continue}
     const left=pf.families?.[family]||[],right=rf.families?.[family]||[];
     groups[family]=embeddedReference?[]:Array.from({length:Math.max(left.length,right.length)},(_,i)=>delta(left[i],right[i]));
    }
-   const row={path,width,measurementStatus:embeddedReference?"embedded-reference-requires-frame-dom":"comparable",productionHeight:pf.documentHeight??null,previewHeight:rf.documentHeight??null,groups,sourceFrames:p.frames,previewFrames:r.frames};
+   const row={path,width,measurementStatus:embeddedReference?"frame-aware-headings":"standard",productionHeight:p.frames[0]?.documentHeight??null,previewHeight:r.frames[0]?.documentHeight??null,matchedHeadings:matchedHeadings.filter(x=>x.status==="matched").length,missingHeadings:matchedHeadings.filter(x=>x.status!=="matched").map(x=>x.text),groups,sourceFrames:p.frames,previewFrames:r.frames};
    report.push(row);
    console.log("COMPONENT GEOMETRY",path,width,"delta",row.productionHeight==null||row.previewHeight==null?"unknown":row.previewHeight-row.productionHeight);
   }
@@ -99,7 +126,7 @@ for(const row of report)for(const [family,items] of Object.entries(row.groups))f
  if(item.status!=="matched")continue;
  flat.push({path:row.path,width:row.width,family,dy:item.changes.y,dh:item.changes.height,dw:item.changes.width,fontChanged:item.fontChanged,fontSizeChanged:item.fontSizeChanged});
 }
-const summary={screens:report.length,comparableScreens:report.filter(r=>r.measurementStatus==="comparable").length,embeddedReferenceScreens:report.filter(r=>r.measurementStatus!=="comparable").map(r=>({path:r.path,width:r.width})),measurementCount:flat.length,families:Object.fromEntries(Object.keys(families).map(f=>{
+const summary={screens:report.length,standardScreens:report.filter(r=>r.measurementStatus==="standard").length,frameAwareScreens:report.filter(r=>r.measurementStatus==="frame-aware-headings").length,unmatchedHeadings:report.flatMap(r=>r.missingHeadings.map(text=>({path:r.path,width:r.width,text}))),measurementCount:flat.length,families:Object.fromEntries(Object.keys(families).map(f=>{
  const rows=flat.filter(r=>r.family===f);
  return [f,{instances:rows.length,largeVerticalDifferences:rows.filter(r=>Math.abs(r.dy)>12||Math.abs(r.dh)>12).length,fontDifferences:rows.filter(r=>r.fontChanged||r.fontSizeChanged).length}];
 }))};
