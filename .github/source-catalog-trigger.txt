@@ -6,3 +6,4 @@ Final owner-source extraction and rollback build check, no deployment.
 
 2026-10-27 compile all 45 exact source structures to independent React code, check bundle and source-only build; no deployment.
 2026-10-27 verify 45 source-generated React primitives with SSR source-structure, conditional and loop assertions; no deployment.
+2026-10-27 repaired interpolation for text inside sc-for, preserved source :active treatment; check SSR DOM and full source build.
