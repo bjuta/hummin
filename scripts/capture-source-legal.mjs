@@ -46,7 +46,7 @@ try {
          return response.text();
         })}))));
      for(const sheet of sourceSheets){
-      assert.match(sheet.name,/^[A-Za-z0-9_.-]+\\.css$/);
+      assert.match(sheet.name,/^[A-Za-z0-9_.-]+\.css$/);
       fs.writeFileSync(output+"/"+sheet.name,sheet.text);
       console.log("LEGAL ORIGINAL CSS",sheet.name,sheet.text.length);
      }
