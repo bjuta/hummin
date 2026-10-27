@@ -5,3 +5,5 @@ One-shot snapshot 27 October 2026: commit only source-transcribed native compone
 2026-10-27 verified original SVG resource recovery and exact marketing state model snapshot; source-only build, no deploy.
 
 2026-10-27 retry file-copy correction: verified original seven marketing render states and asset maps, commit only isolated outputs.
+
+2026-10-27 publish original-font local URLs and source-accurate hover selectors for internal marketing route, validate typecheck and build only.
