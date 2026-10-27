@@ -1,4 +1,4 @@
-/** Shared contact contract for the public handler and isolated no-delivery Preview.
+/** Contact validation contract mirroring the public handler in isolated no-delivery Preview.
  * Keep payload semantics identical; this module has no database or network access.
  */
 export type ContactVisitor={name:string;businessName:string;email:string;message:string};
