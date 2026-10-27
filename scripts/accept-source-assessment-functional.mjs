@@ -33,6 +33,11 @@ try{
    const res=await page.goto(route,{waitUntil:"domcontentloaded",timeout:45000});
    assert.equal(res?.status(),200,"Only isolated Assessment Preview may run this test");
    assert.match(res.headers()["x-robots-tag"]||"",/noindex/);
+   // Server markup is visible before React attaches event handlers. Do not click an inert SSR button.
+   await page.waitForFunction(()=>{
+    const button=[...document.querySelectorAll("button")].find(x=>x.textContent?.includes("Start the Assessment"));
+    return button&&typeof button.onclick==="function";
+   },null,{timeout:25000});
    await page.getByRole("button",{name:/Start the Assessment/i}).click();
    await page.waitForTimeout(350);
    console.log("ASSESSMENT START DIAGNOSTIC",JSON.stringify({width,steps:await page.getByText(/Question 1 of 23/).count(),introButtons:await page.getByRole("button",{name:/Start the Assessment/i}).count(),runtimeErrors,js:await page.evaluate(()=>({scripts:[...document.querySelectorAll("script[src]")].map(e=>e.getAttribute("src")).slice(-10),mainButtons:[...document.querySelectorAll("button")].slice(0,6).map(x=>({text:x.innerText.slice(0,42),onclick:typeof x.onclick,outer:x.outerHTML.slice(0,180)})),ready:document.readyState,resources:performance.getEntriesByType("resource").filter(x=>x.name.includes("js")||x.name.includes("source.remaining")).slice(-12).map(x=>x.name)})),dom:(await page.locator("body").innerText()).slice(0,1300)}));
