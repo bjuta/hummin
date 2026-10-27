@@ -17,7 +17,9 @@ try{
   const ctx=await browser.newContext({viewport:{width,height:width===390?844:900},
     deviceScaleFactor:1,isMobile:width===390,hasTouch:width===390,
     reducedMotion:"reduce",locale:"en-KE",timezoneId:"Africa/Nairobi"});
-  const page=await ctx.newPage(),mutations=[];
+  const page=await ctx.newPage(),mutations=[],runtimeErrors=[];
+  page.on("pageerror",error=>runtimeErrors.push("pageerror: "+String(error)));
+  page.on("console",message=>{if(message.type()==="error")runtimeErrors.push("console: "+message.text());});
   page.on("request",request=>{
    if(/\/(?:api\/assessment\/email|api\/booking\/reserve|api\/booking\/slots|contact)(?:\?|$)/.test(new URL(request.url()).pathname))
     mutations.push(request.url());
@@ -32,6 +34,8 @@ try{
    assert.equal(res?.status(),200,"Only isolated Assessment Preview may run this test");
    assert.match(res.headers()["x-robots-tag"]||"",/noindex/);
    await page.getByRole("button",{name:/Start the Assessment/i}).click();
+   await page.waitForTimeout(350);
+   console.log("ASSESSMENT START DIAGNOSTIC",JSON.stringify({width,steps:await page.getByText(/Question 1 of 23/).count(),introButtons:await page.getByRole("button",{name:/Start the Assessment/i}).count(),runtimeErrors,dom:(await page.locator("body").innerText()).slice(0,1300)}));
    for(const q of contract.STEPS){
     current++;
     await page.getByText("Question "+current+" of 23",{exact:true}).waitFor({timeout:14000});
