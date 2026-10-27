@@ -4,7 +4,7 @@ import {ApprovedSiteRoot} from "./ApprovedSourceTranscription.generated";
 import sourceStates from "../data/ApprovedMarketingViewmodels.generated.json";
 import sourceAssets from "../data/ApprovedSourceAssets.generated.json";
 import type {SourceScope} from "./source-native-bridge";
-import "./approved-source-css/site-fonts.css";
+import "./ApprovedSourceFonts.runtime.css";
 import "./approved-source-css/site-base.css";
 import "./ApprovedSourceHover.generated.css";
 import "./ApprovedSourceActive.generated.css";
