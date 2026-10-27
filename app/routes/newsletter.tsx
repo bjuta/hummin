@@ -2,14 +2,16 @@ import {Form,useActionData,useLoaderData} from "react-router";
 import type {AppLoadContext} from "react-router";
 import {newsletterOptInEmail} from "../lib/email-templates.server.ts";
 import {deliverDue} from "../lib/mail-outbox.server.ts";
+import {transactionalHostBlock,isAuthorizedTransactionalHost} from "../lib/transactional-host-guard.ts";
 import {parseNewsletterEmail} from "../lib/newsletter-contract";
 type Result={ok:boolean;message:string};
 export async function loader({context,request}:{context:AppLoadContext;request:Request}){
  const env=context.cloudflare.env;
  const candidate=new URL(request.url).searchParams.get("email")||"";
- return {ready:!!(env.DB&&env.RESEND_API_KEY&&env.EMAIL_FROM&&env.TURNSTILE_SECRET_KEY&&env.TURNSTILE_SITE_KEY),siteKey:env.TURNSTILE_SITE_KEY||"",prefill:candidate.slice(0,254)};
+ return {ready:isAuthorizedTransactionalHost(new URL(request.url).hostname)&&!!(env.DB&&env.RESEND_API_KEY&&env.EMAIL_FROM&&env.TURNSTILE_SECRET_KEY&&env.TURNSTILE_SITE_KEY),siteKey:env.TURNSTILE_SITE_KEY||"",prefill:candidate.slice(0,254)};
 }
 export async function action({request,context}:{request:Request;context:AppLoadContext}){
+ const blocked=transactionalHostBlock(request);if(blocked)return blocked;
  const e=context.cloudflare.env;
  const fail=(msg:string,status:number)=>Response.json({ok:false,message:msg} satisfies Result,{status});
  if(!e.DB||!e.RESEND_API_KEY||!e.EMAIL_FROM||!e.TURNSTILE_SECRET_KEY||!e.TURNSTILE_SITE_KEY)return fail("Newsletter sign-up is unavailable.",503);
