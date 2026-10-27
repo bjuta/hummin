@@ -361,7 +361,7 @@
   margin-inline:clamp(20px,5cqw,64px);
   margin-top:clamp(64px,8cqw,112px);
   padding-inline:0;
-  padding-top:0;
+  padding-top:calc(clamp(70px,9cqw,128px) - clamp(64px,8cqw,112px));
 }
 @media(max-width:600px){
  .hr-page > .hr-section:not(.hr-engagements-source-section){margin-top:64px}
