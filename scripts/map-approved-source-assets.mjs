@@ -50,6 +50,26 @@ for(const id of missing){
  mappings[id]="/brand/source-resources/"+id+".svg";
 }
 
+const referencedFonts=[...new Set([...html.matchAll(/url\\(["']?([a-f0-9]{8}(?:-[a-f0-9]{4}){3}-[a-f0-9]{12})["']?\\)/gi)].map(m=>m[1]))];
+for(const id of referencedFonts){
+ if(mappings[id])continue;
+ const item=manifest[id];
+ if(item?.mime!=="font/woff2")throw Error("No approved source font "+id);
+ let bytes=Buffer.from(item.data,"base64");
+ if(item.compressed)bytes=gunzipSync(bytes);
+ if(bytes.toString("ascii",0,4)!=="wOF2")throw Error("Invalid original font "+id);
+ const dir="public/brand/source-resources";
+ fs.mkdirSync(dir,{recursive:true});
+ fs.writeFileSync(path.join(dir,id+".woff2"),bytes);
+ mappings[id]="/brand/source-resources/"+id+".woff2";
+}
+const originalFontCss=fs.readFileSync("app/components/approved-source-css/site-fonts.css","utf8");
+const deployedFontCss=originalFontCss.replace(/url\\(["']?([a-f0-9]{8}(?:-[a-f0-9]{4}){3}-[a-f0-9]{12})["']?\\)/gi,(_match,id)=>{
+ if(!mappings[id])throw Error("Unmapped source font CSS "+id);
+ return 'url("'+mappings[id]+'")';
+});
+fs.writeFileSync("app/components/ApprovedSourceFonts.runtime.css",deployedFontCss);
+
 fs.mkdirSync("artifacts/source-native-transcription",{recursive:true});
 fs.writeFileSync("artifacts/source-native-transcription/asset-map.json",JSON.stringify(mappings,null,2)+"\n");
-console.log("APPROVED ASSET MAP",imageIds.length,"site media ids",Object.keys(mappings).length,"exactly matched assets");
+console.log("APPROVED ASSET MAP",imageIds.length,"site images",referencedFonts.length,"source fonts",Object.keys(mappings).length,"byte-matched resources");
