@@ -1,5 +1,5 @@
 {
-  "sourceSha256": "2c9ed2404321e0e4dd9596a36a3b7c9194694cab28fe4f1a0fed5934da4fa657",
+  "sourceSha256": "07c3d8a2dd47ad9cc5e94f9c1e7a1d502e1fc9da7a2bde47c67698a2d4eee56b",
   "pages": {
     "home": {
       "root": {
@@ -951,6 +951,9 @@
         "chipBg": "rgba(30,39,42,0.06)",
         "chipBd": "rgba(30,39,42,0.12)"
       },
+      "contactReady": true,
+      "contactInactive": false,
+      "contactStatus": "",
       "sent": false,
       "not_sent": true
     },
@@ -1904,6 +1907,9 @@
         "chipBg": "rgba(30,39,42,0.06)",
         "chipBd": "rgba(30,39,42,0.12)"
       },
+      "contactReady": true,
+      "contactInactive": false,
+      "contactStatus": "",
       "sent": false,
       "not_sent": true
     },
@@ -2857,6 +2863,9 @@
         "chipBg": "rgba(30,39,42,0.06)",
         "chipBd": "rgba(30,39,42,0.12)"
       },
+      "contactReady": true,
+      "contactInactive": false,
+      "contactStatus": "",
       "sent": false,
       "not_sent": true
     },
@@ -3810,6 +3819,9 @@
         "chipBg": "rgba(30,39,42,0.06)",
         "chipBd": "rgba(30,39,42,0.12)"
       },
+      "contactReady": true,
+      "contactInactive": false,
+      "contactStatus": "",
       "sent": false,
       "not_sent": true
     },
@@ -4763,6 +4775,9 @@
         "chipBg": "rgba(30,39,42,0.06)",
         "chipBd": "rgba(30,39,42,0.12)"
       },
+      "contactReady": true,
+      "contactInactive": false,
+      "contactStatus": "",
       "sent": false,
       "not_sent": true
     },
@@ -5716,6 +5731,9 @@
         "chipBg": "rgba(30,39,42,0.06)",
         "chipBd": "rgba(30,39,42,0.12)"
       },
+      "contactReady": true,
+      "contactInactive": false,
+      "contactStatus": "",
       "sent": false,
       "not_sent": true
     },
@@ -6669,6 +6687,9 @@
         "chipBg": "rgba(30,39,42,0.06)",
         "chipBd": "rgba(30,39,42,0.12)"
       },
+      "contactReady": true,
+      "contactInactive": false,
+      "contactStatus": "",
       "sent": false,
       "not_sent": true
     }
@@ -7624,6 +7645,9 @@
         "chipBg": "rgba(30,39,42,0.06)",
         "chipBd": "rgba(30,39,42,0.12)"
       },
+      "contactReady": true,
+      "contactInactive": false,
+      "contactStatus": "",
       "sent": false,
       "not_sent": true
     },
@@ -8577,6 +8601,9 @@
         "chipBg": "rgba(30,39,42,0.06)",
         "chipBd": "rgba(30,39,42,0.12)"
       },
+      "contactReady": true,
+      "contactInactive": false,
+      "contactStatus": "",
       "sent": false,
       "not_sent": true
     },
@@ -9530,6 +9557,9 @@
         "chipBg": "rgba(30,39,42,0.06)",
         "chipBd": "rgba(30,39,42,0.12)"
       },
+      "contactReady": true,
+      "contactInactive": false,
+      "contactStatus": "",
       "sent": false,
       "not_sent": true
     },
@@ -10483,6 +10513,9 @@
         "chipBg": "rgba(30,39,42,0.06)",
         "chipBd": "rgba(30,39,42,0.12)"
       },
+      "contactReady": true,
+      "contactInactive": false,
+      "contactStatus": "",
       "sent": false,
       "not_sent": true
     },
@@ -11436,6 +11469,9 @@
         "chipBg": "rgba(30,39,42,0.06)",
         "chipBd": "rgba(30,39,42,0.12)"
       },
+      "contactReady": true,
+      "contactInactive": false,
+      "contactStatus": "",
       "sent": false,
       "not_sent": true
     },
@@ -12389,6 +12425,9 @@
         "chipBg": "rgba(30,39,42,0.06)",
         "chipBd": "rgba(30,39,42,0.12)"
       },
+      "contactReady": true,
+      "contactInactive": false,
+      "contactStatus": "",
       "sent": false,
       "not_sent": true
     },
@@ -13342,6 +13381,9 @@
         "chipBg": "rgba(30,39,42,0.06)",
         "chipBd": "rgba(30,39,42,0.12)"
       },
+      "contactReady": true,
+      "contactInactive": false,
+      "contactStatus": "",
       "sent": false,
       "not_sent": true
     }
@@ -14297,6 +14339,9 @@
         "chipBg": "rgba(30,39,42,0.06)",
         "chipBd": "rgba(30,39,42,0.12)"
       },
+      "contactReady": true,
+      "contactInactive": false,
+      "contactStatus": "",
       "sent": false,
       "not_sent": true
     },
@@ -15250,6 +15295,9 @@
         "chipBg": "rgba(30,39,42,0.06)",
         "chipBd": "rgba(30,39,42,0.12)"
       },
+      "contactReady": true,
+      "contactInactive": false,
+      "contactStatus": "",
       "sent": false,
       "not_sent": true
     },
@@ -16203,6 +16251,9 @@
         "chipBg": "rgba(30,39,42,0.06)",
         "chipBd": "rgba(30,39,42,0.12)"
       },
+      "contactReady": true,
+      "contactInactive": false,
+      "contactStatus": "",
       "sent": false,
       "not_sent": true
     },
@@ -17156,6 +17207,9 @@
         "chipBg": "rgba(30,39,42,0.06)",
         "chipBd": "rgba(30,39,42,0.12)"
       },
+      "contactReady": true,
+      "contactInactive": false,
+      "contactStatus": "",
       "sent": false,
       "not_sent": true
     },
@@ -18109,6 +18163,9 @@
         "chipBg": "rgba(30,39,42,0.06)",
         "chipBd": "rgba(30,39,42,0.12)"
       },
+      "contactReady": true,
+      "contactInactive": false,
+      "contactStatus": "",
       "sent": false,
       "not_sent": true
     },
@@ -19062,6 +19119,9 @@
         "chipBg": "rgba(30,39,42,0.06)",
         "chipBd": "rgba(30,39,42,0.12)"
       },
+      "contactReady": true,
+      "contactInactive": false,
+      "contactStatus": "",
       "sent": false,
       "not_sent": true
     },
@@ -20015,6 +20075,9 @@
         "chipBg": "rgba(30,39,42,0.06)",
         "chipBd": "rgba(30,39,42,0.12)"
       },
+      "contactReady": true,
+      "contactInactive": false,
+      "contactStatus": "",
       "sent": false,
       "not_sent": true
     }
@@ -20970,6 +21033,9 @@
         "chipBg": "rgba(30,39,42,0.06)",
         "chipBd": "rgba(30,39,42,0.12)"
       },
+      "contactReady": true,
+      "contactInactive": false,
+      "contactStatus": "",
       "sent": false,
       "not_sent": true
     },
@@ -21923,6 +21989,9 @@
         "chipBg": "rgba(30,39,42,0.06)",
         "chipBd": "rgba(30,39,42,0.12)"
       },
+      "contactReady": true,
+      "contactInactive": false,
+      "contactStatus": "",
       "sent": false,
       "not_sent": true
     },
@@ -22876,6 +22945,9 @@
         "chipBg": "rgba(30,39,42,0.06)",
         "chipBd": "rgba(30,39,42,0.12)"
       },
+      "contactReady": true,
+      "contactInactive": false,
+      "contactStatus": "",
       "sent": false,
       "not_sent": true
     }
@@ -23831,6 +23903,9 @@
         "chipBg": "rgba(30,39,42,0.06)",
         "chipBd": "rgba(30,39,42,0.12)"
       },
+      "contactReady": true,
+      "contactInactive": false,
+      "contactStatus": "",
       "sent": false,
       "not_sent": true
     },
@@ -24784,6 +24859,9 @@
         "chipBg": "rgba(30,39,42,0.06)",
         "chipBd": "rgba(30,39,42,0.12)"
       },
+      "contactReady": true,
+      "contactInactive": false,
+      "contactStatus": "",
       "sent": false,
       "not_sent": true
     },
@@ -25737,6 +25815,9 @@
         "chipBg": "rgba(30,39,42,0.06)",
         "chipBd": "rgba(30,39,42,0.12)"
       },
+      "contactReady": true,
+      "contactInactive": false,
+      "contactStatus": "",
       "sent": false,
       "not_sent": true
     },
@@ -26690,6 +26771,9 @@
         "chipBg": "rgba(30,39,42,0.06)",
         "chipBd": "rgba(30,39,42,0.12)"
       },
+      "contactReady": true,
+      "contactInactive": false,
+      "contactStatus": "",
       "sent": false,
       "not_sent": true
     },
@@ -27643,6 +27727,9 @@
         "chipBg": "rgba(30,39,42,0.06)",
         "chipBd": "rgba(30,39,42,0.12)"
       },
+      "contactReady": true,
+      "contactInactive": false,
+      "contactStatus": "",
       "sent": false,
       "not_sent": true
     },
@@ -28596,6 +28683,9 @@
         "chipBg": "rgba(30,39,42,0.06)",
         "chipBd": "rgba(30,39,42,0.12)"
       },
+      "contactReady": true,
+      "contactInactive": false,
+      "contactStatus": "",
       "sent": false,
       "not_sent": true
     }
@@ -29561,6 +29651,9 @@
         "primaryLabel": "Discuss This Challenge",
         "secondaryLabel": "See Marketing"
       },
+      "contactReady": true,
+      "contactInactive": false,
+      "contactStatus": "",
       "sent": false,
       "not_sent": true
     },
@@ -30524,6 +30617,9 @@
         "primaryLabel": "Discuss This Challenge",
         "secondaryLabel": "See Technology"
       },
+      "contactReady": true,
+      "contactInactive": false,
+      "contactStatus": "",
       "sent": false,
       "not_sent": true
     },
@@ -31487,6 +31583,9 @@
         "primaryLabel": "Discuss This Challenge",
         "secondaryLabel": "See Technology"
       },
+      "contactReady": true,
+      "contactInactive": false,
+      "contactStatus": "",
       "sent": false,
       "not_sent": true
     },
@@ -32450,6 +32549,9 @@
         "primaryLabel": "Discuss This Challenge",
         "secondaryLabel": "See Strategy"
       },
+      "contactReady": true,
+      "contactInactive": false,
+      "contactStatus": "",
       "sent": false,
       "not_sent": true
     },
@@ -33413,6 +33515,9 @@
         "primaryLabel": "Discuss This Challenge",
         "secondaryLabel": "See Data"
       },
+      "contactReady": true,
+      "contactInactive": false,
+      "contactStatus": "",
       "sent": false,
       "not_sent": true
     },
@@ -34376,6 +34481,9 @@
         "primaryLabel": "Discuss This Challenge",
         "secondaryLabel": "See Talent"
       },
+      "contactReady": true,
+      "contactInactive": false,
+      "contactStatus": "",
       "sent": false,
       "not_sent": true
     }
@@ -35344,6 +35452,9 @@
         "primaryLabel": "Discuss a Review",
         "secondaryLabel": "Compare All Three"
       },
+      "contactReady": true,
+      "contactInactive": false,
+      "contactStatus": "",
       "sent": false,
       "not_sent": true
     },
@@ -36310,6 +36421,9 @@
         "primaryLabel": "Discuss a Project",
         "secondaryLabel": "Compare All Three"
       },
+      "contactReady": true,
+      "contactInactive": false,
+      "contactStatus": "",
       "sent": false,
       "not_sent": true
     },
@@ -37276,6 +37390,9 @@
         "primaryLabel": "Discuss a Residency",
         "secondaryLabel": "Compare All Three"
       },
+      "contactReady": true,
+      "contactInactive": false,
+      "contactStatus": "",
       "sent": false,
       "not_sent": true
     }
@@ -38230,6 +38347,9 @@
       "chipBg": "rgba(30,39,42,0.06)",
       "chipBd": "rgba(30,39,42,0.12)"
     },
+    "contactReady": true,
+    "contactInactive": false,
+    "contactStatus": "",
     "sent": true,
     "not_sent": false
   },
@@ -39183,6 +39303,9 @@
       "chipBg": "rgba(30,39,42,0.06)",
       "chipBd": "rgba(30,39,42,0.12)"
     },
+    "contactReady": true,
+    "contactInactive": false,
+    "contactStatus": "",
     "sent": false,
     "not_sent": true
   },
@@ -40136,6 +40259,9 @@
       "chipBg": "rgba(30,39,42,0.06)",
       "chipBd": "rgba(30,39,42,0.12)"
     },
+    "contactReady": true,
+    "contactInactive": false,
+    "contactStatus": "",
     "sent": false,
     "not_sent": true
   }
