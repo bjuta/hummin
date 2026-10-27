@@ -27,6 +27,8 @@ jobs:
         run: npx esbuild artifacts/source-native-transcription/approved-components.tsx --bundle --platform=node --format=esm --packages=external --outfile=artifacts/source-native-transcription/renderable.mjs
       - name: Check native React DOM against untouched source fragments
         run: node scripts/verify-source-native-transcription.mjs
+      - name: Inspect remaining source root and runtime shapes
+        run: node scripts/inspect-remaining-native-sources.mjs
       - name: Typecheck reverted application
         run: npm run typecheck
       - name: Build reverted application
