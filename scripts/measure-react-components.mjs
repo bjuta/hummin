@@ -14,7 +14,7 @@ const widths=[390,768,1440];
 const families={
  header:"header, .hm-site-header",
  hero:".hr-hero, .hm-source-editorial-hero, .ra-source-hero, .hummin-legal-hero",
- content:"main, .hr-insights-main, .ra-source-body, .hr-home-sections",
+ content:"main",
  sections:"section",
  cards:".hr-stage-card, .hr-insights-featured, .hr-insights-source-list-card, .hr-comparison, .ra-source-related-card",
  assessment:".hr-assessment-band, .hr-assessment-float, .ra-root",
@@ -79,14 +79,15 @@ try{
    const p=await sample(context,production,path),r=await sample(context,preview,path);
    // Choose the most component-rich frame, retaining all frames in raw output.
    const richness=f=>Object.values(f.families||{}).reduce((n,x)=>n+x.length,0);
+   const embeddedReference=p.frames.length>1&&p.frames.some(frame=>frame.pathname?.startsWith("/design/"));
    const pf=[...p.frames].sort((a,b)=>richness(b)-richness(a))[0]||{};
    const rf=[...r.frames].sort((a,b)=>richness(b)-richness(a))[0]||{};
    const groups={};
    for(const family of Object.keys(families)){
     const left=pf.families?.[family]||[],right=rf.families?.[family]||[];
-    groups[family]=Array.from({length:Math.max(left.length,right.length)},(_,i)=>delta(left[i],right[i]));
+    groups[family]=embeddedReference?[]:Array.from({length:Math.max(left.length,right.length)},(_,i)=>delta(left[i],right[i]));
    }
-   const row={path,width,productionHeight:pf.documentHeight??null,previewHeight:rf.documentHeight??null,groups,sourceFrames:p.frames,previewFrames:r.frames};
+   const row={path,width,measurementStatus:embeddedReference?"embedded-reference-requires-frame-dom":"comparable",productionHeight:pf.documentHeight??null,previewHeight:rf.documentHeight??null,groups,sourceFrames:p.frames,previewFrames:r.frames};
    report.push(row);
    console.log("COMPONENT GEOMETRY",path,width,"delta",row.productionHeight==null||row.previewHeight==null?"unknown":row.previewHeight-row.productionHeight);
   }
@@ -98,7 +99,7 @@ for(const row of report)for(const [family,items] of Object.entries(row.groups))f
  if(item.status!=="matched")continue;
  flat.push({path:row.path,width:row.width,family,dy:item.changes.y,dh:item.changes.height,dw:item.changes.width,fontChanged:item.fontChanged,fontSizeChanged:item.fontSizeChanged});
 }
-const summary={screens:report.length,measurementCount:flat.length,families:Object.fromEntries(Object.keys(families).map(f=>{
+const summary={screens:report.length,comparableScreens:report.filter(r=>r.measurementStatus==="comparable").length,embeddedReferenceScreens:report.filter(r=>r.measurementStatus!=="comparable").map(r=>({path:r.path,width:r.width})),measurementCount:flat.length,families:Object.fromEntries(Object.keys(families).map(f=>{
  const rows=flat.filter(r=>r.family===f);
  return [f,{instances:rows.length,largeVerticalDifferences:rows.filter(r=>Math.abs(r.dy)>12||Math.abs(r.dh)>12).length,fontDifferences:rows.filter(r=>r.fontChanged||r.fontSizeChanged).length}];
 }))};
