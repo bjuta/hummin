@@ -66,7 +66,9 @@ test("HUMMIN Admin keeps the supplied standalone navigation and removes public s
  assert.match(shell,/Newsreader/);
  assert.match(workbench,/AdminChrome/);
  assert.match(workbench,/menuItems=\{accessible/);
- assert.match(app,/pathname\.startsWith\("\/admin\/"\)/);
+ assert.match(app,/<Outlet\/>/,"React Router renders Admin through its own route outlet");
+ assert.doesNotMatch(app,/SourceMarketingPreview|ApprovedSiteRoot|hm-site-header/,"global site shell must not bleed into Admin");
+ assert.match(shell,/hm-admin-scope/,"Admin retains its independent branded scope");
 });
 test("The OTP is announced, ten-minute limited, autofill compatible and automatically verified",()=>{
  const login=read("app/routes/admin.login.tsx");
