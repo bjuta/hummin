@@ -141,6 +141,11 @@ const hoverCss=Array.from(hover,([css,id])=>"["+quoted("data-source-hover")+"="+
 fs.writeFileSync(path.join(targetDir,"source-hover.css"),hoverCss);
 const activeCss=Array.from(active,([css,id])=>"["+quoted("data-source-active")+"="+quoted(id)+"]:active{"+css+"}").join("\n")+"\n";
 fs.writeFileSync(path.join(targetDir,"source-active.css"),activeCss);
+// Candidate checked-in files: the normal app build must not read archived HTML.
+const portable=text.replaceAll("../../app/components/source-native-bridge","./source-native-bridge");
+fs.writeFileSync("app/components/ApprovedSourceTranscription.generated.tsx",portable);
+fs.writeFileSync("app/components/ApprovedSourceHover.generated.css",hoverCss);
+fs.writeFileSync("app/components/ApprovedSourceActive.generated.css",activeCss);
 const details={count:functions.length,generatedBytes:Buffer.byteLength(text),hoverStates:hover.size,activeStates:active.size,functions,status:"unwired source transcription, not visually accepted"};
 fs.writeFileSync(path.join(targetDir,"transcription-manifest.json"),JSON.stringify(details,null,2));
 console.log("SOURCE NATIVE TRANSCRIPTION",functions.length,"components",details.generatedBytes,"bytes",hover.size,"original hover treatments");
