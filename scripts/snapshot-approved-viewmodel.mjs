@@ -1,3 +1,4 @@
+import {sourceProductionSite} from "./source-production-template.mjs";
 /** Compute original HUMMIN marketing view-model states in an isolated,
  * build-time Node VM. Only data snapshots are committed; the original
  * DCLogic class and design runtime are never shipped to the browser.
@@ -5,7 +6,7 @@
 import fs from "node:fs";
 import vm from "node:vm";
 import {createHash} from "node:crypto";
-const html=JSON.parse(fs.readFileSync("design/sources/site-v4.template.json","utf8"));
+const html=sourceProductionSite();
 const source=html.match(/<script type="text\/x-dc"[^>]*>([\s\S]*?)<\/script>/)?.[1];
 if(!source||!source.includes("class Component extends DCLogic")||!source.includes("renderVals()"))
  throw Error("Approved HUMMIN view model missing");
@@ -20,7 +21,7 @@ for(const icon of icons){
 const sandbox=vm.createContext({
  DCLogic:class {setState(next){this.state={...this.state,...(typeof next==="function"?next(this.state):next)}}},
  React:{createRef:()=>({current:null})},
- window:{__resources:resources,matchMedia:()=>({matches:false})},
+ window:{__resources:resources,matchMedia:()=>({matches:false}),HUMMIN_CONTACT_READY:true,location:{pathname:"/"}},
  console:{log:()=>{}},setTimeout:()=>0,clearTimeout:()=>{},Date,
 });
 const Component=vm.runInContext(source+"\nComponent",sandbox,{timeout:5000});
