@@ -57,14 +57,14 @@ jobs:
               assert.ok(body.includes('id=\"main\"'),name+' source main absent');
               assert.match(response.headers.get('x-robots-tag')||'',/noindex/,name+' accidentally indexable');
               console.log('SOURCE STAGING PASS',name,body.length);
+            }
             for(const view of ['assessment','insights','article','topic','author']){
               const response=await fetch(base+'/__source-review/'+view,{signal:AbortSignal.timeout(25000)});
               const body=await response.text();
               assert.equal(response.status,200,view+' expected HTTP 200');
               assert.ok(body.includes('HUMMIN'),view+' source brand missing');
-              assert.ok(body.includes('id=\\\"main\\\"'),view+' original site shell missing');
+              assert.ok(body.includes('id=\"main\"'),view+' original site shell missing');
               assert.match(response.headers.get('x-robots-tag')||'',/noindex/,view+' accidentally indexable');
               console.log('REMAINING SOURCE STAGING PASS',view,body.length);
-            }
             }
           "
