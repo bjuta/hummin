@@ -23,3 +23,5 @@ Retry source-faithful Preview build after Cloudflare/Vite optimizer WebSocket in
 2026-10-27 source-correct original Google Figtree and Newsreader stylesheet for Assessment/Insights, matching original Insights iframe loaded font CSS; no public deploy.
 
 2026-10-27 isolated Preview verification: source-authored Google Figtree/Newsreader font stylesheet for Insights only; no production routes, databases or messaging.
+
+2026-10-27 isolated Preview: complete source-derived 23-step Assessment, local scoring/results, explicit no-delivery gate; preserve marketing/Insights/legal and production fallback.
