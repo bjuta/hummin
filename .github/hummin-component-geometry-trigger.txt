@@ -1,3 +1,4 @@
 2026-10-27 baseline all 42 screens. Read-only component geometry comparison. No production writes, no React cutover, no archived HTML dependency.
 
 2026-10-27 corrected measurement contract: embedded production iframe screens are explicitly flagged noncomparable, rather than reporting false layout deltas; run geometry baseline again.
+2026-10-27 frame-aware semantic heading measurement across all 42 cases; validate real page-coordinate matches; no production mutations.
