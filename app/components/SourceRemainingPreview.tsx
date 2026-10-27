@@ -1,5 +1,6 @@
 import * as React from "react";
-import {ApprovedAssessmentRoot,ApprovedInsightsRoot} from "./ApprovedSourceTranscription.generated";
+import {ApprovedInsightsRoot} from "./ApprovedSourceTranscription.generated";
+import {SourceAssessmentInteractive} from "./SourceAssessmentInteractive";
 import {SourceMarketingPreview} from "./SourceMarketingPreview";
 import sourceAssets from "../data/ApprovedSourceAssets.generated.json";
 import sourceModels from "../data/ApprovedRemainingViewmodels.generated.json";
@@ -18,7 +19,6 @@ const sources=sourceModels as unknown as {
  * Deliberately excludes live submit/booking endpoints on this Preview.
  */
 export function SourceRemainingPreview({view}:{view:RemainingView}){
- const [assessmentStage,setAssessmentStage]=React.useState<"intro"|"first"|"choice">("intro");
  const [insightView,setInsightView]=React.useState<"index"|"article"|"topic"|"author">(
    view==="assessment"||view==="insights"?"index":view
  );
@@ -53,14 +53,6 @@ export function SourceRemainingPreview({view}:{view:RemainingView}){
   return ()=>{observer.disconnect();mutation.disconnect();};
  },[view,insightView,sourceHeight]);
 
- const assessmentScope:SourceScope={
-  ...sources.assessment.views[assessmentStage],__assets:sourceAssets,
-  start:()=>setAssessmentStage("first"),
-  next:()=>setAssessmentStage("choice"),
-  back:()=>setAssessmentStage("intro"),
-  restart:()=>setAssessmentStage("intro"),
-  toContact:()=>setMessage("Contact submissions are disabled on this isolated Preview.")
- };
  const editorialScope:SourceScope={
   ...sources.insights.views[insightView],__assets:sourceAssets,
   goIndex:()=>setInsightView("index"),
@@ -71,7 +63,7 @@ export function SourceRemainingPreview({view}:{view:RemainingView}){
  const OriginalAssessment=()=>React.createElement("div",{
   className:"hm-frame-shell",
   style:{position:"relative",height:"960px",minHeight:0,overflowY:"auto",overscrollBehavior:"contain",background:"#1E272A"}
- },React.createElement(ApprovedAssessmentRoot,{scope:assessmentScope}));
+ },React.createElement(SourceAssessmentInteractive));
  const OriginalInsights=()=>React.createElement("div",{
   className:"hm-frame-shell",ref:insightFrame,
   style:{position:"relative",height:sourceHeight===null?"auto":sourceHeight+"px",minHeight:"580px",overflow:"hidden",background:"#F4F5F1"}
