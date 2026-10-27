@@ -1,0 +1,52 @@
+name: HUMMIN native migration offline service regression
+on:
+  push:
+    branches: [feat/fullstack-workers-foundation]
+    paths: [.github/source-functional-services-trigger.txt]
+permissions:
+  contents: read
+jobs:
+  existing-service-contracts:
+    if: github.repository == 'bjuta/hummin'
+    runs-on: ubuntu-latest
+    timeout-minutes: 18
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: npm install --no-audit --no-fund
+      - name: Contact, transactional mail, booking and reconciliation unit contracts (mocked)
+        run: npm run verify:email
+      - name: Insights publishing and CMS unit contracts (mocked)
+        run: |
+          npm run verify:insights
+          npm run verify:insights-publications
+      - name: Admin permissions, operations, and data unit contracts (mocked)
+        run: |
+          npm run verify:admin
+          npm run verify:admin-data
+          npm run verify:admin-operations
+          npm run verify:admin-fidelity
+      - name: Analytics events and SEO contracts (mocked)
+        run: |
+          npm run verify:analytics
+          npm run verify:seo
+      - name: Source-native assessment and zero-delivery contract
+        run: node --experimental-strip-types --test tests/source-assessment-native.test.mjs
+      - name: Confirm public fallback and preview isolation have not been removed
+        run: |
+          node --input-type=module -e "
+            import fs from 'node:fs';
+            const router=fs.readFileSync('app/routes.ts','utf8');
+            const source=fs.readFileSync('app/routes/fidelity.ts','utf8');
+            const preview=fs.readFileSync('app/routes/source.remaining.preview.tsx','utf8');
+            if(!router.includes('route(\"contact\",\"routes/fidelity.ts\"')||
+               !router.includes('route(\"assessment\",\"routes/fidelity.ts\"'))
+              throw Error('Public site unexpectedly cut over');
+            if(!source.includes('/design/site/index.html')||
+               !preview.includes('isHumminPublicHost(hostname)'))throw Error('Legacy fallback or public-host preview guard missing');
+            console.log('PUBLIC ROUTING UNCHANGED; SERVICES TESTED OFFLINE');
+          "
