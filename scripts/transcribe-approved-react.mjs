@@ -53,21 +53,22 @@ function cssProp(key){
  return key.replace(/^-webkit-/,"Webkit-").replace(/-([a-z])/g,(_,ch)=>ch.toUpperCase());
 }
 function styleProps(text,scope){
- const entries=[];
+ const entries=new Map();
  for(const part of declarations(text)){
   const colon=part.indexOf(":");if(colon<0)continue;
   const key=part.slice(0,colon).trim(),value=part.slice(colon+1).trim();
   if(!key||!value)continue;
-  entries.push(quoted(cssProp(key))+":"+expr(value,scope));
+  // CSS applies the last declaration of a repeated property.
+  entries.set(cssProp(key),expr(value,scope));
  }
- return "{"+entries.join(",")+"}";
+ return "{"+Array.from(entries,([key,value])=>quoted(key)+":"+value).join(",")+"}";
 }
 function renderChildren(node,scope){
  const children=node.childNodes||node.content?.childNodes||[];
  return children.map(child=>render(child,scope)).filter(v=>v!==null);
 }
 function render(node,scope){
- if(node.nodeName==="#text")return expr(node.value||"",scope);
+ if(node.nodeName==="#text")return "String("+expr(node.value||"",scope)+" ?? \"\")";
  if(node.nodeName==="#comment"||node.nodeName==="#documentType")return null;
  if(!node.tagName){
   const kids=renderChildren(node,scope);
