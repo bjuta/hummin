@@ -5,6 +5,7 @@ import {deliverDue} from "../lib/mail-outbox.server.ts";
 import {transactionalHostBlock,isAuthorizedTransactionalHost} from "../lib/transactional-host-guard.ts";
 import {parseNewsletterEmail} from "../lib/newsletter-contract";
 type Result={ok:boolean;message:string};
+export const headers=()=>({"Cache-Control":"no-store"});
 export async function loader({context,request}:{context:AppLoadContext;request:Request}){
  const env=context.cloudflare.env;
  const candidate=new URL(request.url).searchParams.get("email")||"";
