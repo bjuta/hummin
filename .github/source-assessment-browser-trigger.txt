@@ -11,3 +11,5 @@ Check final 23rd question CTA and gate before release acceptance.
 2026-10-27 wait for React client event hydration before Assessment clicks; no real submission.
 
 2026-10-27 validate all 23 questions and real Preview-only Assessment result validation POST (never live email or booking) across three widths.
+
+2026-10-27 Rerun 23-step native Assessment after isolated Preview host protection; one safe validation POST per width.
