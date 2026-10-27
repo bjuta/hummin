@@ -1,8 +1,10 @@
 import type {AppLoadContext} from "react-router";
 import {assessmentResultsEmail} from "../lib/email-templates.server.ts";
+import {transactionalHostBlock} from "../lib/transactional-host-guard.ts";
 import {deliverDue} from "../lib/mail-outbox.server.ts";
 import {parseAssessmentDeliveryInput} from "../lib/assessment-delivery-contract";
 export async function action({request,context}:{request:Request;context:AppLoadContext}){
+ const blocked=transactionalHostBlock(request);if(blocked)return blocked;
  const env=context.cloudflare.env;
  const err=(message:string,status:number)=>Response.json({ok:false,message},{status,headers:{"Cache-Control":"no-store"}});
  if(!env.DB||!env.TURNSTILE_SECRET_KEY||!env.RESEND_API_KEY||!env.EMAIL_FROM)return err("Email delivery is unavailable.",503);
