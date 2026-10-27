@@ -1,6 +1,7 @@
 import { Form, Link, useActionData, useLoaderData, useNavigation } from "react-router";
 import { enquiryNotification, enquiryAcknowledgement } from "../lib/enquiry-email.server";
 import {deliverDue} from "../lib/mail-outbox.server.ts";
+import {transactionalHostBlock,isAuthorizedTransactionalHost} from "../lib/transactional-host-guard.ts";
 import type { AppLoadContext } from "react-router";
 
 type Result = { ok:boolean; message:string };
@@ -23,11 +24,12 @@ async function verifyTurnstile(secret:string,token:string,hostname:string):Promi
   return body.success===true && body.hostname===hostname;
  }catch{return false;}
 }
-export async function loader({context}:{context:AppLoadContext}){
+export async function loader({context,request}:{context:AppLoadContext;request:Request}){
  const env=context.cloudflare.env;
- return { formReady:!!(env.CONTACT_ENABLED==='true'&&env.DB&&env.RESEND_API_KEY&&env.TURNSTILE_SECRET_KEY&&env.TURNSTILE_SITE_KEY&&env.EMAIL_FROM), siteKey:env.TURNSTILE_SITE_KEY||"" };
+ return { formReady:isAuthorizedTransactionalHost(new URL(request.url).hostname)&&!!(env.CONTACT_ENABLED==='true'&&env.DB&&env.RESEND_API_KEY&&env.TURNSTILE_SECRET_KEY&&env.TURNSTILE_SITE_KEY&&env.EMAIL_FROM), siteKey:env.TURNSTILE_SITE_KEY||"" };
 }
 export async function action({request,context}:{request:Request;context:AppLoadContext}):Promise<Response>{
+ const blocked=transactionalHostBlock(request);if(blocked)return blocked;
  const env=context.cloudflare.env;
  const error=(message:string,status:number)=>Response.json({ok:false,message} satisfies Result,{status});
  if(env.CONTACT_ENABLED!=='true'||!env.DB||!env.RESEND_API_KEY||!env.TURNSTILE_SECRET_KEY||!env.TURNSTILE_SITE_KEY||!env.EMAIL_FROM)
