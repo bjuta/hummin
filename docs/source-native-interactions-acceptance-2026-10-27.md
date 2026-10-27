@@ -10,7 +10,7 @@
 
 ## Strict visual gate
 
-The updated post-Insights-interaction full 42-case source/native visual gate is [run #40564661323](https://github.com/bjuta/hummin/actions/runs/40564661323). **Use its actual completed conclusion** to determine whether the currently deployed interactive Preview maintains 42/42 visual acceptance. Older run #40557216199 passed prior to these particular interaction changes and cannot substitute for a fresh release certificate.
+The updated post-Insights-interaction full 42-case source/native visual gate **PASSED 42/42**, [run #40564661323](https://github.com/bjuta/hummin/actions/runs/40564661323): marketing 21/21, Assessment/Insights 15/15, legal 6/6. The full-page screenshot evidence is attached as GitHub Actions artifact [12762054819](https://github.com/bjuta/hummin/actions/runs/40564661323/artifacts/12762054819). This reflects the deployed interactive candidate, not the earlier static-preview run.
 
 ## What this deliberately does not claim
 
